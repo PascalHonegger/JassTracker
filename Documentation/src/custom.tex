@@ -1,0 +1,64 @@
+% File containing the commands and definitions
+% that are used throughout this project.
+
+% Set input encoding
+\usepackage[utf8]{inputenc}
+
+% For creating coloured text and backgrounds
+\usepackage[table,xcdraw]{xcolor}
+
+% For creating compact lists
+\usepackage{paralist}
+
+% To get the current date and time
+\usepackage{datetime2}
+
+% For including graphics
+\usepackage{graphicx}
+
+% Custom commands
+
+\newcommand{\todo}[1]{TODO: {#1}}
+
+% The following command indicates that its content consists of instructions
+% Even if it does not do anything, it is still a good idea to keep instructions within the `instruction` tag to separate them from the rest of the text. One could then typeset them differently, or choose to remove them form the document by redefining the command definition 
+\newcommand{\instructions}[1]{#1}
+
+% Uncomment the following command to remove all instructions
+% \newcommand{\instructions}[1]{}
+
+% Uncomment the following to make instructions appear in coloured boxes
+% Note: The changes within `\instruciton` are not visible in latexdiff when they are typeset in this way
+% \usepackage{tcolorbox}
+% \newcommand{\instructions}[1]{
+%     \begin{tcolorbox}[sharp corners, colback=green!30, colframe=green!80!blue, title=Instructions]
+%         #1
+%     \end{tcolorbox}
+% }
+
+% Uncomment the following to make instructions appear in colour.
+% Note: The changes within `\instruciton` are not visible in latexdiff when they are typeset in this way
+% \newcommand{\instructions}[1]{ { \color{blue} #1 } }
+
+% Get a git version description roughly using the idea in  
+% https://blog.wxm.be/2013/08/20/automated-git-commit-number-in-latex.html
+% Note that the file that is included needs to be generated before the document is built.
+% Refer to the makefile for further details.
+\IfFileExists{../gitDescription.tmp}
+{\newcommand{\gitDescription}{\input{../gitDescription.tmp}}}
+{\newcommand{\gitDescription}{Not available}}
+
+% Note: Importing hyperref must be done towards the end since it
+% redefines many macros
+%
+% Note:
+%  The following packages must be imported *before* hyperref:
+%  
+%  The following packages must be imported *after* hyperref:
+%    amsrefs, geometry
+\usepackage{hyperref}
+
+\usepackage{geometry}
+
+% options for package geometry (influences writable area on page)
+% \geometry{a4paper, top=2cm, bottom=2cm}

@@ -1,0 +1,42 @@
+{
+    "latex-workshop.latex.outDir": "../out",
+    "spellright.language": [
+        "en_GB"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext"
+    ],
+    "spellright.groupDictionaries": false,
+    "spellright.notificationClass": "information",
+    "spellright.latexSpellParameters": [
+
+
+        "author",
+        "title",
+        "subtitle",
+        "date",
+        "chapter",
+        "section\\*?",
+        "subsection\\*?",
+        "subsubsection\\*?",
+        "part",
+        "paragraph",
+        "subparagraph",
+        "text(rm|sf|tt|md|bf|up|it|sl|sc|normal)",
+        "underline",
+        "emph",
+        "item",
+        "footnote(text)?",
+        "caption(of)?",
+        "multicolumn",
+        "href",
+        "hyperref",
+        "institute",
+        "frametitle",
+        "framesubtitle",
+        "begin\\{frame\\}",
+        "instructions"
+    ]
+}

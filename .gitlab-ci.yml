@@ -1,0 +1,66 @@
+# GitLab CI configuration to build PDFs from LaTeX sources and Diffs of these.
+# (c) Farhad Mehta 2021
+
+image: registry.gitlab.com/islandoftex/images/texlive:TL2020-2020-04-12-04-19
+# This image corresponds to the initial TeX Live 2020 snapshot without any subsequent updates
+
+before_script:
+  - tlmgr --version
+  - git --version
+  - latex --version
+  - latexmk --version
+  # Note: it seems that `latexdiff --version` returns SIG(127) as an error code. Therefore use `|| true` to ignore this.
+  - latexdiff --version || true
+  # Check the current output from git-describe that may be added to the document
+  - git describe --exclude "latexdiff-base" --always --long --dirty --broken
+
+stages:
+  - build
+  - diff
+
+build_doc:
+  stage: build
+  # when: manual
+  script:
+    - cd Documentation
+    - make doc
+    - cd ..
+  artifacts:
+    paths:
+      - Documentation/out
+
+build_doc_diff:
+  stage: diff
+  needs: ["build_doc"]
+  script:
+    - cd Documentation
+    - make doc_diff
+    - cd ..
+  artifacts:
+    paths:
+      - Documentation/out
+
+build_proposal:
+  stage: build
+  # when: manual
+  script:
+    - cd Documentation
+    - make proposal
+    - cd ..
+  artifacts:
+    paths:
+      - Documentation/out
+
+# The following job duplicates the functionality of the previous ones, just in case one in confident that everyhting works and would like to build everyting in one job to save time and resources  
+build_proposal_doc_diff:
+  stage: build
+  when: manual
+  script:
+    - cd Documentation
+    - make proposal
+    - make doc
+    - make doc_diff
+    - cd ..
+  artifacts:
+    paths:
+      - Documentation/out

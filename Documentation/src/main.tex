@@ -1,0 +1,49 @@
+% Template for SE Project software documentation
+% (c) Farhad Mehta 2021
+
+\documentclass[11pt, twoside, a4paper]{book}
+
+\input{custom}
+
+\hypersetup{
+    pdfauthor={Farhad Mehta},
+    pdftitle={Template for SE Project software documentation},
+}
+
+\begin{document}
+
+\pagestyle{empty}
+
+\frontmatter
+
+\input{title-page}
+
+\tableofcontents
+
+\input{instructions}
+
+\mainmatter
+
+\part{Product Documentation}
+
+\input{01_product-documentation/01_vision}
+\input{01_product-documentation/02_domain-analysis}
+\input{01_product-documentation/03_requirements}
+\input{01_product-documentation/04_architecture}
+
+\part{Project Documentation}
+
+% Note: The project proposal needs to be included in the following way (i.e. using `\input` and not `\include`, and with the `\chapter` declaration  outside the input{01_product-documentation/ file) since the proposal can also be generated in a stand-alone document.
+\chapter{Initial Project Proposal}
+\input{02_project-documentation/01_project-proposal}
+
+\input{02_project-documentation/02_project-plan}
+\input{02_project-documentation/03_time-tracking-report}
+\input{02_project-documentation/04_project-summary}
+\input{02_project-documentation/05_personal-reports}
+
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{alpha}
+\bibliography{bibliography}
+
+\end{document}
