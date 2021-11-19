@@ -15,9 +15,3 @@ The included makefile can be used via the `make doc` command within the `Documen
 The repository has also been configured to automatically build `Documentaton/out/main.pdf` and `Documentation/out/diff.pdf` upon every push onto gitlab. These can be found within `CI/CD -> Jobs -> Artifacts`. Take a look at `.gitlab-ci.yml` for more information.
 
 You may use the `Documentation/releases` directory to store and commit individual versions of your documentation and diffs for convenience.
-
-
-# Current high-level todos in need of discussion/consensus between MeFa & KaTh
-
-- Does it make sense to include the meeting minutes as part of the project documentation? (currently not included)
-- Does it make sense to switch chapters "Requirements" and "Domain Analysis"? (typically, DA is based on the information documented in RE)
