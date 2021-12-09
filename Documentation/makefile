@@ -1,7 +1,8 @@
 # Make configuration to build PDFs from LaTeX sources and Diffs of these.
-# (c) Farhad Mehta 2020
+# (c) Farhad Mehta 2021
 
-# Tested with the initial TeX Live 2020 snapshot without any subsequent updates
+# Tested with the TeX Live 2021 snapshot as of 09.12.2021
+# Docker image: registry.gitlab.com/islandoftex/images/texlive:TL2021-2021-12-05-04-05
 
 gitDescription:
 	git describe --exclude "latexdiff-base" --always --long --dirty --broken > gitDescription.tmp
@@ -36,4 +37,9 @@ clean:
 	rm -rf out
 	rm -rf latexdiff-base
 	rm gitDescription.tmp
+
+# Can be used locally as e.g. make docker-doc or make docker-proposal, ... 
+docker-%:
+	docker run --rm -v "$(CURDIR)/../:/opt/ws" -w "/opt/ws/Documentation" registry.gitlab.com/islandoftex/images/texlive:latest make $*
+#	docker run --rm -v "$(CURDIR)/../:/opt/ws" -w "/opt/ws/Documentation" registry.gitlab.com/islandoftex/images/texlive:TL2021-2021-04-11-04-09 make $*
 

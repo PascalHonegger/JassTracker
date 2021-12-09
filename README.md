@@ -15,3 +15,6 @@ The included makefile can be used via the `make doc` command within the `Documen
 The repository has also been configured to automatically build `Documentaton/out/main.pdf` and `Documentation/out/diff.pdf` upon every push onto gitlab. These can be found within `CI/CD -> Jobs -> Artifacts`. Take a look at `.gitlab-ci.yml` for more information.
 
 You may use the `Documentation/releases` directory to store and commit individual versions of your documentation and diffs for convenience.
+
+Note: The template is tested and designed to be compatible with the TeX Live snapshot specified in `gitlab-ci.yml`. In case you experience problems building articles from the template locally, please make sure that you are using the same snapshot.  
+
