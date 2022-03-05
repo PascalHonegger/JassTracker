@@ -13,3 +13,130 @@
     
     You should \textbf{\underline{not}} describe your \textbf{technical solution} in this chapter. It is all about organizing your project.
 }
+
+\section{Relevant Links}
+
+The following chapters are referencing external tools. For convenience, those tools are also listed here:
+
+\begin{itemize}
+    \item GitLab: \url{https://gitlab.ost.ch/SEProj/2022-FS/g02-jasstracker/jasstracker}
+    \item Jira: \url{https://jasstracker-jira.atlassian.net/browse/JASS}
+\end{itemize}
+
+\section{Processes}
+
+We will use a combination of Scrum+RUP as recommended.
+Milestones, iterations and epics are tracked in Jira (see \ref{sec:TimeAndIssueTracking}).
+
+\subsection*{Meetings}
+
+\begin{table}[H]
+    \begin{tabular}{l|l|l}
+    \textbf{Meeting} & \textbf{Schedule} & \textbf{Subject} \\
+    \hline
+    Weekly & Every Saturday & Progress and encountered problems \\
+    Planning & Every other Saturday & Plan the next sprint, assign stories \\
+    Retro & Every other Saturday & Review past spring, how to improve \\
+    Review 1 & 07.03.2022 & Project Plan \\
+    Review 2 & 21.03.2022 & Requirements \\
+    Review 3 & 04.04.2022 & End of Elaboration \\
+    Review 4 & 02.05.2022 & Quality \\
+    Review 5 & 22.05.2022 & Architecture \\
+    Project Presentation & 29.05.2022 & Present JassTracker in its full glory
+    \end{tabular}
+\end{table}
+
+\subsection*{Roles}
+
+Because of the small team size some members have more than one assigned role.
+
+\begin{table}[H]
+    \begin{tabular}{l|l|l}
+    \textbf{Who} & \textbf{Roles} & \textbf{Responsibilities} \\
+    \hline
+    Pascal & PO, DEV & Push project vision, provide business feedback \\
+    Marcel & DEVOPS & Setup and maintain operations, continous delivery \\
+    David  & SM, DEV & Ensure correct scrum procedure \\
+    Jamie  & QA, DEV & Guarantee the final product has a good quality and works reliably
+    \end{tabular}
+\end{table}
+
+\section{Collaboration}
+
+We're using MS Teams for internal communication.
+We plan on using the \href{https://gitlab.ost.ch/SEProj/2022-FS/g02-jasstracker/jasstracker}{OST GitLab} for version control.
+Changes are always done on seperate branches and integrated through merge requests with a required code review.
+
+\section{Risk Management}
+
+\subsection{Very High}
+\begin{enumerate}
+    \item Used technologies are not well knows by all team members (certain, critical) 
+    \begin{enumerate}
+        \item Mitigation: Every team member should create a PoC in the used technologies to ensure basic understanding is present 
+    \end{enumerate}
+\end{enumerate}
+
+\subsection{High}
+\begin{enumerate}
+    \item Used technologies are not well knows by all team members (certain, critical) 
+    \begin{enumerate}
+        \item Mitigation strategies: Every team member should create a PoC in the used technologies to ensure basic understanding is present 
+    \end{enumerate}
+
+    \item Inaccurate estimations (likely and critical) 
+    \begin{enumerate}
+        \item Mitigation strategies: apply cone of uncertainty, apply definion of ready to ensure planning quality 
+    \end{enumerate}
+
+    \item Poor risk management (likely and critical)  
+    \begin{enumerate}
+        \item Mitigation strategies: likelihood calculation, risk mitigation plans and monitoring of risks every planning 
+    \end{enumerate}
+
+    \item Project reviewer's expectations are not aligned with project (possible and critical) 
+    \begin{enumerate}
+        \item Mitigation strategies: obtain frequent approval and acknowledgement (naturally happens for us with review meetings) 
+    \end{enumerate}
+
+    \item Unexpected absence of team member (unlikely and catastrophic) 
+    \begin{enumerate}
+        \item Mitigation strategies: Code changes need to be pushed on a daily basis, stories could at any point be taken over by another team member 
+    \end{enumerate}
+\end{enumerate}
+
+\subsection{Medium}
+\begin{enumerate}
+    \item Insufficient code quality (possible and marginal) 
+    \begin{enumerate}
+        \item Mitigation strategies: code reviews, clear coding standards, apply definition of done 
+    \end{enumerate}
+
+    \item Lack of ownership (possible and marginal) 
+    \begin{enumerate}
+        \item Mitigation strategies: setting clear responsibilities for roles 
+    \end{enumerate}
+
+    \item Losing sight of documentation tasks (possible and marginal) 
+    \begin{enumerate}
+        \item Mitigation strategies: documentation strategy , documentation part of definiton of done 
+    \end{enumerate}
+
+    \item Failure of hardware like personal devices, OST GitLab, Jira, hosted environment (rare, catastrophic) 
+    \begin{enumerate}
+        \item Mitigation strategies: Code changes need to be pushed on a daily basis 
+    \end{enumerate}
+\end{enumerate}
+
+\subsection{Low}
+\begin{enumerate}
+    \item Project idea, "Jassen", is not well known or understood by team members (possible, negligible) 
+    \begin{enumerate}
+        \item Mitigation strategies:  Play a "Jass" in the team to ensure everybody knows the basic rules and concepts 
+    \end{enumerate}
+\end{enumerate}
+
+\section{Time \& Issue Tracking} \label{sec:TimeAndIssueTracking}
+
+Our project plan is tracked on our \href{https://jasstracker-jira.atlassian.net/browse/JASS}{Jira Board}.
+All team members are already experienced with Jira and it provides many desired features (Epics, burndown charts, sprints) which were lacking in GitLab.
