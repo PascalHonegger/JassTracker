@@ -12,3 +12,60 @@
     
     Try to avoid duplication with other chapters such as the \textit{Project Plan}. Work with cross-references when appropriate.
 }
+
+\section{Working with Git}
+\begin{itemize}
+    \item We use conventional commits
+    \item We use Merge Requests in GitLab, direct pushes to master are forbidden
+    \item We rebase our commits locally and create a merge commit when merging into master
+\end{itemize}
+
+\section{Definition of Done (DoD)}
+
+\subsection{Feature (Defect / Story)}
+\begin{itemize}
+    \item Acceptance criteria / issue of user story is met 
+    \item Code follows best practices and guidelines 
+    \item No TODOs without a issue number are allowed 
+    \item Project builds without errors or warnings 
+    \item Tests are written and all tests are passing 
+    \item Peer Code Review performed 
+    \item Project deployed on the test environment identical to production platform 
+    \item Documentation updated 
+    \item Associated with epic and release 
+    \item Hours worked on are logged correctly 
+\end{itemize}
+
+\subsection{Sprint}
+\begin{itemize}
+    \item DoD of each item included in the sprint is met 
+    \item Product backlog updated 
+    \item Sprint marked as ready for the production deployment by the Product Owner 
+\end{itemize}
+
+\subsection{Release}
+\begin{itemize}
+    \item Release is documented and all contining tasks are associated 
+    \item Code complete 
+    \item Environments are prepared for release 
+    \item QA is done \& all issues resolved 
+    \item Check that no unintegrated work in progress has been left in any development or staging environment. 
+\end{itemize}
+
+\section{Definition of Ready (DoR)}
+
+\subsection{Defect} 
+\begin{itemize}
+    \item Steps to reproduce 
+    \item Severity 
+    \item Screenshots 
+\end{itemize}
+
+\subsection{Story}
+\begin{itemize}
+    \item Use-Case (As user I want ...) 
+    \item Estimate 
+    \item Epic link 
+    \item Acceptance criterea list specified 
+    \item Should be doable within a week, otherwise try to split it 
+\end{itemize}
