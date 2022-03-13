@@ -1,6 +1,5 @@
-package dev.honegger
+package dev.honegger.endpoints
 
-import dev.honegger.plugins.configureRouting
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -12,11 +11,11 @@ class ApplicationTest {
     @Test
     fun testRoot() = testApplication {
         application {
-            configureRouting()
+            configureSampleEndpoints()
         }
-        client.get("/").apply {
+        client.get("/api/hello-world").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("Hello World!", bodyAsText())
+            assertEquals("""{"message":"Hello World!"}""", bodyAsText())
         }
     }
 }
