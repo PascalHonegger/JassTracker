@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+
+  jasstracker:
+    image: jasstracker
+    build:
+      dockerfile: Dockerfile
+      context: .
+    restart: on-failure
+    ports:
+      - "80:8080"
+    depends_on:
+      - database
+    environment:
+      DB_HOST: database
+      DB_USER: jasstracker
+      DB_PASSWORD: password
+
+  database:
+    image: postgres:14-alpine
+    restart: on-failure
+    environment:
+      POSTGRES_USER: jasstracker
+      POSTGRES_PASSWORD: password
