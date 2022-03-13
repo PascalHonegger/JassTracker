@@ -1,0 +1,9 @@
+### LaTeX Documentation ###
+out/
+latexdiff-base/
+gitDescription.tmp
+src/**/*.aux
+src/**/*.gz
+src/**/*.log
+src/**/*.out
+src/**/*.toc
