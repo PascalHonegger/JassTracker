@@ -5,6 +5,10 @@
 
 \input{custom}
 
+\makeglossaries
+
+\input{glossary}
+
 \hypersetup{
     pdfauthor={Farhad Mehta, Thomas Kälin},
     pdftitle={Template for SE Project software documentation},
@@ -43,6 +47,11 @@
 \input{03_project-documentation/03_time-tracking-report}
 \input{03_project-documentation/04_personal-reports}
 \input{03_project-documentation/05_meeting-minutes}
+
+% Ensure all entries are printed, even if not referenced
+\glsaddall
+\printglossary
+\newpage
 
 \addcontentsline{toc}{chapter}{Bibliography}
 \bibliographystyle{alpha}
