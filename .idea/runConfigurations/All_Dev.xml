@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="All Dev" type="CompoundRunConfigurationType">
+    <toRun name="Postgres Dev" type="docker-deploy" />
+    <toRun name="Backend" type="JetRunConfigurationType" />
+    <toRun name="Frontend" type="js.build_tools.npm" />
+    <method v="2" />
+  </configuration>
+</component>

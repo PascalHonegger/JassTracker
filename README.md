@@ -1,20 +1,45 @@
-The aim of this repository is to provide an easy to use LaTeX template for documenting software projects. 
+# JassTracker
 
-# Usage
+## Development
 
-Fork this repository before working on a concrete project documentation.
+The easiest way to start all components is using the configured IntelliJ run configuration.
+There exists one configuration for `Frontend`, `Backend` and `Postgres Dev`, or you can start all using the `All Dev` configuration.
+You can also manually start all components:
+
+### Frontend
+```shell
+cd Frontend
+# Install NPM dependencies
+npm ci
+# Start dev server
+npm run serve
+# Build for prod
+npm run build
+# Run linter
+npm run lint
+```
+
+### Backend
+```shell
+# Start dev server
+./gradlew run
+# Run tests
+./gradlew test
+```
+
+## Deployment / Production
+
+```shell
+# See docker-compose.yml for prod template
+docker compose up -d
+```
+
+The aim of this repository is to provide an easy to use LaTeX template for documenting software projects.
+
+## Documentation
 
 This repository is configured to be usable within VS Code, using the LaTeX Workshop plugin.
-
-This repository is also configured to be usable within Eclipse, via the TeXclipse plugin. Clone locally first and the import into Eclipse via `Import Project -> Git -> Projects from Git -> Existing Local Repository -> Import Existing Eclipse Projects`.
-
-Alternatively, you may use your favourite LaTeX editor.
 
 The included makefile can be used via the `make doc` command within the `Documentation` directory to build the pdf version of the documentation. The `make doc_diff` command can be used to generate the diff pdf via latexdiff. Make sure that you tag the base version you want to use for the diff with the `latexdiff-base` tag in the repository. Take a look at `Documentation/makefile` for more information.
 
 The repository has also been configured to automatically build `Documentaton/out/main.pdf` and `Documentation/out/diff.pdf` upon every push onto gitlab. These can be found within `CI/CD -> Jobs -> Artifacts`. Take a look at `.gitlab-ci.yml` for more information.
-
-You may use the `Documentation/releases` directory to store and commit individual versions of your documentation and diffs for convenience.
-
-Note: The template is tested and designed to be compatible with the TeX Live snapshot specified in `gitlab-ci.yml`. In case you experience problems building articles from the template locally, please make sure that you are using the same snapshot.  
-
