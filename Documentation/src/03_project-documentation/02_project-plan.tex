@@ -25,24 +25,24 @@ The following chapters are referencing external tools. For convenience, those to
 
 \section{Processes}
 
-We will use a combination of Scrum+RUP as recommended.
+We will use a combination of Scrum (without RUP) because all team members are comfortable with Scrum.
 Milestones, iterations and epics are tracked in Jira (see \ref{sec:TimeAndIssueTracking}).
 
 \subsection*{Meetings}
 
 \begin{table}[H]
-    \begin{tabular}{l|l|l}
-    \textbf{Meeting} & \textbf{Schedule} & \textbf{Subject} \\
+    \begin{tabular}{l|l|l|l}
+    \textbf{Meeting} & \textbf{Schedule} & \textbf{Subject} & \textbf{Timebox} \\
     \hline
-    Weekly & Every Saturday & Progress and encountered problems \\
-    Planning & Every other Saturday & Plan the next sprint, assign stories \\
-    Retro & Every other Saturday & Review past sprint, how to improve \\
-    Review 1 & 07.03.2022 & Project Plan \\
-    Review 2 & 21.03.2022 & Requirements \\
-    Review 3 & 04.04.2022 & End of Elaboration \\
-    Review 4 & 02.05.2022 & Quality \\
-    Review 5 & 22.05.2022 & Architecture \\
-    Project Presentation & 29.05.2022 & Present JassTracker in its full glory
+    Weekly & Every Saturday & Scrum Daily & 15m \\
+    Planning & Every other Saturday & Scrum Planning & 45m \\
+    Retro & Every other Saturday & Scrum Retrospective & 45m \\
+    Review 1 & 07.03.2022 & Project Plan & 1h \\
+    Review 2 & 21.03.2022 & Requirements & 1h \\
+    Review 3 & 04.04.2022 & End of Elaboration & 1h \\
+    Review 4 & 02.05.2022 & Quality & 1h \\
+    Review 5 & 23.05.2022 & Architecture & 1h \\
+    Presentation & 07.06.2022 & Present the great JassTracker & 1h
     \end{tabular}
 \end{table}
 
@@ -60,6 +60,30 @@ Because of the small team size some members have more than one assigned role.
     Jamie  & QA, DEV & Guarantee the final product has a good quality and works reliably
     \end{tabular}
 \end{table}
+
+\subsubsection*{DEV}
+A developer is responsible for the development of the target application.
+Every developer is responsible for the project / code quality as a whole and should act accordingly.
+
+\subsubsection*{PO}
+The product owner is responsible to push the project vision forward.
+In planning meetings, he is responsible to get as many features done as possible.
+The product backlog is mainly created by the PO, but the team as a whole is responsible for maintaining it.
+But the PO has full authority over the priorization of user stories.
+
+\subsubsection*{DEVOPS}
+A devops engineer extends all responsibilities from a regular dev.
+In addition, he is responsible for operating the app by ensuring it's working correctly.
+He manages and oversees the deployment process and tracks metrics such as uptime or hardware utilization.
+
+\subsubsection*{SM}
+The scrum master is responsible for the correct implementation of the scrum process.
+He is in charge of organizing the scrum meetings and document them if needed (e.g. Retrospective)
+
+\subsubsection*{QA}
+Quality Assurance is responsible to ensure a good quality of the final product.
+To achieve this, quality metrics should be setup and tracked by QA, such as test coverage.
+It is not in the responsibility of QA to fix such issues or run manual tests, that honor belongs to the whole team.
 
 \section{Collaboration}
 
