@@ -1,4 +1,4 @@
-@startuml
+@startuml domain model
 
 hide circle
 hide empty methods
