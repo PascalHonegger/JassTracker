@@ -12,7 +12,8 @@ class Game{
 }
 
 class GameStatistics{
-    
+    totalScore
+    averageRoundScore
 }
 
 class Player{
@@ -23,22 +24,48 @@ class Player{
 }
 
 class PlayerStatistics{
-
+    averageGameScore
+    averageRoundScore
 }
 
 class Round{
     nr
+    score
+}
+
+class RoundType {
+    muliplier
+    name
+    trump
+    direction
 }
 
 class Team{
     name
 }
 
+note left of GameStatistics
+    Team score is calculated
+    by summing up scores
+    of the rounds in which
+    they were able to choose
+    the game type.
+end note
+
+note top of PlayerStatistics
+    Player round score is calculated
+    by averaging the score of each
+    round in which the player
+    was able to choose the game type
+end note
+
 User <|-- Player
 User <|-- Guest
-User "0..*" -- "1..*" Game : plays
-Team -- User
-Game o-- "20" Round
-GameStatistics -- Game
+User "1" -- "0..10" Round : chooses type of >
+Team "*" -- "2" User
+Team "2" -- "1" Game : compete in >
+Game "1" o-- "0..20" Round
+Round "*" -- "1" RoundType : is of type >
+GameStatistics "1" -- "1" Team
 PlayerStatistics -- Player
 @enduml
