@@ -6,26 +6,30 @@ hide empty methods
 class User{
 
 }
+
 class Game{
     state
 }
+
 class GameStatistics{
     
 }
+
 class Player{
     username
     password
-}
-class PlayerStatistics{
-
-}
-class Profile{
     displayName
     profilePicture
 }
+
+class PlayerStatistics{
+
+}
+
 class Round{
     nr
 }
+
 class Team{
     name
 }
@@ -33,7 +37,6 @@ class Team{
 User <|-- Player
 User <|-- Guest
 User "0..*" -- "1..*" Game : plays
-Player *-- Profile
 Team -- User
 Game o-- "20" Round
 GameStatistics -- Game
