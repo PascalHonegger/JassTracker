@@ -1,4 +1,8 @@
 @startuml
+
+hide circle
+hide empty methods
+
 class User{
 
 }
