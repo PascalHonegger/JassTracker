@@ -59,7 +59,8 @@ publish:
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker-compose up -d $CI_ENVIRONMENT_SLUG"
     - echo "Deployed at $CI_ENVIRONMENT_URL"
   only:
-    - $CI_DEFAULT_BRANCH
+    variables:
+      - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 deploy_staging:
   <<: *deploy_configuration
