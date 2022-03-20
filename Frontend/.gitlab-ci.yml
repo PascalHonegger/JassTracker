@@ -1,16 +1,19 @@
 .frontend_template: &frontend_configuration
   image: node:17-alpine
-  cache:
-    paths:
-      - node_modules/
   before_script:
     - cd Frontend
+    - npm ci --cache .npm --prefer-offline
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
 
 frontend_build:
   <<: *frontend_configuration
   stage: build
   script:
-    - npm ci
     - npm run build
 
 frontend_lint:
