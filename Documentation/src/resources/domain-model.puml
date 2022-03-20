@@ -46,7 +46,7 @@ class GameParticipation {
     tablePosition
 }
 
-note right of GameParticipation::playerName
+note left of GameParticipation::playerName
     For registered players
     playerName defaults to
     displayName or username
@@ -114,7 +114,7 @@ note on link
 end note
 GameHighlightType "1" --r "*" GameHighlight  : type
 
-Team "1" --  "1" GameStatistics
+Team "1" --u  "1" GameStatistics
 Player "1" -- "1"PlayerStatistics
 
 @enduml
