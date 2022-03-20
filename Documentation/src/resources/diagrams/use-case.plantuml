@@ -1,0 +1,72 @@
+@startuml JassTracker
+left to right direction
+actor Player as p
+actor Player_With_JassTracker as pt
+package Access {
+  usecase "Login" as A1
+  usecase "Register" as A2
+  usecase "Guest Login" as A3
+  usecase "Logout" as A4
+}
+
+package GameLifeCycleManagement {
+  usecase "Begin New Game" as GLCM1
+  usecase "Enter Player and Table Names" as GLCMH1
+  usecase "Exit a Game" as GLCM2
+  usecase "Continue a Running Game" as GLCM3
+  usecase "Delete Game" as GLCM4
+  usecase "Display Game Overview" as GLCM5
+
+  GLCM1 .> GLCMH1 : include
+}
+package JassScoreboard {
+  usecase "View Scoreboard" as JS1
+  usecase "Update Scoreboard" as JS2
+  usecase "See whose turn it is" as JS3
+  usecase "See which contracts are available to him" as JS4
+  JS2 .> JS1 : extend
+}
+package GameStastics {
+  usecase "View Game Statistics" as GS1
+  usecase "Filter Statistics" as GS2
+  GS2 .> GS1 : extend
+}
+package Profile {
+  usecase "View Profile" as P1
+  usecase "Edit Profile" as P2
+  P2 .> P1 : extend
+}
+package PlayerStatstics {
+  usecase "View Player Statistics" as PS1
+  usecase "Filter Statistics" as PS2
+  PS2 .> PS1 : extend
+}
+
+'Player With JassTracker'
+pt --> A1
+pt --> A2
+pt --> A3
+pt --> A4
+
+pt --> P1
+pt --> P2
+
+pt --> PS1
+pt --> PS2
+
+pt --> GLCM1
+pt --> GLCM2
+pt --> GLCM3
+
+pt --> GS1
+pt --> GS2
+
+'Player'
+pt .u.> p : extends
+
+p -u-> JS1
+p -u-> JS2
+p -u-> JS3
+p -u-> JS4
+
+@enduml
