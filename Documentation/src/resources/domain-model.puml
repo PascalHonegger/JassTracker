@@ -14,7 +14,7 @@ class GameStatistics {
     averageRoundScore
 }
 
-note top
+note right
     Team score is calculated
     by summing up scores
     of the rounds in which
@@ -66,6 +66,12 @@ class Team {
     name
 }
 
+class GameHighlight {
+}
+
+class GameHighlightType {
+}
+
 enum GameState {
     RUNNING
     COMPLETED
@@ -83,20 +89,32 @@ enum ContractType {
     GUSCHTI
 }
 
-User <|--r Player
-User <|--r Guest
+User <|-- Player
+User <|-- Guest
 User "1" -- "*" GameParticipation
-GameParticipation "1" -- "0..10" Round : chooses contract of >
-Team "*" -- "2" GameParticipation
+Team "1" -- "2" GameParticipation
 note on link
-    Team members must be
-    diagonally opposite on table
+    Team mates must be
+    diagonally opposite
+    on table
 end note
-Team "2" --  "1" Game : compete in >
+
+Game "1" --  "2" Team  : compete in <
 Game "1" *-- "0..20" Round
-Game "*" -- "1" GameState : state
-Round "*" --r "1" Contract : contract
-Team "1" --r  "1" GameStatistics
-PlayerStatistics "1" -- "1" Player
-Contract "*" --r "1" ContractType : type
+GameState "1" -- "*" Game  : state
+Contract "1" -- "*" Round  : contract
+ContractType "1" -- "*" Contract : type
+
+GameParticipation "1" -- "0..10" Round : chooses contract of >
+
+GameParticipation "1" -- "0..1" GameHighlight : highlight
+note on link
+    Determined when
+    game is completed
+end note
+GameHighlightType "1" --r "*" GameHighlight  : type
+
+Team "1" --  "1" GameStatistics
+Player "1" -- "1"PlayerStatistics
+
 @enduml
