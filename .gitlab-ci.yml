@@ -1,4 +1,4 @@
-include: 'doc.gitlab-ci.yml'
+include: 'Documentation/.gitlab-ci.yml'
 
 # To contribute improvements to CI/CD templates, please follow the Development guide at:
 # https://docs.gitlab.com/ee/development/cicd/templates.html
@@ -37,4 +37,3 @@ docker-build:
     - if: $CI_COMMIT_BRANCH
       exists:
         - Dockerfile
-
