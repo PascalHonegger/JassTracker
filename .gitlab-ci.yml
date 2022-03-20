@@ -13,7 +13,7 @@ include: 'Frontend/.gitlab-ci.yml'
 # This template uses one generic job with conditional builds
 # for the default branch and all other (MR) branches.
 
-docker-build:
+docker_build:
   # Use the official docker image.
   image: docker:20
   stage: build
