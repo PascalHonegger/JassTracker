@@ -2,6 +2,7 @@
 
 hide class circle
 hide empty methods
+hide empty fields
 
 class User {
 }
@@ -63,7 +64,6 @@ class Contract {
 }
 
 class Team {
-    name
 }
 
 class GameHighlight {
