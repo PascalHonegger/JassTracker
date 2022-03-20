@@ -1,5 +1,6 @@
 include: 'Documentation/.gitlab-ci.yml'
 include: 'Backend/.gitlab-ci.yml'
+include: 'Frontend/.gitlab-ci.yml'
 
 # To contribute improvements to CI/CD templates, please follow the Development guide at:
 # https://docs.gitlab.com/ee/development/cicd/templates.html

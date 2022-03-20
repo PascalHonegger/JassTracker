@@ -1,0 +1,19 @@
+image: node:latest
+
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  - cd Frontend
+  - npm ci
+
+frontend_build:
+  stage: build
+  script:
+    - npm run build
+
+frontend_lint:
+  stage: build
+  script:
+    - npm run lint
