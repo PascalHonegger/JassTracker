@@ -1,42 +1,48 @@
-# GitLab CI configuration to build PDFs from LaTeX sources and Diffs of these.
-# (c) Farhad Mehta 2021
-
-image: registry.gitlab.com/islandoftex/images/texlive:latest
-# Tested with the TeX Live 2021 snapshot as of 09.12.2021
-# Docker image: registry.gitlab.com/islandoftex/images/texlive:TL2021-2021-12-05-04-05
-
-before_script:
-  - tlmgr --version
-  - git --version
-  - latex --version
-  - latexmk --version
-  # Note: it seems that `latexdiff --version` returns SIG(127) as an error code. Therefore use `|| true` to ignore this.
-  - latexdiff --version || true
-  # Check the current output from git-describe that may be added to the document
-  - git describe --exclude "latexdiff-base" --always --long --dirty --broken
-
 stages:
   - build
+  - verify
   - diff
+  - docker
 
-build_doc:
-  stage: build
-  # when: manual
-  script:
-    - cd Documentation
-    - make doc
-    - cd ..
-  artifacts:
-    paths:
-      - Documentation/out/*.pdf
+include:
+  - local: 'Documentation/.gitlab-ci.yml'
+  - local: 'Backend/.gitlab-ci.yml'
+  - local: 'Frontend/.gitlab-ci.yml'
 
-build_doc_diff:
-  stage: diff
-  needs: ["build_doc"]
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Docker.gitlab-ci.yml
+
+# Build a Docker image with CI/CD and push to the GitLab registry.
+# Docker-in-Docker documentation: https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
+#
+# This template uses one generic job with conditional builds
+# for the default branch and all other (MR) branches.
+
+docker_build:
+  # Use the official docker image.
+  image: docker:20
+  stage: docker
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  # Default branch leaves tag empty (= latest tag)
+  # All other branches are tagged with the escaped branch name (commit ref slug)
   script:
-    - cd Documentation
-    - make doc_diff
-    - cd ..
-  artifacts:
-    paths:
-      - Documentation/out/*.pdf
+    - |
+      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+        tag=""
+        echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
+      else
+        tag=":$CI_COMMIT_REF_SLUG"
+        echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
+      fi
+    - docker build --pull -t "$CI_REGISTRY_IMAGE${tag}" .
+    - docker push "$CI_REGISTRY_IMAGE${tag}"
+  # Run this job in a branch where a Dockerfile exists
+  rules:
+    - if: $CI_COMMIT_BRANCH
+      exists:
+        - Dockerfile

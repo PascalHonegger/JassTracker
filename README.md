@@ -24,7 +24,7 @@ npm run lint
 # Start dev server
 ./gradlew run
 # Run tests
-./gradlew test
+./gradlew check
 ```
 
 ## Deployment / Production

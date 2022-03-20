@@ -1,0 +1,38 @@
+# GitLab CI configuration to build PDFs from LaTeX sources and Diffs of these.
+# (c) Farhad Mehta 2021
+
+image: registry.gitlab.com/islandoftex/images/texlive:latest
+# Tested with the TeX Live 2021 snapshot as of 09.12.2021
+# Docker image: registry.gitlab.com/islandoftex/images/texlive:TL2021-2021-12-05-04-05
+
+before_script:
+  - tlmgr --version
+  - git --version
+  - latex --version
+  - latexmk --version
+  # Note: it seems that `latexdiff --version` returns SIG(127) as an error code. Therefore use `|| true` to ignore this.
+  - latexdiff --version || true
+  # Check the current output from git-describe that may be added to the document
+  - git describe --exclude "latexdiff-base" --always --long --dirty --broken
+
+build_doc:
+  stage: build
+  # when: manual
+  script:
+    - cd Documentation
+    - make doc
+    - cd ..
+  artifacts:
+    paths:
+      - Documentation/out/*.pdf
+
+build_doc_diff:
+  stage: diff
+  needs: ["build_doc"]
+  script:
+    - cd Documentation
+    - make doc_diff
+    - cd ..
+  artifacts:
+    paths:
+      - Documentation/out/*.pdf
