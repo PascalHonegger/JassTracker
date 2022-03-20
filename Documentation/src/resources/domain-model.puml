@@ -1,0 +1,126 @@
+@startuml domain model
+
+hide class circle
+hide empty methods
+hide empty fields
+
+class User {
+}
+
+class Game {
+    startTime
+    endTime
+}
+
+class GameStatistics {
+    totalScore
+    averageRoundScore
+}
+
+note right
+    Team score is calculated
+    by summing up scores
+    of the rounds in which
+    they were able to choose
+    the game type.
+end note
+
+class Player {
+    username
+    password
+    displayName
+    profilePicture
+}
+
+class PlayerStatistics {
+    averageGameScore
+    averageRoundScore
+}
+
+note left of PlayerStatistics::averageRoundScore
+    Player round score is calculated
+    by averaging the score of each
+    round in which the player
+    was able to choose the game type
+end note
+
+class GameParticipation {
+    playerName
+    tablePosition
+}
+
+note left of GameParticipation::playerName
+    For registered players
+    playerName defaults to
+    displayName or username
+end note
+
+class Round {
+    number
+    score
+}
+
+class Contract {
+    multiplier
+    name
+}
+
+class Team {
+}
+
+class GameHighlight {
+}
+
+class GameHighlightType {
+}
+
+enum GameState {
+    RUNNING
+    COMPLETED
+}
+
+enum ContractType {
+    ACORNS
+    ROSES
+    SHIELDS
+    BELLS
+    TOPS_DOWN
+    BOTTOMS_UP
+    JOKER
+    SLALOM
+    GUSCHTI
+}
+
+User <|-- Player
+User <|-- Guest
+User "1" -- "*" GameParticipation
+Team "1" -- "2" GameParticipation
+note on link
+    Team mates must be
+    diagonally opposite
+    on table
+end note
+
+Game "1" --  "2" Team  : compete in <
+Game "1" *-- "0..20" Round
+GameState "1" -- "*" Game  : state
+Contract "1" -- "*" Round  : contract
+note on link
+    Each contract can only
+    be used once by each team
+end note
+ContractType "1" -- "*" Contract : type
+
+GameParticipation "1" -- "0..10" Round : chooses contract of >
+
+GameParticipation "1" -- "0..1" GameHighlight : highlight
+note on link
+    Determined when
+    game is completed
+end note
+GameHighlightType "1" --r "*" GameHighlight  : type
+
+Team "1" --u  "1" GameStatistics
+Player "1" -- "1"PlayerStatistics
+
+@enduml
