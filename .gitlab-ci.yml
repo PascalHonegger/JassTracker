@@ -15,7 +15,7 @@ include: 'Frontend/.gitlab-ci.yml'
 
 docker-build:
   # Use the official docker image.
-  image: docker:latest
+  image: docker:20
   stage: build
   services:
     - docker:dind
