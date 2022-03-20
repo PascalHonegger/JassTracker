@@ -8,6 +8,8 @@ class User {
 }
 
 class Game {
+    startTime
+    endTime
 }
 
 class GameStatistics {
@@ -103,6 +105,10 @@ Game "1" --  "2" Team  : compete in <
 Game "1" *-- "0..20" Round
 GameState "1" -- "*" Game  : state
 Contract "1" -- "*" Round  : contract
+note on link
+    Each contract can only
+    be used once by each team
+end note
 ContractType "1" -- "*" Contract : type
 
 GameParticipation "1" -- "0..10" Round : chooses contract of >
