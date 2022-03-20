@@ -7,3 +7,7 @@ src/**/*.gz
 src/**/*.log
 src/**/*.out
 src/**/*.toc
+src/**/*.blg
+src/**/*.bbl
+src/**/*.glg
+src/**/*.gls

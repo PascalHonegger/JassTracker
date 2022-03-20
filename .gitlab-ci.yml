@@ -40,28 +40,3 @@ build_doc_diff:
   artifacts:
     paths:
       - Documentation/out/*.pdf
-
-build_proposal:
-  stage: build
-  # when: manual
-  script:
-    - cd Documentation
-    - make proposal
-    - cd ..
-  artifacts:
-    paths:
-      - Documentation/out/*.pdf
-
-# The following job duplicates the functionality of the previous ones, just in case one in confident that everything works and would like to build everything in one job to save time and resources  
-build_proposal_doc_diff:
-  stage: build
-  when: manual
-  script:
-    - cd Documentation
-    - make proposal
-    - make doc
-    - make doc_diff
-    - cd ..
-  artifacts:
-    paths:
-      - Documentation/out/*.pdf
