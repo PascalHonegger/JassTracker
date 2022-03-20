@@ -5,12 +5,12 @@
       - node_modules/
   before_script:
     - cd Frontend
-    - npm ci
 
 frontend_build:
   <<: *frontend_configuration
   stage: build
   script:
+    - npm ci
     - npm run build
 
 frontend_lint:
