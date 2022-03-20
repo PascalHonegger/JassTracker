@@ -2,6 +2,7 @@ stages:
   - build
   - verify
   - diff
+  - docker
 
 include:
   - local: 'Documentation/.gitlab-ci.yml'
@@ -22,7 +23,7 @@ include:
 docker_build:
   # Use the official docker image.
   image: docker:20
-  stage: build
+  stage: docker
   services:
     - docker:dind
   before_script:
