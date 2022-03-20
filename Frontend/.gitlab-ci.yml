@@ -1,19 +1,20 @@
-image: node:17-alpine
-
-cache:
-  paths:
-    - node_modules/
-
-before_script:
-  - cd Frontend
-  - npm ci
+.frontend_template: &frontend_configuration
+  image: node:17-alpine
+  cache:
+    paths:
+      - node_modules/
+  before_script:
+    - cd Frontend
+    - npm ci
 
 frontend_build:
+  <<: *frontend_configuration
   stage: build
   script:
     - npm run build
 
 frontend_lint:
-  stage: build
+  <<: *frontend_configuration
+  stage: verify
   script:
     - npm run lint

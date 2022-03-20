@@ -15,10 +15,6 @@ before_script:
   # Check the current output from git-describe that may be added to the document
   - git describe --exclude "latexdiff-base" --always --long --dirty --broken
 
-stages:
-  - build
-  - diff
-
 build_doc:
   stage: build
   # when: manual

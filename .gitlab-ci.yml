@@ -1,6 +1,12 @@
-include: 'Documentation/.gitlab-ci.yml'
-include: 'Backend/.gitlab-ci.yml'
-include: 'Frontend/.gitlab-ci.yml'
+stages:
+  - build
+  - verify
+  - diff
+
+include:
+  - local: 'Documentation/.gitlab-ci.yml'
+  - local: 'Backend/.gitlab-ci.yml'
+  - local: 'Frontend/.gitlab-ci.yml'
 
 # To contribute improvements to CI/CD templates, please follow the Development guide at:
 # https://docs.gitlab.com/ee/development/cicd/templates.html
