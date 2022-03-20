@@ -2,7 +2,8 @@ stages:
   - build
   - verify
   - diff
-  - docker
+  - publish
+  - deploy
 
 include:
   - local: 'Documentation/.gitlab-ci.yml'
@@ -20,10 +21,10 @@ include:
 # This template uses one generic job with conditional builds
 # for the default branch and all other (MR) branches.
 
-docker_build:
+publish:
   # Use the official docker image.
   image: docker:20
-  stage: docker
+  stage: publish
   services:
     - docker:dind
   before_script:
@@ -46,3 +47,27 @@ docker_build:
     - if: $CI_COMMIT_BRANCH
       exists:
         - Dockerfile
+
+.deploy_template: &deploy_configuration
+  image: alpine:3
+  script:
+    - chmod 400 $ID_ED25519
+    - apk update && apk add openssh-client
+    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
+    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker pull $CI_REGISTRY_IMAGE:latest"
+    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker tag $CI_PROJECT_NAME:latest $CI_PROJECT_NAME:$CI_ENVIRONMENT_SLUG"
+    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker-compose up -d $CI_ENVIRONMENT_SLUG"
+    - echo "Deployed at $CI_ENVIRONMENT_URL"
+  only:
+    - $CI_DEFAULT_BRANCH
+
+deploy_staging:
+  <<: *deploy_configuration
+  stage: deploy
+  environment: staging
+
+deploy_prod:
+  <<: *deploy_configuration
+  stage: deploy
+  environment: prod
+  when: manual
