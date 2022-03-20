@@ -1,50 +1,20 @@
 @startuml domain model
 
-hide circle
+hide class circle
 hide empty methods
 
-class User{
-
+class User {
 }
 
-class Game{
-    state
+class Game {
 }
 
-class GameStatistics{
+class GameStatistics {
     totalScore
     averageRoundScore
 }
 
-class Player{
-    username
-    password
-    displayName
-    profilePicture
-}
-
-class PlayerStatistics{
-    averageGameScore
-    averageRoundScore
-}
-
-class Round{
-    nr
-    score
-}
-
-class RoundType {
-    muliplier
-    name
-    trump
-    direction
-}
-
-class Team{
-    name
-}
-
-note left of GameStatistics
+note top
     Team score is calculated
     by summing up scores
     of the rounds in which
@@ -52,20 +22,81 @@ note left of GameStatistics
     the game type.
 end note
 
-note top of PlayerStatistics
+class Player {
+    username
+    password
+    displayName
+    profilePicture
+}
+
+class PlayerStatistics {
+    averageGameScore
+    averageRoundScore
+}
+
+note left of PlayerStatistics::averageRoundScore
     Player round score is calculated
     by averaging the score of each
     round in which the player
     was able to choose the game type
 end note
 
-User <|-- Player
-User <|-- Guest
-User "1" -- "0..10" Round : chooses type of >
-Team "*" -- "2" User
-Team "2" -- "1" Game : compete in >
-Game "1" o-- "0..20" Round
-Round "*" -- "1" RoundType : is of type >
-GameStatistics "1" -- "1" Team
-PlayerStatistics -- Player
+class GameParticipation {
+    playerName
+    tablePosition
+}
+
+note right of GameParticipation::playerName
+    For registered players
+    playerName defaults to
+    displayName or username
+end note
+
+class Round {
+    number
+    score
+}
+
+class Contract {
+    multiplier
+    name
+}
+
+class Team {
+    name
+}
+
+enum GameState {
+    RUNNING
+    COMPLETED
+}
+
+enum ContractType {
+    ACORNS
+    ROSES
+    SHIELDS
+    BELLS
+    TOPS_DOWN
+    BOTTOMS_UP
+    JOKER
+    SLALOM
+    GUSCHTI
+}
+
+User <|--r Player
+User <|--r Guest
+User "1" -- "*" GameParticipation
+GameParticipation "1" -- "0..10" Round : chooses contract of >
+Team "*" -- "2" GameParticipation
+note on link
+    Team members must be
+    diagonally opposite on table
+end note
+Team "2" --  "1" Game : compete in >
+Game "1" *-- "0..20" Round
+Game "*" -- "1" GameState : state
+Round "*" --r "1" Contract : contract
+Team "1" --r  "1" GameStatistics
+PlayerStatistics "1" -- "1" Player
+Contract "*" --r "1" ContractType : type
 @enduml
