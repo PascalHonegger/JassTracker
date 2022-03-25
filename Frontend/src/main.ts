@@ -13,7 +13,7 @@ const store = createStore({
   },
   mutations: {
     setLoggedIn(state: { loggedIn: boolean }, loggedIn: boolean) {
-      state.loggedIn = false;
+      state.loggedIn = loggedIn;
     },
     logout(state: { loggedIn: boolean }) {
       state.loggedIn = false;

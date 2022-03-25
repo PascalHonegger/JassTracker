@@ -1,14 +1,23 @@
 <template>
-  <nav>
-    <router-link class="logo" to="/">JassTracker</router-link>
-    <router-link to="/Overview">Overview</router-link>
-    <router-link to="/Profile">Profile</router-link>
-    <router-link to="/Help">Help-Center</router-link>
-    <a @click="logout" class="cursor-pointer" v-if="this.$store.state.loggedIn"
-      >Logout</a
-    >
-  </nav>
-  <router-view />
+  <div>
+    <nav>
+      <router-link class="logo" to="/">JassTracker</router-link>
+      <router-link to="/Overview" v-if="this.$store.state.loggedIn"
+        >Overview</router-link
+      >
+      <router-link to="/Profile" v-if="this.$store.state.loggedIn"
+        >Profile</router-link
+      >
+      <router-link to="/Help">Help-Center</router-link>
+      <a
+        @click="logout"
+        class="cursor-pointer"
+        v-if="this.$store.state.loggedIn"
+        >Logout</a
+      >
+    </nav>
+    <router-view />
+  </div>
 </template>
 
 <script>
