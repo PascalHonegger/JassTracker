@@ -1,5 +1,5 @@
 <template>
-  <div class="help">
-    <h1>This is the Help Center page</h1>
+  <div class="container mx-auto text-center">
+    <h1>We are happy to help!</h1>
   </div>
 </template>

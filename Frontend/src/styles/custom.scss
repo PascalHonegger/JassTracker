@@ -4,25 +4,14 @@ body {
 
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
     color: #2c3e50;
 }
 
-nav {
-padding: 30px;
-border: solid 1px black;
-display: flex;
-justify-content: space-between;
-/*    .logo {
-        // tbd postion left
-    } */
-}
 .home {
     width: 100%;
     display: flex;
 }
+
 .image  {
     width: 50%;
     img {
@@ -30,14 +19,17 @@ justify-content: space-between;
         width: 100%;
     }
 }
+
 .login {
+    text-align: center;
     width: 50%;
 }
+
 nav a {
-font-weight: bold;
-color: #2c3e50;
+    font-weight: bold;
+    color: #2c3e50;
 }
 
 nav a.router-link-exact-active {
-color: #42b983;
+    color: #42b983;
 }

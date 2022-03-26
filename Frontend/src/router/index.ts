@@ -1,8 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import HelpView from "../views/HelpView.vue";
-import ProfileView from "../views/ProfileView.vue";
-import OverView from "../views/OverView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -13,17 +10,20 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/help",
     name: "help",
-    component: HelpView,
+    component: () =>
+      import(/* webpackChunkName: "help" */ "../views/HelpView.vue"),
   },
   {
     path: "/overview",
     name: "overview",
-    component: OverView,
+    component: () =>
+      import(/* webpackChunkName: "overview" */ "../views/OverView.vue"),
   },
   {
     path: "/profile",
     name: "profile",
-    component: ProfileView,
+    component: () =>
+      import(/* webpackChunkName: "profile" */ "../views/ProfileView.vue"),
   },
 ];
 
