@@ -1,0 +1,35 @@
+body {
+    margin: 0; 
+}
+
+#app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    color: #2c3e50;
+}
+
+.home {
+    width: 100%;
+    display: flex;
+}
+
+.image  {
+    width: 50%;
+    img {
+        height: auto;
+        width: 100%;
+    }
+}
+
+.login {
+    text-align: center;
+    width: 50%;
+}
+
+nav a {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+    color: #42b983;
+}

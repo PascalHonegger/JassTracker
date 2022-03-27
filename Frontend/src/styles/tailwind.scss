@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+    @apply font-bold py-2 px-4 rounded;
+}
+.btn-blue {
+    @apply bg-blue-500 text-white;
+}
+.btn-blue:hover {
+    @apply bg-blue-700;
+}
+
+.board {
+    flex: 1 0 21%;
+    justify-content: center;
+    @apply border-solid border-2 border-black p-8;
+    &:hover {
+        border-color: blue;
+    }
+}
+
+.login input {
+    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5;
+}
+
+.default-h1 {
+    @apply font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600;
+}
