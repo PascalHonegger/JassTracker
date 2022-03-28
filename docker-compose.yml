@@ -13,7 +13,7 @@ services:
     depends_on:
       - database
     environment:
-      DB_HOST: database
+      DB_URL: "jdbc:postgresql://database:5432/jasstracker"
       DB_USER: jasstracker
       DB_PASSWORD: password
 
