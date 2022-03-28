@@ -5,7 +5,6 @@ plugins {
 
 dependencies {
     implementation(project(":Backend:domain"))
-    implementation(project(":Backend:domain"))
     implementation(libs.logback)
     testImplementation(testLibs.kotlin.test)
 }
