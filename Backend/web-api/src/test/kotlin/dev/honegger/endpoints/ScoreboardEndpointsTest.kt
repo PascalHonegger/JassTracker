@@ -52,7 +52,7 @@ class ScoreboardEndpointsTest {
                 "dummy"
             )
         } returns dummyScoreboard
-        client.get("/api/scoreboard/dummy").apply {
+        client.get("/api/scoreboards/dummy").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals("""{"name":"dummy","ownerId":"dummy"}""", bodyAsText())
         }
@@ -67,7 +67,7 @@ class ScoreboardEndpointsTest {
 
         val exception = assertThrows<ClientRequestException> {
             runBlocking {
-                client.get("/api/scoreboard/whatever")
+                client.get("/api/scoreboards/whatever")
             }
         }
         assertEquals(HttpStatusCode.NotFound, exception.response.status)
