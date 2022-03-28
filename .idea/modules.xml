@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/JassTracker.iml" filepath="$PROJECT_DIR$/.idea/modules/JassTracker.iml" />
       <module fileurl="file://$PROJECT_DIR$/Documentation/JassTracker.Documentation.iml" filepath="$PROJECT_DIR$/Documentation/JassTracker.Documentation.iml" />
       <module fileurl="file://$PROJECT_DIR$/Frontend/JassTracker.Frontend.iml" filepath="$PROJECT_DIR$/Frontend/JassTracker.Frontend.iml" />
     </modules>

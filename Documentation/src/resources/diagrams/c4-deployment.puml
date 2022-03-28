@@ -1,0 +1,48 @@
+@startuml
+
+cloud Internet as internet {
+}
+
+cloud OST-Server {
+
+    node "Traefik" as proxy
+    note left
+      Reverse proxy, chooses container based on domain
+    end note
+
+    node "JassTracker" as prod {
+      artifact Backend as backendProd {
+        artifact "Frontend" as frontendProd {
+        }
+      }
+    }
+
+    node "JassTracker Test" as test {
+      artifact Backend as backendTest {
+        artifact "Frontend" as frontendTest {
+        }
+      }
+    }
+
+    note "Frontend is served by the Backend and\npart of the same docker container" as n1
+    frontendTest .. n1
+
+    node Database as db {
+      database PostgreSQL {
+        storage Prod as dbProd {
+        }
+        storage Test as dbTest {
+        }
+      }
+    }
+}
+
+internet --> proxy
+
+proxy --> prod : Proxies requests to
+proxy --> test : Proxies requests to
+
+backendProd --> dbProd : uses
+backendTest --> dbTest : uses
+
+@endum

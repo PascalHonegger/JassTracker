@@ -1,0 +1,13 @@
+@startuml SystemContextDiagram
+!include <C4/C4_Context>
+
+title JassTracker - System Context Diagram
+
+Person(player, "Main Player", "Player with JassTracker")
+Person(otherPlayer, "Player", "Regular Player")
+System(jassTracker, "JassTracker", "Tool which tracks Jass scores")
+
+BiRel_R(otherPlayer, player, "Talk about Jass")
+Rel(player, jassTracker, "Enter and view Jass data", "HTTPS")
+
+@enduml
