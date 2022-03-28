@@ -1,5 +1,8 @@
 version: '3.8'
 
+volumes:
+  postgresql_data:
+
 services:
 
   jasstracker:
@@ -23,3 +26,5 @@ services:
     environment:
       POSTGRES_USER: jasstracker
       POSTGRES_PASSWORD: password
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
