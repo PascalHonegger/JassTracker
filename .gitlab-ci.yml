@@ -55,7 +55,7 @@ publish:
     - apk update && apk add openssh-client
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker pull $CI_REGISTRY_IMAGE:latest"
-    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker tag $CI_PROJECT_NAME:latest $CI_PROJECT_NAME:$CI_ENVIRONMENT_SLUG"
+    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker tag $CI_REGISTRY_IMAGE:latest $CI_PROJECT_NAME:$CI_ENVIRONMENT_SLUG"
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "docker-compose up -d $CI_ENVIRONMENT_SLUG"
     - echo "Deployed at $CI_ENVIRONMENT_URL"
   only:
