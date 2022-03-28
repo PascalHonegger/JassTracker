@@ -12,6 +12,8 @@ dependencyResolutionManagement {
         val logback = "1.2.11"
         val shadow = "7.1.2"
         val kotlinLogging = "2.1.21"
+        val flyway = "8.5.5"
+        val postgresql = "42.3.3"
 
         create("libs") {
             library("ktor-server-core", "io.ktor", "ktor-server-core-jvm").version(ktor)
@@ -24,6 +26,8 @@ dependencyResolutionManagement {
             library("ktor-server-netty", "io.ktor", "ktor-server-netty-jvm").version(ktor)
             library("logback", "ch.qos.logback", "logback-classic").version(logback)
             library("kotlin-logging", "io.github.microutils", "kotlin-logging-jvm").version(kotlinLogging)
+            library("flyway", "org.flywaydb", "flyway-core").version(flyway)
+            library("postgresql", "org.postgresql", "postgresql").version(postgresql)
 
             plugin("kotlin-jvm", "org.jetbrains.kotlin.jvm").version(kotlin)
             plugin("kotlin-serialization", "org.jetbrains.kotlin.plugin.serialization").version(kotlin)

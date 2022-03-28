@@ -3,6 +3,7 @@ package dev.honegger
 import dev.honegger.endpoints.configureScoreboardEndpoints
 import dev.honegger.plugins.configureHTTP
 import dev.honegger.plugins.configureStaticRouting
+import dev.honegger.plugins.runDbMigrations
 import dev.honegger.repositories.ScoreboardRepositoryImpl
 import dev.honegger.services.ScoreboardServiceImpl
 import io.ktor.server.application.*
@@ -12,6 +13,7 @@ fun main(args: Array<String>): Unit =
 
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
+    runDbMigrations()
     configureHTTP()
     configureStaticRouting()
 

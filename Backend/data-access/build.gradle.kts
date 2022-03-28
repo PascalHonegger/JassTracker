@@ -6,6 +6,8 @@ plugins {
 dependencies {
     implementation(project(":Backend:domain"))
     implementation(libs.logback)
+    implementation(libs.flyway)
+    runtimeOnly(libs.postgresql)
     testImplementation(testLibs.kotlin.test)
 }
 

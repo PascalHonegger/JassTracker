@@ -43,7 +43,7 @@ create table round (
 
 insert into contract (id, name, multiplier, type) values
     ('58bae0f8-8c59-4a40-aa2d-9c6a489366b3', 'Eicheln', 1, 'acorns'),
-    ('d895b400-3d89-48db-a7ed-5e593f54b7f6', 'Rösli', 2, 'roses'),
+    ('d895b400-3d89-48db-a7ed-5e593f54b7f6', 'Rosen', 2, 'roses'),
     ('41c7bd00-3da4-4926-bcb6-08e12aafbe6d', 'Schilten', 3, 'shields'),
     ('38fb8cbb-b22d-40f7-b9a1-b4adc1740075', 'Schellen', 4, 'bells'),
     ('62aeb3b0-7b2d-4670-9789-6acd23fb8609', 'Obenabe', 5, 'tops_down'),
