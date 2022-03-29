@@ -1,5 +1,8 @@
 version: '3.8'
 
+volumes:
+  postgresql_data:
+
 services:
 
   jasstracker:
@@ -13,7 +16,7 @@ services:
     depends_on:
       - database
     environment:
-      DB_HOST: database
+      DB_URL: "jdbc:postgresql://database:5432/jasstracker"
       DB_USER: jasstracker
       DB_PASSWORD: password
 
@@ -23,3 +26,5 @@ services:
     environment:
       POSTGRES_USER: jasstracker
       POSTGRES_PASSWORD: password
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data

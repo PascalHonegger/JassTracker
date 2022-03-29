@@ -24,6 +24,14 @@
             </DockerPortBindingImpl>
           </list>
         </option>
+        <option name="volumeBindings">
+          <list>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="/var/lib/postgresql/data" />
+              <option name="hostPath" value="jasstracker_pg_dev" />
+            </DockerVolumeBindingImpl>
+          </list>
+        </option>
       </settings>
     </deployment>
     <method v="2" />
