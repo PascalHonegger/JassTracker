@@ -11,6 +11,7 @@ dependencyResolutionManagement {
         val ktor = "2.0.0-beta-1"
         val logback = "1.2.11"
         val shadow = "7.1.2"
+        val kotlinxDatetime = "0.3.2"
         val kotlinLogging = "2.1.21"
         val flyway = "8.5.5"
         val postgresql = "42.3.3"
@@ -26,6 +27,7 @@ dependencyResolutionManagement {
             library("ktor-server-cors", "io.ktor", "ktor-server-cors-jvm").version(ktor)
             library("ktor-serialization-kotlinx-json", "io.ktor", "ktor-serialization-kotlinx-json-jvm").version(ktor)
             library("ktor-server-netty", "io.ktor", "ktor-server-netty-jvm").version(ktor)
+            library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime-jvm").version(kotlinxDatetime)
             library("logback", "ch.qos.logback", "logback-classic").version(logback)
             library("kotlin-logging", "io.github.microutils", "kotlin-logging-jvm").version(kotlinLogging)
             library("flyway", "org.flywaydb", "flyway-core").version(flyway)

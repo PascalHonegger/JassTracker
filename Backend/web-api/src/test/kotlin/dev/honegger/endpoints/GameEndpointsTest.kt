@@ -1,7 +1,7 @@
 package dev.honegger.endpoints
 
-import dev.honegger.domain.Scoreboard
-import dev.honegger.services.ScoreboardService
+import dev.honegger.domain.Game
+import dev.honegger.services.GameService
 import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -11,19 +11,21 @@ import io.ktor.server.plugins.*
 import io.ktor.server.testing.*
 import io.mockk.*
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.LocalDateTime
 import org.junit.jupiter.api.assertThrows
+import java.util.*
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ScoreboardEndpointsTest {
-    private val service = mockk<ScoreboardService>()
+class GameEndpointsTest {
+    private val service = mockk<GameService>()
 
     @BeforeTest
     fun setup() {
         clearMocks(service)
-        every { service.getScoreboardOrNull(any(), any()) } returns null
+        every { service.getGameOrNull(any(), any()) } returns null
     }
 
     @AfterTest
@@ -32,45 +34,45 @@ class ScoreboardEndpointsTest {
     }
 
     @Test
-    fun `test get scoreboard finds dummy scoreboard`() = testApplication {
+    fun `test get game finds dummy game`() = testApplication {
         application {
-            configureScoreboardEndpoints(service)
+            configureGameEndpoints(service)
         }
         val client = createClient {
             install(ContentNegotiation) {
                 json()
             }
         }
-        val dummyScoreboard = Scoreboard(
-            id = "dummy",
-            name = "dummy",
-            ownerId = "dummy",
+        val dummyId = UUID.randomUUID()
+        val dummyGame = Game(
+            id = dummyId,
+            startTime = LocalDateTime(2022, 4, 2, 13, 0, 0),
         )
         every {
-            service.getScoreboardOrNull(
+            service.getGameOrNull(
                 any(),
-                "dummy"
+                dummyId
             )
-        } returns dummyScoreboard
-        client.get("/api/scoreboards/dummy").apply {
+        } returns dummyGame
+        client.get("/api/games/$dummyId").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("""{"name":"dummy","ownerId":"dummy"}""", bodyAsText())
+            assertEquals("""{"startTime":"2022-04-02T13:00:00Z","endTime":null}""", bodyAsText())
         }
-        verify(exactly = 1) { service.getScoreboardOrNull(any(), "dummy") }
+        verify(exactly = 1) { service.getGameOrNull(any(), dummyId) }
     }
 
     @Test
-    fun `test get scoreboard returns 404 if not found`() = testApplication {
+    fun `test get game returns 404 if not found`() = testApplication {
         application {
-            configureScoreboardEndpoints(service)
+            configureGameEndpoints(service)
         }
 
         val exception = assertThrows<ClientRequestException> {
             runBlocking {
-                client.get("/api/scoreboards/whatever")
+                client.get("/api/games/3de81ab0-792e-43b0-838b-acad78f29ba6")
             }
         }
         assertEquals(HttpStatusCode.NotFound, exception.response.status)
-        verify(exactly = 1) { service.getScoreboardOrNull(any(), "whatever") }
+        verify(exactly = 1) { service.getGameOrNull(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
     }
 }

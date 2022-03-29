@@ -10,6 +10,7 @@ dependencies {
     implementation(libs.logback)
     implementation(libs.flyway)
     implementation(libs.jooq)
+    implementation(libs.kotlinx.datetime)
     runtimeOnly(libs.postgresql)
     jooqGenerator(libs.postgresql)
     testImplementation(testLibs.kotlin.test)
