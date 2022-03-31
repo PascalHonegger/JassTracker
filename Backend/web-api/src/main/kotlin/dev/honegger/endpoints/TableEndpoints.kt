@@ -57,9 +57,9 @@ fun Application.configureTableEndpoints(
             }
             get("/") {
                 val tables =
-                    tableService.getTablesOrNull(dummySession)
+                    tableService.getTablesOrEmpty(dummySession)
 
-                if (tables == null) {
+                if (tables.isEmpty()) {
                     call.respond(HttpStatusCode.NotFound)
                     return@get
                 }

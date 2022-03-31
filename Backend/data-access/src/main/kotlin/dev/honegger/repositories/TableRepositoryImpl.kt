@@ -11,7 +11,7 @@ class TableRepositoryImpl : TableRepository {
         return tables[id]
     }
 
-    override fun getTablesOrNull(): List<Table>? {
+    override fun getTablesOrEmpty(): List<Table> {
         // Placeholder code for DB access
         // This code would map the generated jOOQ-Entities to the domain object
         return tables.values.toList()

@@ -80,14 +80,14 @@ class TableEndpointsTest {
             ownerId = "dummy2",
         )
         every {
-            service.getTablesOrNull(any())
+            service.getTablesOrEmpty(any())
         } returns listOf(dummyTable1, dummyTable2)
 
         client.get("/api/tables/").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals("""[{"name":"dummy1","ownerId":"dummy1"},{"name":"dummy2","ownerId":"dummy2"}]""", bodyAsText())
         }
-        verify(exactly = 1) { service.getTablesOrNull(any()) }
+        verify(exactly = 1) { service.getTablesOrEmpty(any()) }
     }
 
     @Test
