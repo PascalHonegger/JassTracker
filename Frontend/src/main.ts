@@ -5,6 +5,7 @@ import router from "./router";
 
 import "./styles/tailwind.scss";
 import "./styles/custom.scss";
+import "./styles/modal.scss";
 
 const store = createStore({
   state() {

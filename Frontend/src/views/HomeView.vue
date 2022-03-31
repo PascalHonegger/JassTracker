@@ -6,7 +6,7 @@
     <div class="login flex flex-col justify-center">
       <h1 class="default-h1">JassTracker</h1>
       <p class="font-medium">Slogan TBD</p>
-      <div class="flex flex-col w-1/4 my-8 self-center">
+      <div class="flex flex-col my-8 self-center">
         <form @submit.prevent="login" autocomplete="on">
           <div class="mb-6">
             <label

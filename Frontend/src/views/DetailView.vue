@@ -1,5 +1,13 @@
 <template>
   <div class="container mx-auto">
+    <button @click="backToOverview" class="btn btn-blue mt-2 ml-2">Back</button>
+    <button
+      v-if="!gameInProgress"
+      @click="newGame"
+      class="btn btn-blue ml-2 mt-2"
+    >
+      New Game
+    </button>
     <scoreboard :scoreboard="scoreboard"></scoreboard>
   </div>
 </template>
@@ -13,6 +21,7 @@ export default {
   data() {
     return {
       scoreboard: {},
+      gameInProgress: false,
     };
   },
   created() {
@@ -28,6 +37,14 @@ export default {
   },
   components: {
     Scoreboard,
+  },
+  methods: {
+    newGame() {
+      console.log("New Game will be created");
+    },
+    backToOverview($event: any) {
+      this.$router.push(`/overview`);
+    },
   },
 };
 </script>
