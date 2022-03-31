@@ -55,6 +55,20 @@ fun Application.configureTableEndpoints(
 
                 call.respond(HttpStatusCode.OK, table.toWebTable())
             }
+            get("/") {
+                val tables =
+                    tableService.getTablesOrNull(dummySession)
+
+                if (tables == null) {
+                    call.respond(HttpStatusCode.NotFound)
+                    return@get
+                }
+                val webTables = mutableListOf<WebTable>()
+                tables.forEach {
+                    webTables += it.toWebTable()
+                }
+                call.respond(HttpStatusCode.OK, webTables)
+            }
             put {
                 val newTable = call.receive<WebCreateTable>()
                 val createdTable = tableService.createTable(

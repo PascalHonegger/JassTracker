@@ -10,6 +10,7 @@ import java.util.*
 interface TableService {
     fun createTable(session: UserSession, name: String): Table
     fun getTableOrNull(session: UserSession, id: String): Table?
+    fun getTablesOrNull(session: UserSession): List<Table>?
     fun updateTable(session: UserSession, updatedTable: Table)
 }
 
@@ -41,6 +42,13 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
     ): Table? {
         // Users can load any table they know the ID of
         return tableRepository.getTableOrNull(id)
+    }
+
+    override fun getTablesOrNull(
+        session: UserSession
+    ): List<Table>? {
+        // Users can load all tables (that belong to them / they are a part of)
+        return tableRepository.getTablesOrNull()
     }
 
     override fun updateTable(

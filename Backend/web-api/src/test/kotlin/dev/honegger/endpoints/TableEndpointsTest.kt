@@ -60,6 +60,37 @@ class TableEndpointsTest {
     }
 
     @Test
+    fun `test get tables finds multiple tables`() = testApplication {
+        application {
+            configureTableEndpoints(service)
+        }
+        val client = createClient {
+            install(ContentNegotiation) {
+                json()
+            }
+        }
+        val dummyTable1 = Table(
+            id = "dummy1",
+            name = "dummy1",
+            ownerId = "dummy1",
+        )
+        val dummyTable2 = Table(
+            id = "dummy2",
+            name = "dummy2",
+            ownerId = "dummy2",
+        )
+        every {
+            service.getTablesOrNull(any())
+        } returns listOf(dummyTable1, dummyTable2)
+
+        client.get("/api/tables/").apply {
+            assertEquals(HttpStatusCode.OK, status)
+            assertEquals("""[{"name":"dummy1","ownerId":"dummy1"},{"name":"dummy2","ownerId":"dummy2"}]""", bodyAsText())
+        }
+        verify(exactly = 1) { service.getTablesOrNull(any()) }
+    }
+
+    @Test
     fun `test get table returns 404 if not found`() = testApplication {
         application {
             configureTableEndpoints(service)
