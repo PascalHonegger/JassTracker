@@ -8,7 +8,8 @@ fun Application.runDbMigrations() {
         runMigrations(
             url = property("jasstracker.db.url").getString(),
             user = property("jasstracker.db.user").getString(),
-            password = propertyOrNull("jasstracker.db.password")?.getString()
+            password = propertyOrNull("jasstracker.db.password")?.getString(),
+            runTestMigrations = environment.developmentMode
         )
     }
 }
