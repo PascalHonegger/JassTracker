@@ -1,4 +1,4 @@
-delete from round where id in (
+delete from "round" where id in (
     'c1dbf7ae-719f-4acc-a6e6-03c37534e8a4',
     '22e854d0-b00b-4dc5-bf72-1ec97ebd0fdf',
     'dc4a1ebc-68d1-4130-86f7-142d293af28a',
@@ -24,13 +24,13 @@ delete from round where id in (
     'e74dfd78-d14f-468f-b9a0-423264725d3b'
 );
 
-delete from game_participation where game_id in ('3de81ae0-792e-43b0-838b-acad78f29ba6', '85df0ff4-6c8b-4846-b8e6-400940660f0b');
+delete from "game_participation" where game_id in ('3de81ae0-792e-43b0-838b-acad78f29ba6', '85df0ff4-6c8b-4846-b8e6-400940660f0b');
 
-delete from game where id in ('3de81ae0-792e-43b0-838b-acad78f29ba6', '85df0ff4-6c8b-4846-b8e6-400940660f0b');
+delete from "game" where id in ('3de81ae0-792e-43b0-838b-acad78f29ba6', '85df0ff4-6c8b-4846-b8e6-400940660f0b');
 
-delete from table where id in ('92968e55-6df0-4f21-a7cc-a243025e5f87', 'de940c47-9881-4e95-bc3d-6014ad1902e1');
+delete from "table" where id in ('92968e55-6df0-4f21-a7cc-a243025e5f87', 'de940c47-9881-4e95-bc3d-6014ad1902e1');
 
-delete from player where id in (
+delete from "player" where id in (
     '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0',
     '3095c042-d0a9-4219-9f65-53d4565fd1e6',
     '283c0a20-b293-40e7-8858-da098a53b756',
@@ -39,7 +39,7 @@ delete from player where id in (
     '7dad81d3-62db-4553-9d48-f38f404f1596'
 );
 
-insert into player (id, username, display_name, password) values
+insert into "player" (id, username, display_name, password) values
 	('27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0', 'pascal', 'Pascal', 'honegger'),
 	('3095c042-d0a9-4219-9f65-53d4565fd1e6', 'marcel', 'Marcel', 'joss'),
 	('283c0a20-b293-40e7-8858-da098a53b756', 'david', 'David', 'kalchofner'),
@@ -47,15 +47,15 @@ insert into player (id, username, display_name, password) values
 	('665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3', 'guest1', 'Guest', ''),
 	('7dad81d3-62db-4553-9d48-f38f404f1596', 'guest2', 'Guest', '');
 
-insert into table (id, name, owner_id, game_id) values
-  ('92968e55-6df0-4f21-a7cc-a243025e5f87', 'game1',  '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0', '3de81ae0-792e-43b0-838b-acad78f29ba6'),
-  ('de940c47-9881-4e95-bc3d-6014ad1902e1', 'game2', '3095c042-d0a9-4219-9f65-53d4565fd1e6', '85df0ff4-6c8b-4846-b8e6-400940660f0b' );
+insert into "table" (id, name, owner_id) values
+  ('92968e55-6df0-4f21-a7cc-a243025e5f87', 'game1',  '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0'),
+  ('de940c47-9881-4e95-bc3d-6014ad1902e1', 'game2', '3095c042-d0a9-4219-9f65-53d4565fd1e6' );
 
-insert into game (id, start_time, end_time, table_id) values
+insert into "game" (id, start_time, end_time, table_id) values
   ('3de81ae0-792e-43b0-838b-acad78f29ba6', '2022-03-31 14:08:59.654385+02', '2022-04-01 14:08:59.654385+02', '92968e55-6df0-4f21-a7cc-a243025e5f87'),
   ('85df0ff4-6c8b-4846-b8e6-400940660f0b', '2022-03-31 14:08:59.654385+02', NULL, 'de940c47-9881-4e95-bc3d-6014ad1902e1');
 
-insert into game_participation (game_id, player_id, table_position) values
+insert into "game_participation" (game_id, player_id, table_position) values
 	('3de81ae0-792e-43b0-838b-acad78f29ba6', '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0', 0),
 	('3de81ae0-792e-43b0-838b-acad78f29ba6', '3095c042-d0a9-4219-9f65-53d4565fd1e6', 1),
 	('3de81ae0-792e-43b0-838b-acad78f29ba6', '283c0a20-b293-40e7-8858-da098a53b756', 2),
@@ -65,7 +65,7 @@ insert into game_participation (game_id, player_id, table_position) values
 	('85df0ff4-6c8b-4846-b8e6-400940660f0b', '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0', 2),
 	('85df0ff4-6c8b-4846-b8e6-400940660f0b', '3095c042-d0a9-4219-9f65-53d4565fd1e6', 3);
 
-insert into round (id, number, score, game_id, player_id, contract_id) values
+insert into "round" (id, number, score, game_id, player_id, contract_id) values
 	('c1dbf7ae-719f-4acc-a6e6-03c37534e8a4',1, 120,'3de81ae0-792e-43b0-838b-acad78f29ba6', '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0', '58bae0f8-8c59-4a40-aa2d-9c6a489366b3'),
 	('22e854d0-b00b-4dc5-bf72-1ec97ebd0fdf',2, 73,'3de81ae0-792e-43b0-838b-acad78f29ba6', '3095c042-d0a9-4219-9f65-53d4565fd1e6', 'd895b400-3d89-48db-a7ed-5e593f54b7f6'),
 	('dc4a1ebc-68d1-4130-86f7-142d293af28a',3, 89,'3de81ae0-792e-43b0-838b-acad78f29ba6', '283c0a20-b293-40e7-8858-da098a53b756', '41c7bd00-3da4-4926-bcb6-08e12aafbe6d'),
