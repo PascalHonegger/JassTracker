@@ -28,6 +28,8 @@ delete from game_participation where game_id in ('3de81ae0-792e-43b0-838b-acad78
 
 delete from game where id in ('3de81ae0-792e-43b0-838b-acad78f29ba6', '85df0ff4-6c8b-4846-b8e6-400940660f0b');
 
+delete from table where id in ('92968e55-6df0-4f21-a7cc-a243025e5f87', 'de940c47-9881-4e95-bc3d-6014ad1902e1');
+
 delete from player where id in (
     '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0',
     '3095c042-d0a9-4219-9f65-53d4565fd1e6',
@@ -45,9 +47,13 @@ insert into player (id, username, display_name, password) values
 	('665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3', 'guest1', 'Guest', ''),
 	('7dad81d3-62db-4553-9d48-f38f404f1596', 'guest2', 'Guest', '');
 
-insert into game (id, start_time, end_time, name, owner_id) values
-  ('3de81ae0-792e-43b0-838b-acad78f29ba6', '2022-03-31 14:08:59.654385+02', '2022-04-01 14:08:59.654385+02', 'game1', '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0'),
-  ('85df0ff4-6c8b-4846-b8e6-400940660f0b', '2022-03-31 14:08:59.654385+02', NULL, 'game2', '3095c042-d0a9-4219-9f65-53d4565fd1e6');
+insert into table (id, name, owner_id, game_id) values
+  ('92968e55-6df0-4f21-a7cc-a243025e5f87', 'game1',  '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0', '3de81ae0-792e-43b0-838b-acad78f29ba6'),
+  ('de940c47-9881-4e95-bc3d-6014ad1902e1', 'game2', '3095c042-d0a9-4219-9f65-53d4565fd1e6', '85df0ff4-6c8b-4846-b8e6-400940660f0b' );
+
+insert into game (id, start_time, end_time, table_id) values
+  ('3de81ae0-792e-43b0-838b-acad78f29ba6', '2022-03-31 14:08:59.654385+02', '2022-04-01 14:08:59.654385+02', '92968e55-6df0-4f21-a7cc-a243025e5f87'),
+  ('85df0ff4-6c8b-4846-b8e6-400940660f0b', '2022-03-31 14:08:59.654385+02', NULL, 'de940c47-9881-4e95-bc3d-6014ad1902e1');
 
 insert into game_participation (game_id, player_id, table_position) values
 	('3de81ae0-792e-43b0-838b-acad78f29ba6', '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0', 0),
