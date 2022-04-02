@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(libs.kotlin.logging)
+    implementation(libs.kotlinx.datetime)
     testImplementation(testLibs.kotlin.test)
     testImplementation(testLibs.mockk)
 }

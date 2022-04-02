@@ -1,9 +1,9 @@
-package dev.honegger.migrations
+package dev.honegger
 
 import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.Location
 
-fun runMigrations(url: String, user: String, password: String?, runTestMigrations: Boolean) {
+fun bootstrap(url: String, user: String, password: String?, runTestMigrations: Boolean) {
     val flyway = Flyway.configure().apply {
         dataSource(url, user, password)
         if (runTestMigrations) {
@@ -11,4 +11,6 @@ fun runMigrations(url: String, user: String, password: String?, runTestMigration
         }
     }.load()
     flyway.migrate()
+
+    initializeDbConnection(url, user, password)
 }

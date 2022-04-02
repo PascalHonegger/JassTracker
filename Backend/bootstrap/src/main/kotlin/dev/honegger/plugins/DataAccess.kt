@@ -1,11 +1,11 @@
 package dev.honegger.plugins
 
-import dev.honegger.migrations.runMigrations
+import dev.honegger.bootstrap
 import io.ktor.server.application.*
 
-fun Application.runDbMigrations() {
+fun Application.initializeDatabase() {
     environment.config.apply {
-        runMigrations(
+        bootstrap(
             url = property("jasstracker.db.url").getString(),
             user = property("jasstracker.db.user").getString(),
             password = propertyOrNull("jasstracker.db.password")?.getString(),
