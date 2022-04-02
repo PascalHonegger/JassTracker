@@ -1,207 +1,126 @@
 \chapter{Requirements}
 
-\newcolumntype{s}{>{\columncolor[HTML]{c2c2cc}} m{3cm}}
+\section{Use-Case Diagram}
+\includegraphics[height=18cm]{resources/diagrams/use-case}
 
-\paragraph{Info:}
-The following requirements are by no means complete, but cover all key-requirements to aid the enhancement of use-cases and UI mockups. 
-Also note that these requirements are not prioritized. 
+\newcolumntype{s}{>{\columncolor[HTML]{c2c2cc}} m{3cm}} 
 
 \section {Functional Requirements}
 
+\paragraph{Info:}
+The following requirements are by no means complete, but cover all key-requirements to aid the enhancement of use-cases and UI mockups. 
+Also note that these requirements are not prioritized.
+
 \subsection {Game Life Cycle Management}
 
-\begin{longtable} { | m{1.25cm} | m{5.75cm} | m{6cm} | }
+\begin{tabular} { | m{1.75 cm} | m{5.25cm} | }
     \hline
-    \multicolumn{1}{|c|}{\textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} } & \multicolumn{1}{|c|}{ \textbf{Acceptance Criteria} } \\
-    \endhead
+    \multicolumn{1}{|c|}{\textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} }  \\
     \hline
-    FR-1 & Begin New Game & \begin{itemize}[-]
-        \item + button on table overview page is available
-        \item pressing + button links to table configuration
-        \item once a new table is configured the start button becomes available
-        \item pressing start button results in the creation of a new game
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-39}{JASS-39}  & New Table \& New Game Creation \\
     \hline
-    FR-2 & Exit a Game & \begin{itemize}[-]
-        \item there's an exit button on the scoreboard view
-        \item the exit button can be used at any time during a game
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-43}{JASS-43} & Exit Game \\
     \hline
-    FR-3 & Display Table Overview & \begin{itemize}[-]
-        \item after successful authentication a table overview of all games is presented
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-41}{JASS-41} & Display Table Overview \\ 
     \hline
-    FR-4 & Distinguish between running and completed Games & \begin{itemize}[-]
-        \item completed games must be labeled as such
-        \item running games must be clearly visible (color coded)
-    \end{itemize} \\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-42}{JASS-42} & Running \& Completed Game Distinction \\
     \hline
-    FR-5 & Continue a Running Game & \begin{itemize}[-]
-        \item running games on table overview page are clickable
-        \item pressing on running game results in the continuation of clicked game
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-41}{JASS-41} & Game Continuation \\ 
     \hline
-    FR-6 & Delete Table & \begin{itemize}[-]
-        \item tables with running games can be deleted
-        \item tables with completed games can be deleted
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-44}{JASS-44} & Delete Table \& Games \\
     \hline
-\end{longtable}
+\end{tabular}
 
 \subsection{Jass Scoreboard}
-\begin{tabular} { | m{1.25cm} | m{5.75cm} | m{6cm} | }
+\begin{tabular} { | m{1.75 cm} | m{5.25cm} | }
     \hline
-    \multicolumn{1}{|c|}{\textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} } & \multicolumn{1}{|c|}{ \textbf{Acceptance Criteria} } \\
+    \multicolumn{1}{|c|}{\textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} }  \\
     \hline
-    FR-7 & View Current Scores & \begin{itemize}[-]
-        \item scoreboard shows a table grid
-        \item first column displays the contract options
-        \item first row displays the player names
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-45}{JASS-45} & Display Current Score \\
     \hline
-    FR-8 & View Current Round & \begin{itemize}[-]
-        \item current round is displayed on scoreboard view
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-46}{JASS-46} & Display Current Round \\
     \hline
-    FR-9 & Enter Result of Current Round & \begin{itemize}[-]
-        \item table is clickable
-        \item round scores can be entered directly into table
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-47}{JASS-47} & Enter Round Results \\
     \hline
-    FR-10 & (Extension) View Win Probability per Team & \begin{itemize}[-]
-        \item scoreboard displays win probability per team
-    \end{itemize} \\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-65}{JASS-65} & (Extension) View Win Probability per Team \\
     \hline
-    FR-11 & (Extension) View Score Prediction & \begin{itemize}[-]
-        \item scorebaord shows score prediction per player
-        \item scoreboard shows score prediction per team
-    \end{itemize} \\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-64}{JASS-64} & (Extension) Display Score Prediction \\
     \hline
-    FR-12 & (Extension) Share Scoreboard & \begin{itemize}[-]
-        \item scoreboard can be exported via other applications 
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-66}{JASS-66} & (Extension) Share Scoreboard \\
     \hline
-    FR-13 & View whose turn it is &  \begin{itemize}[-]
-        \item scoreboard highlights the player whose turn it is
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-48}{JASS-48} & Display Whose Turn it is \\
     \hline
-    FR-14 & View Teams & \begin{itemize}[-]
-        \item scoreboard shows the teams 
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-49}{JASS-49} & Display Teams \\
     \hline
 \end{tabular}
 
 \subsection{Game Statistics}
-\begin{tabular} { | m{1.25cm} | m{5.75cm} | m{6cm} | }
+\begin{tabular} { | m{1.75 cm} | m{5.25cm} | }
     \hline
-    \multicolumn{1}{|c|}{ \textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} } & \multicolumn{1}{|c|}{ \textbf{Acceptance Criteria} } \\
+    \multicolumn{1}{|c|}{ \textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} }  \\
     \hline
-    FR-15 & Overview of Game Statistics & \begin{itemize}[-]
-        \item live statistics can be viewed at at any time during an open game
-        \item game statistics shows average points per team
-        \item game statistics shows total points per team
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-52}{JASS-52} & Display Statistics of one Game \\
     \hline
-    FR-16 & (Extension) Compare Statistics of two Games & \begin{itemize}[-]
-        \item two completed game statistics can be compared
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-53}{JASS-53} & (Extension) Display comparison of two game statistics \\
     \hline
-    FR-17 & View Round Statistics & \begin{itemize}[-]
-        \item game statistics can be filtered to specific contract rounds
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-54}{JASS-54} & Display Statistics of one Round \\
     \hline
 \end{tabular}
 
 \subsection{User Account and Login}
-\begin{tabular} { | m{1.25cm} | m{5.75cm} | m{6cm} | }
+\begin{tabular} { | m{1.75 cm} | m{5.25cm} | }
     \hline
-    \multicolumn{1}{|c|}{ \textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} } & \multicolumn{1}{|c|}{ \textbf{Acceptance Criteria} } \\
+    \multicolumn{1}{|c|}{ \textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} }  \\
     \hline
-    FR-18 & Play as Guest & \begin{itemize}[-]
-        \item play as guest option is available
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-51}{JASS-51} & Play as Guest \\
     \hline
-    FR-19 & Create Account & \begin{itemize}[-]
-        \item account creation requires a username and password
-        \item password must be confirmed in a second input field
-        \item registration button is only clickable if previous points are valid
-        \item account creation occurs after registration button is clicked
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-38}{JASS-38} & Account creation \\
     \hline
-    FR-20 & Login & \begin{itemize}[-]
-        \item login requires username and password
-        \item login button is only clickable if fields are not empty
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-37}{JASS-37} & Login \\
     \hline
-    FR-21 & Logout & \begin{itemize}[-]
-        \item a logout button is available in navigation bar
-    \end{itemize} \\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-50}{JASS-50} & Logout \\
     \hline
 \end{tabular}
 
 \subsection{User Guidance}
-\begin{tabular} { | m{1.25cm} | m{5.75cm} | m{6cm} | }
+\begin{tabular} { | m{1.75 cm} | m{5.25cm} | }
     \hline
-    \multicolumn{1}{|c|}{ \textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} } & \multicolumn{1}{|c|}{ \textbf{Acceptance Criteria} } \\
+    \multicolumn{1}{|c|}{ \textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} }  \\
     \hline
-    FR-22 & Access Game Rules & \begin{itemize}[-]
-        \item Help-Center is clickable throughout the application
-        \item the Help-Center provides the game rules
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-36}{JASS-36} & Provide the rules of the game \\
     \hline
-    FR-23 & Application Instructions & \begin{itemize}[-]
-        \item Help-Center is clickable throughout the application
-        \item the Help-Center provides instructions on app usage
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-56}{JASS-56} & Application Instructions \\
     \hline
 \end{tabular}
 
 \subsection{Profile Management}
-\begin{tabular} { | m{1.25cm} | m{5.75cm} | m{6cm} | }
+\begin{tabular} { | m{1.75 cm} | m{5.25cm} | }
     \hline
-    \multicolumn{1}{|c|}{ \textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} } & \multicolumn{1}{|c|}{ \textbf{Acceptance Criteria} } \\
+    \multicolumn{1}{|c|}{ \textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} }  \\
     \hline
-    FR-24 & Change Password & \begin{itemize}[-]
-        \item profile management view contains input fields to change a password
-        \item new password must be confirmed in a second field
-        \item guest account does not have a password to change
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-33}{JASS-33} & Change Password \\
     \hline
-    FR-25 & Delete Account & \begin{itemize}[-]
-        \item profile management view contains a button to delete the current signed in account
-        \item guest account cannot be deleted
-    \end{itemize} \\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-34}{JASS-34} & Account deletion \\
     \hline
-    FR-26 & Add Displayname & \begin{itemize}[-]
-        \item profile management view allows user to input a display name
-        \item display name overwrites username everywhere except on login page
-        \item guest account does not allow a display name
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-67}{JASS-67} & Add Displayname \\
     \hline
 \end{tabular}
 
 \subsection{Player Statistics}
-\begin{tabular} { | m{1.25cm} | m{5.75cm} | m{6cm} | }
+\begin{tabular} { | m{1.75 cm} | m{5.25cm} | }
     \hline
-    \multicolumn{1}{|c|}{ \textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} } & \multicolumn{1}{|c|}{ \textbf{Acceptance Criteria} } \\
+    \multicolumn{1}{|c|}{ \textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} }  \\
     \hline
-    FR-27 & View Personal Statistics & \begin{itemize}[-]
-        \item via profile management view personal statistics are presented
-        \item personal statistics displays average points per game
-        \item personal statistics displays average points per round
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-32}{JASS-32} & Display unique player statistics \\
     \hline
 \end{tabular}
 
 \subsection{End-of-Game Highlights}
-\begin{tabular} { | m{1.25cm} | m{5.75cm} | m{6cm} | }
+\begin{tabular} { | m{1.75 cm} | m{5.25cm} | }
     \hline
-    \multicolumn{1}{|c|}{ \textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} } & \multicolumn{1}{|c|}{ \textbf{Acceptance Criteria} } \\
+    \multicolumn{1}{|c|}{ \textbf{ID}} & \multicolumn{1}{|c|}{ \textbf{Story} } \\
     \hline
-    FR-28 & End-of-Game Highlights & \begin{itemize}[-]
-        \item at the end of a game each player receives a highlight
-        \item a highlight consists of either moral support or a fun fact about the game
-    \end{itemize}\\
+    \href{https://jasstracker-jira.atlassian.net/browse/JASS-68}{JASS-68} & End-of-Game Highlights \\
     \hline
 \end{tabular}
 
@@ -220,6 +139,8 @@ Also note that these requirements are not prioritized.
     \hline
     \textbf{Measure(s)} & Rendering of the new scores must be doable within 1 second\\
     \hline
+    \textbf{Testing} & Manual\\
+    \hline
 \end{tabular}
 \newline
 \vspace*{0.5 cm}
@@ -233,6 +154,8 @@ Also note that these requirements are not prioritized.
     \textbf{Trigger(s)} & User wants to be able to login in a timely manner\\
     \hline
     \textbf{Measure(s)} & Authentication of a user at login must be doable within 1 second\\
+    \hline
+    \textbf{Testing} & Manual\\
     \hline
 \end{tabular}
 \newline
@@ -248,6 +171,8 @@ Also note that these requirements are not prioritized.
     \hline
     \textbf{Measure(s)} & Setting up a new game must be doable within 1 second\\
     \hline
+    \textbf{Testing} & Manual\\
+    \hline
 \end{tabular}
 
 \subsection{Usability}
@@ -260,6 +185,8 @@ Also note that these requirements are not prioritized.
     \textbf{Trigger(s)} & User has no touch-screen or pointing device available\\ 
     \hline
     \textbf{Measure(s)} & Application must be usable with only a keyboard \\
+    \hline
+    \textbf{Testing} & Manual\\
     \hline
 \end{tabular}
 \newline
@@ -275,6 +202,8 @@ Also note that these requirements are not prioritized.
     \hline
     \textbf{Measure(s)} & Hallway testing shows eight people used the app without getting stuck\\
     \hline
+    \textbf{Testing} & Manual\\
+    \hline
 \end{tabular}
 \newline
 \vspace*{0.5 cm}
@@ -288,6 +217,8 @@ Also note that these requirements are not prioritized.
     \textbf{Trigger(s)} & User wants to be able to access a Help-Center\\
     \hline
     \textbf{Measure(s)} & Hallway testing shows eight people find the Help-Center and say it's helpful\\
+    \hline
+    \textbf{Testing} & Manual\\
     \hline
 \end{tabular}
 
@@ -303,6 +234,8 @@ Also note that these requirements are not prioritized.
     \hline
     \textbf{Measure(s)} & Last 2 major version of any browser with more than 1\% usage (except IE 11) is supported\\
     \hline
+    \textbf{Testing} & Manual\\
+    \hline
 \end{tabular}
 \newline
 \vspace*{0.5 cm}
@@ -317,6 +250,8 @@ Also note that these requirements are not prioritized.
     \hline
     \textbf{Measure(s)} & The application must support being used on mobile devices\\
     \hline
+    \textbf{Testing} & Manual\\
+    \hline
 \end{tabular}
 
 \subsection{Capacity}
@@ -329,6 +264,8 @@ Also note that these requirements are not prioritized.
     \textbf{Trigger(s)} & More than one person wants to use the application not as a guest\\
     \hline
     \textbf{Measure(s)} & At least 500 users can create an account\\
+    \hline
+    \textbf{Testing} & Automated\\
     \hline
 \end{tabular}
 \newline
@@ -344,6 +281,8 @@ Also note that these requirements are not prioritized.
     \hline
     \textbf{Measure(s)} & At least 4 games can be running at one time for a single user \\
     \hline
+    \textbf{Testing} & Automated\\
+    \hline
 \end{tabular}
 
 \subsection{Availability}
@@ -356,6 +295,8 @@ Also note that these requirements are not prioritized.
     \textbf{Trigger(s)} & Application crash\\
     \hline
     \textbf{Measure(s)} & Average downtime can not exceed 30 minutes per day\\
+    \hline
+    \textbf{Testing} & Automated\\
     \hline
 \end{tabular}
 
@@ -370,6 +311,8 @@ Also note that these requirements are not prioritized.
     \hline
     \textbf{Measure(s)} & The state before crash must be recoverable\\
     \hline
+    \textbf{Testing} & Automated\\
+    \hline
 \end{tabular}
 
 \subsection{Maintainability}
@@ -382,6 +325,8 @@ Also note that these requirements are not prioritized.
     \textbf{Trigger(s)} & Any developer wants to be able to understand the code base\\
     \hline
     \textbf{Measure(s)} & SonarQube \\
+    \hline
+    \textbf{Testing} & Automated\\
     \hline
 \end{tabular}
 \newline
@@ -397,6 +342,8 @@ Also note that these requirements are not prioritized.
     \hline
     \textbf{Measure(s)} & At least 80\% test-coverage is required for business logic\\
     \hline
+    \textbf{Testing} & Automated\\
+    \hline
 \end{tabular}
 \newline
 \vspace*{0.5 cm}
@@ -410,6 +357,8 @@ Also note that these requirements are not prioritized.
     \textbf{Trigger(s)} & User action needs to be reviewed\\
     \hline
     \textbf{Measure(s)} & At least one human readable log statement is available for each user action\\
+    \hline
+    \textbf{Testing} & Manual\\
     \hline
 \end{tabular}
 \newline
@@ -425,6 +374,8 @@ Also note that these requirements are not prioritized.
     \hline
     \textbf{Measure(s)} & Web app should pass performance, accessibility and best practices in lighthouse with a green color (90+)\\
     \hline
+    \textbf{Testing} & Automated with Gitlab CI/CD\\
+    \hline
 \end{tabular}
 
 \subsection{Security}
@@ -438,13 +389,17 @@ Also note that these requirements are not prioritized.
     \hline
     \textbf{Measure(s)} & Passwords must be at least eight characters in length\\
     \hline
+    \textbf{Testing} & Automated\\
+    \hline
 \end{tabular}
 
+\pagebreak
 \section {Mockups}
 
 \paragraph{Disclaimer:}
 These are just Mockups.
 Design can still change and colours aren't fixed and are just as a visual aid for where containers should go.
+
 
 \includegraphics[height=10cm, width=\textwidth]{resources/mockups/mockup-login}
 \includegraphics[height=10cm, width=\textwidth]{resources/mockups/mockup-register}
@@ -457,6 +412,3 @@ Design can still change and colours aren't fixed and are just as a visual aid fo
 \includegraphics[height=10cm, width=\textwidth]{resources/mockups/mockup-profile-overview}
 \includegraphics[height=10cm, width=\textwidth]{resources/mockups/mockup-profile-overview-edit}
 \includegraphics[height=10cm, width=\textwidth]{resources/mockups/mockup-player-stats}
-
-\section{Use-Case Diagram}
-\includegraphics[height=20cm]{resources/diagrams/use-case}
