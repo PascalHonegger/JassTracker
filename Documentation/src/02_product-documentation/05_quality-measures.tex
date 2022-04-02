@@ -69,3 +69,27 @@
     \item Acceptance criterea list specified 
     \item Should be doable within a week, otherwise try to split it 
 \end{itemize}
+
+
+\section{Test Concept}
+\subsection{Unit Tests}
+\begin{itemize}
+    \item Business Logic will be Unit Tested
+    \item Runs on every Push to GitLab, Merging is blocked until failing tests are fixed
+    \item Automated
+\end{itemize}
+
+\subsection{Usability Tests}
+\begin{itemize}
+    \item Project will be given to multiple people for testing (Hallway Testing)
+    \item Testers should be able to use website without having to ask any questions
+    \item Manual
+\end{itemize}
+
+\subsection{System Tests}
+\begin{itemize}
+    \item How full System works together - how components interact
+    \item Influenced by Usability Testing
+    \item Manual / Automated
+    \item Evaluation of automated Frontend Tests (Cypress) to reduce manual testing in Frontend
+\end{itemize}
