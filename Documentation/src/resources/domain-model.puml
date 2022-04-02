@@ -7,6 +7,10 @@ hide empty fields
 class User {
 }
 
+class Table {
+    name
+}
+
 class Game {
     startTime
     endTime
@@ -37,7 +41,7 @@ class PlayerStatistics {
     averageRoundScore
 }
 
-note left of PlayerStatistics::averageRoundScore
+note bottom
     Player round score is calculated
     by averaging the score of each
     round in which the player
@@ -101,24 +105,27 @@ note on link
     on table
 end note
 
+User "1" -- "*" Table : owns >
+Table "1" -- "*" Game : is played on <
+
 Game "1" --  "2" Team  : compete in <
 Game "1" *-- "0..20" Round
 GameState "1" -- "*" Game  : state
-Contract "1" -- "*" Round  : contract
+Contract "1" --u "*" Round  : contract
 note on link
     Each contract can only
     be used once by each team
 end note
-ContractType "1" -- "*" Contract : type
+ContractType "1" --l "*" Contract : type
 
-GameParticipation "1" -- "0..10" Round : chooses contract of >
+GameParticipation "1" --r "0..10" Round : chooses contract of >
 
 GameParticipation "1" -- "0..1" GameHighlight : highlight
 note on link
     Determined when
     game is completed
 end note
-GameHighlightType "1" --r "*" GameHighlight  : type
+GameHighlightType "1" --l "*" GameHighlight  : type
 
 Team "1" --u  "1" GameStatistics
 Player "1" -- "1"PlayerStatistics
