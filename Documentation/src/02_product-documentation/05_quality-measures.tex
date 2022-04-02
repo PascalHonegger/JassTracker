@@ -70,7 +70,6 @@
     \item Should be doable within a week, otherwise try to split it 
 \end{itemize}
 
-
 \section{Test Concept}
 \subsection{Unit Tests}
 \begin{itemize}
@@ -93,3 +92,9 @@
     \item Manual / Automated
     \item Evaluation of automated Frontend Tests (Cypress) to reduce manual testing in Frontend
 \end{itemize}
+
+\section{Continuous Integration and Deployment}
+We use GitLab for continuous integration and have a pipeline which runs on every commit and builds both frontend and backend.
+For the backend, tests are run and a linter for the frontend. If all jobs succeed, a Docker image is built, pushed to the registry and tagged with the current branch name.
+Once a merge request is merged into the master branch the pipeline is run again and a Docker image tagged with latest is built.
+If that succeeds the new image is automatically deployed to our staging environment with the option to deploy to production with a single click in GitLab. See also \nameref{sec:architecture_deployment}.
