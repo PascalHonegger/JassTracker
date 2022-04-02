@@ -1,37 +1,12 @@
 package dev.honegger.endpoints
 
-import dev.honegger.domain.Table
-import dev.honegger.domain.UserSession
 import dev.honegger.services.TableService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.Serializable
-
-// These objects could be generated using something like OpenAPI
-@Serializable
-data class WebTable(val name: String, val ownerId: String)
-
-@Serializable
-data class WebCreateTable(val name: String)
-
-// Would be loaded once authentication is implemented
-private val dummySession = UserSession(userId = "42", "dummy")
-
-// Map from WebTable to domain Table
-private fun WebTable.toTable(id: String) = Table(
-    id = id,
-    name = name,
-    ownerId = ownerId,
-)
-
-// Map from domain Table to WebTable
-private fun Table.toWebTable() = WebTable(
-    name = name,
-    ownerId = ownerId,
-)
+import java.util.*
 
 fun Application.configureTableEndpoints(
     // Could be injected by a DI framework like Koin
@@ -39,6 +14,10 @@ fun Application.configureTableEndpoints(
 ) {
     routing {
         route("/api/tables") {
+            get {
+                val tables = tableService.getTables(dummySession)
+                call.respond(HttpStatusCode.OK, tables.map { it.toWebTable() })
+            }
             get("/{id}") {
                 val id = call.parameters["id"]
                 if (id.isNullOrBlank()) {
@@ -46,7 +25,7 @@ fun Application.configureTableEndpoints(
                     return@get
                 }
                 val table =
-                    tableService.getTableOrNull(dummySession, id)
+                    tableService.getTableOrNull(dummySession, UUID.fromString(id))
 
                 if (table == null) {
                     call.respond(HttpStatusCode.NotFound)
@@ -54,20 +33,6 @@ fun Application.configureTableEndpoints(
                 }
 
                 call.respond(HttpStatusCode.OK, table.toWebTable())
-            }
-            get("/") {
-                val tables =
-                    tableService.getTablesOrEmpty(dummySession)
-
-                if (tables.isEmpty()) {
-                    call.respond(HttpStatusCode.NotFound)
-                    return@get
-                }
-                val webTables = mutableListOf<WebTable>()
-                tables.forEach {
-                    webTables += it.toWebTable()
-                }
-                call.respond(HttpStatusCode.OK, webTables)
             }
             put {
                 val newTable = call.receive<WebCreateTable>()
@@ -83,7 +48,7 @@ fun Application.configureTableEndpoints(
                     call.respond(HttpStatusCode.BadRequest)
                     return@post
                 }
-                val updatedTable = call.receive<WebTable>().toTable(id)
+                val updatedTable = call.receive<WebTable>().toTable()
                 tableService.updateTable(dummySession, updatedTable)
                 call.respond(HttpStatusCode.Created)
             }

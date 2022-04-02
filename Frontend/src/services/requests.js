@@ -1,6 +1,7 @@
-// import { apiUrl } from '@/config/global';
-
-const apiUrl = "";
+let apiUrl = "http://localhost:8080/api/";
+if (process.env.NODE_ENV === "production") {
+  apiUrl = "/api/";
+}
 
 export async function getRequest(route, queryParameters) {
   let url = new URL(apiUrl + route);
@@ -34,11 +35,9 @@ export async function putRequest(route, dataObject) {
 }
 
 function _getBasicHeaders() {
-  let headers = {
+  return {
     "Content-Type": "application/json",
   };
-
-  return headers;
 }
 
 async function _getResponseData(response) {

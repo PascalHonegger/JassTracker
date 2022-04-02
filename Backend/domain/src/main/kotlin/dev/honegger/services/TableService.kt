@@ -9,8 +9,8 @@ import java.util.*
 
 interface TableService {
     fun createTable(session: UserSession, name: String): Table
-    fun getTableOrNull(session: UserSession, id: String): Table?
-    fun getTablesOrEmpty(session: UserSession): List<Table>
+    fun getTableOrNull(session: UserSession, id: UUID): Table?
+    fun getTables(session: UserSession): List<Table>
     fun updateTable(session: UserSession, updatedTable: Table)
 }
 
@@ -23,11 +23,12 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
         name: String,
     ): Table {
         // Example of user input validation
-        check(name.length in 2..15) { "Name must be between 2 and 15 characters" }
+        check(name.length in 2..30) { "Name must be between 2 and 30 characters" }
         val newTable = Table(
-            id = UUID.randomUUID().toString(),
+            id = UUID.randomUUID(),
             name = name,
             ownerId = session.userId,
+            games = emptyList(),
         )
 
         // Example of a log message
@@ -38,17 +39,17 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
 
     override fun getTableOrNull(
         session: UserSession,
-        id: String,
+        id: UUID,
     ): Table? {
         // Users can load any table they know the ID of
         return tableRepository.getTableOrNull(id)
     }
 
-    override fun getTablesOrEmpty(
+    override fun getTables(
         session: UserSession
     ): List<Table> {
         // Users can load all tables (that belong to them / they are a part of)
-        return tableRepository.getTablesOrEmpty()
+        return tableRepository.getTables()
     }
 
     override fun updateTable(

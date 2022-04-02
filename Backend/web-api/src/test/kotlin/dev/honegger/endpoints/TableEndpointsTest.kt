@@ -12,6 +12,7 @@ import io.ktor.server.testing.*
 import io.mockk.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.assertThrows
+import java.util.*
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -41,22 +42,25 @@ class TableEndpointsTest {
                 json()
             }
         }
+        val id = UUID.randomUUID()
+        val ownerId = UUID.randomUUID()
         val dummyTable = Table(
-            id = "dummy",
+            id = id,
             name = "dummy",
-            ownerId = "dummy",
+            ownerId = ownerId,
+            games = emptyList()
         )
         every {
             service.getTableOrNull(
                 any(),
-                "dummy"
+                id
             )
         } returns dummyTable
-        client.get("/api/tables/dummy").apply {
+        client.get("/api/tables/$id").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("""{"name":"dummy","ownerId":"dummy"}""", bodyAsText())
+            assertEquals("""{"id":"$id","name":"dummy","ownerId":"$ownerId","games":[]}""", bodyAsText())
         }
-        verify(exactly = 1) { service.getTableOrNull(any(), "dummy") }
+        verify(exactly = 1) { service.getTableOrNull(any(), id) }
     }
 
     @Test
@@ -69,25 +73,34 @@ class TableEndpointsTest {
                 json()
             }
         }
+        val owner1UUID = UUID.randomUUID()
+        val owner2UUID = UUID.randomUUID()
+        val id1 = UUID.randomUUID()
+        val id2 = UUID.randomUUID()
         val dummyTable1 = Table(
-            id = "dummy1",
+            id = id1,
             name = "dummy1",
-            ownerId = "dummy1",
+            ownerId = owner1UUID,
+            games = emptyList(),
         )
         val dummyTable2 = Table(
-            id = "dummy2",
+            id = id2,
             name = "dummy2",
-            ownerId = "dummy2",
+            ownerId = owner2UUID,
+            games = emptyList(),
         )
         every {
-            service.getTablesOrEmpty(any())
+            service.getTables(any())
         } returns listOf(dummyTable1, dummyTable2)
 
-        client.get("/api/tables/").apply {
+        client.get("/api/tables").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("""[{"name":"dummy1","ownerId":"dummy1"},{"name":"dummy2","ownerId":"dummy2"}]""", bodyAsText())
+            assertEquals(
+                """[{"id":"$id1","name":"dummy1","ownerId":"$owner1UUID","games":[]},{"id":"$id2","name":"dummy2","ownerId":"$owner2UUID","games":[]}]""",
+                bodyAsText()
+            )
         }
-        verify(exactly = 1) { service.getTablesOrEmpty(any()) }
+        verify(exactly = 1) { service.getTables(any()) }
     }
 
     @Test
@@ -98,10 +111,10 @@ class TableEndpointsTest {
 
         val exception = assertThrows<ClientRequestException> {
             runBlocking {
-                client.get("/api/tables/whatever")
+                client.get("/api/tables/3de81ab0-792e-43b0-838b-acad78f29ba6")
             }
         }
         assertEquals(HttpStatusCode.NotFound, exception.response.status)
-        verify(exactly = 1) { service.getTableOrNull(any(), "whatever") }
+        verify(exactly = 1) { service.getTableOrNull(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
     }
 }

@@ -1,7 +1,10 @@
 package dev.honegger.domain
 
+import java.util.UUID
+
 data class Table(
-    val id: String,
+    val id: UUID,
     val name: String,
-    val ownerId: String,
+    val ownerId: UUID,
+    val games: List<Game>
 )

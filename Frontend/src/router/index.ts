@@ -29,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/table/:id",
     name: "table",
     component: () =>
-      import(/* webpackChunkName: "profile" */ "../views/DetailView.vue"),
+      import(/* webpackChunkName: "detail" */ "../views/DetailView.vue"),
   },
 ];
 
