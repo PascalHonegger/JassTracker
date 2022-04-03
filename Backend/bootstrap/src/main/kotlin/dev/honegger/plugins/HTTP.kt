@@ -7,11 +7,13 @@ import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 
 fun Application.configureHTTP() {
-    install(CORS) {
-        header(HttpHeaders.ContentType)
-        header(HttpHeaders.Authorization)
-        allowCredentials = true
-        host("localhost")
+    if (environment.developmentMode) {
+        install(CORS) {
+            header(HttpHeaders.ContentType)
+            header(HttpHeaders.Authorization)
+            allowCredentials = true
+            host("localhost:9090")
+        }
     }
 
     install(AutoHeadResponse)
