@@ -49,7 +49,7 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
         session: UserSession
     ): List<Table> {
         // Users can load all tables (that belong to them / they are a part of)
-        return tableRepository.getTables()
+        return tableRepository.getTables(session.userId)
     }
 
     override fun updateTable(

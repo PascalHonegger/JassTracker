@@ -23,8 +23,8 @@ class TableRepositoryImpl : TableRepository {
         }
     }
 
-    override fun getTables(): List<Table> = withContext {
-        selectFrom(TABLE).fetch().map {
+    override fun getTables(ownerId: UUID): List<Table> = withContext {
+        selectFrom(TABLE).where(TABLE.OWNER_ID.eq(ownerId)).fetch().map {
             Table(
                 id = it.id,
                 name = it.name,
