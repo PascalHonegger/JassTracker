@@ -1,23 +1,22 @@
 package dev.honegger.endpoints
 
-import dev.honegger.services.GameService
+import dev.honegger.services.TableService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import java.util.UUID
+import java.util.*
 
-
-fun Application.configureGameEndpoints(
+fun Application.configureTableEndpoints(
     // Could be injected by a DI framework like Koin
-    gameService: GameService,
+    tableService: TableService,
 ) {
     routing {
-        route("/api/games") {
+        route("/api/tables") {
             get {
-                val games = gameService.getAllGames(dummySession)
-                call.respond(HttpStatusCode.OK, games.map { it.toWebGame() })
+                val tables = tableService.getTables(dummySession)
+                call.respond(HttpStatusCode.OK, tables.map { it.toWebTable() })
             }
             get("/{id}") {
                 val id = call.parameters["id"]
@@ -25,23 +24,23 @@ fun Application.configureGameEndpoints(
                     call.respond(HttpStatusCode.BadRequest)
                     return@get
                 }
-                val game =
-                    gameService.getGameOrNull(dummySession, UUID.fromString(id))
+                val table =
+                    tableService.getTableOrNull(dummySession, UUID.fromString(id))
 
-                if (game == null) {
+                if (table == null) {
                     call.respond(HttpStatusCode.NotFound)
                     return@get
                 }
 
-                call.respond(HttpStatusCode.OK, game.toWebGame())
+                call.respond(HttpStatusCode.OK, table.toWebTable())
             }
             put {
-                val newGame = call.receive<WebCreateGame>()
-                val createdGame = gameService.createGame(
+                val newTable = call.receive<WebCreateTable>()
+                val createdTable = tableService.createTable(
                     dummySession,
-                    UUID.fromString(newGame.tableId),
+                    newTable.name
                 )
-                call.respond(HttpStatusCode.Created, createdGame.id.toString())
+                call.respond(HttpStatusCode.Created, createdTable.id)
             }
             post("/{id}") {
                 val id = call.parameters["id"]
@@ -49,8 +48,8 @@ fun Application.configureGameEndpoints(
                     call.respond(HttpStatusCode.BadRequest)
                     return@post
                 }
-                val updatedGame = call.receive<WebGame>().toGame()
-                gameService.updateGame(dummySession, updatedGame)
+                val updatedTable = call.receive<WebTable>().toTable()
+                tableService.updateTable(dummySession, updatedTable)
                 call.respond(HttpStatusCode.Created)
             }
         }

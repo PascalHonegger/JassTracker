@@ -56,7 +56,7 @@ class GameEndpointsTest {
         } returns dummyGame
         client.get("/api/games/$dummyId").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("""{"startTime":"2022-04-02T13:00:00Z","endTime":null}""", bodyAsText())
+            assertEquals("""{"id":"$dummyId","startTime":"2022-04-02T13:00:00Z","endTime":null}""", bodyAsText())
         }
         verify(exactly = 1) { service.getGameOrNull(any(), dummyId) }
     }

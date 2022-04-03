@@ -12,7 +12,7 @@
     @apply bg-blue-700;
 }
 
-.board {
+.table {
     flex: 1 0 21%;
     justify-content: center;
     @apply border-solid border-2 border-black p-8;
@@ -28,3 +28,19 @@
 .default-h1 {
     @apply font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600;
 }
+
+.create-table-modal {
+    input {
+        border-bottom: solid black 1px;
+    }
+    label {
+        @apply block my-2 text-sm font-medium text-gray-900;
+    }
+    .table-players {
+        display: flex;
+        justify-content: space-around;
+    }
+}
+
+
+

@@ -33,3 +33,26 @@ nav a {
 nav a.router-link-exact-active {
     color: #42b983;
 }
+
+.member-list {
+    columns: 2;
+}
+
+.add-icon {
+    font-size: 50pt;
+    align-self: center;
+}
+
+.create-table {
+    cursor: pointer;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .image {
+        display: none;
+    }
+    .login {
+        width: 100%;
+    }
+}
