@@ -5,6 +5,7 @@ import dev.honegger.domain.Table
 import dev.honegger.jasstracker.database.tables.Table.TABLE
 import dev.honegger.jasstracker.database.tables.Game.GAME
 import dev.honegger.withContext
+import kotlinx.datetime.toKotlinLocalDateTime
 import java.util.*
 
 class TableRepositoryImpl : TableRepository {
@@ -17,7 +18,7 @@ class TableRepositoryImpl : TableRepository {
                 id = it.id,
                 name = it.name,
                 ownerId = it.ownerId,
-                games = selectFrom(GAME).where(TABLE.ID.eq(it.id)).fetchInto(Game::class.java)
+                games = selectFrom(GAME).where(GAME.TABLE_ID.eq(it.id)).fetch().map { game -> Game(game.id, game.startTime.toKotlinLocalDateTime(), game.endTime?.toKotlinLocalDateTime())}
             )
         }
     }
@@ -28,7 +29,7 @@ class TableRepositoryImpl : TableRepository {
                 id = it.id,
                 name = it.name,
                 ownerId = it.ownerId,
-                games = selectFrom(GAME).where(TABLE.ID.eq(it.id)).fetchInto(Game::class.java)
+                games = selectFrom(GAME).where(GAME.TABLE_ID.eq(it.id)).fetch().map { game -> Game(game.id, game.startTime.toKotlinLocalDateTime(), game.endTime?.toKotlinLocalDateTime())}
             )
         }
     }
