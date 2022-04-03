@@ -42,7 +42,7 @@ export default {
     newGame() {
       console.log("New Game will be created");
     },
-    backToOverview($event: any) {
+    backToOverview() {
       this.$router.push(`/overview`);
     },
   },

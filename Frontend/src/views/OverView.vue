@@ -1,18 +1,13 @@
 <template>
   <div class="table-container container mx-auto">
     <div class="flex items-stretch flex-wrap">
-      <Table
-        @click="detail($event)"
-        v-for="t in allTables"
-        :table="t"
-        :key="t.id"
-      ></Table>
-      <div
+      <Table v-for="t in allTables" :key="t.id" :table="t"></Table>
+      <button
         @click="showModal"
         class="table create-table max-w-sm w-full lg:max-w-full lg:flex m-4"
       >
-        <p class="add-icon">+</p>
-      </div>
+        <span class="add-icon">+</span>
+      </button>
     </div>
 
     <Modal
@@ -112,9 +107,6 @@ export default {
     Modal,
   },
   methods: {
-    detail($event: any) {
-      this.$router.push(`/table/${$event.currentTarget.dataset.id}`);
-    },
     showModal() {
       this.isModalVisible = true;
     },

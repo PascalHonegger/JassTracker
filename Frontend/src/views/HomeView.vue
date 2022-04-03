@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="image">
-      <img src="../assets/jass.jpg" />
+      <img src="../assets/jass.jpg" alt="Jasskarten" />
     </div>
     <div class="login flex flex-col justify-center">
       <h1 class="default-h1">JassTracker</h1>
@@ -55,13 +55,11 @@ export default {
     return {};
   },
   methods: {
-    login(event: any) {
-      event.preventDefault();
+    login() {
       this.$router.push("overview");
       this.$store.commit("setLoggedIn", true);
     },
-    loginAsGuest(event: any) {
-      event.preventDefault();
+    loginAsGuest() {
       this.$router.push("overview");
       this.$store.commit("setLoggedIn", true);
     },
