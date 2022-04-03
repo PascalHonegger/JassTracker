@@ -1,3 +1,18 @@
+<script setup lang="ts">
+import { useStore } from "@/store";
+import { useRouter } from "vue-router";
+
+const store = useStore();
+const router = useRouter();
+function login() {
+  router.push("overview");
+  store.commit("setLoggedIn", true);
+}
+function loginAsGuest() {
+  router.push("overview");
+  store.commit("setLoggedIn", true);
+}
+</script>
 <template>
   <div class="home">
     <div class="image">
@@ -47,22 +62,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-export default {
-  name: "HomeView",
-  data() {
-    return {};
-  },
-  methods: {
-    login() {
-      this.$router.push("overview");
-      this.$store.commit("setLoggedIn", true);
-    },
-    loginAsGuest() {
-      this.$router.push("overview");
-      this.$store.commit("setLoggedIn", true);
-    },
-  },
-};
-</script>

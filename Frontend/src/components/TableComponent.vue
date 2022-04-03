@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import { ref } from "vue";
+
+const props = defineProps({
+  table: Object,
+});
+const mutableTable = ref({ ...props.table });
+
+function updateTable() {
+  // update table name
+  // update team member names
+}
+</script>
 <template>
   <router-link
     :to="{ name: 'table', params: { id: table.id } }"
@@ -11,23 +24,3 @@
     </ul>
   </router-link>
 </template>
-
-<script lang="ts">
-export default {
-  name: "TableComponent",
-  props: {
-    table: Object,
-  },
-  data() {
-    return {
-      mutableTable: { ...this.table },
-    };
-  },
-  methods: {
-    updateTable() {
-      // update table name
-      // update team member names
-    },
-  },
-};
-</script>
