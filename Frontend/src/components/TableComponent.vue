@@ -1,7 +1,20 @@
+<script setup lang="ts">
+import { ref } from "vue";
+
+const props = defineProps({
+  table: Object,
+});
+const mutableTable = ref({ ...props.table });
+
+function updateTable() {
+  // update table name
+  // update team member names
+}
+</script>
 <template>
-  <div
+  <router-link
+    :to="{ name: 'table', params: { id: table.id } }"
     class="table max-w-sm w-full lg:max-w-full lg:flex flex-col m-4 text-center"
-    :data-id="mutableTable.id"
   >
     <p class="font-bold">{{ mutableTable.name }}</p>
     <ul class="member-list">
@@ -9,25 +22,5 @@
         {{ member }}
       </li>
     </ul>
-  </div>
+  </router-link>
 </template>
-
-<script lang="ts">
-export default {
-  name: "TableComponent",
-  props: {
-    table: Object,
-  },
-  data() {
-    return {
-      mutableTable: { ...this.table },
-    };
-  },
-  methods: {
-    updateTable() {
-      // update table name
-      // update team member names
-    },
-  },
-};
-</script>

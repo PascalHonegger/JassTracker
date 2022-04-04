@@ -4,7 +4,7 @@ module.exports = {
     // removeDeprecatedGapUtilities: true,
     // purgeLayersByDefault: true,
   },
-  purge: ["./public/**/*.html", "./src/**/*.vue"],
+  content: ["./public/**/*.html", "./src/**/*.vue"],
   theme: {
     fontFamily: {
       sans: ["Inter", ...defaultTheme.fontFamily.sans],

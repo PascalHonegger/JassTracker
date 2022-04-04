@@ -1,7 +1,22 @@
+<script setup lang="ts">
+import { useAuthStore } from "@/store/auth-store";
+import { useRouter } from "vue-router";
+
+const store = useAuthStore();
+const router = useRouter();
+function login() {
+  router.push("/overview");
+  store.setLoggedIn();
+}
+function loginAsGuest() {
+  router.push("/overview");
+  store.setLoggedIn();
+}
+</script>
 <template>
   <div class="home">
     <div class="image">
-      <img src="../assets/jass.jpg" />
+      <img src="../assets/jass.jpg" alt="Jasskarten" />
     </div>
     <div class="login flex flex-col justify-center">
       <h1 class="default-h1">JassTracker</h1>
@@ -47,24 +62,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-export default {
-  name: "HomeView",
-  data() {
-    return {};
-  },
-  methods: {
-    login(event: any) {
-      event.preventDefault();
-      this.$router.push("overview");
-      this.$store.commit("setLoggedIn", true);
-    },
-    loginAsGuest(event: any) {
-      event.preventDefault();
-      this.$router.push("overview");
-      this.$store.commit("setLoggedIn", true);
-    },
-  },
-};
-</script>

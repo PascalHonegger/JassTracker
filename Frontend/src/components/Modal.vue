@@ -1,3 +1,9 @@
+<script setup lang="ts">
+const emit = defineEmits(["close"]);
+function close() {
+  emit("close");
+}
+</script>
 <template>
   <div class="modal-backdrop">
     <div class="modal">
@@ -16,14 +22,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-export default {
-  name: "ModalComponent",
-  methods: {
-    close() {
-      this.$emit("close");
-    },
-  },
-};
-</script>

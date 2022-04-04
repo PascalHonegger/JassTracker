@@ -31,22 +31,30 @@ class TableRepositoryImplTest {
     @Disabled
     fun `getTables returns multiple tables after saveTable is called`() {
         val repository = TableRepositoryImpl()
+        val owner1 = UUID.randomUUID()
+        val owner2 = UUID.randomUUID()
         val table1 = Table(
             id = UUID.randomUUID(),
             name = "Foo",
-            ownerId = UUID.randomUUID(),
+            ownerId = owner1,
             games = listOf(Game(id = UUID.randomUUID(), startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)))
         )
         val table2 = Table(
             id = UUID.randomUUID(),
             name = "Bar",
-            ownerId = UUID.randomUUID(),
+            ownerId = owner1,
             games = listOf(Game(id = UUID.randomUUID(), startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)))
-
         )
-        assertEquals(emptyList(), repository.getTables())
+        val table3 = Table(
+            id = UUID.randomUUID(),
+            name = "Other owner Table",
+            ownerId = owner2,
+            games = emptyList()
+        )
+        assertEquals(emptyList(), repository.getTables(owner1))
         repository.saveTable(table1)
         repository.saveTable(table2)
-        assertEquals(listOf(table1, table2), repository.getTables())
+        assertEquals(listOf(table1, table2), repository.getTables(owner1))
+        assertEquals(listOf(table3), repository.getTables(owner2))
     }
 }

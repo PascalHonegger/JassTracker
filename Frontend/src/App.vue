@@ -1,10 +1,25 @@
+<script setup lang="ts">
+import { useAuthStore } from "@/store/auth-store";
+import { computed } from "vue";
+import { useRouter } from "vue-router";
+
+const store = useAuthStore();
+const router = useRouter();
+
+const logoLink = computed(() => (store.loggedIn ? "/overview" : "/login"));
+
+function logout() {
+  store.logout();
+  router.push("/login");
+}
+</script>
 <template>
   <div>
     <nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 dark:bg-gray-800">
       <div
         class="container flex flex-wrap justify-between items-center mx-auto"
       >
-        <router-link class="flex items-center text-white" :to="this.logoLink"
+        <router-link class="flex items-center text-white" :to="logoLink"
           >JassTracker</router-link
         >
         <div class="hidden w-full md:block md:w-auto" id="mobile-menu">
@@ -15,7 +30,7 @@
               <router-link
                 class="block py-2 pr-4 pl-3 text-white"
                 to="/Profile"
-                v-if="this.$store.state.loggedIn"
+                v-if="store.loggedIn"
                 >Profile</router-link
               >
             </li>
@@ -25,12 +40,13 @@
               >
             </li>
             <li>
-              <a
+              <button
                 @click="logout"
-                class="cursor-pointer block py-2 pr-4 pl-3 text-white"
-                v-if="this.$store.state.loggedIn"
-                >Logout</a
+                class="block py-2 pr-4 pl-3 text-white"
+                v-if="store.loggedIn"
               >
+                Logout
+              </button>
             </li>
           </ul>
         </div>
@@ -39,23 +55,3 @@
     <router-view />
   </div>
 </template>
-
-<script lang="ts">
-export default {
-  name: "App",
-  data() {
-    return {};
-  },
-  computed: {
-    logoLink() {
-      return this.$store.state.loggedIn ? "/Overview" : "/";
-    },
-  },
-  methods: {
-    logout() {
-      this.$store.commit("logout");
-      this.$router.push("/");
-    },
-  },
-};
-</script>
