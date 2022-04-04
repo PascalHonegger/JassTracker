@@ -6,7 +6,7 @@ include("Backend:web-api")
 
 dependencyResolutionManagement {
     versionCatalogs {
-        val kotlin = "1.6.10"
+        val kotlin = "1.6.20"
         val mockk = "1.12.3"
         val ktor = "2.0.0-beta-1"
         val logback = "1.2.11"
