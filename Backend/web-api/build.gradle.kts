@@ -10,6 +10,7 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.logback)
     implementation(libs.kotlinx.datetime)
+    testImplementation(libs.ktor.client.content.negotiation)
     testImplementation(testLibs.ktor.server.tests)
     testImplementation(testLibs.kotlin.test)
     testImplementation(testLibs.mockk)

@@ -8,7 +8,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         val kotlin = "1.6.20"
         val mockk = "1.12.3"
-        val ktor = "2.0.0-beta-1"
+        val ktor = "2.0.0-eap-363"
         val logback = "1.2.11"
         val shadow = "7.1.2"
         val kotlinxDatetime = "0.3.2"
@@ -27,6 +27,7 @@ dependencyResolutionManagement {
             library("ktor-server-cors", "io.ktor", "ktor-server-cors-jvm").version(ktor)
             library("ktor-serialization-kotlinx-json", "io.ktor", "ktor-serialization-kotlinx-json-jvm").version(ktor)
             library("ktor-server-netty", "io.ktor", "ktor-server-netty-jvm").version(ktor)
+            library("ktor-client-content-negotiation", "io.ktor", "ktor-client-content-negotiation").version(ktor)
             library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime-jvm").version(kotlinxDatetime)
             library("logback", "ch.qos.logback", "logback-classic").version(logback)
             library("kotlin-logging", "io.github.microutils", "kotlin-logging-jvm").version(kotlinLogging)

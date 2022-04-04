@@ -3,16 +3,19 @@ package dev.honegger.plugins
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
-import io.ktor.server.plugins.*
+import io.ktor.server.plugins.autohead.*
+import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.cors.*
 import io.ktor.server.request.*
 
 fun Application.configureHTTP() {
     if (environment.developmentMode) {
         install(CORS) {
-            header(HttpHeaders.ContentType)
-            header(HttpHeaders.Authorization)
+            allowHeader(HttpHeaders.ContentType)
+            allowHeader(HttpHeaders.Authorization)
             allowCredentials = true
-            host("localhost:9090")
+            allowHost("localhost:9090")
         }
     }
 

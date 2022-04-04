@@ -2,16 +2,11 @@ package dev.honegger.endpoints
 
 import dev.honegger.domain.Table
 import dev.honegger.services.TableService
-import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.plugins.*
 import io.ktor.server.testing.*
 import io.mockk.*
-import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.assertThrows
 import java.util.*
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -35,12 +30,11 @@ class TableEndpointsTest {
     @Test
     fun `test get table finds dummy table`() = testApplication {
         application {
+            installJson()
             configureTableEndpoints(service)
         }
         val client = createClient {
-            install(ContentNegotiation) {
-                json()
-            }
+            installJson()
         }
         val id = UUID.randomUUID()
         val ownerId = UUID.randomUUID()
@@ -66,12 +60,11 @@ class TableEndpointsTest {
     @Test
     fun `test get tables finds multiple tables`() = testApplication {
         application {
+            installJson()
             configureTableEndpoints(service)
         }
         val client = createClient {
-            install(ContentNegotiation) {
-                json()
-            }
+            installJson()
         }
         val owner1UUID = UUID.randomUUID()
         val owner2UUID = UUID.randomUUID()
@@ -109,12 +102,9 @@ class TableEndpointsTest {
             configureTableEndpoints(service)
         }
 
-        val exception = assertThrows<ClientRequestException> {
-            runBlocking {
-                client.get("/api/tables/3de81ab0-792e-43b0-838b-acad78f29ba6")
-            }
+        client.get("/api/tables/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
+            assertEquals(HttpStatusCode.NotFound, status)
         }
-        assertEquals(HttpStatusCode.NotFound, exception.response.status)
         verify(exactly = 1) { service.getTableOrNull(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
     }
 }

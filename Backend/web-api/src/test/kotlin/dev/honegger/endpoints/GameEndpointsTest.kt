@@ -2,17 +2,12 @@ package dev.honegger.endpoints
 
 import dev.honegger.domain.Game
 import dev.honegger.services.GameService
-import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.plugins.*
 import io.ktor.server.testing.*
 import io.mockk.*
-import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDateTime
-import org.junit.jupiter.api.assertThrows
 import java.util.*
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -36,12 +31,11 @@ class GameEndpointsTest {
     @Test
     fun `test get game finds dummy game`() = testApplication {
         application {
+            installJson()
             configureGameEndpoints(service)
         }
         val client = createClient {
-            install(ContentNegotiation) {
-                json()
-            }
+            installJson()
         }
         val dummyId = UUID.randomUUID()
         val dummyGame = Game(
@@ -67,12 +61,9 @@ class GameEndpointsTest {
             configureGameEndpoints(service)
         }
 
-        val exception = assertThrows<ClientRequestException> {
-            runBlocking {
-                client.get("/api/games/3de81ab0-792e-43b0-838b-acad78f29ba6")
-            }
+        client.get("/api/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
+            assertEquals(HttpStatusCode.NotFound, status)
         }
-        assertEquals(HttpStatusCode.NotFound, exception.response.status)
         verify(exactly = 1) { service.getGameOrNull(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
     }
 }
