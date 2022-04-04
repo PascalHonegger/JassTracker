@@ -23,7 +23,7 @@ function newGame() {
   console.log("New Game will be created");
 }
 function backToOverview() {
-  router.push(`overview`);
+  router.push("/overview");
 }
 </script>
 <template>

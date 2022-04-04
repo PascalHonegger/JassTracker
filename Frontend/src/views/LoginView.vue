@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { useStore } from "@/store";
+import { useAuthStore } from "@/store/auth-store";
 import { useRouter } from "vue-router";
 
-const store = useStore();
+const store = useAuthStore();
 const router = useRouter();
 function login() {
-  router.push("overview");
-  store.commit("setLoggedIn", true);
+  router.push("/overview");
+  store.setLoggedIn();
 }
 function loginAsGuest() {
-  router.push("overview");
-  store.commit("setLoggedIn", true);
+  router.push("/overview");
+  store.setLoggedIn();
 }
 </script>
 <template>

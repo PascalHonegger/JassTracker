@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { useStore } from "@/store";
+import { useAuthStore } from "@/store/auth-store";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 
-const store = useStore();
+const store = useAuthStore();
 const router = useRouter();
 
-const logoLink = computed(() =>
-  store.state.loggedIn ? "/overview" : "/login"
-);
+const logoLink = computed(() => (store.loggedIn ? "/overview" : "/login"));
 
 function logout() {
-  store.commit("logout");
+  store.logout();
   router.push("/login");
 }
 </script>
@@ -32,7 +30,7 @@ function logout() {
               <router-link
                 class="block py-2 pr-4 pl-3 text-white"
                 to="/Profile"
-                v-if="store.state.loggedIn"
+                v-if="store.loggedIn"
                 >Profile</router-link
               >
             </li>
@@ -45,7 +43,7 @@ function logout() {
               <button
                 @click="logout"
                 class="block py-2 pr-4 pl-3 text-white"
-                v-if="store.state.loggedIn"
+                v-if="store.loggedIn"
               >
                 Logout
               </button>

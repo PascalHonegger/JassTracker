@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import LoginView from "../views/LoginView.vue";
-import { store } from "@/store";
+import { useAuthStore } from "@/store/auth-store";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -57,7 +57,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!store.state.loggedIn) {
+    if (!useAuthStore().loggedIn) {
       next({ name: "login" });
       return;
     }

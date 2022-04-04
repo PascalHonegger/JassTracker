@@ -1,10 +1,10 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import { key, store } from "./store";
+import { createPinia } from "pinia";
 
 import "./styles/tailwind.scss";
 import "./styles/custom.scss";
 import "./styles/modal.scss";
 
-createApp(App).use(router).use(store, key).mount("#app");
+createApp(App).use(createPinia()).use(router).mount("#app");
