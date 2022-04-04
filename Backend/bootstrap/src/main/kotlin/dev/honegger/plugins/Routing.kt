@@ -6,10 +6,9 @@ import io.ktor.server.routing.*
 
 fun Application.configureStaticRouting() {
     routing {
-        static("/") {
-            staticBasePackage = "static"
-            resources(".")
-            defaultResource("index.html")
+        singlePageApplication {
+            vue("static")
+            useResources = true
         }
     }
 }
