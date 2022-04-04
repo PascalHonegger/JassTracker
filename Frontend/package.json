@@ -35,5 +35,9 @@
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
+  },
+  "engines": {
+    "node": "17",
+    "npm": "8"
   }
 }
