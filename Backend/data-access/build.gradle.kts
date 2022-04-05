@@ -20,6 +20,12 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of("17"))
+    }
+}
+
 jooq {
     version.set(libs.versions.jooq.get())
     edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)
