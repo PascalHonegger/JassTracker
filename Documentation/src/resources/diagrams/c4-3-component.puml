@@ -7,7 +7,7 @@ title JassTracker - Component Diagram
 
 Container_Boundary(frontend, "Frontend") {
     Component(components, "Components", "Vue Router", "Pages and user interface")
-    Component(store, "Store", "Vuex", "Manage state and state updates")
+    Component(store, "Store", "Pinia", "Manage state and state updates")
     Component(backendApi, "Backend API", "", "Call backend API")
 }
 

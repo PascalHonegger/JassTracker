@@ -11,7 +11,7 @@ Person(player, "Main Player", "Player with JassTracker")
 System(jassTracker, "JassTracker", "Tool which tracks Jass scores")
 
 System_Boundary(jassTracker, "JassTracker") {
-    Container(frontend, "Frontend", "Vue.js, Vue Router, Vuex", "SPA, provides user interaction", $sprite="ma_vuejs")
+    Container(frontend, "Frontend", "Vue.js, Vue Router, Pinia", "SPA, provides user interaction", $sprite="ma_vuejs")
     Container(backend, "Backend", "Kotlin, Ktor, jOOQ, Flyway", "Provides REST-API, handles business logic", $sprite="kotlin")
     ContainerDb(database, "Database", "PostgreSQL", "Stores persistent data", $sprite="postgresql")
 }
