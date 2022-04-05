@@ -16,9 +16,6 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/help",
     name: "help",
-    meta: {
-      requiresAuth: true,
-    },
     component: () =>
       import(/* webpackChunkName: "help" */ "../views/HelpView.vue"),
   },
