@@ -1,9 +1,17 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/store/auth-store";
 import { useRouter } from "vue-router";
+import { onMounted } from "vue";
 
 const store = useAuthStore();
 const router = useRouter();
+
+onMounted(() => {
+  if (store.loggedIn) {
+    router.push("/overview");
+  }
+});
+
 function login() {
   router.push("/overview");
   store.setLoggedIn();
