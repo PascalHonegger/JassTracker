@@ -14,8 +14,16 @@ fun Application.configureHTTP() {
         install(CORS) {
             allowHeader(HttpHeaders.ContentType)
             allowHeader(HttpHeaders.Authorization)
-            allowCredentials = true
+
+            allowMethod(HttpMethod.Options)
+            allowMethod(HttpMethod.Put)
+            allowMethod(HttpMethod.Patch)
+            allowMethod(HttpMethod.Delete)
+
             allowHost("localhost:9090")
+
+            allowCredentials = true
+            allowNonSimpleContentTypes = true
         }
     }
 

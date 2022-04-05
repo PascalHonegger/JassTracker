@@ -3,7 +3,7 @@ import Table from "../components/TableComponent.vue";
 import Modal from "../components/Modal.vue";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-// import { getTables } from '../services/tableService';
+import { getTables } from "@/services/tableService";
 
 const router = useRouter();
 
@@ -29,9 +29,9 @@ onMounted(() => {
       members: ["Player 1", "Player 2", "Player 3", "Player 4"],
     },
   ];
-  /* getTables().then((data) => {
-    this.allTables = data.dataObject || [];
-  }); */
+  getTables().then((tables) => {
+    allTables.value = tables as any[]; // TODO
+  });
 });
 
 function showModal() {
