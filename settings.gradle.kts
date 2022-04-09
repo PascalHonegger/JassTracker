@@ -8,7 +8,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         val kotlin = "1.6.20"
         val mockk = "1.12.3"
-        val ktor = "2.0.0-eap-363"
+        val ktor = "2.0.0"
         val logback = "1.2.11"
         val shadow = "7.1.2"
         val kotlinxDatetime = "0.3.2"

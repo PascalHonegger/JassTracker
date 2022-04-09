@@ -18,8 +18,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        // TODO remove once Ktor 2.0 is stable
-        maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
     }
 
     tasks.withType<KotlinCompile> {
