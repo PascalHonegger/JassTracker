@@ -10,6 +10,7 @@ buildscript {
 plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.kover)
 }
 
 allprojects {
@@ -29,5 +30,24 @@ allprojects {
             languageVersion.set(JavaLanguageVersion.of("17"))
         }
         kotlinJavaToolchain.toolchain.use(javaLauncher)
+    }
+}
+
+tasks.koverMergedHtmlReport {
+    isEnabled = true
+    excludes = listOf("dev.honegger.jasstracker.database.*")
+}
+
+tasks.koverMergedXmlReport {
+    isEnabled = false
+}
+
+tasks.koverMergedVerify {
+    excludes = listOf("dev.honegger.jasstracker.database.*")
+    rule {
+        name = "Minimal line coverage rate in percent"
+        bound {
+            minValue = 30 // TODO slowly increase to reach 80% coverage
+        }
     }
 }
