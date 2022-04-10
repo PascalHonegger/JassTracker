@@ -24,8 +24,8 @@ insert into "player" (id, username, display_name, password) values
 	('7dad81d3-62db-4553-9d48-f38f404f1596', null, null, null);
 
 insert into "table" (id, name, owner_id) values
-  ('92968e55-6df0-4f21-a7cc-a243025e5f87', 'game1',  '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0'),
-  ('de940c47-9881-4e95-bc3d-6014ad1902e1', 'game2', '3095c042-d0a9-4219-9f65-53d4565fd1e6' );
+  ('92968e55-6df0-4f21-a7cc-a243025e5f87', 'table1', '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0'),
+  ('de940c47-9881-4e95-bc3d-6014ad1902e1', 'table2', '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0' );
 
 insert into "game" (id, start_time, end_time, table_id) values
   ('3de81ae0-792e-43b0-838b-acad78f29ba6', '2022-03-31 14:08:59.654385+02', '2022-04-01 14:08:59.654385+02', '92968e55-6df0-4f21-a7cc-a243025e5f87'),

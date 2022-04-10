@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 import java.util.*
 
 // Would be loaded once authentication is implemented
-val dummySession = UserSession(userId = UUID.fromString("2ea1cb74-a9aa-4b81-8953-d7a16d6ba582"), "dummy")
+val dummySession = UserSession(userId = UUID.fromString("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0"), "dummy")
 
 // These objects could be generated using something like OpenAPI
 @Serializable
