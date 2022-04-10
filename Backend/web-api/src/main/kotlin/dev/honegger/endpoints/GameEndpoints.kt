@@ -8,9 +8,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import java.util.UUID
 
-
 fun Application.configureGameEndpoints(
-    // Could be injected by a DI framework like Koin
     gameService: GameService,
 ) {
     routing {

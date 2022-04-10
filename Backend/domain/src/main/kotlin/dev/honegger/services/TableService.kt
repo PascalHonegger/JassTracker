@@ -22,7 +22,6 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
         session: UserSession,
         name: String,
     ): Table {
-        // Example of user input validation
         check(name.length in 2..30) { "Name must be between 2 and 30 characters" }
         val newTable = Table(
             id = UUID.randomUUID(),
@@ -31,7 +30,6 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
             games = emptyList(),
         )
 
-        // Example of a log message
         log.info { "Saving new table $newTable" }
         tableRepository.saveTable(newTable)
         return newTable
@@ -61,7 +59,6 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
         // User can only update a table which exists and is owned by himself
         checkNotNull(existingTable)
         check(updatedTable.ownerId == session.userId)
-        // Only copy name as an example if only partial update is allowed
         tableRepository.saveTable(existingTable.copy(name = updatedTable.name))
     }
 }

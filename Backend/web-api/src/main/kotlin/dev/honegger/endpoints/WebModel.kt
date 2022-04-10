@@ -52,8 +52,6 @@ fun WebTable.toTable() = Table(
     ownerId = ownerId,
     games = emptyList(),
 )
-
-// Map from domain Table to WebTable
 fun Table.toWebTable() = WebTable(
     id = id,
     name = name,
@@ -61,14 +59,11 @@ fun Table.toWebTable() = WebTable(
     gameIds = games.map { it.id }
 )
 
-// Map from WebGame to domain Game
 fun WebGame.toGame() = Game(
     id = id,
     startTime = startTime.toLocalDateTime(TimeZone.UTC),
     endTime = endTime?.toLocalDateTime(TimeZone.UTC),
 )
-
-// Map from domain Game to WebGame
 fun Game.toWebGame() = WebGame(
     id = id,
     startTime = startTime.toInstant(TimeZone.UTC),
