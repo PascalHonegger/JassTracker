@@ -3,11 +3,14 @@ import Table from "../components/TableComponent.vue";
 import Modal from "../components/Modal.vue";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { getTables } from "@/services/tableService";
+import { useTableStore } from "@/store/table-store";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
+const tableStore = useTableStore();
 
-let allTables = ref<Array<{ id: number; name: string; members: string[] }>>([]);
+const { tablesAsArray, loading } = storeToRefs(tableStore);
+
 const isModalVisible = ref(false);
 const newTable = {
   tableName: "",
@@ -16,22 +19,8 @@ const newTable = {
   player3: "",
   player4: "",
 };
-onMounted(() => {
-  allTables.value = [
-    {
-      id: 1,
-      name: "Demo Table",
-      members: ["Player 1", "Player 2", "Player 3", "Player 4"],
-    },
-    {
-      id: 2,
-      name: "Demo Table",
-      members: ["Player 1", "Player 2", "Player 3", "Player 4"],
-    },
-  ];
-  getTables().then((tables) => {
-    allTables.value = tables as any[]; // TODO
-  });
+onMounted(async () => {
+  await tableStore.loadTables();
 });
 
 function showModal() {
@@ -53,10 +42,21 @@ function saveTable() {
   router.push({ name: "table", params: { id } });
 }
 </script>
+<style lang="scss">
+.create-table {
+  cursor: pointer;
+  text-align: center;
+}
+.add-icon {
+  font-size: 50pt;
+  align-self: center;
+}
+</style>
 <template>
   <div class="table-container container mx-auto">
-    <div class="flex items-stretch flex-wrap">
-      <Table v-for="t in allTables" :key="t.id" :table="t"></Table>
+    <div v-if="loading">LOADING...</div>
+    <div v-else class="flex items-stretch flex-wrap">
+      <Table v-for="t in tablesAsArray" :key="t.id" :table="t"></Table>
       <button
         @click="showModal"
         class="table create-table max-w-sm w-full lg:max-w-full lg:flex m-4"

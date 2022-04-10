@@ -13,6 +13,16 @@ function logout() {
   router.push("/login");
 }
 </script>
+<style lang="scss">
+nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+  color: #42b983;
+}
+</style>
 <template>
   <div>
     <nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 dark:bg-gray-800">

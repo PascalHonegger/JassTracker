@@ -1,4 +1,4 @@
-import {api} from "@/services/requests";
+import { api } from "@/services/requests";
 
 export interface WebTable {
   id: string;
