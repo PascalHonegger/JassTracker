@@ -17,7 +17,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row3;
+import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -64,6 +64,11 @@ public class GameParticipation extends TableImpl<GameParticipationRecord> {
      * The column <code>public.game_participation.table_position</code>.
      */
     public final TableField<GameParticipationRecord, Integer> TABLE_POSITION = createField(DSL.name("table_position"), SQLDataType.INTEGER.nullable(false), this, "");
+
+    /**
+     * The column <code>public.game_participation.player_name</code>.
+     */
+    public final TableField<GameParticipationRecord, String> PLAYER_NAME = createField(DSL.name("player_name"), SQLDataType.VARCHAR(30).nullable(false), this, "");
 
     private GameParticipation(Name alias, Table<GameParticipationRecord> aliased) {
         this(alias, aliased, null);
@@ -175,11 +180,11 @@ public class GameParticipation extends TableImpl<GameParticipationRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<UUID, UUID, Integer> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row4<UUID, UUID, Integer, String> fieldsRow() {
+        return (Row4) super.fieldsRow();
     }
 }
