@@ -22,7 +22,7 @@ data class WebTable(
     val name: String,
     @Serializable(with = UUIDSerializer::class)
     val ownerId: UUID,
-    val games: List<WebGame>,
+    val gameIds: List<@Serializable(with = UUIDSerializer::class) UUID>,
 )
 
 @Serializable
@@ -44,7 +44,7 @@ fun WebTable.toTable() = Table(
     id = id,
     name = name,
     ownerId = ownerId,
-    games = games.map { it.toGame() },
+    games = emptyList(),
 )
 
 // Map from domain Table to WebTable
@@ -52,7 +52,7 @@ fun Table.toWebTable() = WebTable(
     id = id,
     name = name,
     ownerId = ownerId,
-    games = games.map { it.toWebGame() }
+    gameIds = games.map { it.id }
 )
 
 // Map from WebGame to domain Game

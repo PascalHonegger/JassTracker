@@ -1,5 +1,6 @@
 package dev.honegger.endpoints
 
+import dev.honegger.domain.Game
 import dev.honegger.domain.Table
 import dev.honegger.services.TableService
 import io.ktor.client.request.*
@@ -7,6 +8,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.mockk.*
+import kotlinx.datetime.LocalDateTime
 import java.util.*
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -52,7 +54,7 @@ class TableEndpointsTest {
         } returns dummyTable
         client.get("/api/tables/$id").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("""{"id":"$id","name":"dummy","ownerId":"$ownerId","games":[]}""", bodyAsText())
+            assertEquals("""{"id":"$id","name":"dummy","ownerId":"$ownerId","gameIds":[]}""", bodyAsText())
         }
         verify(exactly = 1) { service.getTableOrNull(any(), id) }
     }
@@ -70,6 +72,7 @@ class TableEndpointsTest {
         val owner2UUID = UUID.randomUUID()
         val id1 = UUID.randomUUID()
         val id2 = UUID.randomUUID()
+        val gameId = UUID.randomUUID()
         val dummyTable1 = Table(
             id = id1,
             name = "dummy1",
@@ -80,7 +83,14 @@ class TableEndpointsTest {
             id = id2,
             name = "dummy2",
             ownerId = owner2UUID,
-            games = emptyList(),
+            games = listOf(
+                Game(
+                    id = gameId,
+                    startTime = LocalDateTime(2022, 4, 10, 20, 20, 0, 0),
+                    endTime = null,
+                    rounds = emptyList()
+                )
+            ),
         )
         every {
             service.getTables(any())
@@ -89,7 +99,7 @@ class TableEndpointsTest {
         client.get("/api/tables").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(
-                """[{"id":"$id1","name":"dummy1","ownerId":"$owner1UUID","games":[]},{"id":"$id2","name":"dummy2","ownerId":"$owner2UUID","games":[]}]""",
+                """[{"id":"$id1","name":"dummy1","ownerId":"$owner1UUID","gameIds":[]},{"id":"$id2","name":"dummy2","ownerId":"$owner2UUID","gameIds":["$gameId"]}]""",
                 bodyAsText()
             )
         }
