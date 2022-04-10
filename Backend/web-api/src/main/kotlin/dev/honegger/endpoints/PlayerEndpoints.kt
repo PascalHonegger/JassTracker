@@ -1,0 +1,59 @@
+package dev.honegger.endpoints
+
+import dev.honegger.services.PlayerService
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import java.util.UUID
+
+fun Application.configurePlayerEndpoints(
+    playerService: PlayerService,
+) {
+    routing {
+        route("/api/players") {
+            get ("/byTable/{tableId}"){
+                val id = call.parameters["tableId"]
+                val players = playerService.getPlayersPerTable(dummySession, UUID.fromString(id))
+                call.respond(HttpStatusCode.OK, players.map { it.toWebPlayer() })
+            }
+            get("/{id}") {
+                val id = call.parameters["id"]
+                if (id.isNullOrBlank()) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@get
+                }
+                val player =
+                    playerService.getPlayerOrNull(dummySession, UUID.fromString(id))
+
+                if (player == null) {
+                    call.respond(HttpStatusCode.NotFound)
+                    return@get
+                }
+
+                call.respond(HttpStatusCode.OK, player.toWebPlayer())
+            }
+            put {
+                val newPlayer = call.receive<WebCreatePlayer>()
+                val createdPlayer = playerService.createPlayer(
+                    session = dummySession,
+                    displayName = newPlayer.displayName,
+                    username = newPlayer.username,
+                    password = newPlayer.password,
+                )
+                call.respond(HttpStatusCode.Created, createdPlayer.id.toString())
+            }
+            post("/{id}") {
+                val id = call.parameters["id"]
+                if (id.isNullOrBlank()) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@post
+                }
+                val updatedPlayer = call.receive<WebPlayer>().toPlayer()
+                playerService.updatePlayer(dummySession, updatedPlayer)
+                call.respond(HttpStatusCode.Created)
+            }
+        }
+    }
+}

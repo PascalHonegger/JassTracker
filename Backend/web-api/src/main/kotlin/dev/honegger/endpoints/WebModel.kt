@@ -73,6 +73,23 @@ data class WebContract(
     val type: ContractType,
 )
 
+@Serializable
+data class WebPlayer(
+    @Serializable(with = UUIDSerializer::class)
+    val id: UUID,
+    val username: String?,
+    val displayName: String?,
+    val password: String?,
+    val isGuest: Boolean
+)
+
+@Serializable
+data class WebCreatePlayer(
+    val username: String,
+    val displayName: String,
+    val password: String,
+)
+
 fun WebTable.toTable() = Table(
     id = id,
     name = name,
@@ -122,4 +139,20 @@ fun Round.toWebRound() = WebRound(
     gameId = gameId,
     playerId = playerId,
     contractId = contractId,
+)
+
+fun WebPlayer.toPlayer() = Player(
+    id = id,
+    username = username,
+    displayName = displayName,
+    password = password,
+    isGuest = isGuest,
+)
+
+fun Player.toWebPlayer() = WebPlayer(
+    id = id,
+    username = username,
+    displayName = displayName,
+    password = "", // Do not return password to client
+    isGuest = isGuest,
 )

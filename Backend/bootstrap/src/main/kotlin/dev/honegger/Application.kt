@@ -29,4 +29,8 @@ fun Application.module() {
     val contractRepository = ContractRepositoryImpl()
     val contractService = ContractServiceImpl(contractRepository)
     configureContractEndpoints(contractService)
+
+    val playerRepository = PlayerRepositoryImpl()
+    val playerService = PlayerServiceImpl(playerRepository)
+    configurePlayerEndpoints(playerService)
 }
