@@ -33,4 +33,8 @@ fun Application.module() {
     val playerRepository = PlayerRepositoryImpl()
     val playerService = PlayerServiceImpl(playerRepository)
     configurePlayerEndpoints(playerService)
+
+    val roundRepository = RoundRepositoryImpl()
+    val roundService = RoundServiceImpl(roundRepository)
+    configureRoundEndpoints(roundService)
 }
