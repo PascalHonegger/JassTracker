@@ -41,6 +41,7 @@ class GameEndpointsTest {
         val dummyGame = Game(
             id = dummyId,
             startTime = LocalDateTime(2022, 4, 2, 13, 0, 0),
+            rounds = emptyList()
         )
         every {
             service.getGameOrNull(
@@ -50,7 +51,7 @@ class GameEndpointsTest {
         } returns dummyGame
         client.get("/api/games/$dummyId").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("""{"id":"$dummyId","startTime":"2022-04-02T13:00:00Z","endTime":null}""", bodyAsText())
+            assertEquals("""{"id":"$dummyId","startTime":"2022-04-02T13:00:00Z","endTime":null,"rounds":[]}""", bodyAsText())
         }
         verify(exactly = 1) { service.getGameOrNull(any(), dummyId) }
     }

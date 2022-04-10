@@ -4,6 +4,7 @@ import dev.honegger.domain.Game
 import dev.honegger.domain.Table
 import dev.honegger.jasstracker.database.tables.Table.TABLE
 import dev.honegger.jasstracker.database.tables.Game.GAME
+import dev.honegger.jasstracker.database.tables.Round
 import dev.honegger.withContext
 import kotlinx.datetime.toKotlinLocalDateTime
 import java.util.*
@@ -18,7 +19,20 @@ class TableRepositoryImpl : TableRepository {
                 id = it.id,
                 name = it.name,
                 ownerId = it.ownerId,
-                games = selectFrom(GAME).where(GAME.TABLE_ID.eq(it.id)).fetch().map { game -> Game(game.id, game.startTime.toKotlinLocalDateTime(), game.endTime?.toKotlinLocalDateTime())}
+                games = selectFrom(GAME).where(GAME.TABLE_ID.eq(it.id)).fetch().map { game ->
+                    Game(game.id, game.startTime.toKotlinLocalDateTime(), game.endTime?.toKotlinLocalDateTime(),
+                        selectFrom(Round.ROUND).where(Round.ROUND.GAME_ID.eq(game.id)).fetch().map { round ->
+                            dev.honegger.domain.Round(
+                                round.id,
+                                round.number,
+                                round.score,
+                                round.gameId,
+                                round.playerId,
+                                round.contractId
+                            )
+                        }
+                    )
+                }
             )
         }
     }
@@ -29,7 +43,21 @@ class TableRepositoryImpl : TableRepository {
                 id = it.id,
                 name = it.name,
                 ownerId = it.ownerId,
-                games = selectFrom(GAME).where(GAME.TABLE_ID.eq(it.id)).fetch().map { game -> Game(game.id, game.startTime.toKotlinLocalDateTime(), game.endTime?.toKotlinLocalDateTime())}
+                games = selectFrom(GAME).where(GAME.TABLE_ID.eq(it.id)).fetch().map { game ->
+                    Game(game.id,
+                        game.startTime.toKotlinLocalDateTime(),
+                        game.endTime?.toKotlinLocalDateTime(),
+                        selectFrom(Round.ROUND).where(Round.ROUND.GAME_ID.eq(game.id)).fetch().map { round ->
+                            dev.honegger.domain.Round(
+                                round.id,
+                                round.number,
+                                round.score,
+                                round.gameId,
+                                round.playerId,
+                                round.contractId
+                            )
+                        })
+                }
             )
         }
     }

@@ -32,10 +32,37 @@ data class WebGame(
     val id: UUID,
     val startTime: Instant,
     val endTime: Instant?,
+    val rounds: List<WebRound>
 )
 
 @Serializable
 data class WebCreateGame(val tableId: String)
+
+@Serializable
+data class WebRound(
+    @Serializable(with = UUIDSerializer::class)
+    val id: UUID,
+    val number: Int,
+    val score: Int,
+    @Serializable(with = UUIDSerializer::class)
+    val gameId: UUID,
+    @Serializable(with = UUIDSerializer::class)
+    val playerId: UUID,
+    @Serializable(with = UUIDSerializer::class)
+    val contractId: UUID,
+)
+
+@Serializable
+data class WebCreateRound(
+    val number: Int,
+    val score: Int,
+    @Serializable(with = UUIDSerializer::class)
+    val gameId: UUID,
+    @Serializable(with = UUIDSerializer::class)
+    val playerId: UUID,
+    @Serializable(with = UUIDSerializer::class)
+    val contractId: UUID
+)
 
 @Serializable
 data class WebContract(
@@ -63,11 +90,13 @@ fun WebGame.toGame() = Game(
     id = id,
     startTime = startTime.toLocalDateTime(TimeZone.UTC),
     endTime = endTime?.toLocalDateTime(TimeZone.UTC),
+    rounds = rounds.map { it.toRound() }
 )
 fun Game.toWebGame() = WebGame(
     id = id,
     startTime = startTime.toInstant(TimeZone.UTC),
     endTime = endTime?.toInstant(TimeZone.UTC),
+    rounds = rounds.map { it.toWebRound() },
 )
 
 fun Contract.toWebContract() = WebContract(
@@ -75,4 +104,22 @@ fun Contract.toWebContract() = WebContract(
     name = name,
     multiplier = multiplier,
     type = type,
+)
+
+fun WebRound.toRound() = Round(
+    id = id,
+    number = number,
+    score = score,
+    gameId = gameId,
+    playerId = playerId,
+    contractId = contractId,
+)
+
+fun Round.toWebRound() = WebRound(
+    id = id,
+    number = number,
+    score = score,
+    gameId = gameId,
+    playerId = playerId,
+    contractId = contractId,
 )

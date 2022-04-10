@@ -20,7 +20,13 @@ class TableRepositoryImplTest {
             id = UUID.randomUUID(),
             name = "Some Name",
             ownerId = UUID.randomUUID(),
-            games = listOf(Game(id = UUID.randomUUID(), startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)))
+            games = listOf(
+                Game(
+                    id = UUID.randomUUID(),
+                    startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+                    rounds = emptyList()
+                )
+            )
         )
         assertNull(repository.getTableOrNull(newTable.id))
         repository.saveTable(newTable)
@@ -37,13 +43,25 @@ class TableRepositoryImplTest {
             id = UUID.randomUUID(),
             name = "Foo",
             ownerId = owner1,
-            games = listOf(Game(id = UUID.randomUUID(), startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)))
+            games = listOf(
+                Game(
+                    id = UUID.randomUUID(),
+                    startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+                    rounds = emptyList()
+                )
+            )
         )
         val table2 = Table(
             id = UUID.randomUUID(),
             name = "Bar",
             ownerId = owner1,
-            games = listOf(Game(id = UUID.randomUUID(), startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)))
+            games = listOf(
+                Game(
+                    id = UUID.randomUUID(),
+                    startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+                    rounds = emptyList()
+                )
+            )
         )
         val table3 = Table(
             id = UUID.randomUUID(),

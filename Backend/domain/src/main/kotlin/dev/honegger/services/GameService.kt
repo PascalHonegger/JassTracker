@@ -27,6 +27,7 @@ class GameServiceImpl(private val gameRepository: GameRepository, private val cl
         val newGame = Game(
             id = UUID.randomUUID(),
             startTime = clock.now().toLocalDateTime(TimeZone.UTC),
+            rounds = emptyList(),
         )
 
         log.info { "Saving new game $newGame for table $tableId" }

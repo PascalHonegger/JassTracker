@@ -6,5 +6,6 @@ import java.util.UUID
 data class Game(
     val id: UUID,
     val startTime: LocalDateTime,
-    val endTime: LocalDateTime? = null
+    val endTime: LocalDateTime? = null,
+    val rounds: List<Round>,
 )
