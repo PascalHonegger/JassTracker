@@ -1,8 +1,6 @@
 package dev.honegger.endpoints
 
-import dev.honegger.domain.Game
-import dev.honegger.domain.Table
-import dev.honegger.domain.UserSession
+import dev.honegger.domain.*
 import dev.honegger.serializer.UUIDSerializer
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -39,7 +37,15 @@ data class WebGame(
 @Serializable
 data class WebCreateGame(val tableId: String)
 
-// Map from WebTable to domain Table
+@Serializable
+data class WebContract(
+    @Serializable(with = UUIDSerializer::class)
+    val id: UUID,
+    val name: String,
+    val multiplier: Int,
+    val type: ContractType,
+)
+
 fun WebTable.toTable() = Table(
     id = id,
     name = name,
@@ -67,4 +73,11 @@ fun Game.toWebGame() = WebGame(
     id = id,
     startTime = startTime.toInstant(TimeZone.UTC),
     endTime = endTime?.toInstant(TimeZone.UTC),
+)
+
+fun Contract.toWebContract() = WebContract(
+    id = id,
+    name = name,
+    multiplier = multiplier,
+    type = type,
 )
