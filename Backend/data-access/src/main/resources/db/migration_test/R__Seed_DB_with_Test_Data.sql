@@ -1,28 +1,4 @@
-delete from "round" where id in (
-    'c1dbf7ae-719f-4acc-a6e6-03c37534e8a4',
-    '22e854d0-b00b-4dc5-bf72-1ec97ebd0fdf',
-    'dc4a1ebc-68d1-4130-86f7-142d293af28a',
-    '623a1692-fe3a-42da-977e-dea4bb872112',
-    '94615cd2-1cd7-4298-b7e1-7db6d5e5fb8e',
-    'fddcb3aa-6f8f-4656-be2e-ab9d82b5b675',
-    '69884b8a-df0c-48fa-9ad8-065cc16740f5',
-    'e5847e97-61bd-4b41-813b-80995e4ea2b9',
-    '0efda358-f340-4c43-85b1-f69def6b34d1',
-    '6af5adf2-aaa5-4583-8101-c16122bb347f',
-    '1705f2cb-0ff8-4361-9bcb-4ff1a2e3f7dd',
-    'd695e65a-a546-4ef8-ac11-8806f3e35a0c',
-    'fdd91c1f-af05-40a1-8b39-ecf5d3291556',
-    '4c364d4a-7b86-4f72-9336-f86754b0a928',
-    'ce2c29ce-cd3f-4140-b439-0cde812f2598',
-    '8cff9836-17f1-4b30-9457-f7ae59088f70',
-    '96ad63e5-c942-4b7c-bcc3-0f7b89b47468',
-    '8d708031-46af-4475-8697-be8692043357',
-    '98de7a69-f7ff-45fa-9aa5-10e02728ee2c',
-    '2e4887c9-3fbe-441a-9992-0da5f5a2fc8e',
-    'e1eb6701-f163-4e54-aadd-8239476972f6',
-    'e515e48e-ffe9-4ac4-b5bc-c9a74568ffa5',
-    'e74dfd78-d14f-468f-b9a0-423264725d3b'
-);
+delete from "round" where game_id in ('3de81ae0-792e-43b0-838b-acad78f29ba6', '85df0ff4-6c8b-4846-b8e6-400940660f0b');
 
 delete from "game_participation" where game_id in ('3de81ae0-792e-43b0-838b-acad78f29ba6', '85df0ff4-6c8b-4846-b8e6-400940660f0b');
 
