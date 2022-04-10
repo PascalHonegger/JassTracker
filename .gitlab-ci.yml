@@ -1,7 +1,6 @@
 stages:
   - build
   - verify
-  - diff
   - publish
   - deploy
 

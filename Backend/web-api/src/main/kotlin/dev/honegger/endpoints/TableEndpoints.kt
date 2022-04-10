@@ -9,7 +9,6 @@ import io.ktor.server.routing.*
 import java.util.*
 
 fun Application.configureTableEndpoints(
-    // Could be injected by a DI framework like Koin
     tableService: TableService,
 ) {
     routing {

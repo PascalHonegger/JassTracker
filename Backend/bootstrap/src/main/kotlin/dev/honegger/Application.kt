@@ -1,14 +1,11 @@
 package dev.honegger
 
-import dev.honegger.endpoints.configureGameEndpoints
-import dev.honegger.endpoints.configureTableEndpoints
+import dev.honegger.endpoints.*
 import dev.honegger.plugins.configureHTTP
 import dev.honegger.plugins.configureStaticRouting
 import dev.honegger.plugins.initializeDatabase
-import dev.honegger.repositories.GameRepositoryImpl
-import dev.honegger.repositories.TableRepositoryImpl
-import dev.honegger.services.GameServiceImpl
-import dev.honegger.services.TableServiceImpl
+import dev.honegger.repositories.*
+import dev.honegger.services.*
 import io.ktor.server.application.*
 
 fun main(args: Array<String>): Unit =
@@ -28,4 +25,16 @@ fun Application.module() {
     val tableRepository = TableRepositoryImpl()
     val tableService = TableServiceImpl(tableRepository)
     configureTableEndpoints(tableService)
+
+    val contractRepository = ContractRepositoryImpl()
+    val contractService = ContractServiceImpl(contractRepository)
+    configureContractEndpoints(contractService)
+
+    val playerRepository = PlayerRepositoryImpl()
+    val playerService = PlayerServiceImpl(playerRepository)
+    configurePlayerEndpoints(playerService)
+
+    val roundRepository = RoundRepositoryImpl()
+    val roundService = RoundServiceImpl(roundRepository)
+    configureRoundEndpoints(roundService)
 }

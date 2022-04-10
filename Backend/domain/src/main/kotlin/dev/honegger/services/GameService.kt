@@ -24,13 +24,12 @@ class GameServiceImpl(private val gameRepository: GameRepository, private val cl
         session: UserSession,
         tableId: UUID,
     ): Game {
-        // Example of user input validation
         val newGame = Game(
             id = UUID.randomUUID(),
             startTime = clock.now().toLocalDateTime(TimeZone.UTC),
+            rounds = emptyList(),
         )
 
-        // Example of a log message
         log.info { "Saving new game $newGame for table $tableId" }
         gameRepository.saveGame(newGame, tableId)
         return newGame
@@ -58,7 +57,6 @@ class GameServiceImpl(private val gameRepository: GameRepository, private val cl
         // User can only update a scoreboard which exists and is owned by himself
         checkNotNull(existingGame)
         check(updatedGame.endTime == null || updatedGame.endTime >= updatedGame.startTime)
-        // Only copy name as an example if only partial update is allowed
         gameRepository.updateGame(existingGame.copy(endTime = updatedGame.endTime))
     }
 }

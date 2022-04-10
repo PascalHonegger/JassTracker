@@ -1,7 +1,9 @@
 package dev.honegger.repositories
 
 import dev.honegger.domain.Game
+import dev.honegger.domain.Round
 import dev.honegger.jasstracker.database.tables.Game.GAME
+import dev.honegger.jasstracker.database.tables.Round.ROUND
 import dev.honegger.withContext
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
@@ -13,7 +15,17 @@ class GameRepositoryImpl : GameRepository {
             Game(
                 id = it.id,
                 startTime = it.startTime.toKotlinLocalDateTime(),
-                endTime = it.endTime?.toKotlinLocalDateTime()
+                endTime = it.endTime?.toKotlinLocalDateTime(),
+                rounds = selectFrom(ROUND).where(ROUND.GAME_ID.eq(it.id)).fetch().map { round ->
+                    Round(
+                        round.id,
+                        round.number,
+                        round.score,
+                        round.gameId,
+                        round.playerId,
+                        round.contractId
+                    )
+                },
             )
         }
     }
@@ -25,7 +37,17 @@ class GameRepositoryImpl : GameRepository {
             Game(
                 id = it.id,
                 startTime = it.startTime.toKotlinLocalDateTime(),
-                endTime = it.endTime?.toKotlinLocalDateTime()
+                endTime = it.endTime?.toKotlinLocalDateTime(),
+                rounds = selectFrom(ROUND).where(ROUND.GAME_ID.eq(it.id)).fetch().map { round ->
+                    Round(
+                        round.id,
+                        round.number,
+                        round.score,
+                        round.gameId,
+                        round.playerId,
+                        round.contractId
+                    )
+                },
             )
         }
     }

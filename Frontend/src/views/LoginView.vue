@@ -21,6 +21,34 @@ function loginAsGuest() {
   store.setLoggedIn();
 }
 </script>
+<style lang="scss">
+.home {
+  width: 100%;
+  display: flex;
+}
+
+.login {
+  text-align: center;
+  width: 50%;
+}
+
+.image {
+  width: 50%;
+  img {
+    height: auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .image {
+    display: none;
+  }
+  .login {
+    width: 100%;
+  }
+}
+</style>
 <template>
   <div class="home">
     <div class="image">

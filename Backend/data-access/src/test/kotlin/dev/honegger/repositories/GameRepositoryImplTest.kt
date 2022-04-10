@@ -17,7 +17,8 @@ class GameRepositoryImplTest {
         val repository = GameRepositoryImpl()
         val newBoard = Game(
             id = UUID.randomUUID(),
-            startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+            startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+            rounds = emptyList()
         )
         assertNull(repository.getGameOrNull(newBoard.id))
         repository.saveGame(newBoard, UUID.randomUUID())

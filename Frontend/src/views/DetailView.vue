@@ -1,27 +1,41 @@
 <script setup lang="ts">
 import Scoreboard from "../components/ScoreboardComponent.vue";
-import { onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
-// import { getScoreboard } from '../services/scoreboardService';
+import { onMounted, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useTableStore } from "@/store/table-store";
+import { useGameStore } from "@/store/game-store";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
+const route = useRoute();
+const tableStore = useTableStore();
+const gameStore = useGameStore();
 
-const scoreboard = ref({});
-const gameInProgress = ref(false);
-onMounted(() => {
-  scoreboard.value = [
-    {
-      id: 1,
-      name: "Demo Scoreboard",
-    },
-  ];
-  /* getScoreboard().then((data) => {
-    this.scoreboard = data.dataObject || [];
-  }); */
+const { currentTable } = storeToRefs(tableStore);
+const { currentGame } = storeToRefs(gameStore);
+
+watch(
+  () => route.params.id,
+  async (newId) => {
+    await setCurrentTableId(newId);
+  }
+);
+
+onMounted(async () => {
+  await setCurrentTableId(route.params.id);
 });
-function newGame() {
-  console.log("New Game will be created");
+
+async function setCurrentTableId(newId: string | string[] | undefined) {
+  if (typeof newId !== "string") return;
+  tableStore.setCurrentTable(newId);
+  await tableStore.loadTable(newId);
+  await gameStore.loadGamesForTable(newId);
 }
+
+function newGame() {
+  console.log("New Game will be created", currentTable.value);
+}
+
 function backToOverview() {
   router.push("/overview");
 }
@@ -29,13 +43,7 @@ function backToOverview() {
 <template>
   <div class="container mx-auto">
     <button @click="backToOverview" class="btn btn-blue mt-2 ml-2">Back</button>
-    <button
-      v-if="!gameInProgress"
-      @click="newGame"
-      class="btn btn-blue ml-2 mt-2"
-    >
-      New Game
-    </button>
-    <Scoreboard :scoreboard="scoreboard"></Scoreboard>
+    <button @click="newGame" class="btn btn-blue ml-2 mt-2">New Game</button>
+    <Scoreboard v-if="currentGame" :game="currentGame"></Scoreboard>
   </div>
 </template>

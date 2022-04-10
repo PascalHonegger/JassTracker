@@ -1,8 +1,6 @@
 package dev.honegger.endpoints
 
-import dev.honegger.domain.Game
-import dev.honegger.domain.Table
-import dev.honegger.domain.UserSession
+import dev.honegger.domain.*
 import dev.honegger.serializer.UUIDSerializer
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -12,7 +10,7 @@ import kotlinx.serialization.Serializable
 import java.util.*
 
 // Would be loaded once authentication is implemented
-val dummySession = UserSession(userId = UUID.fromString("2ea1cb74-a9aa-4b81-8953-d7a16d6ba582"), "dummy")
+val dummySession = UserSession(userId = UUID.fromString("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0"), "dummy")
 
 // These objects could be generated using something like OpenAPI
 @Serializable
@@ -22,7 +20,7 @@ data class WebTable(
     val name: String,
     @Serializable(with = UUIDSerializer::class)
     val ownerId: UUID,
-    val games: List<WebGame>,
+    val gameIds: List<@Serializable(with = UUIDSerializer::class) UUID>,
 )
 
 @Serializable
@@ -34,37 +32,127 @@ data class WebGame(
     val id: UUID,
     val startTime: Instant,
     val endTime: Instant?,
+    val rounds: List<WebRound>
 )
 
 @Serializable
 data class WebCreateGame(val tableId: String)
 
-// Map from WebTable to domain Table
+@Serializable
+data class WebRound(
+    @Serializable(with = UUIDSerializer::class)
+    val id: UUID,
+    val number: Int,
+    val score: Int,
+    @Serializable(with = UUIDSerializer::class)
+    val gameId: UUID,
+    @Serializable(with = UUIDSerializer::class)
+    val playerId: UUID,
+    @Serializable(with = UUIDSerializer::class)
+    val contractId: UUID,
+)
+
+@Serializable
+data class WebCreateRound(
+    val number: Int,
+    val score: Int,
+    @Serializable(with = UUIDSerializer::class)
+    val gameId: UUID,
+    @Serializable(with = UUIDSerializer::class)
+    val playerId: UUID,
+    @Serializable(with = UUIDSerializer::class)
+    val contractId: UUID
+)
+
+@Serializable
+data class WebContract(
+    @Serializable(with = UUIDSerializer::class)
+    val id: UUID,
+    val name: String,
+    val multiplier: Int,
+    val type: ContractType,
+)
+
+@Serializable
+data class WebPlayer(
+    @Serializable(with = UUIDSerializer::class)
+    val id: UUID,
+    val username: String?,
+    val displayName: String?,
+    val password: String?,
+    val isGuest: Boolean
+)
+
+@Serializable
+data class WebCreatePlayer(
+    val username: String,
+    val displayName: String,
+    val password: String,
+)
+
 fun WebTable.toTable() = Table(
     id = id,
     name = name,
     ownerId = ownerId,
-    games = games.map { it.toGame() },
+    games = emptyList(),
 )
-
-// Map from domain Table to WebTable
 fun Table.toWebTable() = WebTable(
     id = id,
     name = name,
     ownerId = ownerId,
-    games = games.map { it.toWebGame() }
+    gameIds = games.map { it.id }
 )
 
-// Map from WebGame to domain Game
 fun WebGame.toGame() = Game(
     id = id,
     startTime = startTime.toLocalDateTime(TimeZone.UTC),
     endTime = endTime?.toLocalDateTime(TimeZone.UTC),
+    rounds = rounds.map { it.toRound() }
 )
-
-// Map from domain Game to WebGame
 fun Game.toWebGame() = WebGame(
     id = id,
     startTime = startTime.toInstant(TimeZone.UTC),
     endTime = endTime?.toInstant(TimeZone.UTC),
+    rounds = rounds.map { it.toWebRound() },
+)
+
+fun Contract.toWebContract() = WebContract(
+    id = id,
+    name = name,
+    multiplier = multiplier,
+    type = type,
+)
+
+fun WebRound.toRound() = Round(
+    id = id,
+    number = number,
+    score = score,
+    gameId = gameId,
+    playerId = playerId,
+    contractId = contractId,
+)
+
+fun Round.toWebRound() = WebRound(
+    id = id,
+    number = number,
+    score = score,
+    gameId = gameId,
+    playerId = playerId,
+    contractId = contractId,
+)
+
+fun WebPlayer.toPlayer() = Player(
+    id = id,
+    username = username,
+    displayName = displayName,
+    password = password,
+    isGuest = isGuest,
+)
+
+fun Player.toWebPlayer() = WebPlayer(
+    id = id,
+    username = username,
+    displayName = displayName,
+    password = "", // Do not return password to client
+    isGuest = isGuest,
 )
