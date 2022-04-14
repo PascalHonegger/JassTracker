@@ -21,6 +21,7 @@ fun Application.configureHTTP() {
             allowMethod(HttpMethod.Delete)
 
             allowHost("localhost:9090")
+            allowHost("0.0.0.0:9090")
 
             allowCredentials = true
             allowNonSimpleContentTypes = true
