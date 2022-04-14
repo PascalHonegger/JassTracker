@@ -6,8 +6,9 @@ package dev.honegger.jasstracker.database.tables.records;
 
 import dev.honegger.jasstracker.database.tables.Game;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
+
+import kotlinx.datetime.LocalDateTime;
 
 import org.jooq.Field;
 import org.jooq.Record1;

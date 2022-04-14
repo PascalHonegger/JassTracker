@@ -1,3 +1,5 @@
+import org.jooq.meta.jaxb.ForcedType
+
 @Suppress("DSL_SCOPE_VIOLATION") // see https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
     java
@@ -55,6 +57,16 @@ jooq {
                         excludes = """
                             flyway_schema_history         # This table (unqualified name) should not be generated‡
                         """
+
+                        forcedTypes = listOf(
+                            ForcedType().apply {
+                                userType = "kotlinx.datetime.LocalDateTime"
+
+                                converter = "dev.honegger.converters.LocalDateTimeConverter"
+
+                                includeTypes = "TIMESTAMP"
+                            }
+                        )
                     }
                     generate.apply {
                         isDeprecated = false
