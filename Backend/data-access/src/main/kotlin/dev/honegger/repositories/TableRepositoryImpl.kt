@@ -1,12 +1,12 @@
 package dev.honegger.repositories
 
 import dev.honegger.domain.Game
+import dev.honegger.domain.Round
 import dev.honegger.domain.Table
 import dev.honegger.jasstracker.database.tables.Table.TABLE
 import dev.honegger.jasstracker.database.tables.Game.GAME
-import dev.honegger.jasstracker.database.tables.Round
+import dev.honegger.jasstracker.database.tables.Round.ROUND
 import dev.honegger.withContext
-import kotlinx.datetime.toKotlinLocalDateTime
 import java.util.*
 
 class TableRepositoryImpl : TableRepository {
@@ -20,9 +20,9 @@ class TableRepositoryImpl : TableRepository {
                 name = it.name,
                 ownerId = it.ownerId,
                 games = selectFrom(GAME).where(GAME.TABLE_ID.eq(it.id)).fetch().map { game ->
-                    Game(game.id, game.startTime.toKotlinLocalDateTime(), game.endTime?.toKotlinLocalDateTime(),
-                        selectFrom(Round.ROUND).where(Round.ROUND.GAME_ID.eq(game.id)).fetch().map { round ->
-                            dev.honegger.domain.Round(
+                    Game(game.id, game.startTime, game.endTime,
+                        selectFrom(ROUND).where(ROUND.GAME_ID.eq(game.id)).fetch().map { round ->
+                            Round(
                                 round.id,
                                 round.number,
                                 round.score,
@@ -45,10 +45,10 @@ class TableRepositoryImpl : TableRepository {
                 ownerId = it.ownerId,
                 games = selectFrom(GAME).where(GAME.TABLE_ID.eq(it.id)).fetch().map { game ->
                     Game(game.id,
-                        game.startTime.toKotlinLocalDateTime(),
-                        game.endTime?.toKotlinLocalDateTime(),
-                        selectFrom(Round.ROUND).where(Round.ROUND.GAME_ID.eq(game.id)).fetch().map { round ->
-                            dev.honegger.domain.Round(
+                        game.startTime,
+                        game.endTime,
+                        selectFrom(ROUND).where(ROUND.GAME_ID.eq(game.id)).fetch().map { round ->
+                            Round(
                                 round.id,
                                 round.number,
                                 round.score,

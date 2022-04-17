@@ -14,8 +14,8 @@ class GameRepositoryImpl : GameRepository {
         selectFrom(GAME).fetch().map {
             Game(
                 id = it.id,
-                startTime = it.startTime.toKotlinLocalDateTime(),
-                endTime = it.endTime?.toKotlinLocalDateTime(),
+                startTime = it.startTime,
+                endTime = it.endTime,
                 rounds = selectFrom(ROUND).where(ROUND.GAME_ID.eq(it.id)).fetch().map { round ->
                     Round(
                         round.id,
@@ -25,7 +25,7 @@ class GameRepositoryImpl : GameRepository {
                         round.playerId,
                         round.contractId
                     )
-                },
+                }
             )
         }
     }
@@ -36,8 +36,8 @@ class GameRepositoryImpl : GameRepository {
         gameRecord?.let {
             Game(
                 id = it.id,
-                startTime = it.startTime.toKotlinLocalDateTime(),
-                endTime = it.endTime?.toKotlinLocalDateTime(),
+                startTime = it.startTime,
+                endTime = it.endTime,
                 rounds = selectFrom(ROUND).where(ROUND.GAME_ID.eq(it.id)).fetch().map { round ->
                     Round(
                         round.id,
@@ -56,16 +56,16 @@ class GameRepositoryImpl : GameRepository {
         val gameRecord = selectFrom(GAME).where(GAME.ID.eq(updatedGame.id)).fetchOne()
         checkNotNull(gameRecord)
 
-        gameRecord.startTime = updatedGame.startTime.toJavaLocalDateTime()
-        gameRecord.endTime = updatedGame.endTime?.toJavaLocalDateTime()
+        gameRecord.startTime = updatedGame.startTime
+        gameRecord.endTime = updatedGame.endTime
         gameRecord.store()
     }
 
     override fun saveGame(newGame: Game, tableId: UUID): Unit = withContext {
         val newRecord = newRecord(GAME).apply {
             this.id = newGame.id
-            this.startTime = newGame.startTime.toJavaLocalDateTime()
-            this.endTime = newGame.endTime?.toJavaLocalDateTime()
+            this.startTime = newGame.startTime
+            this.endTime = newGame.endTime
             this.tableId = tableId
         }
         newRecord.store()

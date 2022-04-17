@@ -4,14 +4,16 @@
 package dev.honegger.jasstracker.database.tables;
 
 
+import dev.honegger.converters.LocalDateTimeConverter;
 import dev.honegger.jasstracker.database.Keys;
 import dev.honegger.jasstracker.database.Public;
 import dev.honegger.jasstracker.database.tables.records.GameRecord;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import kotlinx.datetime.LocalDateTime;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
@@ -57,12 +59,12 @@ public class Game extends TableImpl<GameRecord> {
     /**
      * The column <code>public.game.start_time</code>.
      */
-    public final TableField<GameRecord, LocalDateTime> START_TIME = createField(DSL.name("start_time"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "");
+    public final TableField<GameRecord, LocalDateTime> START_TIME = createField(DSL.name("start_time"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "", new LocalDateTimeConverter());
 
     /**
      * The column <code>public.game.end_time</code>.
      */
-    public final TableField<GameRecord, LocalDateTime> END_TIME = createField(DSL.name("end_time"), SQLDataType.LOCALDATETIME(6), this, "");
+    public final TableField<GameRecord, LocalDateTime> END_TIME = createField(DSL.name("end_time"), SQLDataType.LOCALDATETIME(6), this, "", new LocalDateTimeConverter());
 
     /**
      * The column <code>public.game.table_id</code>.
