@@ -17,6 +17,6 @@ export async function createTable(name: string) {
   return api.post<WebTable>("tables", { name });
 }
 
-export async function deleteTable(id: string) {
+export async function deleteTableById(id: string) {
   return api.delete(`tables/${id}`);
 }

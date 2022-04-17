@@ -2,8 +2,10 @@ package dev.honegger.jasstracker.domain.services
 
 import dev.honegger.jasstracker.domain.Table
 import dev.honegger.jasstracker.domain.UserSession
+import dev.honegger.jasstracker.domain.repositories.GameRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
 import io.mockk.*
+import org.junit.jupiter.api.Disabled
 import java.util.*
 import kotlin.test.*
 
@@ -35,5 +37,57 @@ class TableServiceImplTest {
         assertEquals(dummyName, created.name)
         assertEquals(dummySession.userId, created.ownerId)
         verify(exactly = 1) { repository.saveTable(any()) }
+    }
+
+    @Test
+    fun `deleteTableById removes a created table`() {
+        val dummyName = "Some Table"
+        val created = service.createTable(dummySession, dummyName)
+
+        assertTrue { passedTable.isCaptured }
+        assertEquals(created, passedTable.captured)
+        assertEquals(dummyName, created.name)
+        assertEquals(dummySession.userId, created.ownerId)
+        verify(exactly = 1) { repository.saveTable(created) }
+        every {
+            repository.getTableOrNull(created.id)
+        } returns created
+
+        every {
+            repository.deleteTableById(created.id)
+        } returns true
+
+        val deleted = service.deleteTableById(dummySession, created.id)
+        assertTrue { deleted }
+        verify(exactly = 1) {
+            repository.deleteTableById(created.id)
+            repository.getTableOrNull(created.id)
+        }
+    }
+
+    @Test
+    @Disabled
+    fun `deleteTableById removes a table, table can't be found afterwards anymore`() {
+        val dummyName = "Some Table"
+        val created = service.createTable(dummySession, dummyName)
+
+        every {
+            repository.getTableOrNull(created.id)
+        } returns created
+
+        every {
+            repository.deleteTableById(created.id)
+        } returns true
+
+        val deleted = service.deleteTableById(dummySession, created.id)
+        val tableShouldBeNull = service.getTableOrNull(dummySession, created.id)
+
+        assertTrue { deleted }
+        assertNull(tableShouldBeNull);
+
+        verify(exactly = 1) {
+            repository.deleteTableById(created.id)
+            repository.getTableOrNull(created.id)
+        }
     }
 }

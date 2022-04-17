@@ -12,6 +12,7 @@ interface TableService {
     fun getTableOrNull(session: UserSession, id: UUID): Table?
     fun getTables(session: UserSession): List<Table>
     fun updateTable(session: UserSession, updatedTable: Table)
+    fun deleteTableById(session: UserSession, id: UUID): Boolean
 }
 
 private val log = KotlinLogging.logger { }
@@ -60,5 +61,13 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
         checkNotNull(existingTable)
         check(updatedTable.ownerId == session.userId)
         tableRepository.saveTable(existingTable.copy(name = updatedTable.name))
+    }
+
+    override fun deleteTableById(session: UserSession, id: UUID): Boolean {
+        val existingTable =
+            tableRepository.getTableOrNull(id)
+        checkNotNull(existingTable)
+        check(existingTable.ownerId === session.userId)
+        return tableRepository.deleteTableById(id)
     }
 }

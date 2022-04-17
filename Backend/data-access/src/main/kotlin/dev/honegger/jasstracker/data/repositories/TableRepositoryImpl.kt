@@ -3,6 +3,7 @@ package dev.honegger.jasstracker.data.repositories
 import dev.honegger.jasstracker.domain.Table
 import dev.honegger.jasstracker.data.database.tables.Game.GAME
 import dev.honegger.jasstracker.data.database.tables.Table.TABLE
+import dev.honegger.jasstracker.data.database.tables.GameParticipation.GAME_PARTICIPATION as GP
 import dev.honegger.jasstracker.domain.repositories.GameRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
 import dev.honegger.withContext
@@ -64,5 +65,12 @@ class TableRepositoryImpl(private val gameRepository: GameRepository) : TableRep
             this.ownerId = newTable.ownerId
         }
         newRecord.insert()
+    }
+
+    override fun deleteTableById(id: UUID): Boolean = withContext {
+        val gameIds = select(GAME.ID).from(GAME).where(GAME.TABLE_ID.eq(id))
+        deleteFrom(GP).where(GP.GAME_ID.`in`(gameIds))
+        deleteFrom(GAME).where(GAME.TABLE_ID.eq(id))
+        return@withContext deleteFrom(TABLE).where(TABLE.ID.eq(id)).execute() == 1
     }
 }
