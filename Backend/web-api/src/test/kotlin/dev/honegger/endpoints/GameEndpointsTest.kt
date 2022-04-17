@@ -1,6 +1,8 @@
 package dev.honegger.endpoints
 
 import dev.honegger.domain.Game
+import dev.honegger.domain.GameParticipant
+import dev.honegger.domain.Team
 import dev.honegger.services.GameService
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -38,10 +40,16 @@ class GameEndpointsTest {
             installJson()
         }
         val dummyId = UUID.randomUUID()
+        val p1Id = UUID.randomUUID()
+        val p2Id = UUID.randomUUID()
+        val p3Id = UUID.randomUUID()
+        val p4Id = UUID.randomUUID()
         val dummyGame = Game(
             id = dummyId,
             startTime = LocalDateTime(2022, 4, 2, 13, 0, 0),
-            rounds = emptyList()
+            rounds = emptyList(),
+            team1 = Team(GameParticipant(p1Id, "p1"), GameParticipant(p2Id, "p2")),
+            team2 = Team(GameParticipant(p3Id, "p3"), GameParticipant(p4Id, "p4")),
         )
         every {
             service.getGameOrNull(
@@ -51,7 +59,15 @@ class GameEndpointsTest {
         } returns dummyGame
         client.get("/api/games/$dummyId").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("""{"id":"$dummyId","startTime":"2022-04-02T13:00:00Z","endTime":null,"rounds":[]}""", bodyAsText())
+            assertEquals(
+                """{
+                    |"id":"$dummyId",
+                    |"startTime":"2022-04-02T13:00:00Z",
+                    |"endTime":null,
+                    |"rounds":[],
+                    |"team1":{"player1":{"playerId":"$p1Id","displayName":"p1"},"player2":{"playerId":"$p2Id","displayName":"p2"}},
+                    |"team2":{"player1":{"playerId":"$p3Id","displayName":"p3"},"player2":{"playerId":"$p4Id","displayName":"p4"}}
+                |}""".trimMargin().replace("\n",""), bodyAsText())
         }
         verify(exactly = 1) { service.getGameOrNull(any(), dummyId) }
     }

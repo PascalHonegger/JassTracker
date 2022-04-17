@@ -1,6 +1,7 @@
 package dev.honegger.endpoints
 
-import dev.honegger.domain.Player
+import dev.honegger.domain.GuestPlayer
+import dev.honegger.domain.RegisteredPlayer
 import dev.honegger.services.PlayerService
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -28,7 +29,7 @@ class PlayerEndpointsTest {
     }
 
     @Test
-    fun `test get player finds dummy player`() = testApplication {
+    fun `test get registered player finds dummy player`() = testApplication {
         application {
             installJson()
             configurePlayerEndpoints(service)
@@ -37,12 +38,11 @@ class PlayerEndpointsTest {
             installJson()
         }
         val dummyId = UUID.randomUUID()
-        val dummyPlayer = Player(
+        val dummyPlayer = RegisteredPlayer(
             id = dummyId,
             username = "bar",
             displayName = "foo",
             password = "max-security",
-            isGuest = false,
         )
         every {
             service.getPlayerOrNull(
@@ -52,9 +52,35 @@ class PlayerEndpointsTest {
         } returns dummyPlayer
         client.get("/api/players/$dummyId").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("""{"id":"$dummyId","username":"bar","displayName":"foo","password":"","isGuest":false}""", bodyAsText())
+            assertEquals("""{"id":"$dummyId","username":"bar","displayName":"foo","password":null,"isGuest":false}""", bodyAsText())
         }
         verify(exactly = 1) { service.getPlayerOrNull(any(), dummyId) }
+    }
+
+    @Test
+    fun `test get guest player finds dummy guest`() = testApplication {
+        application {
+            installJson()
+            configurePlayerEndpoints(service)
+        }
+        val client = createClient {
+            installJson()
+        }
+        val guestId = UUID.randomUUID()
+        val guest = GuestPlayer(
+            id = guestId,
+        )
+        every {
+            service.getPlayerOrNull(
+                any(),
+                guestId
+            )
+        } returns guest
+        client.get("/api/players/$guestId").apply {
+            assertEquals(HttpStatusCode.OK, status)
+            assertEquals("""{"id":"$guestId","username":null,"displayName":null,"password":null,"isGuest":true}""", bodyAsText())
+        }
+        verify(exactly = 1) { service.getPlayerOrNull(any(), guestId) }
     }
 
     @Test

@@ -1,6 +1,6 @@
 package dev.honegger.repositories
 
-import dev.honegger.domain.Player
+import dev.honegger.domain.RegisteredPlayer
 import org.junit.jupiter.api.Disabled
 import java.util.UUID
 import kotlin.test.Test
@@ -12,12 +12,11 @@ class PlayerRepositoryImplTest {
     @Disabled
     fun `savePlayer saved new player to database`() {
         val repository = PlayerRepositoryImpl()
-        val newPlayer = Player(
+        val newPlayer = RegisteredPlayer(
             id = UUID.randomUUID(),
             username = "dummy",
             displayName = "dummy",
             password = "pw",
-            isGuest = false,
         )
         assertNull(repository.getPlayerOrNull(newPlayer.id))
         repository.savePlayer(newPlayer)

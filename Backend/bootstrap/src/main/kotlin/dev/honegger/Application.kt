@@ -19,22 +19,20 @@ fun Application.module() {
 
     // Could be provided by a DI framework like Koin
     val gameRepository = GameRepositoryImpl()
-    val gameService = GameServiceImpl(gameRepository)
-    configureGameEndpoints(gameService)
-
-    val tableRepository = TableRepositoryImpl()
-    val tableService = TableServiceImpl(tableRepository)
-    configureTableEndpoints(tableService)
-
-    val contractRepository = ContractRepositoryImpl()
-    val contractService = ContractServiceImpl(contractRepository)
-    configureContractEndpoints(contractService)
-
+    val tableRepository = TableRepositoryImpl(gameRepository)
     val playerRepository = PlayerRepositoryImpl()
-    val playerService = PlayerServiceImpl(playerRepository)
-    configurePlayerEndpoints(playerService)
+    val contractRepository = ContractRepositoryImpl()
 
+    val gameService = GameServiceImpl(gameRepository, playerRepository)
+    val tableService = TableServiceImpl(tableRepository)
     val roundRepository = RoundRepositoryImpl()
-    val roundService = RoundServiceImpl(roundRepository)
+    val roundService = RoundServiceImpl(roundRepository, tableRepository)
+    val contractService = ContractServiceImpl(contractRepository)
+    val playerService = PlayerServiceImpl(playerRepository)
+
+    configureGameEndpoints(gameService)
+    configureTableEndpoints(tableService)
+    configureContractEndpoints(contractService)
+    configurePlayerEndpoints(playerService)
     configureRoundEndpoints(roundService)
 }

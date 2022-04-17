@@ -1,6 +1,8 @@
 package dev.honegger.services
 
+import dev.honegger.domain.GuestPlayer
 import dev.honegger.domain.Player
+import dev.honegger.domain.RegisteredPlayer
 import dev.honegger.domain.UserSession
 import dev.honegger.repositories.PlayerRepository
 import mu.KotlinLogging
@@ -12,11 +14,10 @@ interface PlayerService {
         displayName: String,
         username: String,
         password: String,
-    ): Player
+    ): RegisteredPlayer
 
     fun getPlayerOrNull(session: UserSession, id: UUID): Player?
-    fun getPlayersPerTable(session: UserSession, tableId: UUID): List<Player>
-    fun updatePlayer(session: UserSession, updatedPlayer: Player)
+    fun updatePlayer(session: UserSession, updatedPlayer: RegisteredPlayer)
 }
 
 private val log = KotlinLogging.logger { }
@@ -27,13 +28,12 @@ class PlayerServiceImpl(private val playerRepository: PlayerRepository) : Player
         displayName: String,
         username: String,
         password: String,
-    ): Player {
-        val newPlayer = Player(
+    ): RegisteredPlayer {
+        val newPlayer = RegisteredPlayer(
             id = UUID.randomUUID(),
             displayName = displayName,
             username = username,
             password = password, // TODO Hashing & Security once we look at authentication
-            isGuest = false,
         )
 
         log.info { "Saving new player $newPlayer" }
@@ -49,19 +49,20 @@ class PlayerServiceImpl(private val playerRepository: PlayerRepository) : Player
         return playerRepository.getPlayerOrNull(id)
     }
 
-    override fun getPlayersPerTable(session: UserSession, tableId: UUID): List<Player> {
-        return playerRepository.getPlayersPerTable(tableId)
-    }
-
     override fun updatePlayer(
         session: UserSession,
-        updatedPlayer: Player,
+        updatedPlayer: RegisteredPlayer,
     ) {
         val existingPlayer =
             playerRepository.getPlayerOrNull(updatedPlayer.id)
         // User can only update themselves
         checkNotNull(existingPlayer)
         check(existingPlayer.id == session.userId)
-        playerRepository.updatePlayer(existingPlayer.copy(displayName = existingPlayer.displayName))
+
+        val sanitizedPlayer = when (existingPlayer) {
+            is GuestPlayer -> updatedPlayer
+            is RegisteredPlayer -> existingPlayer.copy(displayName = updatedPlayer.displayName)
+        }
+        playerRepository.updatePlayer(sanitizedPlayer)
     }
 }

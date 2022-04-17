@@ -1,11 +1,12 @@
-import { WebRound } from "@/services/game-service";
+import { WebRound } from "@/services/web-model";
 
 export interface Table {
   id: string;
   name: string;
+  latestGameId: string;
+  currentGameId: string;
   gameIds: string[];
-  loadedGames: Game[];
-  players: Player[];
+  loadedGames: Record<string, Game>;
 }
 
 export interface Game {
@@ -14,6 +15,18 @@ export interface Game {
   endTime?: string;
   rounds: WebRound[];
   rows: Row[];
+  team1: Team;
+  team2: Team;
+}
+
+export interface Team {
+  player1: GameParticipant;
+  player2: GameParticipant;
+}
+
+export interface GameParticipant {
+  playerId: string;
+  displayName: string;
 }
 
 export interface Row {

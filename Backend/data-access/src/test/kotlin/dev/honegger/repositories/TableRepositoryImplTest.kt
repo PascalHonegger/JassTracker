@@ -1,7 +1,9 @@
 package dev.honegger.repositories
 
 import dev.honegger.domain.Game
+import dev.honegger.domain.GameParticipant
 import dev.honegger.domain.Table
+import dev.honegger.domain.Team
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -15,7 +17,7 @@ class TableRepositoryImplTest {
     @Test
     @Disabled
     fun `getTable returns correct table after saveTable is called`() {
-        val repository = TableRepositoryImpl()
+        val repository = TableRepositoryImpl(GameRepositoryImpl())
         val newTable = Table(
             id = UUID.randomUUID(),
             name = "Some Name",
@@ -24,7 +26,9 @@ class TableRepositoryImplTest {
                 Game(
                     id = UUID.randomUUID(),
                     startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
-                    rounds = emptyList()
+                    rounds = emptyList(),
+                    team1 = Team(GameParticipant(UUID.randomUUID(), "p1"), GameParticipant(UUID.randomUUID(), "p2")),
+                    team2 = Team(GameParticipant(UUID.randomUUID(), "p3"), GameParticipant(UUID.randomUUID(), "p4")),
                 )
             )
         )
@@ -36,7 +40,7 @@ class TableRepositoryImplTest {
     @Test
     @Disabled
     fun `getTables returns multiple tables after saveTable is called`() {
-        val repository = TableRepositoryImpl()
+        val repository = TableRepositoryImpl(GameRepositoryImpl())
         val owner1 = UUID.randomUUID()
         val owner2 = UUID.randomUUID()
         val table1 = Table(
@@ -47,7 +51,9 @@ class TableRepositoryImplTest {
                 Game(
                     id = UUID.randomUUID(),
                     startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
-                    rounds = emptyList()
+                    rounds = emptyList(),
+                    team1 = Team(GameParticipant(UUID.randomUUID(), "p1"), GameParticipant(UUID.randomUUID(), "p2")),
+                    team2 = Team(GameParticipant(UUID.randomUUID(), "p3"), GameParticipant(UUID.randomUUID(), "p4")),
                 )
             )
         )
@@ -59,7 +65,9 @@ class TableRepositoryImplTest {
                 Game(
                     id = UUID.randomUUID(),
                     startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
-                    rounds = emptyList()
+                    rounds = emptyList(),
+                    team1 = Team(GameParticipant(UUID.randomUUID(), "p1"), GameParticipant(UUID.randomUUID(), "p2")),
+                    team2 = Team(GameParticipant(UUID.randomUUID(), "p3"), GameParticipant(UUID.randomUUID(), "p4")),
                 )
             )
         )

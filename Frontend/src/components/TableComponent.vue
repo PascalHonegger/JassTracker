@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { Table } from "@/types/types";
+import GamePreviewComponent from "./GamePreviewComponent.vue";
+import { computed } from "vue";
 
-const props = defineProps({
-  table: Object,
-});
-const mutableTable = ref({ ...props.table });
+const props = defineProps<{ table: Table }>();
 
-function updateTable() {
-  // update table name
-  // update team member names
-}
+const latestGame = computed(
+  () => props.table.loadedGames[props.table.latestGameId]
+);
 </script>
 <style lang="scss">
 .member-list {
@@ -18,14 +16,13 @@ function updateTable() {
 </style>
 <template>
   <router-link
-    :to="{ name: 'table', params: { id: mutableTable.id } }"
+    :to="{ name: 'table', params: { id: props.table.id } }"
     class="table max-w-sm w-full lg:max-w-full lg:flex flex-col m-4 text-center"
   >
-    <p class="font-bold">{{ mutableTable.name }}</p>
-    <ul class="member-list">
-      <li v-for="p in mutableTable.players" :key="p.id">
-        {{ p.displayName }}
-      </li>
-    </ul>
+    <p class="font-bold">{{ props.table.name }}</p>
+    <game-preview-component
+      v-if="latestGame != null"
+      :game="latestGame"
+    ></game-preview-component>
   </router-link>
 </template>

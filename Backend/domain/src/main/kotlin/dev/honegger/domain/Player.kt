@@ -2,14 +2,21 @@ package dev.honegger.domain
 
 import java.util.UUID
 
-data class Player(
-    val id: UUID,
-    val username: String?,
-    val displayName: String?,
-    val password: String?,
-    val isGuest: Boolean
-) {
+sealed interface Player {
+    val id: UUID
+}
+
+data class RegisteredPlayer(
+    override val id: UUID,
+    val username: String,
+    val displayName: String,
+    val password: String,
+): Player {
     override fun toString(): String {
-        return "Player(id=$id, username='$username', displayName='$displayName', password='<redacted>', isGuest=$isGuest)"
+        return "RegisteredPlayer(id=$id, username='$username', displayName='$displayName', password='<redacted>')"
     }
 }
+
+data class GuestPlayer(
+    override val id: UUID,
+): Player

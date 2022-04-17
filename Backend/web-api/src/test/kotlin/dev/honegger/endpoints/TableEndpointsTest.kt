@@ -1,7 +1,9 @@
 package dev.honegger.endpoints
 
 import dev.honegger.domain.Game
+import dev.honegger.domain.GameParticipant
 import dev.honegger.domain.Table
+import dev.honegger.domain.Team
 import dev.honegger.services.TableService
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -54,7 +56,7 @@ class TableEndpointsTest {
         } returns dummyTable
         client.get("/api/tables/$id").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("""{"id":"$id","name":"dummy","ownerId":"$ownerId","gameIds":[]}""", bodyAsText())
+            assertEquals("""{"id":"$id","name":"dummy","ownerId":"$ownerId","gameIds":[],"latestGame":null}""", bodyAsText())
         }
         verify(exactly = 1) { service.getTableOrNull(any(), id) }
     }
@@ -73,6 +75,10 @@ class TableEndpointsTest {
         val id1 = UUID.randomUUID()
         val id2 = UUID.randomUUID()
         val gameId = UUID.randomUUID()
+        val p1Id = UUID.randomUUID()
+        val p2Id = UUID.randomUUID()
+        val p3Id = UUID.randomUUID()
+        val p4Id = UUID.randomUUID()
         val dummyTable1 = Table(
             id = id1,
             name = "dummy1",
@@ -88,7 +94,9 @@ class TableEndpointsTest {
                     id = gameId,
                     startTime = LocalDateTime(2022, 4, 10, 20, 20, 0, 0),
                     endTime = null,
-                    rounds = emptyList()
+                    rounds = emptyList(),
+                    team1 = Team(GameParticipant(p1Id, "p1"), GameParticipant(p2Id, "p2")),
+                    team2 = Team(GameParticipant(p3Id, "p3"), GameParticipant(p4Id, "p4")),
                 )
             ),
         )
@@ -99,7 +107,33 @@ class TableEndpointsTest {
         client.get("/api/tables").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(
-                """[{"id":"$id1","name":"dummy1","ownerId":"$owner1UUID","gameIds":[]},{"id":"$id2","name":"dummy2","ownerId":"$owner2UUID","gameIds":["$gameId"]}]""",
+                """[
+                    |{
+                        |"id":"$id1",
+                        |"name":"dummy1",
+                        |"ownerId":"$owner1UUID",
+                        |"gameIds":[],
+                        |"latestGame":null
+                    |},
+                    |{
+                        |"id":"$id2",
+                        |"name":"dummy2",
+                        |"ownerId":"$owner2UUID",
+                        |"gameIds":["$gameId"],
+                        |"latestGame":{
+                            |"id":"$gameId",
+                            |"startTime":"2022-04-10T20:20:00Z",
+                            |"endTime":null,
+                            |"rounds":[],
+                            |"team1":{
+                                |"player1":{"playerId":"$p1Id","displayName":"p1"},
+                                |"player2":{"playerId":"$p2Id","displayName":"p2"}},
+                            |"team2":{
+                                |"player1":{"playerId":"$p3Id","displayName":"p3"},
+                                |"player2":{"playerId":"$p4Id","displayName":"p4"}
+                            |}
+                        |}
+                    |}]""".trimMargin().replace("\n",""),
                 bodyAsText()
             )
         }

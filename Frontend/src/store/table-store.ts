@@ -2,7 +2,8 @@ import { defineStore } from "pinia";
 import { getTable, getTables } from "@/services/table-service";
 
 import { Table } from "@/types/types";
-import { getPlayers } from "@/services/player-service";
+import { useGameStore } from "@/store/game-store";
+import { WebTable } from "@/services/web-model";
 
 export const useTableStore = defineStore("table", {
   state: () => ({
@@ -36,13 +37,9 @@ export const useTableStore = defineStore("table", {
         this.loadingCounter++;
         try {
           const loadedTables = await getTables();
-          // not map cause creates new array, but we want object soo
-          for (const webTable of loadedTables) {
-            this.tables[webTable.id] = {
-              ...webTable,
-              loadedGames: [],
-              players: await getPlayers(webTable.id),
-            } as Table;
+          // create object with ID to allow O(1) access time
+          for (const loadedTable of loadedTables) {
+            this.addTable(loadedTable);
           }
         } finally {
           this.loadingCounter--;
@@ -56,15 +53,26 @@ export const useTableStore = defineStore("table", {
       if (!this.hasTable(id)) {
         this.loadingCounter++;
         try {
-          const webTable = await getTable(id);
-          this.tables[id] = this.tables[webTable.id] = {
-            ...webTable,
-            loadedGames: [],
-            players: await getPlayers(webTable.id),
-          } as Table;
+          const loadedTable = await getTable(id);
+          this.addTable(loadedTable);
         } finally {
           this.loadingCounter--;
         }
+      }
+    },
+    addTable(table: WebTable) {
+      this.tables[table.id] = this.tables[table.id] = {
+        id: table.id,
+        name: table.name,
+        gameIds: table.gameIds,
+        loadedGames: {},
+        latestGameId: table.latestGame?.id ?? "",
+        currentGameId: table.latestGame?.id ?? "",
+      } as Table;
+
+      if (table.latestGame != null) {
+        const gameStore = useGameStore();
+        gameStore.addGameToExistingTable(table.id, table.latestGame);
       }
     },
   },

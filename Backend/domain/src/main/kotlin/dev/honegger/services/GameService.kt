@@ -1,8 +1,8 @@
 package dev.honegger.services
 
-import dev.honegger.domain.Game
-import dev.honegger.domain.UserSession
+import dev.honegger.domain.*
 import dev.honegger.repositories.GameRepository
+import dev.honegger.repositories.PlayerRepository
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -10,24 +10,42 @@ import mu.KotlinLogging
 import java.util.*
 
 interface GameService {
-    fun createGame(session: UserSession, tableId: UUID): Game
+    fun createGame(
+        session: UserSession,
+        tableId: UUID,
+        team1Player1: CreateGameParticipant,
+        team1Player2: CreateGameParticipant,
+        team2Player1: CreateGameParticipant,
+        team2Player2: CreateGameParticipant,
+    ): Game
     fun getGameOrNull(session: UserSession, id: UUID): Game?
     fun getAllGames(session: UserSession): List<Game>
     fun updateGame(session: UserSession, updatedGame: Game)
 }
 
+data class CreateGameParticipant(
+    val playerId: UUID?,
+    val displayName: String,
+)
+
 private val log = KotlinLogging.logger { }
 
-class GameServiceImpl(private val gameRepository: GameRepository, private val clock: Clock = Clock.System) :
+class GameServiceImpl(private val gameRepository: GameRepository, private val playerRepository: PlayerRepository, private val clock: Clock = Clock.System) :
     GameService {
     override fun createGame(
         session: UserSession,
         tableId: UUID,
+        team1Player1: CreateGameParticipant,
+        team1Player2: CreateGameParticipant,
+        team2Player1: CreateGameParticipant,
+        team2Player2: CreateGameParticipant,
     ): Game {
         val newGame = Game(
             id = UUID.randomUUID(),
             startTime = clock.now().toLocalDateTime(TimeZone.UTC),
             rounds = emptyList(),
+            team1 = Team(createParticipant(team1Player1), createParticipant(team1Player2)),
+            team2 = Team(createParticipant(team2Player1), createParticipant(team2Player2)),
         )
 
         log.info { "Saving new game $newGame for table $tableId" }
@@ -58,5 +76,17 @@ class GameServiceImpl(private val gameRepository: GameRepository, private val cl
         checkNotNull(existingGame)
         check(updatedGame.endTime == null || updatedGame.endTime >= updatedGame.startTime)
         gameRepository.updateGame(existingGame.copy(endTime = updatedGame.endTime))
+    }
+
+    private fun createParticipant(createGameParticipant: CreateGameParticipant): GameParticipant {
+        if (createGameParticipant.playerId != null) {
+            return GameParticipant(createGameParticipant.playerId, createGameParticipant.displayName)
+        }
+
+        val newGuest = GuestPlayer(
+            id = UUID.randomUUID(),
+        )
+        playerRepository.savePlayer(newGuest)
+        return GameParticipant(newGuest.id, createGameParticipant.displayName)
     }
 }
