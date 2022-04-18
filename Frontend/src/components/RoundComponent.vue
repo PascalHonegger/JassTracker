@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { Row } from "@/types/types";
 
-const props = defineProps({
-  round: Object,
-});
-const mutableRound = ref({ ...props.round });
+const props = defineProps<{ row: Row }>();
 </script>
 <template>
   <tr>
-    <td>{{ mutableRound.contract.name }}</td>
-    <template v-for="r in mutableRound.rounds" :key="r">
+    <td>{{ props.row.contract.name }}</td>
+    <template v-for="r in props.row.rounds" :key="r">
       <td>
         <input
           type="number"

@@ -8,4 +8,16 @@ data class Game(
     val startTime: LocalDateTime,
     val endTime: LocalDateTime? = null,
     val rounds: List<Round>,
+    val team1: Team,
+    val team2: Team,
+)
+
+data class Team(
+    val player1: GameParticipant,
+    val player2: GameParticipant,
+)
+
+data class GameParticipant(
+    val playerId: UUID,
+    val displayName: String,
 )

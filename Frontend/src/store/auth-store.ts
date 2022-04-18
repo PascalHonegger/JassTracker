@@ -1,4 +1,7 @@
 import { defineStore } from "pinia";
+import { useContractStore } from "@/store/contract-store";
+import { useGameStore } from "@/store/game-store";
+import { useTableStore } from "@/store/table-store";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -6,11 +9,26 @@ export const useAuthStore = defineStore("auth", {
     loggedIn: false,
   }),
   actions: {
-    setLoggedIn() {
-      this.loggedIn = true;
+    async setLoggedIn() {
+      // Load all available contracts once after login
+      // These shouldn't change and loading them
+      // For each game seems excessive
+      const contractStore = useContractStore();
+      try {
+        this.loading = true;
+        await contractStore.loadContracts();
+        this.loggedIn = true;
+      } finally {
+        this.loading = false;
+      }
     },
     logout() {
       this.loggedIn = false;
+
+      // Reset all stores to prevent any weird behavior on logout / login
+      useContractStore().$reset();
+      useGameStore().$reset();
+      useTableStore().$reset();
     },
   },
 });

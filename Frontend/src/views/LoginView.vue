@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/store/auth-store";
 import { useRouter } from "vue-router";
-import { onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
+import WaitSpinner from "@/components/WaitSpinner.vue";
 
 const store = useAuthStore();
 const router = useRouter();
+
+const loginLoading = ref<boolean>(false);
+const loginAsGuestLoading = ref<boolean>(false);
+const loading = computed(() => loginLoading.value || loginAsGuestLoading.value);
 
 onMounted(() => {
   if (store.loggedIn) {
@@ -12,13 +17,15 @@ onMounted(() => {
   }
 });
 
-function login() {
-  router.push("/overview");
-  store.setLoggedIn();
+async function login() {
+  loginLoading.value = true;
+  await store.setLoggedIn();
+  await router.push("/overview");
 }
-function loginAsGuest() {
-  router.push("/overview");
-  store.setLoggedIn();
+async function loginAsGuest() {
+  loginAsGuestLoading.value = true;
+  await store.setLoggedIn();
+  await router.push("/overview");
 }
 </script>
 <style lang="scss">
@@ -70,6 +77,7 @@ function loginAsGuest() {
               id="username"
               name="username"
               type="text"
+              :disabled="loading"
             />
           </div>
           <div class="mb-6">
@@ -83,14 +91,30 @@ function loginAsGuest() {
               id="password"
               name="password"
               type="password"
+              :disabled="loading"
             />
           </div>
-          <button type="submit" class="btn btn-blue self-center">Login</button>
+          <button
+            type="submit"
+            :disabled="loading"
+            class="btn btn-blue self-center"
+          >
+            Login
+
+            <wait-spinner v-if="loginLoading"></wait-spinner>
+          </button>
         </form>
       </div>
       <p>------ oder -----</p>
-      <button @click="loginAsGuest" class="btn btn-blue self-center my-8">
+      <button
+        type="button"
+        @click="loginAsGuest"
+        :disabled="loading"
+        class="btn btn-blue self-center my-8"
+      >
         Als Gast spielen
+
+        <wait-spinner v-if="loginAsGuestLoading"></wait-spinner>
       </button>
       <div>
         <p>Neu beim JassTracker? Erstellen Sie einen Account!</p>

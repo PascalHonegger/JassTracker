@@ -29,7 +29,6 @@ async function setCurrentTableId(newId: string | string[] | undefined) {
   if (typeof newId !== "string") return;
   tableStore.setCurrentTable(newId);
   await tableStore.loadTable(newId);
-  await gameStore.loadGamesForTable(newId);
 }
 
 function newGame() {

@@ -1,5 +1,7 @@
 package dev.honegger.endpoints
 
+import dev.honegger.domain.GuestPlayer
+import dev.honegger.domain.RegisteredPlayer
 import dev.honegger.services.PlayerService
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -13,11 +15,6 @@ fun Application.configurePlayerEndpoints(
 ) {
     routing {
         route("/api/players") {
-            get ("/byTable/{tableId}"){
-                val id = call.parameters["tableId"]
-                val players = playerService.getPlayersPerTable(dummySession, UUID.fromString(id))
-                call.respond(HttpStatusCode.OK, players.map { it.toWebPlayer() })
-            }
             get("/{id}") {
                 val id = call.parameters["id"]
                 if (id.isNullOrBlank()) {
@@ -50,9 +47,15 @@ fun Application.configurePlayerEndpoints(
                     call.respond(HttpStatusCode.BadRequest)
                     return@post
                 }
-                val updatedPlayer = call.receive<WebPlayer>().toPlayer()
-                playerService.updatePlayer(dummySession, updatedPlayer)
-                call.respond(HttpStatusCode.Created)
+                when (val updatedPlayer = call.receive<WebPlayer>().toPlayer()) {
+                    is GuestPlayer -> {
+                        call.respond(HttpStatusCode.BadRequest)
+                    }
+                    is RegisteredPlayer -> {
+                        playerService.updatePlayer(dummySession, updatedPlayer)
+                        call.respond(HttpStatusCode.Created)
+                    }
+                }
             }
         }
     }

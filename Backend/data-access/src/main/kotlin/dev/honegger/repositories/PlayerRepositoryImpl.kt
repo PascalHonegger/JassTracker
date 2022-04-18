@@ -1,6 +1,8 @@
 package dev.honegger.repositories
 
+import dev.honegger.domain.GuestPlayer
 import dev.honegger.domain.Player
+import dev.honegger.domain.RegisteredPlayer
 import dev.honegger.jasstracker.database.tables.Game.GAME
 import dev.honegger.jasstracker.database.tables.Player.PLAYER
 import dev.honegger.jasstracker.database.tables.GameParticipation.GAME_PARTICIPATION as GP
@@ -14,13 +16,15 @@ class PlayerRepositoryImpl : PlayerRepository {
 
         selectFrom(PLAYER).where(PLAYER.ID.`in`(playerIds)).fetch()
             .map {
-                Player(
-                    id = it.id,
-                    username = it.username,
-                    displayName = it.displayName,
-                    password = it.password,
-                    isGuest = it.isGuest
-                )
+                when {
+                    it.isGuest -> GuestPlayer(it.id)
+                    else -> RegisteredPlayer(
+                        id = it.id,
+                        username = it.username,
+                        displayName = it.displayName,
+                        password = it.password,
+                    )
+                }
             }
     }
 
@@ -28,32 +32,37 @@ class PlayerRepositoryImpl : PlayerRepository {
         val playerRecord = selectFrom(PLAYER).where(PLAYER.ID.eq(id)).fetchOne()
 
         playerRecord?.let {
-            Player(
-                id = it.id,
-                username = it.username,
-                displayName = it.displayName,
-                password = it.password,
-                isGuest = it.isGuest,
-            )
+            when {
+                it.isGuest -> GuestPlayer(it.id)
+                else -> RegisteredPlayer(
+                    id = it.id,
+                    username = it.username,
+                    displayName = it.displayName,
+                    password = it.password,
+                )
+            }
         }
     }
 
-    override fun updatePlayer(updatedPlayer: Player): Unit = withContext {
+    override fun updatePlayer(updatedPlayer: RegisteredPlayer): Unit = withContext {
         val playerRecord = selectFrom(PLAYER).where(PLAYER.ID.eq(updatedPlayer.id)).fetchOne()
         checkNotNull(playerRecord)
 
         playerRecord.displayName = updatedPlayer.displayName
-        playerRecord.isGuest = updatedPlayer.isGuest
         playerRecord.store()
     }
 
     override fun savePlayer(newPlayer: Player): Unit = withContext {
         val newRecord = newRecord(PLAYER).apply {
             this.id = newPlayer.id
-            this.username = newPlayer.username
-            this.displayName = newPlayer.displayName
-            this.password = newPlayer.password
-            this.isGuest = newPlayer.isGuest
+            when (newPlayer) {
+                is GuestPlayer -> Unit
+                is RegisteredPlayer -> {
+                    this.username = newPlayer.username
+                    this.displayName = newPlayer.displayName
+                    this.password = newPlayer.password
+                }
+            }
         }
         newRecord.store()
     }

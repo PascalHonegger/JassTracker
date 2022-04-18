@@ -1,19 +1,8 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import Round from "./RoundComponent.vue";
-import { Player, Row } from "@/types/types";
-import { useRoute, useRouter } from "vue-router";
-import { useGameStore } from "@/store/game-store";
-import { storeToRefs } from "pinia";
+import { Game } from "@/types/types";
 
-const props = defineProps({
-  game: Object,
-});
-const router = useRouter();
-const route = useRoute();
-const gameStore = useGameStore();
-
-const { currentGame } = storeToRefs(gameStore);
+const props = defineProps<{ game: Game }>();
 
 // Will be in store one day
 const total = {
@@ -46,16 +35,17 @@ const total = {
         <table class="table-fixed w-full">
           <thead>
             <tr>
-              <td></td>
-              <template v-for="n in currentGame.players" :key="n.id">
-                <td>{{ n.displayName }}</td>
-              </template>
+              <th></th>
+              <th scope="col">{{ props.game.team1.player1.displayName }}</th>
+              <th scope="col">{{ props.game.team1.player2.displayName }}</th>
+              <th scope="col">{{ props.game.team2.player1.displayName }}</th>
+              <th scope="col">{{ props.game.team2.player2.displayName }}</th>
             </tr>
           </thead>
           <tbody>
             <Round
-              v-for="r in currentGame.rows"
-              :round="r"
+              v-for="r in props.game.rows"
+              :row="r"
               :key="r.contract.id"
             ></Round>
           </tbody>

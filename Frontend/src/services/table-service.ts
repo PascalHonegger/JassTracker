@@ -1,11 +1,5 @@
 import { api } from "@/services/requests";
-
-export interface WebTable {
-  id: string;
-  name: string;
-  ownerId: string;
-  gameIds: string[];
-}
+import { WebTable } from "@/services/web-model";
 
 export async function getTables() {
   return api.get<WebTable[]>("tables");

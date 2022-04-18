@@ -1,28 +1,33 @@
 package dev.honegger.services
 
-import dev.honegger.domain.Round
-import dev.honegger.domain.UserSession
+import dev.honegger.domain.*
 import dev.honegger.repositories.RoundRepository
+import dev.honegger.repositories.TableRepository
 import io.mockk.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import org.junit.jupiter.api.assertThrows
 import java.util.*
 import kotlin.test.*
 
 class RoundServiceImplTest {
-    private val repository = mockk<RoundRepository>()
-    private val service = RoundServiceImpl(repository)
+    private val roundRepository = mockk<RoundRepository>()
+    private val tableRepository = mockk<TableRepository>()
+    private val service = RoundServiceImpl(roundRepository, tableRepository)
     private val dummySession = UserSession(UUID.randomUUID(), "dummy")
     private val passedRound = slot<Round>()
 
     @BeforeTest
     fun setup() {
-        clearMocks(repository)
+        clearMocks(roundRepository, tableRepository)
         passedRound.clear()
-        every { repository.saveRound(capture(passedRound)) } just Runs
+        every { roundRepository.saveRound(capture(passedRound)) } just Runs
     }
 
     @AfterTest
     fun teardown() {
-        confirmVerified(repository)
+        confirmVerified(roundRepository, tableRepository)
     }
 
     @Test
@@ -32,6 +37,21 @@ class RoundServiceImplTest {
         val dummyGame = UUID.randomUUID()
         val dummyPlayer = UUID.randomUUID()
         val dummyContract = UUID.randomUUID()
+
+        every { tableRepository.getTableByGameIdOrNull(dummyGame) } returns Table(
+            id = UUID.randomUUID(),
+            name = "Foo",
+            ownerId = dummyPlayer,
+            games = listOf(
+                Game(
+                    id = dummyGame,
+                    startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+                    rounds = emptyList(),
+                    team1 = Team(GameParticipant(UUID.randomUUID(), "p1"), GameParticipant(UUID.randomUUID(), "p2")),
+                    team2 = Team(GameParticipant(UUID.randomUUID(), "p3"), GameParticipant(UUID.randomUUID(), "p4")),
+                )
+            )
+        )
 
         val created = service.createRound(dummySession, dummyNum, dummyScore, dummyGame, dummyPlayer, dummyContract)
 
@@ -43,6 +63,45 @@ class RoundServiceImplTest {
         assertEquals(dummyPlayer, created.playerId)
         assertEquals(dummyContract, created.contractId)
 
-        verify(exactly = 1) { repository.saveRound(any()) }
+        verify(exactly = 1) {
+            roundRepository.saveRound(any())
+            tableRepository.getTableByGameIdOrNull(dummyGame)
+        }
+    }
+
+    @Test
+    fun `createRound fails with score over 157`() {
+        val thrown = assertThrows<IllegalStateException> {
+            service.createRound(
+                session = dummySession,
+                number = 0,
+                score = 158,
+                gameId = UUID.randomUUID(),
+                playerId = UUID.randomUUID(),
+                contractId = UUID.randomUUID())
+        }
+        assertEquals("Score must be between 0 and 157", thrown.message)
+    }
+
+    @Test
+    fun `createRound fails with score below 0`() {
+        val thrown = assertThrows<IllegalStateException> {
+            service.createRound(
+                session = dummySession,
+                number = 0,
+                score = -1,
+                gameId = UUID.randomUUID(),
+                playerId = UUID.randomUUID(),
+                contractId = UUID.randomUUID())
+        }
+        assertEquals("Score must be between 0 and 157", thrown.message)
+    }
+
+    @Test
+    fun `getRounds returns all rounds for a game`() {
+        val dummyGame = UUID.randomUUID()
+        every { roundRepository.getRoundsForGame(dummyGame) } returns emptyList()
+        assertEquals(emptyList(), service.getRounds(dummySession, dummyGame))
+        verify(exactly = 1) { roundRepository.getRoundsForGame(dummyGame) }
     }
 }

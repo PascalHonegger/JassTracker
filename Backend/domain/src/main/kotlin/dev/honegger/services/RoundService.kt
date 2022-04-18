@@ -3,6 +3,7 @@ package dev.honegger.services
 import dev.honegger.domain.Round
 import dev.honegger.domain.UserSession
 import dev.honegger.repositories.RoundRepository
+import dev.honegger.repositories.TableRepository
 
 import mu.KotlinLogging
 import java.util.*
@@ -23,7 +24,7 @@ interface RoundService {
 
 private val log = KotlinLogging.logger { }
 
-class RoundServiceImpl(private val roundRepository: RoundRepository) : RoundService {
+class RoundServiceImpl(private val roundRepository: RoundRepository, private val tableRepository: TableRepository) : RoundService {
     override fun createRound(
         session: UserSession,
         number: Int,
@@ -33,6 +34,15 @@ class RoundServiceImpl(private val roundRepository: RoundRepository) : RoundServ
         contractId: UUID,
     ): Round {
         check(score in 0..157) { "Score must be between 0 and 157" }
+
+        val table = tableRepository.getTableByGameIdOrNull(gameId) ?: error("Couldn't find gameId")
+        val game = table.games.single()
+
+        // Santity checks:
+        // - contract is valid and not done by other team member
+        // - playerId is part of game
+        // - ...
+
         val newRound = Round(
             id = UUID.randomUUID(),
             number = number,
@@ -44,7 +54,7 @@ class RoundServiceImpl(private val roundRepository: RoundRepository) : RoundServ
 
         // TODO verify round is part of game / table which is owned by current user
 
-        log.info { "Saving new table $newRound" }
+        log.info { "Saving new round $newRound" }
         roundRepository.saveRound(newRound)
         return newRound
     }
@@ -68,6 +78,6 @@ class RoundServiceImpl(private val roundRepository: RoundRepository) : RoundServ
 
         // TODO verify round is part of game / table which is owned by current user
 
-        roundRepository.saveRound(existingRound)
+        roundRepository.updateRound(existingRound)
     }
 }

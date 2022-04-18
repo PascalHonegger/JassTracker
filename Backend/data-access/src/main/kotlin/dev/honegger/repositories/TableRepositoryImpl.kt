@@ -1,17 +1,13 @@
 package dev.honegger.repositories
 
-import dev.honegger.domain.Game
-import dev.honegger.domain.Round
 import dev.honegger.domain.Table
-import dev.honegger.jasstracker.database.tables.Table.TABLE
 import dev.honegger.jasstracker.database.tables.Game.GAME
-import dev.honegger.jasstracker.database.tables.Round.ROUND
+import dev.honegger.jasstracker.database.tables.Table.TABLE
 import dev.honegger.withContext
 import java.util.*
 
-class TableRepositoryImpl : TableRepository {
+class TableRepositoryImpl(private val gameRepository: GameRepository) : TableRepository {
     override fun getTableOrNull(id: UUID): Table? = withContext {
-
         val tableRecord = selectFrom(TABLE).where(TABLE.ID.eq(id)).fetchOne()
 
         tableRecord?.let {
@@ -19,21 +15,23 @@ class TableRepositoryImpl : TableRepository {
                 id = it.id,
                 name = it.name,
                 ownerId = it.ownerId,
-                games = selectFrom(GAME).where(GAME.TABLE_ID.eq(it.id)).fetch().map { game ->
-                    Game(game.id, game.startTime, game.endTime,
-                        selectFrom(ROUND).where(ROUND.GAME_ID.eq(game.id)).fetch().map { round ->
-                            Round(
-                                round.id,
-                                round.number,
-                                round.score,
-                                round.gameId,
-                                round.playerId,
-                                round.contractId
-                            )
-                        }
-                    )
-                }
+                games = gameRepository.getAllGamesOfTable(it.id),
             )
+        }
+    }
+
+    override fun getTableByGameIdOrNull(id: UUID): Table? = withContext {
+        selectFrom(GAME).where(GAME.ID.eq(id)).fetchOne()?.let { game ->
+            val tableRecord = selectFrom(TABLE).where(TABLE.ID.eq(game.id)).fetchOne()
+
+            tableRecord?.let {
+                Table(
+                    id = it.id,
+                    name = it.name,
+                    ownerId = it.ownerId,
+                    games = listOf(gameRepository.getGameOrNull(game.id)!!),
+                )
+            }
         }
     }
 
@@ -43,21 +41,7 @@ class TableRepositoryImpl : TableRepository {
                 id = it.id,
                 name = it.name,
                 ownerId = it.ownerId,
-                games = selectFrom(GAME).where(GAME.TABLE_ID.eq(it.id)).fetch().map { game ->
-                    Game(game.id,
-                        game.startTime,
-                        game.endTime,
-                        selectFrom(ROUND).where(ROUND.GAME_ID.eq(game.id)).fetch().map { round ->
-                            Round(
-                                round.id,
-                                round.number,
-                                round.score,
-                                round.gameId,
-                                round.playerId,
-                                round.contractId
-                            )
-                        })
-                }
+                games = gameRepository.getAllGamesOfTable(it.id),
             )
         }
     }
