@@ -7,6 +7,7 @@ import dev.honegger.jasstracker.domain.Team
 import dev.honegger.jasstracker.data.database.tables.GameParticipation.GAME_PARTICIPATION
 import dev.honegger.jasstracker.data.database.tables.Game.GAME
 import dev.honegger.jasstracker.data.database.tables.Round.ROUND
+import dev.honegger.jasstracker.database.tables.Table
 import dev.honegger.jasstracker.data.database.tables.records.GameRecord
 import dev.honegger.jasstracker.domain.repositories.GameRepository
 import dev.honegger.withContext
@@ -93,5 +94,9 @@ class GameRepositoryImpl : GameRepository {
         newGame.team1.player2.toGameParticipation(tablePosition = 1).insert()
         newGame.team2.player1.toGameParticipation(tablePosition = 2).insert()
         newGame.team2.player2.toGameParticipation(tablePosition = 3).insert()
+    }
+
+    override fun deleteGameById(id: UUID): Boolean = withContext {
+        return@withContext deleteFrom(GAME).where(GAME.ID.eq(id)).execute() == 1
     }
 }

@@ -21,6 +21,7 @@ interface GameService {
     fun getGameOrNull(session: UserSession, id: UUID): Game?
     fun getAllGames(session: UserSession): List<Game>
     fun updateGame(session: UserSession, updatedGame: Game)
+    fun deleteGameById(session: UserSession, id: UUID): Boolean
 }
 
 data class CreateGameParticipant(
@@ -88,5 +89,12 @@ class GameServiceImpl(private val gameRepository: GameRepository, private val pl
         )
         playerRepository.savePlayer(newGuest)
         return GameParticipant(newGuest.id, createGameParticipant.displayName)
+    }
+
+    override fun deleteGameById(session: UserSession, id: UUID): Boolean {
+        val existingGame =
+            gameRepository.getGameOrNull(id)
+        checkNotNull(existingGame)
+        return gameRepository.deleteGameById(id)
     }
 }
