@@ -52,7 +52,7 @@ class TableRepositoryImpl(private val gameRepository: GameRepository) : TableRep
 
         tableRecord.name = tableRecord.name
         tableRecord.ownerId = tableRecord.ownerId
-        tableRecord.store()
+        tableRecord.update()
     }
 
     override fun saveTable(newTable: Table): Unit = withContext {
@@ -61,6 +61,6 @@ class TableRepositoryImpl(private val gameRepository: GameRepository) : TableRep
             this.name = newTable.name
             this.ownerId = newTable.ownerId
         }
-        newRecord.store()
+        newRecord.insert()
     }
 }

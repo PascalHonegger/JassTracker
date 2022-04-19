@@ -69,7 +69,7 @@ class GameRepositoryImpl : GameRepository {
 
         gameRecord.startTime = updatedGame.startTime
         gameRecord.endTime = updatedGame.endTime
-        gameRecord.store()
+        gameRecord.update()
     }
 
     override fun saveGame(newGame: Game, tableId: UUID): Unit = withContext {

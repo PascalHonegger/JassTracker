@@ -49,7 +49,7 @@ class PlayerRepositoryImpl : PlayerRepository {
         checkNotNull(playerRecord)
 
         playerRecord.displayName = updatedPlayer.displayName
-        playerRecord.store()
+        playerRecord.update()
     }
 
     override fun savePlayer(newPlayer: Player): Unit = withContext {
@@ -64,6 +64,6 @@ class PlayerRepositoryImpl : PlayerRepository {
                 }
             }
         }
-        newRecord.store()
+        newRecord.insert()
     }
 }
