@@ -13,6 +13,7 @@ import WaitSpinner from "@/components/WaitSpinner.vue";
 import { WebCreateGame } from "@/services/web-model";
 import type { Game } from "@/types/types";
 import GamePreviewComponent from "@/components/GamePreviewComponent.vue";
+import { toDateTimeString } from "@/util/dates";
 
 const router = useRouter();
 const route = useRoute();
@@ -38,6 +39,8 @@ const pastGames = computed<Game[]>(() =>
   )
 );
 
+const selectedGame = ref<Game>();
+
 watch(
   () => route.params.id,
   async (newId) => {
@@ -56,6 +59,7 @@ async function setCurrentTableId(newId: string | string[] | undefined) {
 
   // Open the latest game if no game id is specified
   gameStore.setCurrentGame(newId, currentTable.value?.latestGameId ?? "");
+  await gameStore.loadGamesForTable(tableStore.currentTableId);
 }
 
 async function createNewGame() {
@@ -86,21 +90,31 @@ function backToOverview() {
       Neues Spiel erstellen
     </button>
     <Scoreboard v-if="currentGame" :game="currentGame"></Scoreboard>
-    <p v-else>There is currently no game going on</p>
+    <p v-else>Momentan läuft kein Spiel</p>
   </div>
+
+  <WaitSpinner v-else />
+
   <div v-if="pastGames.length > 0" class="container mx-auto">
-    <h2>Past Games</h2>
-    <ul>
+    <h2 class="font-bold text-lg">Vergangene Spiele</h2>
+    <ul class="flex flex-row gap-2 flex-wrap">
       <li v-for="game in pastGames" :key="game.id">
-        <button @click="selectedGame = game">
+        <button
+          class="border p-2 rounded flex flex-col"
+          :class="
+            game === selectedGame
+              ? ['border-blue-700', 'border-2', 'font-bold']
+              : ['border-black', 'border-1']
+          "
+          @click="selectedGame = game"
+        >
           <GamePreviewComponent :game="game" />
+          <span>{{ toDateTimeString(game.endTime) }}</span>
         </button>
       </li>
     </ul>
     <Scoreboard v-if="selectedGame" :game="selectedGame" />
   </div>
-
-  <WaitSpinner v-else />
 
   <Modal v-show="isModalVisible" @close="isModalVisible = false">
     <template v-slot:header>

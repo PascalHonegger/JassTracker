@@ -128,8 +128,8 @@ export const useGameStore = defineStore("game", {
 
       const preparedGame: Game = {
         id: game.id,
-        startTime: game.startTime,
-        endTime: game.endTime,
+        startTime: new Date(game.startTime),
+        endTime: game.endTime != null ? new Date(game.endTime) : undefined,
         rounds: game.rounds,
         team1: game.team1,
         team2: game.team2,
