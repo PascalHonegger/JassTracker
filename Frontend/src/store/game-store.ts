@@ -1,19 +1,13 @@
 import { defineStore } from "pinia";
 
 import { useTableStore } from "@/store/table-store";
-import { getGame } from "@/services/game-service";
+import { createGame, getGame } from "@/services/game-service";
 import { useContractStore } from "@/store/contract-store";
 import { Game, RoundType } from "@/types/types";
-import { WebGame } from "@/services/web-model";
+import { WebCreateGame, WebGame } from "@/services/web-model";
 
 export const useGameStore = defineStore("game", {
-  state: () => ({
-    loadingCounter: 0,
-  }),
   getters: {
-    loading(state) {
-      return state.loadingCounter > 0;
-    },
     currentGame(): Game | undefined {
       const tableStore = useTableStore();
       const table = tableStore.currentTable;
@@ -47,14 +41,34 @@ export const useGameStore = defineStore("game", {
         return;
       }
       if (table.loadedGames[gameId] == null) {
-        this.loadingCounter++;
-        try {
-          const loadedGame = await getGame(gameId);
-          this.addGameToExistingTable(tableId, loadedGame);
-        } finally {
-          this.loadingCounter--;
-        }
+        const loadedGame = await getGame(gameId);
+        this.addGameToExistingTable(tableId, loadedGame);
       }
+    },
+    async createGame(newGame: WebCreateGame): Promise<string> {
+      const createdGame = await createGame(newGame);
+      const gameStore = useGameStore();
+      gameStore.addGameToExistingTable(newGame.tableId, createdGame);
+      this.setLatestGame(newGame.tableId, createdGame.id);
+      return createdGame.id;
+    },
+    setCurrentGame(tableId: string, gameId: string) {
+      const tableStore = useTableStore();
+      const table = tableStore.getTableById(tableId);
+      if (table == null) {
+        console.error(`Got unexpected null for tableId ${tableId}`);
+        return;
+      }
+      table.currentGameId = gameId;
+    },
+    setLatestGame(tableId: string, gameId: string) {
+      const tableStore = useTableStore();
+      const table = tableStore.getTableById(tableId);
+      if (table == null) {
+        console.error(`Got unexpected null for tableId ${tableId}`);
+        return;
+      }
+      table.latestGameId = gameId;
     },
     addGameToExistingTable(tableId: string, game: WebGame) {
       const tableStore = useTableStore();
@@ -100,7 +114,12 @@ export const useGameStore = defineStore("game", {
               const teamMember = getTeamMember(round.playerId);
               const teamMemberRound = row.rounds.find(
                 (r) => r.playerId === teamMember
-              )!;
+              );
+              if (teamMemberRound == null) {
+                throw new Error(
+                  "Couldn't match player id to player, this should not happen"
+                );
+              }
               teamMemberRound.type = RoundType.Locked;
             }
           }

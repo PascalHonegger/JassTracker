@@ -29,6 +29,9 @@ async function setCurrentTableId(newId: string | string[] | undefined) {
   if (typeof newId !== "string") return;
   tableStore.setCurrentTable(newId);
   await tableStore.loadTable(newId);
+
+  // Open the latest game if no game id is specified
+  gameStore.setCurrentGame(newId, currentTable.value?.latestGameId ?? "");
 }
 
 function newGame() {
