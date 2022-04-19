@@ -52,15 +52,15 @@ export const useTableStore = defineStore("table", {
       return createdTable.id;
     },
     addTable(table: WebTable) {
-      this.tables[table.id] = this.tables[table.id] = {
+      this.tables[table.id] = {
         id: table.id,
         name: table.name,
         gameIds: table.gameIds,
         loadedGames: {},
         latestGameId: table.latestGame?.id ?? "",
-        currentGameId: table.latestGame?.id ?? "",
-      } as Table;
-
+        currentGameId:
+          table.latestGame?.endTime == null ? table.latestGame?.id ?? "" : "",
+      };
       if (table.latestGame != null) {
         const gameStore = useGameStore();
         gameStore.addGameToExistingTable(table.id, table.latestGame);

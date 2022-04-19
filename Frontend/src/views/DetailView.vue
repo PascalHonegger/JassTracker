@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Scoreboard from "../components/ScoreboardComponent.vue";
-import { onMounted, ref, watch } from "vue";
+import Scoreboard from "@/components/ScoreboardComponent.vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useTableStore } from "@/store/table-store";
 import { useGameStore } from "@/store/game-store";
@@ -11,6 +11,8 @@ import CreateGameComponent, {
 import Modal from "@/components/Modal.vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
 import { WebCreateGame } from "@/services/web-model";
+import type { Game } from "@/types/types";
+import GamePreviewComponent from "@/components/GamePreviewComponent.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -29,6 +31,12 @@ const newGame = ref<PartialCreateGame>({
   team2Player1: { playerId: null, displayName: "" },
   team2Player2: { playerId: null, displayName: "" },
 });
+
+const pastGames = computed<Game[]>(() =>
+  Object.values(currentTable.value?.loadedGames ?? {}).filter(
+    (g) => g !== currentGame.value
+  )
+);
 
 watch(
   () => route.params.id,
@@ -78,6 +86,18 @@ function backToOverview() {
       Neues Spiel erstellen
     </button>
     <Scoreboard v-if="currentGame" :game="currentGame"></Scoreboard>
+    <p v-else>There is currently no game going on</p>
+  </div>
+  <div v-if="pastGames.length > 0" class="container mx-auto">
+    <h2>Past Games</h2>
+    <ul>
+      <li v-for="game in pastGames" :key="game.id">
+        <button @click="selectedGame = game">
+          <GamePreviewComponent :game="game" />
+        </button>
+      </li>
+    </ul>
+    <Scoreboard v-if="selectedGame" :game="selectedGame" />
   </div>
 
   <WaitSpinner v-else />
