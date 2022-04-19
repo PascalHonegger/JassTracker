@@ -33,12 +33,12 @@ insert into "game" (id, start_time, end_time, table_id) values
 
 insert into "game_participation" (game_id, player_id, table_position, player_name) values
 	('3de81ae0-792e-43b0-838b-acad78f29ba6', '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0', 0, 'Pascal'),
-	('3de81ae0-792e-43b0-838b-acad78f29ba6', '3095c042-d0a9-4219-9f65-53d4565fd1e6', 1, 'Marcel'),
-	('3de81ae0-792e-43b0-838b-acad78f29ba6', '283c0a20-b293-40e7-8858-da098a53b756', 2, 'David'),
+    ('3de81ae0-792e-43b0-838b-acad78f29ba6', '283c0a20-b293-40e7-8858-da098a53b756', 1, 'David'),
+	('3de81ae0-792e-43b0-838b-acad78f29ba6', '3095c042-d0a9-4219-9f65-53d4565fd1e6', 2, 'Marcel'),
 	('3de81ae0-792e-43b0-838b-acad78f29ba6', 'cdfa5ae5-d182-4e11-b7f1-a173b2b4b797', 3, 'Jamie'),
 	('85df0ff4-6c8b-4846-b8e6-400940660f0b', '665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3', 0, 'Guest 1'),
-	('85df0ff4-6c8b-4846-b8e6-400940660f0b', '7dad81d3-62db-4553-9d48-f38f404f1596', 1, 'Guest 2'),
-	('85df0ff4-6c8b-4846-b8e6-400940660f0b', '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0', 2, 'Pascal'),
+    ('85df0ff4-6c8b-4846-b8e6-400940660f0b', '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0', 1, 'Pascal'),
+	('85df0ff4-6c8b-4846-b8e6-400940660f0b', '7dad81d3-62db-4553-9d48-f38f404f1596', 2, 'Guest 2'),
 	('85df0ff4-6c8b-4846-b8e6-400940660f0b', '3095c042-d0a9-4219-9f65-53d4565fd1e6', 3, 'Marcel');
 
 insert into "round" (id, number, score, game_id, player_id, contract_id) values
