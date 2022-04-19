@@ -32,7 +32,7 @@ fun Application.configureRoundEndpoints(
                     newRound.playerId,
                     newRound.contractId
                 )
-                call.respond(HttpStatusCode.Created, createdRound.id)
+                call.respond(HttpStatusCode.Created, createdRound.toWebRound())
             }
             post("/{id}") {
                 val id = call.parameters["id"]
@@ -42,7 +42,7 @@ fun Application.configureRoundEndpoints(
                 }
                 val updatedRound = call.receive<WebRound>().toRound()
                 roundService.updateRound(dummySession, updatedRound)
-                call.respond(HttpStatusCode.Created)
+                call.respond(HttpStatusCode.OK)
             }
         }
     }

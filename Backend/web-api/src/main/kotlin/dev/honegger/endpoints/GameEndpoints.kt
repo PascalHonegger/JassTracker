@@ -44,7 +44,7 @@ fun Application.configureGameEndpoints(
                     CreateGameParticipant(newGame.team2Player1),
                     CreateGameParticipant(newGame.team2Player2),
                 )
-                call.respond(HttpStatusCode.Created, createdGame.id.toString())
+                call.respond(HttpStatusCode.Created, createdGame.toWebGame())
             }
             post("/{id}") {
                 val id = call.parameters["id"]
@@ -54,7 +54,7 @@ fun Application.configureGameEndpoints(
                 }
                 val updatedGame = call.receive<WebGame>().toGame()
                 gameService.updateGame(dummySession, updatedGame)
-                call.respond(HttpStatusCode.Created)
+                call.respond(HttpStatusCode.OK)
             }
         }
     }

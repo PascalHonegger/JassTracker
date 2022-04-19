@@ -39,7 +39,7 @@ fun Application.configureTableEndpoints(
                     dummySession,
                     newTable.name
                 )
-                call.respond(HttpStatusCode.Created, createdTable.id)
+                call.respond(HttpStatusCode.Created, createdTable.toWebTable())
             }
             post("/{id}") {
                 val id = call.parameters["id"]
@@ -49,7 +49,7 @@ fun Application.configureTableEndpoints(
                 }
                 val updatedTable = call.receive<WebTable>().toTable()
                 tableService.updateTable(dummySession, updatedTable)
-                call.respond(HttpStatusCode.Created)
+                call.respond(HttpStatusCode.OK)
             }
         }
     }
