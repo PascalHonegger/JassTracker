@@ -44,7 +44,15 @@ const routes: Array<RouteRecordRaw> = [
       requiresAuth: true,
     },
     component: () =>
-      import(/* webpackChunkName: "detail" */ "../views/DetailView.vue"),
+      import(/* webpackChunkName: "detail" */ "../views/TableDetailView.vue"),
+  },
+  {
+    path: "/table/:tableId/game/:gameId",
+    name: "game",
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import("../views/GameDetailView.vue"),
   },
   {
     path: "/:pathMatch(.*)*",

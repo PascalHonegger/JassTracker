@@ -7,6 +7,9 @@ import { Game, RoundType } from "@/types/types";
 import { WebCreateGame, WebGame } from "@/services/web-model";
 
 export const useGameStore = defineStore("game", {
+  state: () => ({
+    loadingCounter: 0,
+  }),
   getters: {
     currentGame(): Game | undefined {
       const tableStore = useTableStore();

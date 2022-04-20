@@ -35,7 +35,7 @@ const newGame = ref<PartialCreateGame>({
 
 const pastGames = computed<Game[]>(() =>
   Object.values(currentTable.value?.loadedGames ?? {}).filter(
-    (g) => g !== currentGame.value
+    (g) => g !== gameStore.currentGame
   )
 );
 
@@ -99,18 +99,21 @@ function backToOverview() {
     <h2 class="font-bold text-lg">Vergangene Spiele</h2>
     <ul class="flex flex-row gap-2 flex-wrap">
       <li v-for="game in pastGames" :key="game.id">
-        <button
-          class="border p-2 rounded flex flex-col"
+        <RouterLink
+          class="border p-2 rounded flex flex-col text-center"
           :class="
             game === selectedGame
               ? ['border-blue-700', 'border-2', 'font-bold']
               : ['border-black', 'border-1']
           "
-          @click="selectedGame = game"
+          :to="{
+            name: 'game',
+            params: { tableId: currentTable.id, gameId: game.id },
+          }"
         >
           <GamePreviewComponent :game="game" />
           <span>{{ toDateTimeString(game.endTime) }}</span>
-        </button>
+        </RouterLink>
       </li>
     </ul>
     <Scoreboard v-if="selectedGame" :game="selectedGame" />
