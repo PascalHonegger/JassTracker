@@ -4,7 +4,7 @@ import { useGameStore } from "@/store/game-store";
 import { onMounted, onUnmounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useTableStore } from "@/store/table-store";
-import Scoreboard from "@/components/ScoreboardComponent.vue";
+import Scoreboard from "@/components/Scoreboard.vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
 
 const router = useRouter();

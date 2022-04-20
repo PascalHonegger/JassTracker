@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Table from "../components/TableComponent.vue";
+import Table from "../components/Table.vue";
 import Modal from "../components/Modal.vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
 import { onMounted, ref } from "vue";
@@ -8,9 +8,7 @@ import { useTableStore } from "@/store/table-store";
 import { storeToRefs } from "pinia";
 import { useGameStore } from "@/store/game-store";
 import { WebCreateGame } from "@/services/web-model";
-import CreateGameComponent, {
-  PartialCreateGame,
-} from "@/components/CreateGameComponent.vue";
+import CreateGame, { PartialCreateGame } from "@/components/CreateGame.vue";
 
 const router = useRouter();
 const tableStore = useTableStore();
@@ -68,10 +66,10 @@ async function createNewTable() {
           <input id="tableName" v-model="newTableName" />
         </div>
         <form @submit.prevent="createNewTable" class="flex justify-around">
-          <CreateGameComponent
+          <CreateGame
             :disabled="creatingGame"
             v-model:new-game="newGame"
-          ></CreateGameComponent>
+          ></CreateGame>
         </form>
       </template>
       <template v-slot:footer>

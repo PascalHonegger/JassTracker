@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Round from "./RoundComponent.vue";
+import Round from "./Round.vue";
 import { Game } from "@/types/types";
 
 const props = defineProps<{ game: Game }>();

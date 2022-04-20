@@ -1,18 +1,16 @@
 <script setup lang="ts">
-import Scoreboard from "@/components/ScoreboardComponent.vue";
+import Scoreboard from "@/components/Scoreboard.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useTableStore } from "@/store/table-store";
 import { useGameStore } from "@/store/game-store";
 import { storeToRefs } from "pinia";
-import CreateGameComponent, {
-  PartialCreateGame,
-} from "@/components/CreateGameComponent.vue";
+import CreateGame, { PartialCreateGame } from "@/components/CreateGame.vue";
 import Modal from "@/components/Modal.vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
 import { WebCreateGame } from "@/services/web-model";
 import type { Game } from "@/types/types";
-import GamePreviewComponent from "@/components/GamePreviewComponent.vue";
+import GamePreview from "@/components/GamePreview.vue";
 import { toDateTimeString } from "@/util/dates";
 
 const router = useRouter();
@@ -111,7 +109,7 @@ function backToOverview() {
             params: { tableId: currentTable.id, gameId: game.id },
           }"
         >
-          <GamePreviewComponent :game="game" />
+          <GamePreview :game="game" />
           <span>{{ toDateTimeString(game.endTime) }}</span>
         </RouterLink>
       </li>
@@ -125,10 +123,10 @@ function backToOverview() {
     </template>
     <template v-slot:body>
       <form @submit.prevent="createNewGame" class="flex justify-around">
-        <CreateGameComponent
+        <CreateGame
           :disabled="creatingGame"
           v-model:new-game="newGame"
-        ></CreateGameComponent>
+        ></CreateGame>
       </form>
     </template>
     <template v-slot:footer>
