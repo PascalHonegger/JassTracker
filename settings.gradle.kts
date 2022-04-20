@@ -17,6 +17,7 @@ dependencyResolutionManagement {
         val postgresql = "42.3.3"
         val jooq = "3.16.5"
         val jooqPlugin = "7.1.1"
+        val kover = "0.5.0"
 
         create("libs") {
             library("ktor-server-core", "io.ktor", "ktor-server-core-jvm").version(ktor)
@@ -41,6 +42,7 @@ dependencyResolutionManagement {
             plugin("kotlin-serialization", "org.jetbrains.kotlin.plugin.serialization").version(kotlin)
             plugin("shadow", "com.github.johnrengelman.shadow").version(shadow)
             plugin("jooq", "nu.studer.jooq").version(jooqPlugin)
+            plugin("kover", "org.jetbrains.kotlinx.kover").version(kover)
         }
         create("testLibs") {
             library("kotlin-test", "org.jetbrains.kotlin", "kotlin-test-junit5").version(kotlin)

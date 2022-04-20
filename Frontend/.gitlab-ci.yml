@@ -21,3 +21,25 @@ frontend_lint:
   stage: verify
   script:
     - npm run lint
+
+lhci:
+  <<: *frontend_configuration
+  image: cypress/browsers:node17.8.0-chrome99-ff97-slim
+  stage: verify
+  script:
+    - npm run build
+    - npm install -g @lhci/cli@0.8.x
+    - lhci autorun --upload.target=temporary-public-storage --collect.settings.chromeFlags="--no-sandbox" || echo "LHCI failed!"
+
+qodana-js:
+  <<: *frontend_configuration
+  image:
+    name: jetbrains/qodana-js:2021.3-eap
+    entrypoint: ['']
+  stage: verify
+  script:
+    - /opt/idea/bin/entrypoint --results-dir=$CI_PROJECT_DIR/qodana --save-report --report-dir=$CI_PROJECT_DIR/qodana/report
+  artifacts:
+    paths:
+      - qodana/report/
+    expose_as: 'Qodana JS Report'

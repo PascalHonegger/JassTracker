@@ -33,10 +33,14 @@ backend_build:
 backend_test:
   <<: *backend_configuration
   stage: verify
-  script: ./gradlew check
+  script: ./gradlew check koverMergedHtmlReport koverMergedVerify
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
     paths:
       - build
       - .gradle
+  artifacts:
+    paths:
+      - build/reports/kover/html/
+    expose_as: 'Kover Code Coverage'
