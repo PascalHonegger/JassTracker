@@ -74,8 +74,7 @@ export const useTableStore = defineStore("table", {
     async removeTable(tableId: string) {
       // remove table object in memory
       delete this.tables[tableId];
-      // currently, result is null, need to fix this in BE
-      const success = (await deleteTableById(tableId)) || true;
+      const success = await deleteTableById(tableId);
       return this.tables[tableId] === undefined && success;
     },
   },

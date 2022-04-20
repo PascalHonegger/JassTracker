@@ -63,8 +63,12 @@ fun Application.configureGameEndpoints(
                     call.respond(HttpStatusCode.BadRequest)
                     return@delete
                 }
-                gameService.deleteGameById(dummySession, UUID.fromString(id))
-                call.respond(HttpStatusCode.OK)
+                val success = gameService.deleteGameById(dummySession, UUID.fromString(id))
+                if (!success) {
+                    call.respond(HttpStatusCode.NotFound, false)
+                    return@delete
+                }
+                call.respond(HttpStatusCode.OK, true)
             }
         }
     }

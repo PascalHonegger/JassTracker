@@ -83,7 +83,7 @@ class GameRepositoryImpl : GameRepository {
         }
         newGameRecord.insert()
 
-        fun GameParticipant.toGameParticipation(tablePosition: Int) = newRecord(GAME_PARTICIPATION).apply {
+        fun GameParticipant.toGameParticipation(tablePosition: Int) = newRecord(GP).apply {
             this.gameId = newGameRecord.id
             this.playerId = this@toGameParticipation.playerId
             this.playerName = this@toGameParticipation.displayName

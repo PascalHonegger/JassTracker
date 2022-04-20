@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Table } from "@/types/types";
 import GamePreview from "./GamePreview.vue";
-import Icon from "./Icon.vue";
+import Icon from "./IconSelector.vue";
 import { computed, ref } from "vue";
-import Modal from "./Modal.vue";
+import Modal from "./ModalDialog.vue";
 
 import { useTableStore } from "@/store/table-store";
 const tableStore = useTableStore();
@@ -34,7 +34,7 @@ function closeModal() {
 </script>
 <template>
   <RouterLink
-    :to="{ name: 'table', params: { id: table.id } }"
+    :to="{ name: 'table', params: { tableId: table.id } }"
     class="table max-w-sm w-full lg:max-w-full lg:flex flex-col text-center relative z-0"
   >
     <p class="font-bold">{{ table.name }}</p>
@@ -51,8 +51,8 @@ function closeModal() {
       <p class="font-bold">Tisch löschen</p>
     </template>
     <template v-slot:body>
-      Sind Sie sicher, dass Sie den Tisch: {{ props.table.name }} und alle
-      enthaltenen Spiele Löschen möchten?
+      Sind Sie sicher, dass Sie den Tisch: {{ table.name }} und alle enthaltenen
+      Spiele Löschen möchten?
     </template>
     <template v-slot:footer>
       <button type="button" class="btn btn-blue" @click="deleteTable">

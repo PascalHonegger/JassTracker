@@ -57,8 +57,12 @@ fun Application.configureTableEndpoints(
                     call.respond(HttpStatusCode.BadRequest)
                     return@delete
                 }
-                tableService.deleteTableById(dummySession, UUID.fromString(id))
-                call.respond(HttpStatusCode.OK)
+                val success = tableService.deleteTableById(dummySession, UUID.fromString(id))
+                if (!success) {
+                    call.respond(HttpStatusCode.NotFound, false)
+                    return@delete
+                }
+                call.respond(HttpStatusCode.OK, true)
             }
         }
     }
