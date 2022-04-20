@@ -11,13 +11,10 @@ const latestGame = computed(
 </script>
 <template>
   <RouterLink
-    :to="{ name: 'table', params: { tableId: props.table.id } }"
+    :to="{ name: 'table', params: { tableId: table.id } }"
     class="table max-w-sm w-full lg:max-w-full lg:flex flex-col text-center"
   >
-    <p class="font-bold">{{ props.table.name }}</p>
-    <GamePreview
-      v-if="latestGame != null"
-      :game="latestGame"
-    ></GamePreview>
+    <p class="font-bold">{{ table.name }}</p>
+    <GamePreview v-if="latestGame != null" :game="latestGame"></GamePreview>
   </RouterLink>
 </template>
