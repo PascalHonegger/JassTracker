@@ -33,23 +33,23 @@ fun Application.configureTableEndpoints(
 
                 call.respond(HttpStatusCode.OK, table.toWebTable())
             }
-            put {
+            post {
                 val newTable = call.receive<WebCreateTable>()
                 val createdTable = tableService.createTable(
                     dummySession,
                     newTable.name
                 )
-                call.respond(HttpStatusCode.Created, createdTable.id)
+                call.respond(HttpStatusCode.Created, createdTable.toWebTable())
             }
-            post("/{id}") {
+            put("/{id}") {
                 val id = call.parameters["id"]
                 if (id.isNullOrBlank()) {
                     call.respond(HttpStatusCode.BadRequest)
-                    return@post
+                    return@put
                 }
                 val updatedTable = call.receive<WebTable>().toTable()
                 tableService.updateTable(dummySession, updatedTable)
-                call.respond(HttpStatusCode.Created)
+                call.respond(HttpStatusCode.OK)
             }
         }
     }

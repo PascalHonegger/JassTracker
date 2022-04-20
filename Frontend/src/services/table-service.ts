@@ -13,8 +13,8 @@ export async function updateTable(id: string, table: WebTable) {
   return api.put(`tables/${id}`, table);
 }
 
-export async function createTable(table: WebTable) {
-  return api.post("tables", table);
+export async function createTable(name: string) {
+  return api.post<WebTable>("tables", { name });
 }
 
 export async function deleteTable(id: string) {

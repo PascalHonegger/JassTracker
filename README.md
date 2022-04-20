@@ -34,8 +34,6 @@ npm run lint
 docker compose up -d
 ```
 
-The aim of this repository is to provide an easy to use LaTeX template for documenting software projects.
-
 ## Documentation
 
 This repository is configured to be usable within VS Code, using the LaTeX Workshop plugin.

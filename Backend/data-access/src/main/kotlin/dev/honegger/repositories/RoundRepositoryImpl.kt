@@ -32,7 +32,7 @@ class RoundRepositoryImpl : RoundRepository {
         roundRecord.gameId = updatedRound.gameId
         roundRecord.playerId = updatedRound.playerId
         roundRecord.contractId = updatedRound.contractId
-        roundRecord.store()
+        roundRecord.update()
     }
 
     override fun saveRound(newRound: Round): Unit = withContext {
@@ -44,6 +44,6 @@ class RoundRepositoryImpl : RoundRepository {
             this.playerId = newRound.playerId
             this.contractId = newRound.contractId
         }
-        newRecord.store()
+        newRecord.insert()
     }
 }

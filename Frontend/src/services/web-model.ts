@@ -27,6 +27,19 @@ export interface WebGameParticipant {
   displayName: string;
 }
 
+export interface WebCreateGame {
+  tableId: string;
+  team1Player1: WebCreateGameParticipant;
+  team1Player2: WebCreateGameParticipant;
+  team2Player1: WebCreateGameParticipant;
+  team2Player2: WebCreateGameParticipant;
+}
+
+export interface WebCreateGameParticipant {
+  playerId: string | null;
+  displayName: string;
+}
+
 export interface WebRound {
   id: string;
   number: number;

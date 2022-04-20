@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getTable, getTables } from "@/services/table-service";
+import { createTable, getTable, getTables } from "@/services/table-service";
 
 import { Table } from "@/types/types";
 import { useGameStore } from "@/store/game-store";
@@ -7,14 +7,10 @@ import { WebTable } from "@/services/web-model";
 
 export const useTableStore = defineStore("table", {
   state: () => ({
-    loadingCounter: 0,
     tables: {} as Record<string, Table>,
     currentTableId: "",
   }),
   getters: {
-    loading(state) {
-      return state.loadingCounter > 0;
-    },
     tablesAsArray(state) {
       return Object.values(state.tables);
     },
@@ -34,15 +30,10 @@ export const useTableStore = defineStore("table", {
   actions: {
     async loadTables() {
       if (this.isEmpty) {
-        this.loadingCounter++;
-        try {
-          const loadedTables = await getTables();
-          // create object with ID to allow O(1) access time
-          for (const loadedTable of loadedTables) {
-            this.addTable(loadedTable);
-          }
-        } finally {
-          this.loadingCounter--;
+        const loadedTables = await getTables();
+        // create object with ID to allow O(1) access time
+        for (const loadedTable of loadedTables) {
+          this.addTable(loadedTable);
         }
       }
     },
@@ -51,14 +42,14 @@ export const useTableStore = defineStore("table", {
     },
     async loadTable(id: string) {
       if (!this.hasTable(id)) {
-        this.loadingCounter++;
-        try {
-          const loadedTable = await getTable(id);
-          this.addTable(loadedTable);
-        } finally {
-          this.loadingCounter--;
-        }
+        const loadedTable = await getTable(id);
+        this.addTable(loadedTable);
       }
+    },
+    async createTable(tableName: string): Promise<string> {
+      const createdTable = await createTable(tableName);
+      this.addTable(createdTable);
+      return createdTable.id;
     },
     addTable(table: WebTable) {
       this.tables[table.id] = this.tables[table.id] = {

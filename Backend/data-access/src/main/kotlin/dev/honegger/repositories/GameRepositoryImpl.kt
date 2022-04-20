@@ -69,16 +69,28 @@ class GameRepositoryImpl : GameRepository {
 
         gameRecord.startTime = updatedGame.startTime
         gameRecord.endTime = updatedGame.endTime
-        gameRecord.store()
+        gameRecord.update()
     }
 
     override fun saveGame(newGame: Game, tableId: UUID): Unit = withContext {
-        val newRecord = newRecord(GAME).apply {
+        val newGameRecord = newRecord(GAME).apply {
             this.id = newGame.id
             this.startTime = newGame.startTime
             this.endTime = newGame.endTime
             this.tableId = tableId
         }
-        newRecord.store()
+        newGameRecord.insert()
+
+        fun GameParticipant.toGameParticipation(tablePosition: Int) = newRecord(GAME_PARTICIPATION).apply {
+            this.gameId = newGameRecord.id
+            this.playerId = this@toGameParticipation.playerId
+            this.playerName = this@toGameParticipation.displayName
+            this.tablePosition = tablePosition
+        }
+
+        newGame.team1.player1.toGameParticipation(tablePosition = 0).insert()
+        newGame.team1.player2.toGameParticipation(tablePosition = 1).insert()
+        newGame.team2.player1.toGameParticipation(tablePosition = 2).insert()
+        newGame.team2.player2.toGameParticipation(tablePosition = 3).insert()
     }
 }

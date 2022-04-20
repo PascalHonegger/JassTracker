@@ -31,7 +31,7 @@ fun Application.configurePlayerEndpoints(
 
                 call.respond(HttpStatusCode.OK, player.toWebPlayer())
             }
-            put {
+            post {
                 val newPlayer = call.receive<WebCreatePlayer>()
                 val createdPlayer = playerService.createPlayer(
                     session = dummySession,
@@ -39,21 +39,21 @@ fun Application.configurePlayerEndpoints(
                     username = newPlayer.username,
                     password = newPlayer.password,
                 )
-                call.respond(HttpStatusCode.Created, createdPlayer.id.toString())
+                call.respond(HttpStatusCode.Created, createdPlayer.toWebPlayer())
             }
-            post("/{id}") {
+            put("/{id}") {
                 val id = call.parameters["id"]
                 if (id.isNullOrBlank()) {
                     call.respond(HttpStatusCode.BadRequest)
-                    return@post
+                    return@put
                 }
                 when (val updatedPlayer = call.receive<WebPlayer>().toPlayer()) {
                     is GuestPlayer -> {
-                        call.respond(HttpStatusCode.BadRequest)
+                        call.respond(HttpStatusCode.BadRequest, "Cannot update guest player")
                     }
                     is RegisteredPlayer -> {
                         playerService.updatePlayer(dummySession, updatedPlayer)
-                        call.respond(HttpStatusCode.Created)
+                        call.respond(HttpStatusCode.OK)
                     }
                 }
             }
