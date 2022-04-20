@@ -10,11 +10,11 @@ export async function getTable(id: string) {
 }
 
 export async function updateTable(id: string, table: WebTable) {
-  return api.post(`tables/${id}`, table);
+  return api.put(`tables/${id}`, table);
 }
 
 export async function createTable(name: string) {
-  return api.put<WebTable>("tables", { name });
+  return api.post<WebTable>("tables", { name });
 }
 
 export async function deleteTable(id: string) {

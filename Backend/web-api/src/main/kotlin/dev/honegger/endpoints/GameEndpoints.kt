@@ -33,7 +33,7 @@ fun Application.configureGameEndpoints(
 
                 call.respond(HttpStatusCode.OK, game.toWebGame())
             }
-            put {
+            post {
                 val newGame = call.receive<WebCreateGame>()
                 fun CreateGameParticipant(game: WebCreateGameParticipant) = dev.honegger.services.CreateGameParticipant(game.playerId, game.displayName)
                 val createdGame = gameService.createGame(
@@ -46,11 +46,11 @@ fun Application.configureGameEndpoints(
                 )
                 call.respond(HttpStatusCode.Created, createdGame.toWebGame())
             }
-            post("/{id}") {
+            put("/{id}") {
                 val id = call.parameters["id"]
                 if (id.isNullOrBlank()) {
                     call.respond(HttpStatusCode.BadRequest)
-                    return@post
+                    return@put
                 }
                 val updatedGame = call.receive<WebGame>().toGame()
                 gameService.updateGame(dummySession, updatedGame)
