@@ -67,7 +67,7 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
         val existingTable =
             tableRepository.getTableOrNull(id)
         checkNotNull(existingTable)
-        check(existingTable.ownerId === session.userId)
+        check(existingTable.ownerId == session.userId)
         return tableRepository.deleteTableById(id)
     }
 }

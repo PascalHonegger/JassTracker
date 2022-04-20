@@ -68,9 +68,9 @@ class TableRepositoryImpl(private val gameRepository: GameRepository) : TableRep
     }
 
     override fun deleteTableById(id: UUID): Boolean = withContext {
-        val gameIds = select(GAME.ID).from(GAME).where(GAME.TABLE_ID.eq(id))
-        deleteFrom(GP).where(GP.GAME_ID.`in`(gameIds))
-        deleteFrom(GAME).where(GAME.TABLE_ID.eq(id))
+        val gameIds = select(GAME.ID).from(GAME).where(GAME.TABLE_ID.eq(id)).fetch()
+        deleteFrom(GP).where(GP.GAME_ID.`in`(gameIds)).execute()
+        deleteFrom(GAME).where(GAME.TABLE_ID.eq(id)).execute()
         return@withContext deleteFrom(TABLE).where(TABLE.ID.eq(id)).execute() == 1
     }
 }

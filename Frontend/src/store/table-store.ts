@@ -1,5 +1,10 @@
 import { defineStore } from "pinia";
-import { createTable, getTable, getTables } from "@/services/table-service";
+import {
+  deleteTableById,
+  createTable,
+  getTable,
+  getTables,
+} from "@/services/table-service";
 
 import { Table } from "@/types/types";
 import { useGameStore } from "@/store/game-store";
@@ -65,6 +70,13 @@ export const useTableStore = defineStore("table", {
         const gameStore = useGameStore();
         gameStore.addGameToExistingTable(table.id, table.latestGame);
       }
+    },
+    async removeTable(tableId: string) {
+      // remove table object in memory
+      delete this.tables[tableId];
+      // currently, result is null, need to fix this in BE
+      const success = (await deleteTableById(tableId)) || true;
+      return this.tables[tableId] === undefined && success;
     },
   },
 });
