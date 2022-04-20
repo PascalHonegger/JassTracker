@@ -41,12 +41,12 @@ nav a.router-link-exact-active {
                 class="block py-2 pr-4 pl-3 text-white"
                 to="/Profile"
                 v-if="store.loggedIn"
-                >Profile</router-link
+                >Profil</router-link
               >
             </li>
             <li>
               <router-link class="block py-2 pr-4 pl-3 text-white" to="/Help"
-                >Help-Center</router-link
+                >Hilfezentrum</router-link
               >
             </li>
             <li>
@@ -55,7 +55,7 @@ nav a.router-link-exact-active {
                 class="block py-2 pr-4 pl-3 text-white"
                 v-if="store.loggedIn"
               >
-                Logout
+                Ausloggen
               </button>
             </li>
           </ul>

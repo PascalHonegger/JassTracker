@@ -10,6 +10,6 @@
     class="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"
     role="status"
   >
-    <span class="sr-only">Loading...</span>
+    <span class="sr-only">Wird geladen...</span>
   </div>
 </template>

@@ -41,8 +41,12 @@ function backToOverview() {
 </script>
 <template>
   <div class="container mx-auto">
-    <button @click="backToOverview" class="btn btn-blue mt-2 ml-2">Back</button>
-    <button @click="newGame" class="btn btn-blue ml-2 mt-2">New Game</button>
+    <button @click="backToOverview" class="btn btn-blue mt-2 ml-2">
+      Zurück
+    </button>
+    <button @click="newGame" class="btn btn-blue ml-2 mt-2">
+      Neues Spiel erstellen
+    </button>
     <Scoreboard v-if="currentGame" :game="currentGame"></Scoreboard>
   </div>
 </template>
