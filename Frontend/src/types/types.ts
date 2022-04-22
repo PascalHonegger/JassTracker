@@ -11,8 +11,8 @@ export interface Table {
 
 export interface Game {
   id: string;
-  startTime: string;
-  endTime?: string;
+  startTime: Date;
+  endTime?: Date;
   rounds: WebRound[];
   rows: Row[];
   team1: Team;

@@ -101,7 +101,7 @@ async function loginAsGuest() {
           >
             Login
 
-            <wait-spinner v-if="loginLoading"></wait-spinner>
+            <WaitSpinner v-if="loginLoading"></WaitSpinner>
           </button>
         </form>
       </div>
@@ -114,7 +114,7 @@ async function loginAsGuest() {
       >
         Als Gast spielen
 
-        <wait-spinner v-if="loginAsGuestLoading"></wait-spinner>
+        <WaitSpinner v-if="loginAsGuestLoading"></WaitSpinner>
       </button>
       <div>
         <p>Neu beim JassTracker? Erstellen Sie einen Account!</p>

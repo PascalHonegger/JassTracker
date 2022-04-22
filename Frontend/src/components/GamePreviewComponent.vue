@@ -5,15 +5,15 @@ const props = defineProps<{ game: Game }>();
 </script>
 <style lang="scss"></style>
 <template>
-  <div>
+  <span>
     {{ props.game.team1.player1.displayName }}
     &amp;
     {{ props.game.team1.player2.displayName }}
-  </div>
-  <div>VS</div>
-  <div>
+  </span>
+  <span>VS</span>
+  <span>
     {{ props.game.team2.player1.displayName }}
     &amp;
     {{ props.game.team2.player2.displayName }}
-  </div>
+  </span>
 </template>

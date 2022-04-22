@@ -29,24 +29,24 @@ nav a.router-link-exact-active {
       <div
         class="container flex flex-wrap justify-between items-center mx-auto"
       >
-        <router-link class="flex items-center text-white" :to="logoLink"
-          >JassTracker</router-link
+        <RouterLink class="flex items-center text-white" :to="logoLink"
+          >JassTracker</RouterLink
         >
         <div class="hidden w-full md:block md:w-auto" id="mobile-menu">
           <ul
             class="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium text-white"
           >
             <li>
-              <router-link
+              <RouterLink
                 class="block py-2 pr-4 pl-3 text-white"
                 to="/Profile"
                 v-if="store.loggedIn"
-                >Profil</router-link
+                >Profil</RouterLink
               >
             </li>
             <li>
-              <router-link class="block py-2 pr-4 pl-3 text-white" to="/Help"
-                >Hilfezentrum</router-link
+              <RouterLink class="block py-2 pr-4 pl-3 text-white" to="/Help"
+                >Hilfezentrum</RouterLink
               >
             </li>
             <li>
@@ -62,6 +62,6 @@ nav a.router-link-exact-active {
         </div>
       </div>
     </nav>
-    <router-view />
+    <RouterView />
   </div>
 </template>
