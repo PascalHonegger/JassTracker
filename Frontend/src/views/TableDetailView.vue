@@ -42,14 +42,14 @@ const pastGames = computed<Game[]>(() =>
 const selectedGame = ref<Game>();
 
 watch(
-  () => route.params.id,
+  () => route.params.tableId,
   async (newId) => {
     await setCurrentTableId(newId);
   }
 );
 
 onMounted(async () => {
-  await setCurrentTableId(route.params.id);
+  await setCurrentTableId(route.params.tableId);
 });
 
 async function setCurrentTableId(newId: string | string[] | undefined) {

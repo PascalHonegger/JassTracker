@@ -11,7 +11,7 @@ const latestGame = computed(
 </script>
 <template>
   <RouterLink
-    :to="{ name: 'table', params: { id: props.table.id } }"
+    :to="{ name: 'table', params: { tableId: props.table.id } }"
     class="table max-w-sm w-full lg:max-w-full lg:flex flex-col text-center"
   >
     <p class="font-bold">{{ props.table.name }}</p>

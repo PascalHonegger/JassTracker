@@ -42,7 +42,7 @@ async function createNewTable() {
     tableId: newTableId,
   };
   await gameStore.createGame(createGame);
-  await router.push({ name: "table", params: { id: newTableId } });
+  await router.push({ name: "table", params: { tableId: newTableId } });
 }
 </script>
 <template>

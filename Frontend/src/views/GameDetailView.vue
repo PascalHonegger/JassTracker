@@ -35,7 +35,10 @@ async function setCurrentGameId(newId: string | string[]) {
 }
 
 function backToTable() {
-  router.push({ name: "table", params: { id: tableStore.currentTableId } });
+  router.push({
+    name: "table",
+    params: { tableId: tableStore.currentTableId },
+  });
 }
 </script>
 

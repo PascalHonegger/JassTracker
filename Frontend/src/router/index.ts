@@ -38,7 +38,7 @@ const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "profile" */ "../views/ProfileView.vue"),
   },
   {
-    path: "/table/:id",
+    path: "/table/:tableId",
     name: "table",
     meta: {
       requiresAuth: true,
