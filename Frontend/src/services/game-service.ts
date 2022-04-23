@@ -17,6 +17,6 @@ export async function createGame(game: WebCreateGame) {
   return api.post<WebGame>("games", game);
 }
 
-export async function deleteGame(id: string) {
+export async function deleteGameById(id: string) {
   return api.delete(`games/${id}`);
 }
