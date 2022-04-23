@@ -2,7 +2,7 @@
 left to right direction
 actor Player as p
 actor Player_With_JassTracker as pt
-package Access {
+package Authentication { 
   usecase "Login" as A1
   usecase "Register" as A2
   usecase "Guest Login" as A3
@@ -15,7 +15,7 @@ package GameLifeCycleManagement {
   usecase "Exit a Game" as GLCM2
   usecase "Continue a Running Game" as GLCM3
   usecase "Delete Game" as GLCM4
-  usecase "Display Game Overview" as GLCM5
+  usecase "Display Table Overview" as GLCM5
 
   GLCM1 .> GLCMH1 : include
 }
@@ -28,18 +28,28 @@ package JassScoreboard {
 }
 package GameStastics {
   usecase "View Game Statistics" as GS1
-  usecase "Filter Statistics" as GS2
+  usecase "Statistics filter options" as GS2
   GS2 .> GS1 : extend
 }
 package Profile {
   usecase "View Profile" as P1
   usecase "Edit Profile" as P2
+  usecase "Account Deletion"
   P2 .> P1 : extend
 }
 package PlayerStatstics {
   usecase "View Player Statistics" as PS1
-  usecase "Filter Statistics" as PS2
+  usecase "Statistics filter options" as PS2
   PS2 .> PS1 : extend
+}
+
+package UserGuidance {
+  usecase "View Game Rules"
+  usecase "View Application Instructions"
+}
+
+package End-of-GameHighlights {
+  usecase "View End-of-Game Highlights"
 }
 
 'Player With JassTracker'
