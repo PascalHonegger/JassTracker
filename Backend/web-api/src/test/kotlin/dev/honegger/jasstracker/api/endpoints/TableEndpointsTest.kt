@@ -23,7 +23,6 @@ class TableEndpointsTest {
     @BeforeTest
     fun setup() {
         clearMocks(service)
-        every { service.getTableOrNull(any(), any()) } returns null
     }
 
     @AfterTest
@@ -56,7 +55,8 @@ class TableEndpointsTest {
         } returns dummyTable
         client.get("/api/tables/$id").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("""{"id":"$id","name":"dummy","ownerId":"$ownerId","gameIds":[],"latestGame":null}""", bodyAsText())
+            assertEquals("""{"id":"$id","name":"dummy","ownerId":"$ownerId","gameIds":[],"latestGame":null}""",
+                bodyAsText())
         }
         verify(exactly = 1) { service.getTableOrNull(any(), id) }
     }
@@ -131,9 +131,10 @@ class TableEndpointsTest {
                             |"team2":{
                                 |"player1":{"playerId":"$p3Id","displayName":"p3"},
                                 |"player2":{"playerId":"$p4Id","displayName":"p4"}
-                            |}
+                            |},
+                            |"currentPlayer":{"playerId":"$p1Id","displayName":"p1"}
                         |}
-                    |}]""".trimMargin().replace("\n",""),
+                    |}]""".trimMargin().replace("\n", ""),
                 bodyAsText()
             )
         }
@@ -146,9 +147,37 @@ class TableEndpointsTest {
             configureTableEndpoints(service)
         }
 
+        every { service.getTableOrNull(any(), any()) } returns null
+
         client.get("/api/tables/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.NotFound, status)
         }
         verify(exactly = 1) { service.getTableOrNull(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
+    }
+
+    @Test
+    fun `test delete table returns 404 if not found`() = testApplication {
+        application {
+            configureTableEndpoints(service)
+        }
+
+        every { service.deleteTableById(any(), any()) } returns false
+        client.delete("/api/tables/aafd71ae-a6c1-4722-8ee1-2c9ff4f505ec").apply {
+            assertEquals(HttpStatusCode.NotFound, status)
+        }
+        verify(exactly = 1) { service.deleteTableById(any(), UUID.fromString("aafd71ae-a6c1-4722-8ee1-2c9ff4f505ec")) }
+    }
+
+    @Test
+    fun `test delete table returns 200 if deleted`() = testApplication {
+        application {
+            configureTableEndpoints(service)
+        }
+
+        every { service.deleteTableById(any(), any()) } returns true
+        client.delete("/api/tables/7351c4e4-c798-467a-a890-b28e59b9e5a5").apply {
+            assertEquals(HttpStatusCode.OK, status)
+        }
+        verify(exactly = 1) { service.deleteTableById(any(), UUID.fromString("7351c4e4-c798-467a-a890-b28e59b9e5a5")) }
     }
 }

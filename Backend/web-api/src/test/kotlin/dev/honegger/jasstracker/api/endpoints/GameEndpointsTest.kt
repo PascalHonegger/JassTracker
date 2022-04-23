@@ -22,12 +22,29 @@ class GameEndpointsTest {
     @BeforeTest
     fun setup() {
         clearMocks(service)
-        every { service.getGameOrNull(any(), any()) } returns null
     }
 
     @AfterTest
     fun teardown() {
         confirmVerified(service)
+    }
+
+    @Test
+    fun `test get games finds empty list`() = testApplication {
+        application {
+            installJson()
+            configureGameEndpoints(service)
+        }
+        val client = createClient {
+            installJson()
+        }
+
+        every { service.getAllGames(any()) } returns emptyList()
+        client.get("/api/games").apply {
+            assertEquals(HttpStatusCode.OK, status)
+            assertEquals("[]", bodyAsText())
+        }
+        verify(exactly = 1) { service.getAllGames(any()) }
     }
 
     @Test
@@ -78,10 +95,37 @@ class GameEndpointsTest {
         application {
             configureGameEndpoints(service)
         }
+        every { service.getGameOrNull(any(), any()) } returns null
 
         client.get("/api/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.NotFound, status)
         }
         verify(exactly = 1) { service.getGameOrNull(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
+    }
+
+    @Test
+    fun `test delete game returns 404 if not found`() = testApplication {
+        application {
+            configureGameEndpoints(service)
+        }
+        every { service.deleteGameById(any(), any()) } returns false
+
+        client.delete("/api/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
+            assertEquals(HttpStatusCode.NotFound, status)
+        }
+        verify(exactly = 1) { service.deleteGameById(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
+    }
+
+    @Test
+    fun `test delete game returns 200 if deleted`() = testApplication {
+        application {
+            configureGameEndpoints(service)
+        }
+        every { service.deleteGameById(any(), any()) } returns true
+
+        client.delete("/api/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
+            assertEquals(HttpStatusCode.OK, status)
+        }
+        verify(exactly = 1) { service.deleteGameById(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
     }
 }
