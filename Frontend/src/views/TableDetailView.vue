@@ -61,7 +61,7 @@ async function setCurrentTableId(newId: string | string[] | undefined) {
 async function createNewGame() {
   const tableId = currentTable.value?.id;
   if (tableId == null) {
-    console.error("Can't create a game without a table!");
+    alert("Can't create a game without a table!");
     return;
   }
   const createGame: WebCreateGame = {
