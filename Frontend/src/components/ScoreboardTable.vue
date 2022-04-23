@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Round from "./Round.vue";
+import RoundRow from "./RoundRow.vue";
 import { Game } from "@/types/types";
 
 defineProps<{ game: Game }>();
@@ -43,7 +43,11 @@ const total = {
             </tr>
           </thead>
           <tbody>
-            <Round v-for="r in game.rows" :row="r" :key="r.contract.id"></Round>
+            <RoundRow
+              v-for="r in game.rows"
+              :row="r"
+              :key="r.contract.id"
+            ></RoundRow>
           </tbody>
           <tfoot>
             <tr>

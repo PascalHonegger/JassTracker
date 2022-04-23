@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import Scoreboard from "@/components/Scoreboard.vue";
+import ScoreboardTable from "@/components/ScoreboardTable.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useTableStore } from "@/store/table-store";
 import { useGameStore } from "@/store/game-store";
 import { storeToRefs } from "pinia";
 import CreateGame, { PartialCreateGame } from "@/components/CreateGame.vue";
-import Modal from "@/components/Modal.vue";
+import ModalDialog from "@/components/ModalDialog.vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
 import { WebCreateGame } from "@/services/web-model";
 import type { Game } from "@/types/types";
@@ -87,7 +87,7 @@ function backToOverview() {
     <button @click="isModalVisible = true" class="btn btn-blue ml-2 mt-2">
       Neues Spiel erstellen
     </button>
-    <Scoreboard v-if="currentGame" :game="currentGame"></Scoreboard>
+    <ScoreboardTable v-if="currentGame" :game="currentGame"></ScoreboardTable>
     <p v-else>Momentan läuft kein Spiel</p>
   </div>
 
@@ -114,10 +114,10 @@ function backToOverview() {
         </RouterLink>
       </li>
     </ul>
-    <Scoreboard v-if="selectedGame" :game="selectedGame" />
+    <ScoreboardTable v-if="selectedGame" :game="selectedGame" />
   </div>
 
-  <Modal v-show="isModalVisible" @close="isModalVisible = false">
+  <ModalDialog v-show="isModalVisible" @close="isModalVisible = false">
     <template v-slot:header>
       <p class="font-bold">Neues Spiel erstellen</p>
     </template>
@@ -141,5 +141,5 @@ function backToOverview() {
         <WaitSpinner v-if="creatingGame"></WaitSpinner>
       </button>
     </template>
-  </Modal>
+  </ModalDialog>
 </template>

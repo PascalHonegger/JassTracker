@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Table from "../components/Table.vue";
-import Modal from "../components/Modal.vue";
+import TableItem from "../components/TableItem.vue";
+import ModalDialog from "../components/ModalDialog.vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -47,7 +47,7 @@ async function createNewTable() {
   <div class="table-container container mx-auto">
     <WaitSpinner v-if="loadingTables"></WaitSpinner>
     <div v-else class="flex items-stretch flex-wrap gap-4 p-4">
-      <Table v-for="t in tablesAsArray" :key="t.id" :table="t"></Table>
+      <TableItem v-for="t in tablesAsArray" :key="t.id" :table="t"></TableItem>
       <button
         @click="isModalVisible = true"
         class="table cursor-pointer max-w-sm w-full lg:max-w-full lg:flex"
@@ -56,7 +56,7 @@ async function createNewTable() {
       </button>
     </div>
 
-    <Modal v-show="isModalVisible" @close="isModalVisible = false">
+    <ModalDialog v-show="isModalVisible" @close="isModalVisible = false">
       <template v-slot:header>
         <p class="font-bold">Neuen Tisch erstellen</p>
       </template>
@@ -84,6 +84,6 @@ async function createNewTable() {
           <WaitSpinner v-if="creatingGame"></WaitSpinner>
         </button>
       </template>
-    </Modal>
+    </ModalDialog>
   </div>
 </template>

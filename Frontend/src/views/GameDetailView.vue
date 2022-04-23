@@ -4,7 +4,7 @@ import { useGameStore } from "@/store/game-store";
 import { onMounted, onUnmounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useTableStore } from "@/store/table-store";
-import Scoreboard from "@/components/Scoreboard.vue";
+import ScoreboardTable from "@/components/ScoreboardTable.vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
 
 const router = useRouter();
@@ -45,7 +45,7 @@ function backToTable() {
 <template>
   <div class="container mx-auto mb-3">
     <button class="btn btn-blue mt-2" @click="backToTable">Zurück</button>
-    <Scoreboard v-if="currentGame" :game="currentGame" />
+    <ScoreboardTable v-if="currentGame" :game="currentGame" />
     <WaitSpinner v-else />
   </div>
 </template>
