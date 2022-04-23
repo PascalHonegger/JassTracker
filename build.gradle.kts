@@ -33,7 +33,7 @@ allprojects {
     }
 }
 
-val koverExcludes = listOf("dev.honegger.jasstracker.data.database.*")
+val koverExcludes = listOf("dev.honegger.jasstracker.data.database.*", "dev.honegger.jasstracker.bootstrap.*")
 tasks.koverMergedHtmlReport {
     isEnabled = true
     excludes = koverExcludes
