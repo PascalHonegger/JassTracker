@@ -2,9 +2,9 @@ delete from "round" where game_id in ('3de81ae0-792e-43b0-838b-acad78f29ba6', '8
 
 delete from "game_participation" where game_id in ('3de81ae0-792e-43b0-838b-acad78f29ba6', '85df0ff4-6c8b-4846-b8e6-400940660f0b');
 
-delete from "game" where id in ('3de81ae0-792e-43b0-838b-acad78f29ba6', '85df0ff4-6c8b-4846-b8e6-400940660f0b');
+delete from "game" where table_id in ('92968e55-6df0-4f21-a7cc-a243025e5f87', 'de940c47-9881-4e95-bc3d-6014ad1902e1');
 
-delete from "table" where id in ('92968e55-6df0-4f21-a7cc-a243025e5f87', 'de940c47-9881-4e95-bc3d-6014ad1902e1');
+delete from "table" where owner_id = '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0';
 
 delete from "player" where id in (
     '27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0',
