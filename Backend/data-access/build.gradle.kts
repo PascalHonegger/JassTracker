@@ -62,7 +62,7 @@ jooq {
                             ForcedType().apply {
                                 userType = "kotlinx.datetime.LocalDateTime"
 
-                                converter = "dev.honegger.converters.LocalDateTimeConverter"
+                                converter = "dev.honegger.jasstracker.data.converters.LocalDateTimeConverter"
 
                                 includeTypes = "TIMESTAMP"
                             }
@@ -75,7 +75,7 @@ jooq {
                         isFluentSetters = false
                     }
                     target.apply {
-                        packageName = "dev.honegger.jasstracker.database"
+                        packageName = "dev.honegger.jasstracker.data.database"
                         directory = "src/main/java"
                     }
                     strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"

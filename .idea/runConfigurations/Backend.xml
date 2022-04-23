@@ -4,7 +4,7 @@
     <option name="alternativeJrePath" />
     <option name="alternativeJrePathEnabled" value="false" />
     <option name="includeProvidedScope" value="true" />
-    <option name="mainClass" value="dev.honegger.ApplicationKt" />
+    <option name="mainClass" value="dev.honegger.jasstracker.bootstrap.ApplicationKt" />
     <option name="passParentEnvs" value="true" />
     <option name="programParameters" value="" />
     <option name="shortenCommandLine" value="NONE" />
