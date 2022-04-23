@@ -1,6 +1,6 @@
 package dev.honegger.jasstracker.bootstrap.plugins
 
-import dev.honegger.bootstrap
+import dev.honegger.jasstracker.data.bootstrap
 import io.ktor.server.application.*
 
 fun Application.initializeDatabase() {

@@ -6,7 +6,7 @@ import dev.honegger.jasstracker.data.database.tables.Table.TABLE
 import dev.honegger.jasstracker.data.database.tables.GameParticipation.GAME_PARTICIPATION as GP
 import dev.honegger.jasstracker.domain.repositories.GameRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
-import dev.honegger.withContext
+import dev.honegger.jasstracker.data.withContext
 import java.util.*
 
 class TableRepositoryImpl(private val gameRepository: GameRepository) : TableRepository {

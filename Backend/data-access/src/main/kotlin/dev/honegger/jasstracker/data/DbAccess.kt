@@ -1,4 +1,4 @@
-package dev.honegger
+package dev.honegger.jasstracker.data
 
 import org.jooq.DSLContext
 import org.jooq.impl.DSL
