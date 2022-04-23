@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import RoundRow from "./RoundRow.vue";
-import { Game } from "@/types/types";
+import { Game, GameParticipant } from "@/types/types";
 
-defineProps<{ game: Game }>();
+const props = defineProps<{ game: Game }>();
 
 // Will be in store one day
 const total = {
@@ -11,7 +11,16 @@ const total = {
   player3: 0,
   player4: 0,
 };
+
+function isActive(participant: GameParticipant): boolean {
+  return props.game.currentPlayer.playerId === participant.playerId;
+}
 </script>
+<style lang="scss">
+.active {
+  @apply bg-green-300;
+}
+</style>
 <template>
   <div class="max-w-2xl w-full m-2 text-center">
     <div class="border rounded border-black border-solid my-4">
@@ -37,16 +46,28 @@ const total = {
             </tr>
             <tr class="border-b-2 border-slate-300">
               <th></th>
-              <th scope="col" class="border-l-2 border-slate-300">
+              <th
+                scope="col"
+                :class="{ active: isActive(game.team1.player1) }"
+                class="border-l-2 border-slate-300"
+              >
                 {{ game.team1.player1.displayName }}
               </th>
-              <th scope="col" class="border-r-2 border-slate-300">
+              <th
+                scope="col"
+                :class="{ active: isActive(game.team1.player2) }"
+                class="border-l-2 border-slate-300"
+              >
                 {{ game.team1.player2.displayName }}
               </th>
-              <th scope="col" class="border-l-2 border-slate-300">
+              <th
+                scope="col"
+                :class="{ active: isActive(game.team2.player1) }"
+                class="border-l-2 border-slate-300"
+              >
                 {{ game.team2.player1.displayName }}
               </th>
-              <th scope="col">
+              <th scope="col" :class="{ active: isActive(game.team2.player2) }">
                 {{ game.team2.player2.displayName }}
               </th>
             </tr>

@@ -136,6 +136,7 @@ export const useGameStore = defineStore("game", {
         rounds: game.rounds,
         team1: game.team1,
         team2: game.team2,
+        currentPlayer: game.currentPlayer,
         rows,
       };
       table.loadedGames[preparedGame.id] = preparedGame;

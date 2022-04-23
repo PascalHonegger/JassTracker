@@ -17,6 +17,7 @@ export interface Game {
   rows: Row[];
   team1: Team;
   team2: Team;
+  currentPlayer: GameParticipant;
 }
 
 export interface Team {

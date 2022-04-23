@@ -15,6 +15,7 @@ export interface WebGame {
   rounds: WebRound[];
   team1: WebTeam;
   team2: WebTeam;
+  currentPlayer: WebGameParticipant;
 }
 
 export interface WebTeam {

@@ -66,7 +66,8 @@ class GameEndpointsTest {
                     |"endTime":null,
                     |"rounds":[],
                     |"team1":{"player1":{"playerId":"$p1Id","displayName":"p1"},"player2":{"playerId":"$p2Id","displayName":"p2"}},
-                    |"team2":{"player1":{"playerId":"$p3Id","displayName":"p3"},"player2":{"playerId":"$p4Id","displayName":"p4"}}
+                    |"team2":{"player1":{"playerId":"$p3Id","displayName":"p3"},"player2":{"playerId":"$p4Id","displayName":"p4"}},
+                    |"currentPlayer":{"playerId":"$p1Id","displayName":"p1"}
                 |}""".trimMargin().replace("\n",""), bodyAsText())
         }
         verify(exactly = 1) { service.getGameOrNull(any(), dummyId) }

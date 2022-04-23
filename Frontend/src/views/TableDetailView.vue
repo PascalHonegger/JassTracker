@@ -85,7 +85,7 @@ function backToOverview() {
     <button @click="isModalVisible = true" class="btn btn-blue ml-2 mt-2">
       Neues Spiel erstellen
     </button>
-    <ScoreboardTable v-if="currentGame" :game="currentGame"></ScoreboardTable>
+    <ScoreboardTable v-if="currentGame" :game="currentGame" />
     <p v-else>Momentan läuft kein Spiel</p>
   </div>
 
