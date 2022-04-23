@@ -37,8 +37,6 @@ const pastGames = computed<Game[]>(() =>
   )
 );
 
-const selectedGame = ref<Game>();
-
 watch(
   () => route.params.tableId,
   async (newId) => {
@@ -99,11 +97,6 @@ function backToOverview() {
       <li v-for="game in pastGames" :key="game.id">
         <RouterLink
           class="border p-2 rounded flex flex-col text-center"
-          :class="
-            game === selectedGame
-              ? ['border-blue-700', 'border-2', 'font-bold']
-              : ['border-black', 'border-1']
-          "
           :to="{
             name: 'game',
             params: { tableId: currentTable.id, gameId: game.id },
@@ -114,7 +107,6 @@ function backToOverview() {
         </RouterLink>
       </li>
     </ul>
-    <ScoreboardTable v-if="selectedGame" :game="selectedGame" />
   </div>
 
   <ModalDialog v-show="isModalVisible" @close="isModalVisible = false">
