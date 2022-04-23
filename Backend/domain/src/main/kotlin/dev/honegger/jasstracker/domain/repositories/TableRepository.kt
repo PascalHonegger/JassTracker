@@ -9,4 +9,5 @@ interface TableRepository {
     fun getTables(ownerId: UUID): List<Table>
     fun updateTable(updatedTable: Table)
     fun saveTable(newTable: Table)
+    fun deleteTableById(id: UUID): Boolean
 }

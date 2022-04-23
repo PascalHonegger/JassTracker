@@ -4,7 +4,7 @@ import dev.honegger.jasstracker.domain.Game
 import dev.honegger.jasstracker.domain.GameParticipant
 import dev.honegger.jasstracker.domain.Round
 import dev.honegger.jasstracker.domain.Team
-import dev.honegger.jasstracker.data.database.tables.GameParticipation.GAME_PARTICIPATION
+import dev.honegger.jasstracker.data.database.tables.GameParticipation.GAME_PARTICIPATION as GP
 import dev.honegger.jasstracker.data.database.tables.Game.GAME
 import dev.honegger.jasstracker.data.database.tables.Round.ROUND
 import dev.honegger.jasstracker.data.database.tables.records.GameRecord
@@ -15,7 +15,7 @@ import java.util.*
 
 class GameRepositoryImpl : GameRepository {
     private fun DSLContext.toGame(record: GameRecord): Game {
-        val gameParticipations = selectFrom(GAME_PARTICIPATION).where(GAME_PARTICIPATION.GAME_ID.eq(record.id)).fetch()
+        val gameParticipations = selectFrom(GP).where(GP.GAME_ID.eq(record.id)).fetch()
         check(gameParticipations.size == 4) { "Expected exactly 4 game participations for game ${record.id} but found ${gameParticipations.size}" }
         val team1Player1 = gameParticipations.single { it.tablePosition == 0 }
         val team1Player2 = gameParticipations.single { it.tablePosition == 1 }
@@ -82,7 +82,7 @@ class GameRepositoryImpl : GameRepository {
         }
         newGameRecord.insert()
 
-        fun GameParticipant.toGameParticipation(tablePosition: Int) = newRecord(GAME_PARTICIPATION).apply {
+        fun GameParticipant.toGameParticipation(tablePosition: Int) = newRecord(GP).apply {
             this.gameId = newGameRecord.id
             this.playerId = this@toGameParticipation.playerId
             this.playerName = this@toGameParticipation.displayName
@@ -93,5 +93,10 @@ class GameRepositoryImpl : GameRepository {
         newGame.team1.player2.toGameParticipation(tablePosition = 1).insert()
         newGame.team2.player1.toGameParticipation(tablePosition = 2).insert()
         newGame.team2.player2.toGameParticipation(tablePosition = 3).insert()
+    }
+
+    override fun deleteGameById(id: UUID): Boolean = withContext {
+        deleteFrom(GP).where(GP.GAME_ID.eq(id)).execute()
+        return@withContext deleteFrom(GAME).where(GAME.ID.eq(id)).execute() == 1
     }
 }

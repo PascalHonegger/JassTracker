@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 
 import { useTableStore } from "@/store/table-store";
-import { createGame, getGame } from "@/services/game-service";
+import { createGame, deleteGameById, getGame } from "@/services/game-service";
 import { useContractStore } from "@/store/contract-store";
 import { Game, RoundType } from "@/types/types";
 import { WebCreateGame, WebGame } from "@/services/web-model";
@@ -139,6 +139,22 @@ export const useGameStore = defineStore("game", {
         rows,
       };
       table.loadedGames[preparedGame.id] = preparedGame;
+    },
+    async removeGame(gameId: string) {
+      // remove game object in memory
+      const tableStore = useTableStore();
+      const table = tableStore.currentTable;
+      delete table?.loadedGames[gameId];
+      const index: number | undefined = table?.gameIds.indexOf(gameId);
+      if (index && index !== -1) {
+        table?.gameIds.splice(index, 1);
+      }
+      try {
+        await deleteGameById(gameId);
+      } catch (e) {
+        return false;
+      }
+      return true;
     },
   },
 });

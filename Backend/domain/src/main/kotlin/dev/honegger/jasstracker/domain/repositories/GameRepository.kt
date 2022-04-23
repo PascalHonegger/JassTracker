@@ -9,4 +9,5 @@ interface GameRepository {
     fun getGameOrNull(id: UUID): Game?
     fun updateGame(updatedGame: Game)
     fun saveGame(newGame: Game, tableId: UUID)
+    fun deleteGameById(id: UUID): Boolean
 }
