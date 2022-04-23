@@ -12,46 +12,56 @@ const total = {
   player4: 0,
 };
 </script>
-<style lang="scss">
-.game {
-  .played,
-  .locked {
-    background-color: lightgray;
-  }
-
-  .open {
-    background-color: lightblue;
-  }
-}
-</style>
 <template>
-  <div
-    class="scoreboard max-w-sm w-full lg:max-w-full lg:flex flex-col m-2 text-center"
-  >
-    <div
-      class="game border rounded border-black border-solid maw-w-sm max-h-sm my-4"
-    >
+  <div class="max-w-2xl w-full m-2 text-center">
+    <div class="border rounded border-black border-solid my-4">
       <div class="flex justify-between">
         <table class="table-fixed w-full">
           <thead>
-            <tr>
+            <tr class="h-10">
               <th></th>
-              <th scope="col">{{ game.team1.player1.displayName }}</th>
-              <th scope="col">{{ game.team1.player2.displayName }}</th>
-              <th scope="col">{{ game.team2.player1.displayName }}</th>
-              <th scope="col">{{ game.team2.player2.displayName }}</th>
+              <th
+                colspan="2"
+                scope="colgroup"
+                class="border-x-2 border-slate-300 text-xl"
+              >
+                Team 1
+              </th>
+              <th
+                colspan="2"
+                scope="colgroup"
+                class="border-l-2 border-slate-300 text-xl"
+              >
+                Team 2
+              </th>
+            </tr>
+            <tr class="border-b-2 border-slate-300">
+              <th></th>
+              <th scope="col" class="border-l-2 border-slate-300">
+                {{ game.team1.player1.displayName }}
+              </th>
+              <th scope="col" class="border-r-2 border-slate-300">
+                {{ game.team1.player2.displayName }}
+              </th>
+              <th scope="col" class="border-l-2 border-slate-300">
+                {{ game.team2.player1.displayName }}
+              </th>
+              <th scope="col">
+                {{ game.team2.player2.displayName }}
+              </th>
             </tr>
           </thead>
           <tbody>
             <RoundRow
+              class="odd:bg-white even:bg-slate-100 h-10"
               v-for="r in game.rows"
               :row="r"
               :key="r.contract.id"
             ></RoundRow>
           </tbody>
           <tfoot>
-            <tr>
-              <td>Total</td>
+            <tr class="border-t-2 border-slate-300 h-10 text-xl font-bold">
+              <th scope="row">Total</th>
               <td>{{ total.player1 }}</td>
               <td>{{ total.player2 }}</td>
               <td>{{ total.player3 }}</td>
