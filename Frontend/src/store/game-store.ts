@@ -28,7 +28,7 @@ export const useGameStore = defineStore("game", {
       await tableStore.loadTable(tableId);
       const table = tableStore.getTableById(tableId);
       if (table == null) {
-        console.error(`Got unexpected null for tableId ${tableId}`);
+        alert(`Got unexpected null for tableId ${tableId}`);
         return;
       }
       for (const gameId of table.gameIds) {
@@ -40,7 +40,7 @@ export const useGameStore = defineStore("game", {
       await tableStore.loadTable(tableId);
       const table = tableStore.getTableById(tableId);
       if (table == null) {
-        console.error(`Got unexpected null for tableId ${tableId}`);
+        alert(`Got unexpected null for tableId ${tableId}`);
         return;
       }
       if (table.loadedGames[gameId] == null) {
@@ -59,7 +59,7 @@ export const useGameStore = defineStore("game", {
       const tableStore = useTableStore();
       const table = tableStore.getTableById(tableId);
       if (table == null) {
-        console.error(`Got unexpected null for tableId ${tableId}`);
+        alert(`Got unexpected null for tableId ${tableId}`);
         return;
       }
       table.currentGameId = gameId;
@@ -68,7 +68,7 @@ export const useGameStore = defineStore("game", {
       const tableStore = useTableStore();
       const table = tableStore.getTableById(tableId);
       if (table == null) {
-        console.error(`Got unexpected null for tableId ${tableId}`);
+        alert(`Got unexpected null for tableId ${tableId}`);
         return;
       }
       table.latestGameId = gameId;
@@ -78,7 +78,7 @@ export const useGameStore = defineStore("game", {
       const contractStore = useContractStore();
       const table = tableStore.getTableById(tableId);
       if (table == null) {
-        console.error(`Got unexpected null for tableId ${tableId}`);
+        alert(`Got unexpected null for tableId ${tableId}`);
         return;
       }
       const rows = contractStore.emptyRows([

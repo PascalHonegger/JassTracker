@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Round from "./RoundComponent.vue";
+import RoundRow from "./RoundRow.vue";
 import { Game } from "@/types/types";
 
-const props = defineProps<{ game: Game }>();
+defineProps<{ game: Game }>();
 
 // Will be in store one day
 const total = {
@@ -36,18 +36,18 @@ const total = {
           <thead>
             <tr>
               <th></th>
-              <th scope="col">{{ props.game.team1.player1.displayName }}</th>
-              <th scope="col">{{ props.game.team1.player2.displayName }}</th>
-              <th scope="col">{{ props.game.team2.player1.displayName }}</th>
-              <th scope="col">{{ props.game.team2.player2.displayName }}</th>
+              <th scope="col">{{ game.team1.player1.displayName }}</th>
+              <th scope="col">{{ game.team1.player2.displayName }}</th>
+              <th scope="col">{{ game.team2.player1.displayName }}</th>
+              <th scope="col">{{ game.team2.player2.displayName }}</th>
             </tr>
           </thead>
           <tbody>
-            <Round
-              v-for="r in props.game.rows"
+            <RoundRow
+              v-for="r in game.rows"
               :row="r"
               :key="r.contract.id"
-            ></Round>
+            ></RoundRow>
           </tbody>
           <tfoot>
             <tr>

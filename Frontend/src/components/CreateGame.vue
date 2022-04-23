@@ -39,7 +39,7 @@ label {
       id="player1"
       :value="newGame.team1Player1.displayName"
       @input="setAnonymousPlayer('team1Player1', $event.target.value)"
-      :disabled="props.disabled"
+      :disabled="disabled"
     />
 
     <label for="player2">Spieler 2</label>
@@ -48,7 +48,7 @@ label {
       id="player2"
       :value="newGame.team1Player2.displayName"
       @input="setAnonymousPlayer('team1Player2', $event.target.value)"
-      :disabled="props.disabled"
+      :disabled="disabled"
     />
   </div>
   <div class="mb-4">
@@ -58,7 +58,7 @@ label {
       id="player3"
       :value="newGame.team2Player1.displayName"
       @input="setAnonymousPlayer('team2Player1', $event.target.value)"
-      :disabled="props.disabled"
+      :disabled="disabled"
     />
 
     <label for="player4">Spieler 4</label>
@@ -66,7 +66,7 @@ label {
       autocomplete="username"
       :value="newGame.team2Player2.displayName"
       @input="setAnonymousPlayer('team2Player2', $event.target.value)"
-      :disabled="props.disabled"
+      :disabled="disabled"
       id="player4"
     />
   </div>

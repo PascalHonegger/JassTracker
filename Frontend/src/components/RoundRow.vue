@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { Row } from "@/types/types";
 
-const props = defineProps<{ row: Row }>();
+defineProps<{ row: Row }>();
 </script>
 <template>
   <tr>
-    <td>{{ props.row.contract.name }}</td>
-    <template v-for="r in props.row.rounds" :key="r">
+    <td>{{ row.contract.name }}</td>
+    <template v-for="r in row.rounds" :key="r">
       <td>
         <input
           type="number"

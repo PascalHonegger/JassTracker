@@ -1,18 +1,16 @@
 <script setup lang="ts">
-import Scoreboard from "@/components/ScoreboardComponent.vue";
+import ScoreboardTable from "@/components/ScoreboardTable.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useTableStore } from "@/store/table-store";
 import { useGameStore } from "@/store/game-store";
 import { storeToRefs } from "pinia";
-import CreateGameComponent, {
-  PartialCreateGame,
-} from "@/components/CreateGameComponent.vue";
-import Modal from "@/components/Modal.vue";
+import CreateGame, { PartialCreateGame } from "@/components/CreateGame.vue";
+import ModalDialog from "@/components/ModalDialog.vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
 import { WebCreateGame } from "@/services/web-model";
 import type { Game } from "@/types/types";
-import GamePreviewComponent from "@/components/GamePreviewComponent.vue";
+import GamePreview from "@/components/GamePreview.vue";
 import { toDateTimeString } from "@/util/dates";
 
 const router = useRouter();
@@ -39,8 +37,6 @@ const pastGames = computed<Game[]>(() =>
   )
 );
 
-const selectedGame = ref<Game>();
-
 watch(
   () => route.params.tableId,
   async (newId) => {
@@ -65,7 +61,7 @@ async function setCurrentTableId(newId: string | string[] | undefined) {
 async function createNewGame() {
   const tableId = currentTable.value?.id;
   if (tableId == null) {
-    console.error("Can't create a game without a table!");
+    alert("Can't create a game without a table!");
     return;
   }
   const createGame: WebCreateGame = {
@@ -89,7 +85,7 @@ function backToOverview() {
     <button @click="isModalVisible = true" class="btn btn-blue ml-2 mt-2">
       Neues Spiel erstellen
     </button>
-    <Scoreboard v-if="currentGame" :game="currentGame"></Scoreboard>
+    <ScoreboardTable v-if="currentGame" :game="currentGame"></ScoreboardTable>
     <p v-else>Momentan läuft kein Spiel</p>
   </div>
 
@@ -101,34 +97,28 @@ function backToOverview() {
       <li v-for="game in pastGames" :key="game.id">
         <RouterLink
           class="border p-2 rounded flex flex-col text-center"
-          :class="
-            game === selectedGame
-              ? ['border-blue-700', 'border-2', 'font-bold']
-              : ['border-black', 'border-1']
-          "
           :to="{
             name: 'game',
             params: { tableId: currentTable.id, gameId: game.id },
           }"
         >
-          <GamePreviewComponent :game="game" />
+          <GamePreview :game="game" />
           <span>{{ toDateTimeString(game.endTime) }}</span>
         </RouterLink>
       </li>
     </ul>
-    <Scoreboard v-if="selectedGame" :game="selectedGame" />
   </div>
 
-  <Modal v-show="isModalVisible" @close="isModalVisible = false">
+  <ModalDialog v-show="isModalVisible" @close="isModalVisible = false">
     <template v-slot:header>
       <p class="font-bold">Neues Spiel erstellen</p>
     </template>
     <template v-slot:body>
       <form @submit.prevent="createNewGame" class="flex justify-around">
-        <CreateGameComponent
+        <CreateGame
           :disabled="creatingGame"
           v-model:new-game="newGame"
-        ></CreateGameComponent>
+        ></CreateGame>
       </form>
     </template>
     <template v-slot:footer>
@@ -143,5 +133,5 @@ function backToOverview() {
         <WaitSpinner v-if="creatingGame"></WaitSpinner>
       </button>
     </template>
-  </Modal>
+  </ModalDialog>
 </template>
