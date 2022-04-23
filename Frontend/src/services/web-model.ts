@@ -50,6 +50,14 @@ export interface WebRound {
   contractId: string;
 }
 
+export interface WebCreateRound {
+  number: number;
+  score: number;
+  gameId: string;
+  playerId: string;
+  contractId: string;
+}
+
 export interface WebContract {
   id: string;
   name: string;
