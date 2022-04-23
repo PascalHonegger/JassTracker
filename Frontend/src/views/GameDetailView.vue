@@ -28,14 +28,15 @@ onUnmounted(async () => await setCurrentGameId(""));
 const isModalVisible = ref(false);
 
 async function deleteGame() {
-  const removalSuccess = await gameStore.removeGame(
-    route.params.gameId as string
-  );
+  if (Array.isArray(route.params.gameId)) {
+    return;
+  }
+  await gameStore.removeGame(route.params.gameId);
   // do some additional checking for success / error handling
   closeModal();
   backToTable();
 }
-function showModal(event: any) {
+function showModal(event: PointerEvent) {
   event.preventDefault();
   isModalVisible.value = true;
 }

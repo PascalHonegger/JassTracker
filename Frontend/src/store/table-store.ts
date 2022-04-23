@@ -74,8 +74,12 @@ export const useTableStore = defineStore("table", {
     async removeTable(tableId: string) {
       // remove table object in memory
       delete this.tables[tableId];
-      const success = await deleteTableById(tableId);
-      return this.tables[tableId] === undefined && success;
+      try {
+        await deleteTableById(tableId);
+      } catch (e) {
+        return false;
+      }
+      return true;
     },
   },
 });

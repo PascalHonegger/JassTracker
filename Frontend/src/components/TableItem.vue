@@ -17,13 +17,12 @@ const latestGame = computed(
 );
 
 async function deleteTable() {
-  const removalSuccess = await tableStore.removeTable(props.table.id);
+  await tableStore.removeTable(props.table.id);
   // do some additional checking, aka if first success false, error
-  // on second success try again or just load tables again in overview?
   closeModal();
 }
 
-function showModal(event: any) {
+function showModal(event: PointerEvent) {
   event.preventDefault();
   isModalVisible.value = true;
 }

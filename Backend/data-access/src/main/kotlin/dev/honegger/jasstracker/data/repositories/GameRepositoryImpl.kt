@@ -7,7 +7,6 @@ import dev.honegger.jasstracker.domain.Team
 import dev.honegger.jasstracker.data.database.tables.GameParticipation.GAME_PARTICIPATION as GP
 import dev.honegger.jasstracker.data.database.tables.Game.GAME
 import dev.honegger.jasstracker.data.database.tables.Round.ROUND
-import dev.honegger.jasstracker.database.tables.Table
 import dev.honegger.jasstracker.data.database.tables.records.GameRecord
 import dev.honegger.jasstracker.domain.repositories.GameRepository
 import dev.honegger.withContext

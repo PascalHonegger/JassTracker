@@ -149,7 +149,12 @@ export const useGameStore = defineStore("game", {
       if (index && index !== -1) {
         table?.gameIds.splice(index, 1);
       }
-      return await deleteGameById(gameId);
+      try {
+        await deleteGameById(gameId);
+      } catch (e) {
+        return false;
+      }
+      return true;
     },
   },
 });
