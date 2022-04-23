@@ -48,7 +48,7 @@ tasks.koverMergedVerify {
     rule {
         name = "Minimal line coverage rate in percent"
         bound {
-            minValue = 30 // TODO slowly increase to reach 80% coverage
+            minValue = 40 // TODO slowly increase to reach 80% coverage
         }
     }
 }
