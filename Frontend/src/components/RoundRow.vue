@@ -21,7 +21,8 @@ defineProps<{ row: Row }>();
     <template v-for="r in row.rounds" :key="r">
       <td>
         <input
-          type="number"
+          type="text"
+          inputmode="numeric"
           class="text-center w-24"
           :disabled="r.type === 'locked'"
           :value="r.score"
