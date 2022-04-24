@@ -13,7 +13,10 @@ const total = {
 };
 
 function isActive(participant: GameParticipant): boolean {
-  return props.game.currentPlayer.playerId === participant.playerId;
+  return (
+    props.game.endTime === undefined &&
+    props.game.currentPlayer.playerId === participant.playerId
+  );
 }
 </script>
 <style lang="scss">
