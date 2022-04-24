@@ -30,7 +30,7 @@ class GameEndpointsTest {
     }
 
     @Test
-    fun `test get games finds empty list`() = testApplication {
+    fun `get games finds empty list`() = testApplication {
         application {
             installJson()
             configureGameEndpoints(service)
@@ -48,7 +48,7 @@ class GameEndpointsTest {
     }
 
     @Test
-    fun `test get game finds dummy game`() = testApplication {
+    fun `get game finds dummy game`() = testApplication {
         application {
             installJson()
             configureGameEndpoints(service)
@@ -91,7 +91,7 @@ class GameEndpointsTest {
     }
 
     @Test
-    fun `test get game returns 404 if not found`() = testApplication {
+    fun `get game returns 404 if not found`() = testApplication {
         application {
             configureGameEndpoints(service)
         }
@@ -104,7 +104,7 @@ class GameEndpointsTest {
     }
 
     @Test
-    fun `test delete game returns 404 if not found`() = testApplication {
+    fun `delete game returns 404 if not found`() = testApplication {
         application {
             configureGameEndpoints(service)
         }
@@ -117,7 +117,7 @@ class GameEndpointsTest {
     }
 
     @Test
-    fun `test delete game returns 200 if deleted`() = testApplication {
+    fun `delete game returns 200 if deleted`() = testApplication {
         application {
             configureGameEndpoints(service)
         }

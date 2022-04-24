@@ -1,7 +1,12 @@
 import { defineStore } from "pinia";
 
 import { useTableStore } from "@/store/table-store";
-import { createGame, deleteGameById, getGame } from "@/services/game-service";
+import {
+  createGame,
+  deleteGameById,
+  getGame,
+  updateGame,
+} from "@/services/game-service";
 import { useContractStore } from "@/store/contract-store";
 import { Game, RoundType } from "@/types/types";
 import { WebCreateGame, WebGame } from "@/services/web-model";
@@ -156,6 +161,28 @@ export const useGameStore = defineStore("game", {
         return false;
       }
       return true;
+    },
+    async finishGame(gameId: string) {
+      const tableStore = useTableStore();
+      await this.loadGame(tableStore.currentTableId, gameId);
+      const table = tableStore.currentTable;
+      const game = table?.loadedGames[gameId];
+      if (game === undefined) {
+        throw new Error(`Game with ID ${gameId} not found`);
+      }
+
+      game.endTime = new Date();
+      const webGame: WebGame = {
+        id: gameId,
+        rounds: [],
+        team1: game.team1,
+        team2: game.team2,
+        startTime: game.startTime.toISOString(),
+        endTime: game.endTime.toISOString(),
+        // TODO: make seperate API type for updates
+        currentPlayer: game.team1.player1,
+      };
+      await updateGame(gameId, webGame);
     },
   },
 });

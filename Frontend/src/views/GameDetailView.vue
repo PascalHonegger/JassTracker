@@ -4,9 +4,9 @@ import { useGameStore } from "@/store/game-store";
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useTableStore } from "@/store/table-store";
-import ScoreboardTable from "@/components/ScoreboardTable.vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
-import Modal from "@/components/ModalDialog.vue";
+import ModalDialog from "@/components/ModalDialog.vue";
+import GameItem from "@/components/GameItem.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -69,9 +69,9 @@ function backToTable() {
     <button class="btn btn-blue mt-2 ml-2" @click="showModal">
       Spiel Löschen
     </button>
-    <ScoreboardTable v-if="currentGame" :game="currentGame" />
+    <GameItem v-if="currentGame" :game="currentGame" />
     <WaitSpinner v-else />
-    <Modal
+    <ModalDialog
       class="delete-game-modal"
       v-show="isModalVisible"
       @close="closeModal"
@@ -87,6 +87,6 @@ function backToTable() {
           Löschen
         </button>
       </template>
-    </Modal>
+    </ModalDialog>
   </div>
 </template>

@@ -1,6 +1,6 @@
 const dateTimeFormat = new Intl.DateTimeFormat("de-CH", {
   dateStyle: "medium",
-  timeStyle: "medium",
+  timeStyle: "short",
 });
 
 export function toDateTimeString(date: Date) {

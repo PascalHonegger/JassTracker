@@ -127,12 +127,13 @@ fun WebTable.toTable() = Table(
     ownerId = ownerId,
     games = emptyList(),
 )
+
 fun Table.toWebTable() = WebTable(
     id = id,
     name = name,
     ownerId = ownerId,
     gameIds = games.map { it.id },
-    latestGame = games.maxByOrNull { it.startTime }?.toWebGame(),
+    latestGame = latestGame?.toWebGame()
 )
 
 fun WebGame.toGame() = Game(

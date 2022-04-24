@@ -31,7 +31,7 @@ class TableEndpointsTest {
     }
 
     @Test
-    fun `test get table finds dummy table`() = testApplication {
+    fun `get table finds dummy table`() = testApplication {
         application {
             installJson()
             configureTableEndpoints(service)
@@ -62,7 +62,7 @@ class TableEndpointsTest {
     }
 
     @Test
-    fun `test get tables finds multiple tables`() = testApplication {
+    fun `get tables finds multiple tables`() = testApplication {
         application {
             installJson()
             configureTableEndpoints(service)
@@ -142,7 +142,7 @@ class TableEndpointsTest {
     }
 
     @Test
-    fun `test get table returns 404 if not found`() = testApplication {
+    fun `get table returns 404 if not found`() = testApplication {
         application {
             configureTableEndpoints(service)
         }
@@ -156,7 +156,7 @@ class TableEndpointsTest {
     }
 
     @Test
-    fun `test delete table returns 404 if not found`() = testApplication {
+    fun `delete table returns 404 if not found`() = testApplication {
         application {
             configureTableEndpoints(service)
         }
@@ -169,7 +169,7 @@ class TableEndpointsTest {
     }
 
     @Test
-    fun `test delete table returns 200 if deleted`() = testApplication {
+    fun `delete table returns 200 if deleted`() = testApplication {
         application {
             configureTableEndpoints(service)
         }
@@ -179,5 +179,96 @@ class TableEndpointsTest {
             assertEquals(HttpStatusCode.OK, status)
         }
         verify(exactly = 1) { service.deleteTableById(any(), UUID.fromString("7351c4e4-c798-467a-a890-b28e59b9e5a5")) }
+    }
+
+    @Test
+    fun `open game with earlier startGame is preferred for latestGame`() = testApplication {
+        application {
+            installJson()
+            configureTableEndpoints(service)
+        }
+        val client = createClient {
+            installJson()
+        }
+
+        val tableId = UUID.randomUUID()
+        val ownerId = UUID.randomUUID()
+        val finishedGameId = UUID.randomUUID()
+        val openGameId = UUID.randomUUID()
+        val p1Id = UUID.randomUUID()
+        val p2Id = UUID.randomUUID()
+        val p3Id = UUID.randomUUID()
+        val p4Id = UUID.randomUUID()
+
+        val earlier = LocalDateTime(2022, 4, 1, 13, 37)
+        val later = LocalDateTime(2022, 4, 20, 13, 37)
+        val dummyTable = Table(
+            id = tableId,
+            name = "dummy",
+            ownerId = ownerId,
+            games = listOf(
+                Game(
+                    id = finishedGameId,
+                    startTime = later,
+                    endTime = later,
+                    rounds = emptyList(),
+                    team1 = Team(
+                        player1 = GameParticipant(p1Id, "p1"),
+                        player2 = GameParticipant(p2Id, "p2")
+                    ),
+                    team2 = Team(
+                        player1 = GameParticipant(p3Id, "p3"),
+                        player2 = GameParticipant(p4Id, "p4")
+                    )
+                ),
+                Game(
+                    id = openGameId,
+                    startTime = earlier,
+                    endTime = null,
+                    rounds = emptyList(),
+                    team1 = Team(
+                        player1 = GameParticipant(p1Id, "p1"),
+                        player2 = GameParticipant(p2Id, "p2")
+                    ),
+                    team2 = Team(
+                        player1 = GameParticipant(p3Id, "p3"),
+                        player2 = GameParticipant(p4Id, "p4")
+                    )
+                )
+            )
+        )
+
+        every {
+            service.getTableOrNull(any(), tableId)
+        } returns dummyTable
+
+        client.get("/api/tables/$tableId").apply {
+            assertEquals(HttpStatusCode.OK, status)
+            assertEquals(
+                """|{
+                        |"id":"$tableId",
+                        |"name":"dummy",
+                        |"ownerId":"$ownerId",
+                        |"gameIds":["$finishedGameId","$openGameId"],
+                        |"latestGame":{
+                            |"id":"$openGameId",
+                            |"startTime":"2022-04-01T13:37:00Z",
+                            |"endTime":null,
+                            |"rounds":[],
+                            |"team1":{
+                                |"player1":{"playerId":"$p1Id","displayName":"p1"},
+                                |"player2":{"playerId":"$p2Id","displayName":"p2"}
+                            |},
+                            |"team2":{
+                                |"player1":{"playerId":"$p3Id","displayName":"p3"},
+                                |"player2":{"playerId":"$p4Id","displayName":"p4"}
+                            |},
+                            |"currentPlayer":{"playerId":"$p1Id","displayName":"p1"}
+                        |}
+                    |}""".trimMargin().replace("\n",""),
+                bodyAsText()
+            )
+        }
+        verify(exactly = 1) { service.getTableOrNull(any(), tableId) }
     }
 }
