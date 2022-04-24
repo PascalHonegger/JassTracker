@@ -179,6 +179,8 @@ export const useGameStore = defineStore("game", {
         team2: game.team2,
         startTime: game.startTime.toISOString(),
         endTime: game.endTime.toISOString(),
+        // TODO: make seperate API type for updates
+        currentPlayer: game.team1.player1,
       };
       await updateGame(gameId, webGame);
     },
