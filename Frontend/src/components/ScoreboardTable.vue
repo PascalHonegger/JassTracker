@@ -22,7 +22,7 @@ function isActive(participant: GameParticipant): boolean {
 }
 </style>
 <template>
-  <div class="max-w-2xl w-full m-2 text-center">
+  <div class="max-w-2xl w-full my-2 text-center">
     <div class="border rounded border-black border-solid my-4">
       <div class="flex justify-between">
         <table class="table-fixed w-full">
@@ -78,7 +78,8 @@ function isActive(participant: GameParticipant): boolean {
               v-for="r in game.rows"
               :row="r"
               :key="r.contract.id"
-            ></RoundRow>
+              :readonly="game.endTime !== undefined"
+            />
           </tbody>
           <tfoot>
             <tr class="border-t-2 border-slate-300 h-10 text-xl font-bold">

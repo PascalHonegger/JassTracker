@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Row } from "@/types/types";
 
-defineProps<{ row: Row }>();
+defineProps<{ row: Row; readonly: boolean }>();
 </script>
 <style lang="scss">
 .played,
@@ -24,7 +24,7 @@ defineProps<{ row: Row }>();
           type="text"
           inputmode="numeric"
           class="text-center w-24"
-          :disabled="r.type === 'locked'"
+          :disabled="r.type === 'locked' || readonly"
           :value="r.score"
           :class="r.type"
           min="0"

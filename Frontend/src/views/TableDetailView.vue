@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ScoreboardTable from "@/components/ScoreboardTable.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useTableStore } from "@/store/table-store";
@@ -10,15 +9,15 @@ import ModalDialog from "@/components/ModalDialog.vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
 import { WebCreateGame } from "@/services/web-model";
 import type { Game } from "@/types/types";
-import GamePreview from "@/components/GamePreview.vue";
-import { toDateTimeString } from "@/util/dates";
+import GameItem from "@/components/GameItem.vue";
+import GameList from "@/components/GameList.vue";
 
 const router = useRouter();
 const route = useRoute();
 const tableStore = useTableStore();
 const gameStore = useGameStore();
 
-const { currentTable } = storeToRefs(tableStore);
+const { currentTable, currentTableId } = storeToRefs(tableStore);
 const { currentGame } = storeToRefs(gameStore);
 
 const creatingGame = ref(false);
@@ -31,10 +30,18 @@ const newGame = ref<PartialCreateGame>({
   team2Player2: { playerId: null, displayName: "" },
 });
 
-const pastGames = computed<Game[]>(() =>
+const otherGames = computed<Game[]>(() =>
   Object.values(currentTable.value?.loadedGames ?? {}).filter(
     (g) => g !== gameStore.currentGame
   )
+);
+
+const openGames = computed<Game[]>(() =>
+  otherGames.value.filter((e) => e.endTime === undefined)
+);
+
+const completedGames = computed<Game[]>(() =>
+  otherGames.value.filter((e) => e.endTime !== undefined)
 );
 
 watch(
@@ -53,9 +60,9 @@ async function setCurrentTableId(newId: string | string[] | undefined) {
   tableStore.setCurrentTable(newId);
   await tableStore.loadTable(newId);
 
+  await gameStore.loadGamesForTable(tableStore.currentTableId);
   // Open the latest game if no game id is specified
   gameStore.setCurrentGame(newId, currentTable.value?.latestGameId ?? "");
-  await gameStore.loadGamesForTable(tableStore.currentTableId);
 }
 
 async function createNewGame() {
@@ -79,34 +86,24 @@ function backToOverview() {
 </script>
 <template>
   <div class="container mx-auto" v-if="currentTable">
-    <button @click="backToOverview" class="btn btn-blue mt-2 ml-2">
-      Zurück
-    </button>
+    <button @click="backToOverview" class="btn btn-blue mt-2">Zurück</button>
     <button @click="isModalVisible = true" class="btn btn-blue ml-2 mt-2">
       Neues Spiel erstellen
     </button>
-    <ScoreboardTable v-if="currentGame" :game="currentGame" />
+    <GameItem v-if="currentGame" :game="currentGame" />
     <p v-else>Momentan läuft kein Spiel</p>
   </div>
 
   <WaitSpinner v-else />
 
-  <div v-if="pastGames.length > 0" class="container mx-auto">
-    <h2 class="font-bold text-lg">Vergangene Spiele</h2>
-    <ul class="flex flex-row gap-2 flex-wrap">
-      <li v-for="game in pastGames" :key="game.id">
-        <RouterLink
-          class="border p-2 rounded flex flex-col text-center"
-          :to="{
-            name: 'game',
-            params: { tableId: currentTable.id, gameId: game.id },
-          }"
-        >
-          <GamePreview :game="game" />
-          <span>{{ toDateTimeString(game.endTime) }}</span>
-        </RouterLink>
-      </li>
-    </ul>
+  <div v-if="openGames.length > 0" class="container mx-auto my-2">
+    <h2 class="font-bold text-lg">Offene Spiele</h2>
+    <GameList :table-id="currentTableId" :games="openGames" />
+  </div>
+
+  <div v-if="completedGames.length > 0" class="container mx-auto my-2">
+    <h2 class="font-bold text-lg">Abgeschlossene Spiele</h2>
+    <GameList :table-id="currentTableId" :games="completedGames" />
   </div>
 
   <ModalDialog v-show="isModalVisible" @close="isModalVisible = false">
