@@ -27,7 +27,7 @@ class RoundEndpointsTest {
     }
 
     @Test
-    fun `test get rounds of game returns all all rounds of the game`() = testApplication {
+    fun `test get rounds of game returns all rounds of the game`() = testApplication {
         application {
             installJson()
             configureRoundEndpoints(service)
@@ -71,5 +71,26 @@ class RoundEndpointsTest {
             )
         }
         verify(exactly = 1) { service.getRounds(any(), any()) }
+    }
+
+    @Test
+    fun `test get rounds of game returns empty list if game not found`() = testApplication {
+        application {
+            installJson()
+            configureRoundEndpoints(service)
+        }
+        val client = createClient {
+            installJson()
+        }
+
+        every {
+            service.getRounds(any(), any())
+        } returns emptyList()
+
+        client.get("/api/rounds/byGame/84c532b1-dd87-4ca0-bc85-81c9c5d51c21").apply {
+            assertEquals(HttpStatusCode.OK, status)
+            assertEquals("[]", bodyAsText())
+        }
+        verify(exactly = 1) { service.getRounds(any(), UUID.fromString("84c532b1-dd87-4ca0-bc85-81c9c5d51c21")) }
     }
 }

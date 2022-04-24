@@ -5,7 +5,7 @@ import dev.honegger.jasstracker.data.database.tables.Contract.CONTRACT
 import dev.honegger.jasstracker.data.database.tables.records.ContractRecord
 import dev.honegger.jasstracker.domain.Contract
 import dev.honegger.jasstracker.domain.repositories.ContractRepository
-import dev.honegger.withContext
+import dev.honegger.jasstracker.data.withContext
 import java.util.*
 
 class ContractRepositoryImpl : ContractRepository {

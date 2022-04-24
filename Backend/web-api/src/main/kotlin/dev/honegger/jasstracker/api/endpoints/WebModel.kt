@@ -37,6 +37,7 @@ data class WebGame(
     val rounds: List<WebRound>,
     val team1: WebTeam,
     val team2: WebTeam,
+    val currentPlayer: WebGameParticipant,
 )
 
 @Serializable
@@ -149,16 +150,20 @@ fun Game.toWebGame() = WebGame(
     rounds = rounds.map { it.toWebRound() },
     team1 = team1.toWebTeam(),
     team2 = team2.toWebTeam(),
+    currentPlayer = currentPlayer.toWebGameParticipant()
 )
 
 fun WebTeam.toTeam() = Team(
-    player1 = GameParticipant(player1.playerId, player1.displayName),
-    player2 = GameParticipant(player2.playerId, player2.displayName),
+    player1 = player1.toGameParticipant(),
+    player2 = player2.toGameParticipant(),
 )
 fun Team.toWebTeam() = WebTeam(
-    player1 = WebGameParticipant(player1.playerId, player1.displayName),
-    player2 = WebGameParticipant(player2.playerId, player2.displayName),
+    player1 = player1.toWebGameParticipant(),
+    player2 = player2.toWebGameParticipant(),
 )
+
+fun WebGameParticipant.toGameParticipant() = GameParticipant(playerId, displayName)
+fun GameParticipant.toWebGameParticipant() = WebGameParticipant(playerId, displayName)
 
 fun Contract.toWebContract() = WebContract(
     id = id,

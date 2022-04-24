@@ -1,4 +1,4 @@
-package dev.honegger
+package dev.honegger.jasstracker.data
 
 import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.Location

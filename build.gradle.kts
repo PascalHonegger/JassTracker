@@ -33,7 +33,7 @@ allprojects {
     }
 }
 
-val koverExcludes = listOf("dev.honegger.jasstracker.data.database.*")
+val koverExcludes = listOf("dev.honegger.jasstracker.data.database.*", "dev.honegger.jasstracker.bootstrap.*")
 tasks.koverMergedHtmlReport {
     isEnabled = true
     excludes = koverExcludes
@@ -48,7 +48,7 @@ tasks.koverMergedVerify {
     rule {
         name = "Minimal line coverage rate in percent"
         bound {
-            minValue = 30 // TODO slowly increase to reach 80% coverage
+            minValue = 40 // TODO slowly increase to reach 80% coverage
         }
     }
 }
