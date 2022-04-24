@@ -29,7 +29,7 @@ class PlayerEndpointsTest {
     }
 
     @Test
-    fun `test get registered player finds dummy player`() = testApplication {
+    fun `get registered player finds dummy player`() = testApplication {
         application {
             installJson()
             configurePlayerEndpoints(service)
@@ -58,7 +58,7 @@ class PlayerEndpointsTest {
     }
 
     @Test
-    fun `test get guest player finds dummy guest`() = testApplication {
+    fun `get guest player finds dummy guest`() = testApplication {
         application {
             installJson()
             configurePlayerEndpoints(service)
@@ -84,7 +84,7 @@ class PlayerEndpointsTest {
     }
 
     @Test
-    fun `test get game returns 404 if not found`() = testApplication {
+    fun `get game returns 404 if not found`() = testApplication {
         application {
             configurePlayerEndpoints(service)
         }

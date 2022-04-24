@@ -28,7 +28,7 @@ class ContractEndpointsTest {
     }
 
     @Test
-    fun `test get contracts returns all contracts`() = testApplication {
+    fun `get contracts returns all contracts`() = testApplication {
         application {
             installJson()
             configureContractEndpoints(service)

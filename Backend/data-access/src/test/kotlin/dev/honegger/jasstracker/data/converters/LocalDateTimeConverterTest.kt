@@ -7,36 +7,36 @@ import kotlin.test.assertEquals
 
 class LocalDateTimeConverterTest {
     @Test
-    fun `test fromType is Java LocalDateTime`() {
+    fun `fromType is Java LocalDateTime`() {
         assertEquals(JavaLocalDateTime::class.java, LocalDateTimeConverter().fromType())
     }
 
     @Test
-    fun `test toType is Kotlin LocalDateTime`() {
+    fun `toType is Kotlin LocalDateTime`() {
         assertEquals(KotlinLocalDateTime::class.java, LocalDateTimeConverter().toType())
     }
 
     @Test
-    fun `test from creates Kotlin LocalDateTime with same value`() {
+    fun `from creates Kotlin LocalDateTime with same value`() {
         val input = JavaLocalDateTime.of(2022, 4, 20, 13, 37)
         val expected = KotlinLocalDateTime(2022, 4, 20, 13, 37)
         assertEquals(expected, LocalDateTimeConverter().from(input))
     }
 
     @Test
-    fun `test to creates Java LocalDateTime with same value`() {
+    fun `to creates Java LocalDateTime with same value`() {
         val input = KotlinLocalDateTime(2022, 4, 20, 13, 37)
         val expected = JavaLocalDateTime.of(2022, 4, 20, 13, 37)
         assertEquals(expected, LocalDateTimeConverter().to(input))
     }
 
     @Test
-    fun `test from null is null`() {
+    fun `from null is null`() {
         assertEquals(null, LocalDateTimeConverter().from(null))
     }
 
     @Test
-    fun `test to null is null`() {
+    fun `to null is null`() {
         assertEquals(null, LocalDateTimeConverter().to(null))
     }
 }

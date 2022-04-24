@@ -11,7 +11,6 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.mockk.*
 import kotlinx.datetime.LocalDateTime
-import java.time.Duration
 import java.util.*
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -32,7 +31,7 @@ class TableEndpointsTest {
     }
 
     @Test
-    fun `test get table finds dummy table`() = testApplication {
+    fun `get table finds dummy table`() = testApplication {
         application {
             installJson()
             configureTableEndpoints(service)
@@ -63,7 +62,7 @@ class TableEndpointsTest {
     }
 
     @Test
-    fun `test get tables finds multiple tables`() = testApplication {
+    fun `get tables finds multiple tables`() = testApplication {
         application {
             installJson()
             configureTableEndpoints(service)
@@ -143,7 +142,7 @@ class TableEndpointsTest {
     }
 
     @Test
-    fun `test get table returns 404 if not found`() = testApplication {
+    fun `get table returns 404 if not found`() = testApplication {
         application {
             configureTableEndpoints(service)
         }
@@ -157,7 +156,7 @@ class TableEndpointsTest {
     }
 
     @Test
-    fun `test delete table returns 404 if not found`() = testApplication {
+    fun `delete table returns 404 if not found`() = testApplication {
         application {
             configureTableEndpoints(service)
         }
@@ -170,7 +169,7 @@ class TableEndpointsTest {
     }
 
     @Test
-    fun `test delete table returns 200 if deleted`() = testApplication {
+    fun `delete table returns 200 if deleted`() = testApplication {
         application {
             configureTableEndpoints(service)
         }
@@ -183,7 +182,7 @@ class TableEndpointsTest {
     }
 
     @Test
-    fun `test open game with earlier startGame is preferred for latestGame`() = testApplication {
+    fun `open game with earlier startGame is preferred for latestGame`() = testApplication {
         application {
             installJson()
             configureTableEndpoints(service)

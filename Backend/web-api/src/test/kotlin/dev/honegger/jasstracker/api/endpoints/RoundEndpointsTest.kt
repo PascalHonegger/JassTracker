@@ -27,7 +27,7 @@ class RoundEndpointsTest {
     }
 
     @Test
-    fun `test get rounds of game returns all rounds of the game`() = testApplication {
+    fun `get rounds of game returns all rounds of the game`() = testApplication {
         application {
             installJson()
             configureRoundEndpoints(service)
@@ -74,7 +74,7 @@ class RoundEndpointsTest {
     }
 
     @Test
-    fun `test get rounds of game returns empty list if game not found`() = testApplication {
+    fun `get rounds of game returns empty list if game not found`() = testApplication {
         application {
             installJson()
             configureRoundEndpoints(service)
