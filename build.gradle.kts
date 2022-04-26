@@ -23,11 +23,11 @@ allprojects {
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "17"
+            jvmTarget = "18"
         }
 
         val javaLauncher = project.extensions.getByType<JavaToolchainService>().launcherFor {
-            languageVersion.set(JavaLanguageVersion.of("17"))
+            languageVersion.set(JavaLanguageVersion.of("18"))
         }
         kotlinJavaToolchain.toolchain.use(javaLauncher)
     }
