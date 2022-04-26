@@ -59,7 +59,7 @@ async function loginAsGuest() {
 <template>
   <div class="home">
     <div class="image">
-      <img src="../assets/jass.jpg" alt="Jasskarten" />
+      <img src="../assets/jass.webp" alt="Jasskarten" />
     </div>
     <div class="login flex flex-col justify-center">
       <h1 class="default-h1">JassTracker</h1>

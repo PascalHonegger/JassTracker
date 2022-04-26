@@ -28,8 +28,12 @@ lhci:
   stage: verify
   script:
     - npm run build
-    - npm install -g @lhci/cli@0.8.x
-    - lhci autorun --upload.target=temporary-public-storage --collect.settings.chromeFlags="--no-sandbox" || echo "LHCI failed!"
+    - npx @lhci/cli@0.9.0 autorun
+  artifacts:
+    when: always
+    paths:
+      - Frontend/lhci/
+    expose_as: 'Lighthouse Report'
 
 qodana-js:
   <<: *frontend_configuration
@@ -40,6 +44,7 @@ qodana-js:
   script:
     - /opt/idea/bin/entrypoint --results-dir=$CI_PROJECT_DIR/qodana --save-report --report-dir=$CI_PROJECT_DIR/qodana/report
   artifacts:
+    when: always
     paths:
       - qodana/report/
     expose_as: 'Qodana JS Report'
