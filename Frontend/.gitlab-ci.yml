@@ -28,8 +28,7 @@ lhci:
   stage: verify
   script:
     - npm run build
-    - npm install -g @lhci/cli@0.8.x
-    - lhci autorun --upload.target=temporary-public-storage --collect.settings.chromeFlags="--no-sandbox" || echo "LHCI failed!"
+    - npx @lhci/cli@0.9.0 autorun --upload.target=temporary-public-storage --collect.settings.chromeFlags="--no-sandbox"
 
 qodana-js:
   <<: *frontend_configuration
