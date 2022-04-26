@@ -9,13 +9,12 @@ const roundStore = useRoundStore();
 const gameStore = useGameStore();
 const { currentGame } = storeToRefs(gameStore);
 
-// would be changeEvent, this doesn't seem to exist, Event and Input event both cause other errors...
-async function handleInput(event: any, round: Round) {
+async function handleInput(event: Event, round: Round) {
   if (currentGame.value === undefined) {
-    console.error("undefined table or game, this should not happen");
+    alert("undefined table or game, this should not happen");
     return;
   }
-  const inputScore = Number(event.target.value);
+  const inputScore = parseInt((event.target as HTMLInputElement).value, 10);
   const actualScore = inputScore < 0 ? 157 - Math.abs(inputScore) : inputScore;
   if (round.id) {
     // update, TBD

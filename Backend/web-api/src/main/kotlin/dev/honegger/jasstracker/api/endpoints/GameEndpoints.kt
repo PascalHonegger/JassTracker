@@ -1,5 +1,6 @@
 package dev.honegger.jasstracker.api.endpoints
 
+import dev.honegger.jasstracker.domain.currentPlayer
 import dev.honegger.jasstracker.domain.services.GameService
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -32,6 +33,22 @@ fun Application.configureGameEndpoints(
                 }
 
                 call.respond(HttpStatusCode.OK, game.toWebGame())
+            }
+            get("/{id}/currentPlayer") {
+                val id = call.parameters["id"]
+                if (id.isNullOrBlank()) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@get
+                }
+                val game =
+                    gameService.getGameOrNull(dummySession, UUID.fromString(id))
+
+                if (game == null) {
+                    call.respond(HttpStatusCode.NotFound)
+                    return@get
+                }
+
+                call.respond(HttpStatusCode.OK, game.currentPlayer.toWebGameParticipant())
             }
             post {
                 val newGame = call.receive<WebCreateGame>()
