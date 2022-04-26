@@ -7,7 +7,8 @@ module.exports = {
       preset: "lighthouse:recommended",
     },
     upload: {
-      target: "temporary-public-storage",
+      target: "filesystem",
+      outputDir: "./lhci",
     },
   },
 };

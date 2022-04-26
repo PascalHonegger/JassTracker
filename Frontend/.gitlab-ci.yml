@@ -28,7 +28,11 @@ lhci:
   stage: verify
   script:
     - npm run build
-    - npx @lhci/cli@0.9.0 autorun --upload.target=temporary-public-storage --collect.settings.chromeFlags="--no-sandbox"
+    - npx @lhci/cli@0.9.0 autorun
+  artifacts:
+    paths:
+      - Frontend/lhci/
+    expose_as: 'Lighthouse Report'
 
 qodana-js:
   <<: *frontend_configuration
