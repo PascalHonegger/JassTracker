@@ -41,6 +41,7 @@ backend_test:
       - build
       - .gradle
   artifacts:
+    when: always
     paths:
       - build/reports/kover/html/
     expose_as: 'Kover Code Coverage'

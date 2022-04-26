@@ -80,6 +80,7 @@ qodana-jvm:
   script:
     - /opt/idea/bin/entrypoint --results-dir=$CI_PROJECT_DIR/qodana --save-report --report-dir=$CI_PROJECT_DIR/qodana/report
   artifacts:
+    when: always
     paths:
        - qodana/report/
     expose_as: 'Qodana JVM Report'
