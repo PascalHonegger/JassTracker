@@ -25,7 +25,7 @@ class TableRepositoryImpl(private val gameRepository: GameRepository) : TableRep
 
     override fun getTableByGameIdOrNull(id: UUID): Table? = withContext {
         selectFrom(GAME).where(GAME.ID.eq(id)).fetchOne()?.let { game ->
-            val tableRecord = selectFrom(TABLE).where(TABLE.ID.eq(game.id)).fetchOne()
+            val tableRecord = selectFrom(TABLE).where(TABLE.ID.eq(game.tableId)).fetchOne()
 
             tableRecord?.let {
                 Table(

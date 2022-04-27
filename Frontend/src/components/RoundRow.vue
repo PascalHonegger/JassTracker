@@ -1,5 +1,50 @@
 <script setup lang="ts">
 import type { Round, Row } from "@/types/types";
+import { WebCreateRound } from "@/services/web-model";
+import { useRoundStore } from "@/store/round-store";
+import { useGameStore } from "@/store/game-store";
+import { storeToRefs } from "pinia";
+
+const roundStore = useRoundStore();
+const gameStore = useGameStore();
+const { currentGame } = storeToRefs(gameStore);
+
+async function handleInput(event: Event, round: Round) {
+  if (currentGame.value === undefined) {
+    alert("undefined table or game, this should not happen");
+    return;
+  }
+  const target = event.target as HTMLInputElement;
+  const inputScore = parseInt(target.value, 10);
+  if (Math.abs(inputScore) > 157) {
+    target.classList.add("!bg-red-500");
+    event.preventDefault();
+    return;
+  }
+  if (target.classList.contains("!bg-red-500")) {
+    target.classList.remove("!bg-red-500");
+  }
+  const actualScore = inputScore < 0 ? 157 - Math.abs(inputScore) : inputScore;
+  if (round.id) {
+    // update, TBD
+  } else {
+    const newRound: WebCreateRound = {
+      number: currentGame.value.rounds.length + 1,
+      score: actualScore,
+      gameId: currentGame.value.id,
+      playerId: round.playerId,
+      contractId: round.contractId,
+    };
+    await roundStore.createRound(newRound);
+  }
+}
+
+function validateNumber(event: KeyboardEvent) {
+  const keyCode = event.keyCode;
+  if (keyCode !== 45 && (keyCode < 48 || keyCode > 57)) {
+    event.preventDefault();
+  }
+}
 
 const props = defineProps<{ row: Row; readonly: boolean }>();
 
@@ -28,10 +73,12 @@ function getClass(round: Round): string {
           type="text"
           inputmode="numeric"
           class="text-center w-24"
+          @change="handleInput($event, r)"
+          @keypress="validateNumber"
           :disabled="r.type === 'locked' || readonly"
           :value="r.score"
           :class="getClass(r)"
-          min="0"
+          min="-157"
           max="157"
         />
       </td>

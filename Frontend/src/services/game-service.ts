@@ -1,5 +1,9 @@
 import { api } from "@/services/requests";
-import { WebCreateGame, WebGame } from "@/services/web-model";
+import {
+  WebCreateGame,
+  WebGame,
+  WebGameParticipant,
+} from "@/services/web-model";
 
 export async function getGames(tableId: string) {
   return api.get<WebGame[]>(`games/${tableId}`);
@@ -7,6 +11,10 @@ export async function getGames(tableId: string) {
 
 export async function getGame(gameId: string) {
   return api.get<WebGame>(`games/${gameId}`);
+}
+
+export async function getCurrentPlayerOfGame(gameId: string) {
+  return api.get<WebGameParticipant>(`games/${gameId}/currentPlayer`);
 }
 
 export async function updateGame(id: string, game: WebGame) {

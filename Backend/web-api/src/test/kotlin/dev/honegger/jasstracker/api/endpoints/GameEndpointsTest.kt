@@ -2,6 +2,7 @@ package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.domain.Game
 import dev.honegger.jasstracker.domain.GameParticipant
+import dev.honegger.jasstracker.domain.Round
 import dev.honegger.jasstracker.domain.Team
 import dev.honegger.jasstracker.domain.services.GameService
 import io.ktor.client.request.*
@@ -127,5 +128,94 @@ class GameEndpointsTest {
             assertEquals(HttpStatusCode.OK, status)
         }
         verify(exactly = 1) { service.deleteGameById(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
+    }
+
+    @Test
+    fun `get game currentPlayer finds current player`() = testApplication {
+        application {
+            installJson()
+            configureGameEndpoints(service)
+        }
+        val client = createClient {
+            installJson()
+        }
+        val dummyId = UUID.randomUUID()
+        val p1Id = UUID.randomUUID()
+        val p2Id = UUID.randomUUID()
+        val p3Id = UUID.randomUUID()
+        val p4Id = UUID.randomUUID()
+        val dummyGame = Game(
+            id = dummyId,
+            startTime = LocalDateTime(2022, 4, 2, 13, 0, 0),
+            rounds = emptyList(),
+            team1 = Team(GameParticipant(p1Id, "p1"), GameParticipant(p2Id, "p2")),
+            team2 = Team(GameParticipant(p3Id, "p3"), GameParticipant(p4Id, "p4")),
+        )
+        every {
+            service.getGameOrNull(
+                any(),
+                dummyId
+            )
+        } returns dummyGame
+        client.get("/api/games/$dummyId/currentPlayer").apply {
+            assertEquals(HttpStatusCode.OK, status)
+            assertEquals(
+                """{"playerId":"$p1Id","displayName":"p1"}""", bodyAsText())
+        }
+        verify(exactly = 1) { service.getGameOrNull(any(), dummyId) }
+    }
+
+    @Test
+    fun `get game currentPlayer finds current player even with multiple rounds played`() = testApplication {
+        application {
+            installJson()
+            configureGameEndpoints(service)
+        }
+        val client = createClient {
+            installJson()
+        }
+
+        val dummyId = UUID.randomUUID()
+        val p1Id = UUID.randomUUID()
+        val p2Id = UUID.randomUUID()
+        val p3Id = UUID.randomUUID()
+        val p4Id = UUID.randomUUID()
+
+        val round1 = Round(
+            id = UUID.randomUUID(),
+            number = 1,
+            score = 150,
+            gameId = dummyId,
+            playerId = p1Id,
+            contractId = UUID.randomUUID(),
+        )
+        val round2 = Round(
+            id = UUID.randomUUID(),
+            number = 2,
+            score = 140,
+            gameId = dummyId,
+            playerId = p1Id,
+            contractId = UUID.randomUUID(),
+        )
+
+        val dummyGame = Game(
+            id = dummyId,
+            startTime = LocalDateTime(2022, 4, 2, 13, 0, 0),
+            rounds = listOf(round1, round2),
+            team1 = Team(GameParticipant(p1Id, "p1"), GameParticipant(p2Id, "p2")),
+            team2 = Team(GameParticipant(p3Id, "p3"), GameParticipant(p4Id, "p4")),
+        )
+        every {
+            service.getGameOrNull(
+                any(),
+                dummyId
+            )
+        } returns dummyGame
+        client.get("/api/games/$dummyId/currentPlayer").apply {
+            assertEquals(HttpStatusCode.OK, status)
+            assertEquals(
+                """{"playerId":"$p2Id","displayName":"p2"}""".trimMargin().replace("\n",""), bodyAsText())
+        }
+        verify(exactly = 1) { service.getGameOrNull(any(), dummyId) }
     }
 }
