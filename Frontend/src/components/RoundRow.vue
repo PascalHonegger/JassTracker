@@ -14,7 +14,16 @@ async function handleInput(event: Event, round: Round) {
     alert("undefined table or game, this should not happen");
     return;
   }
-  const inputScore = parseInt((event.target as HTMLInputElement).value, 10);
+  const target = event.target as HTMLInputElement;
+  const inputScore = parseInt(target.value, 10);
+  if (Math.abs(inputScore) > 157) {
+    target.classList.add("!bg-red-500");
+    event.preventDefault();
+    return;
+  }
+  if (target.classList.contains("!bg-red-500")) {
+    target.classList.remove("!bg-red-500");
+  }
   const actualScore = inputScore < 0 ? 157 - Math.abs(inputScore) : inputScore;
   if (round.id) {
     // update, TBD
@@ -27,6 +36,13 @@ async function handleInput(event: Event, round: Round) {
       contractId: round.contractId,
     };
     await roundStore.createRound(newRound);
+  }
+}
+
+function validateNumber(event: KeyboardEvent) {
+  const keyCode = event.keyCode;
+  if (keyCode !== 45 && (keyCode < 48 || keyCode > 57)) {
+    event.preventDefault();
   }
 }
 
@@ -58,6 +74,7 @@ function getClass(round: Round): string {
           inputmode="numeric"
           class="text-center w-24"
           @change="handleInput($event, r)"
+          @keypress="validateNumber"
           :disabled="r.type === 'locked' || readonly"
           :value="r.score"
           :class="getClass(r)"
