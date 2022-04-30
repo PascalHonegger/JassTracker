@@ -4,72 +4,44 @@ import dev.honegger.jasstracker.domain.Game
 import dev.honegger.jasstracker.domain.GameParticipation
 import dev.honegger.jasstracker.domain.Table
 import dev.honegger.jasstracker.domain.Team
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import org.junit.jupiter.api.Disabled
+import dev.honegger.jasstracker.domain.util.toUUID
+import kotlinx.datetime.LocalDateTime
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class TableRepositoryImplTest {
+class TableRepositoryImplTest : RepositoryTest() {
+    private val repo = TableRepositoryImpl(GameRepositoryImpl())
+
     @Test
-    @Disabled
     fun `getTable returns correct table after saveTable is called`() {
-        val repository = TableRepositoryImpl(GameRepositoryImpl())
         val newTable = Table(
             id = UUID.randomUUID(),
             name = "Some Name",
-            ownerId = UUID.randomUUID(),
-            games = listOf(
-                Game(
-                    id = UUID.randomUUID(),
-                    startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
-                    rounds = emptyList(),
-                    team1 = Team(GameParticipation(UUID.randomUUID(), "p1"), GameParticipation(UUID.randomUUID(), "p2")),
-                    team2 = Team(GameParticipation(UUID.randomUUID(), "p3"), GameParticipation(UUID.randomUUID(), "p4")),
-                )
-            )
+            ownerId = "27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(),
+            games = emptyList()
         )
-        assertNull(repository.getTableOrNull(newTable.id))
-        repository.saveTable(newTable)
-        assertEquals(newTable, repository.getTableOrNull(newTable.id))
+        assertNull(repo.getTableOrNull(newTable.id))
+        repo.saveTable(newTable)
+        assertEquals(newTable, repo.getTableOrNull(newTable.id))
     }
 
     @Test
-    @Disabled
     fun `getTables returns multiple tables after saveTable is called`() {
-        val repository = TableRepositoryImpl(GameRepositoryImpl())
-        val owner1 = UUID.randomUUID()
-        val owner2 = UUID.randomUUID()
+        val owner1 = "283c0a20-b293-40e7-8858-da098a53b756".toUUID()
+        val owner2 = "3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID()
         val table1 = Table(
             id = UUID.randomUUID(),
             name = "Foo",
             ownerId = owner1,
-            games = listOf(
-                Game(
-                    id = UUID.randomUUID(),
-                    startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
-                    rounds = emptyList(),
-                    team1 = Team(GameParticipation(UUID.randomUUID(), "p1"), GameParticipation(UUID.randomUUID(), "p2")),
-                    team2 = Team(GameParticipation(UUID.randomUUID(), "p3"), GameParticipation(UUID.randomUUID(), "p4")),
-                )
-            )
+            games = emptyList()
         )
         val table2 = Table(
             id = UUID.randomUUID(),
             name = "Bar",
             ownerId = owner1,
-            games = listOf(
-                Game(
-                    id = UUID.randomUUID(),
-                    startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
-                    rounds = emptyList(),
-                    team1 = Team(GameParticipation(UUID.randomUUID(), "p1"), GameParticipation(UUID.randomUUID(), "p2")),
-                    team2 = Team(GameParticipation(UUID.randomUUID(), "p3"), GameParticipation(UUID.randomUUID(), "p4")),
-                )
-            )
+            games = emptyList()
         )
         val table3 = Table(
             id = UUID.randomUUID(),
@@ -77,10 +49,56 @@ class TableRepositoryImplTest {
             ownerId = owner2,
             games = emptyList()
         )
-        assertEquals(emptyList(), repository.getTables(owner1))
-        repository.saveTable(table1)
-        repository.saveTable(table2)
-        assertEquals(listOf(table1, table2), repository.getTables(owner1))
-        assertEquals(listOf(table3), repository.getTables(owner2))
+        assertEquals(emptyList(), repo.getTables(owner1))
+        repo.saveTable(table1)
+        repo.saveTable(table2)
+        assertEquals(setOf(table1, table2), repo.getTables(owner1).toSet())
+        repo.saveTable(table3)
+        assertEquals(listOf(table3), repo.getTables(owner2))
+    }
+
+    @Test
+    fun `getTableByGameIdOrNull returns table`() {
+        val table = createTable()
+        val gameId = UUID.randomUUID()
+        val game = Game(
+            gameId,
+            LocalDateTime(2022, 4, 20, 13, 37),
+            null,
+            emptyList(),
+            Team(GameParticipation("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "p1"),
+                GameParticipation("3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(), "p2")),
+            Team(GameParticipation("283c0a20-b293-40e7-8858-da098a53b756".toUUID(), "p3"),
+                GameParticipation("cdfa5ae5-d182-4e11-b7f1-a173b2b4b797".toUUID(), "p4"))
+        )
+        GameRepositoryImpl().saveGame(game, table.id)
+        val tableWithGame = table.copy(games = listOf(game))
+        assertEquals(tableWithGame, repo.getTableByGameIdOrNull(gameId))
+    }
+
+    @Test
+    fun `updateTable updates table`() {
+        val table = createTable()
+        val updatedTable = table.copy(name = "Nicer table")
+        repo.updateTable(updatedTable)
+        assertEquals(updatedTable, repo.getTableOrNull(table.id))
+    }
+
+    @Test
+    fun `deleteTable deletes table`() {
+        val id = createTable().id
+        repo.deleteTableById(id)
+        assertNull(repo.getTableOrNull(id))
+    }
+
+    private fun createTable(): Table {
+        val table = Table(
+            UUID.randomUUID(),
+            "Nice Table",
+            "27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(),
+            emptyList()
+        )
+        repo.saveTable(table)
+        return table
     }
 }

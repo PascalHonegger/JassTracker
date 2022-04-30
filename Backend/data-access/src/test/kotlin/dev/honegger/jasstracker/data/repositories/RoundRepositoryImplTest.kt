@@ -1,7 +1,7 @@
 package dev.honegger.jasstracker.data.repositories
 
 import dev.honegger.jasstracker.domain.Game
-import dev.honegger.jasstracker.domain.GameParticipant
+import dev.honegger.jasstracker.domain.GameParticipation
 import dev.honegger.jasstracker.domain.Round
 import dev.honegger.jasstracker.domain.Team
 import dev.honegger.jasstracker.domain.util.toUUID
@@ -96,12 +96,12 @@ class RoundRepositoryImplTest : RepositoryTest() {
             endTime = null,
             rounds = emptyList(),
             team1 = Team(
-                GameParticipant("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "Pascal"),
-                GameParticipant("3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(), "Marcel")
+                GameParticipation("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "Pascal"),
+                GameParticipation("3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(), "Marcel")
             ),
             team2 = Team(
-                GameParticipant("665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3".toUUID(), "Guest 1"),
-                GameParticipant("7dad81d3-62db-4553-9d48-f38f404f1596".toUUID(), "Guest 2")
+                GameParticipation("665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3".toUUID(), "Guest 1"),
+                GameParticipation("7dad81d3-62db-4553-9d48-f38f404f1596".toUUID(), "Guest 2")
             )
         )
         GameRepositoryImpl().saveGame(game, "92968e55-6df0-4f21-a7cc-a243025e5f87".toUUID())

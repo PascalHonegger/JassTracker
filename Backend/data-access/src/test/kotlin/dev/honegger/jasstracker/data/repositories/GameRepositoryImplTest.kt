@@ -15,12 +15,12 @@ class GameRepositoryImplTest : RepositoryTest() {
         startTime = LocalDateTime.parse("2022-03-31T14:08:59.654385"),
         endTime = LocalDateTime.parse("2022-04-01T14:08:59.654385"),
         team1 = Team(
-            GameParticipant("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "Pascal"),
-            GameParticipant("283c0a20-b293-40e7-8858-da098a53b756".toUUID(), "David"),
+            GameParticipation("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "Pascal"),
+            GameParticipation("283c0a20-b293-40e7-8858-da098a53b756".toUUID(), "David"),
         ),
         team2 = Team(
-            GameParticipant("3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(), "Marcel"),
-            GameParticipant("cdfa5ae5-d182-4e11-b7f1-a173b2b4b797".toUUID(), "Jamie"),
+            GameParticipation("3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(), "Marcel"),
+            GameParticipation("cdfa5ae5-d182-4e11-b7f1-a173b2b4b797".toUUID(), "Jamie"),
         ),
         rounds = listOf(
             Round("c1dbf7ae-719f-4acc-a6e6-03c37534e8a4".toUUID(),
@@ -150,12 +150,12 @@ class GameRepositoryImplTest : RepositoryTest() {
         startTime = LocalDateTime.parse("2022-03-31T14:08:59.654385"),
         endTime = null,
         team1 = Team(
-            GameParticipant("665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3".toUUID(), "Guest 1"),
-            GameParticipant("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "Pascal")
+            GameParticipation("665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3".toUUID(), "Guest 1"),
+            GameParticipation("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "Pascal")
         ),
         team2 = Team(
-            GameParticipant("7dad81d3-62db-4553-9d48-f38f404f1596".toUUID(), "Guest 2"),
-            GameParticipant("3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(), "Marcel")
+            GameParticipation("7dad81d3-62db-4553-9d48-f38f404f1596".toUUID(), "Guest 2"),
+            GameParticipation("3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(), "Marcel")
         ),
         rounds = listOf(
             Round("e1eb6701-f163-4e54-aadd-8239476972f6".toUUID(),
@@ -204,12 +204,12 @@ class GameRepositoryImplTest : RepositoryTest() {
             endTime = null,
             rounds = emptyList(),
             team1 = Team(
-                GameParticipant("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "Pascal"),
-                GameParticipant("3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(), "Marcel")
+                GameParticipation("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "Pascal"),
+                GameParticipation("3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(), "Marcel")
             ),
             team2 = Team(
-                GameParticipant("665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3".toUUID(), "Guest 1"),
-                GameParticipant("7dad81d3-62db-4553-9d48-f38f404f1596".toUUID(), "Guest 2")
+                GameParticipation("665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3".toUUID(), "Guest 1"),
+                GameParticipation("7dad81d3-62db-4553-9d48-f38f404f1596".toUUID(), "Guest 2")
             )
         )
         repo.saveGame(game, "92968e55-6df0-4f21-a7cc-a243025e5f87".toUUID())
@@ -225,12 +225,12 @@ class GameRepositoryImplTest : RepositoryTest() {
             endTime = null,
             rounds = emptyList(),
             team1 = Team(
-                GameParticipant("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "Pascal"),
-                GameParticipant("3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(), "Marcel")
+                GameParticipation("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "Pascal"),
+                GameParticipation("3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(), "Marcel")
             ),
             team2 = Team(
-                GameParticipant("665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3".toUUID(), "Guest 1"),
-                GameParticipant("7dad81d3-62db-4553-9d48-f38f404f1596".toUUID(), "Guest 2")
+                GameParticipation("665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3".toUUID(), "Guest 1"),
+                GameParticipation("7dad81d3-62db-4553-9d48-f38f404f1596".toUUID(), "Guest 2")
             )
         )
         repo.saveGame(game, "de940c47-9881-4e95-bc3d-6014ad1902e1".toUUID())
@@ -248,12 +248,12 @@ class GameRepositoryImplTest : RepositoryTest() {
             endTime = null,
             rounds = emptyList(),
             team1 = Team(
-                GameParticipant("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "Pascal"),
-                GameParticipant("3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(), "Marcel")
+                GameParticipation("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "Pascal"),
+                GameParticipation("3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(), "Marcel")
             ),
             team2 = Team(
-                GameParticipant("665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3".toUUID(), "Guest 1"),
-                GameParticipant("7dad81d3-62db-4553-9d48-f38f404f1596".toUUID(), "Guest 2")
+                GameParticipation("665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3".toUUID(), "Guest 1"),
+                GameParticipation("7dad81d3-62db-4553-9d48-f38f404f1596".toUUID(), "Guest 2")
             )
         )
         repo.saveGame(game, "de940c47-9881-4e95-bc3d-6014ad1902e1".toUUID())
