@@ -18,6 +18,7 @@ dependencyResolutionManagement {
         val jooq = "3.16.5"
         val jooqPlugin = "7.1.1"
         val kover = "0.5.0"
+        val testcontainers = "1.16.3"
 
         create("libs") {
             library("ktor-server-core", "io.ktor", "ktor-server-core-jvm").version(ktor)
@@ -48,6 +49,9 @@ dependencyResolutionManagement {
             library("kotlin-test", "org.jetbrains.kotlin", "kotlin-test-junit5").version(kotlin)
             library("ktor-server-tests", "io.ktor", "ktor-server-tests-jvm").version(ktor)
             library("mockk", "io.mockk", "mockk").version(mockk)
+            library("testcontainers", "org.testcontainers", "testcontainers").version(testcontainers)
+            library("testcontainers-junit", "org.testcontainers", "junit-jupiter").version(testcontainers)
+            library("testcontainers-postgresql", "org.testcontainers", "postgresql").version(testcontainers)
         }
     }
 }
