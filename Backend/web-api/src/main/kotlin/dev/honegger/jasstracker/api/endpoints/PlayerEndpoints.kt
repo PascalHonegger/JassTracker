@@ -3,12 +3,12 @@ package dev.honegger.jasstracker.api.endpoints
 import dev.honegger.jasstracker.domain.GuestPlayer
 import dev.honegger.jasstracker.domain.RegisteredPlayer
 import dev.honegger.jasstracker.domain.services.PlayerService
+import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import java.util.UUID
 
 fun Application.configurePlayerEndpoints(
     playerService: PlayerService,
@@ -22,7 +22,7 @@ fun Application.configurePlayerEndpoints(
                     return@get
                 }
                 val player =
-                    playerService.getPlayerOrNull(dummySession, UUID.fromString(id))
+                    playerService.getPlayerOrNull(dummySession, id.toUUID())
 
                 if (player == null) {
                     call.respond(HttpStatusCode.NotFound)

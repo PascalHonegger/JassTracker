@@ -2,12 +2,12 @@ package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.domain.currentPlayer
 import dev.honegger.jasstracker.domain.services.GameService
+import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import java.util.UUID
 
 fun Application.configureGameEndpoints(
     gameService: GameService,
@@ -25,7 +25,7 @@ fun Application.configureGameEndpoints(
                     return@get
                 }
                 val game =
-                    gameService.getGameOrNull(dummySession, UUID.fromString(id))
+                    gameService.getGameOrNull(dummySession, id.toUUID())
 
                 if (game == null) {
                     call.respond(HttpStatusCode.NotFound)
@@ -41,7 +41,7 @@ fun Application.configureGameEndpoints(
                     return@get
                 }
                 val game =
-                    gameService.getGameOrNull(dummySession, UUID.fromString(id))
+                    gameService.getGameOrNull(dummySession, id.toUUID())
 
                 if (game == null) {
                     call.respond(HttpStatusCode.NotFound)
@@ -56,7 +56,7 @@ fun Application.configureGameEndpoints(
                     dev.honegger.jasstracker.domain.services.CreateGameParticipation(game.playerId, game.displayName)
                 val createdGame = gameService.createGame(
                     dummySession,
-                    UUID.fromString(newGame.tableId),
+                    newGame.tableId.toUUID(),
                     CreateGameParticipation(newGame.team1Player1),
                     CreateGameParticipation(newGame.team1Player2),
                     CreateGameParticipation(newGame.team2Player1),
@@ -80,7 +80,7 @@ fun Application.configureGameEndpoints(
                     call.respond(HttpStatusCode.BadRequest)
                     return@delete
                 }
-                val success = gameService.deleteGameById(dummySession, UUID.fromString(id))
+                val success = gameService.deleteGameById(dummySession, id.toUUID())
                 if (!success) {
                     call.respond(HttpStatusCode.NotFound)
                     return@delete

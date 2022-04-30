@@ -3,6 +3,7 @@ package dev.honegger.jasstracker.api.endpoints
 import dev.honegger.jasstracker.domain.GuestPlayer
 import dev.honegger.jasstracker.domain.RegisteredPlayer
 import dev.honegger.jasstracker.domain.services.PlayerService
+import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -92,6 +93,6 @@ class PlayerEndpointsTest {
         client.get("/api/players/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.NotFound, status)
         }
-        verify(exactly = 1) { service.getPlayerOrNull(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
+        verify(exactly = 1) { service.getPlayerOrNull(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
     }
 }

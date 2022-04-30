@@ -5,6 +5,7 @@ import dev.honegger.jasstracker.domain.GameParticipation
 import dev.honegger.jasstracker.domain.Round
 import dev.honegger.jasstracker.domain.Team
 import dev.honegger.jasstracker.domain.services.GameService
+import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -101,7 +102,7 @@ class GameEndpointsTest {
         client.get("/api/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.NotFound, status)
         }
-        verify(exactly = 1) { service.getGameOrNull(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
+        verify(exactly = 1) { service.getGameOrNull(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
     }
 
     @Test
@@ -114,7 +115,7 @@ class GameEndpointsTest {
         client.delete("/api/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.NotFound, status)
         }
-        verify(exactly = 1) { service.deleteGameById(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
+        verify(exactly = 1) { service.deleteGameById(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
     }
 
     @Test
@@ -127,7 +128,7 @@ class GameEndpointsTest {
         client.delete("/api/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.OK, status)
         }
-        verify(exactly = 1) { service.deleteGameById(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
+        verify(exactly = 1) { service.deleteGameById(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
     }
 
     @Test
