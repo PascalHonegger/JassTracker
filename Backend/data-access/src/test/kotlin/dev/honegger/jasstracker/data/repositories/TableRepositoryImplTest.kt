@@ -1,7 +1,7 @@
 package dev.honegger.jasstracker.data.repositories
 
 import dev.honegger.jasstracker.domain.Game
-import dev.honegger.jasstracker.domain.GameParticipant
+import dev.honegger.jasstracker.domain.GameParticipation
 import dev.honegger.jasstracker.domain.Table
 import dev.honegger.jasstracker.domain.Team
 import kotlinx.datetime.Clock
@@ -27,8 +27,8 @@ class TableRepositoryImplTest {
                     id = UUID.randomUUID(),
                     startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
                     rounds = emptyList(),
-                    team1 = Team(GameParticipant(UUID.randomUUID(), "p1"), GameParticipant(UUID.randomUUID(), "p2")),
-                    team2 = Team(GameParticipant(UUID.randomUUID(), "p3"), GameParticipant(UUID.randomUUID(), "p4")),
+                    team1 = Team(GameParticipation(UUID.randomUUID(), "p1"), GameParticipation(UUID.randomUUID(), "p2")),
+                    team2 = Team(GameParticipation(UUID.randomUUID(), "p3"), GameParticipation(UUID.randomUUID(), "p4")),
                 )
             )
         )
@@ -52,8 +52,8 @@ class TableRepositoryImplTest {
                     id = UUID.randomUUID(),
                     startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
                     rounds = emptyList(),
-                    team1 = Team(GameParticipant(UUID.randomUUID(), "p1"), GameParticipant(UUID.randomUUID(), "p2")),
-                    team2 = Team(GameParticipant(UUID.randomUUID(), "p3"), GameParticipant(UUID.randomUUID(), "p4")),
+                    team1 = Team(GameParticipation(UUID.randomUUID(), "p1"), GameParticipation(UUID.randomUUID(), "p2")),
+                    team2 = Team(GameParticipation(UUID.randomUUID(), "p3"), GameParticipation(UUID.randomUUID(), "p4")),
                 )
             )
         )
@@ -66,8 +66,8 @@ class TableRepositoryImplTest {
                     id = UUID.randomUUID(),
                     startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
                     rounds = emptyList(),
-                    team1 = Team(GameParticipant(UUID.randomUUID(), "p1"), GameParticipant(UUID.randomUUID(), "p2")),
-                    team2 = Team(GameParticipant(UUID.randomUUID(), "p3"), GameParticipant(UUID.randomUUID(), "p4")),
+                    team1 = Team(GameParticipation(UUID.randomUUID(), "p1"), GameParticipation(UUID.randomUUID(), "p2")),
+                    team2 = Team(GameParticipation(UUID.randomUUID(), "p3"), GameParticipation(UUID.randomUUID(), "p4")),
                 )
             )
         )

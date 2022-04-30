@@ -15,28 +15,28 @@ export interface WebGame {
   rounds: WebRound[];
   team1: WebTeam;
   team2: WebTeam;
-  currentPlayer: WebGameParticipant;
+  currentPlayer: WebGameParticipation;
 }
 
 export interface WebTeam {
-  player1: WebGameParticipant;
-  player2: WebGameParticipant;
+  player1: WebGameParticipation;
+  player2: WebGameParticipation;
 }
 
-export interface WebGameParticipant {
+export interface WebGameParticipation {
   playerId: string;
   displayName: string;
 }
 
 export interface WebCreateGame {
   tableId: string;
-  team1Player1: WebCreateGameParticipant;
-  team1Player2: WebCreateGameParticipant;
-  team2Player1: WebCreateGameParticipant;
-  team2Player2: WebCreateGameParticipant;
+  team1Player1: WebCreateGameParticipation;
+  team1Player2: WebCreateGameParticipation;
+  team2Player1: WebCreateGameParticipation;
+  team2Player2: WebCreateGameParticipation;
 }
 
-export interface WebCreateGameParticipant {
+export interface WebCreateGameParticipation {
   playerId: string | null;
   displayName: string;
 }

@@ -1,7 +1,7 @@
 package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.domain.Game
-import dev.honegger.jasstracker.domain.GameParticipant
+import dev.honegger.jasstracker.domain.GameParticipation
 import dev.honegger.jasstracker.domain.Round
 import dev.honegger.jasstracker.domain.Team
 import dev.honegger.jasstracker.domain.services.GameService
@@ -66,8 +66,8 @@ class GameEndpointsTest {
             id = dummyId,
             startTime = LocalDateTime(2022, 4, 2, 13, 0, 0),
             rounds = emptyList(),
-            team1 = Team(GameParticipant(p1Id, "p1"), GameParticipant(p2Id, "p2")),
-            team2 = Team(GameParticipant(p3Id, "p3"), GameParticipant(p4Id, "p4")),
+            team1 = Team(GameParticipation(p1Id, "p1"), GameParticipation(p2Id, "p2")),
+            team2 = Team(GameParticipation(p3Id, "p3"), GameParticipation(p4Id, "p4")),
         )
         every {
             service.getGameOrNull(
@@ -148,8 +148,8 @@ class GameEndpointsTest {
             id = dummyId,
             startTime = LocalDateTime(2022, 4, 2, 13, 0, 0),
             rounds = emptyList(),
-            team1 = Team(GameParticipant(p1Id, "p1"), GameParticipant(p2Id, "p2")),
-            team2 = Team(GameParticipant(p3Id, "p3"), GameParticipant(p4Id, "p4")),
+            team1 = Team(GameParticipation(p1Id, "p1"), GameParticipation(p2Id, "p2")),
+            team2 = Team(GameParticipation(p3Id, "p3"), GameParticipation(p4Id, "p4")),
         )
         every {
             service.getGameOrNull(
@@ -202,8 +202,8 @@ class GameEndpointsTest {
             id = dummyId,
             startTime = LocalDateTime(2022, 4, 2, 13, 0, 0),
             rounds = listOf(round1, round2),
-            team1 = Team(GameParticipant(p1Id, "p1"), GameParticipant(p2Id, "p2")),
-            team2 = Team(GameParticipant(p3Id, "p3"), GameParticipant(p4Id, "p4")),
+            team1 = Team(GameParticipation(p1Id, "p1"), GameParticipation(p2Id, "p2")),
+            team2 = Team(GameParticipation(p3Id, "p3"), GameParticipation(p4Id, "p4")),
         )
         every {
             service.getGameOrNull(

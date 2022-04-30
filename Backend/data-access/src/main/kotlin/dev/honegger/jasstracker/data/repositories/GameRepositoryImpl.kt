@@ -1,7 +1,7 @@
 package dev.honegger.jasstracker.data.repositories
 
 import dev.honegger.jasstracker.domain.Game
-import dev.honegger.jasstracker.domain.GameParticipant
+import dev.honegger.jasstracker.domain.GameParticipation
 import dev.honegger.jasstracker.domain.Round
 import dev.honegger.jasstracker.domain.Team
 import dev.honegger.jasstracker.data.database.tables.GameParticipation.GAME_PARTICIPATION as GP
@@ -36,12 +36,12 @@ class GameRepositoryImpl : GameRepository {
                 )
             },
             team1 = Team(
-                player1 = GameParticipant(team1Player1.playerId, team1Player1.playerName),
-                player2 = GameParticipant(team1Player2.playerId, team1Player2.playerName),
+                player1 = GameParticipation(team1Player1.playerId, team1Player1.playerName),
+                player2 = GameParticipation(team1Player2.playerId, team1Player2.playerName),
             ),
             team2 = Team(
-                player1 = GameParticipant(team2Player1.playerId, team2Player1.playerName),
-                player2 = GameParticipant(team2Player2.playerId, team2Player2.playerName),
+                player1 = GameParticipation(team2Player1.playerId, team2Player1.playerName),
+                player2 = GameParticipation(team2Player2.playerId, team2Player2.playerName),
             ),
         )
     }
@@ -82,7 +82,7 @@ class GameRepositoryImpl : GameRepository {
         }
         newGameRecord.insert()
 
-        fun GameParticipant.toGameParticipation(tablePosition: Int) = newRecord(GP).apply {
+        fun GameParticipation.toGameParticipation(tablePosition: Int) = newRecord(GP).apply {
             this.gameId = newGameRecord.id
             this.playerId = this@toGameParticipation.playerId
             this.playerName = this@toGameParticipation.displayName

@@ -13,10 +13,10 @@ interface GameService {
     fun createGame(
         session: UserSession,
         tableId: UUID,
-        team1Player1: CreateGameParticipant,
-        team1Player2: CreateGameParticipant,
-        team2Player1: CreateGameParticipant,
-        team2Player2: CreateGameParticipant,
+        team1Player1: CreateGameParticipation,
+        team1Player2: CreateGameParticipation,
+        team2Player1: CreateGameParticipation,
+        team2Player2: CreateGameParticipation,
     ): Game
     fun getGameOrNull(session: UserSession, id: UUID): Game?
     fun getAllGames(session: UserSession): List<Game>
@@ -24,7 +24,7 @@ interface GameService {
     fun deleteGameById(session: UserSession, id: UUID): Boolean
 }
 
-data class CreateGameParticipant(
+data class CreateGameParticipation(
     val playerId: UUID?,
     val displayName: String,
 )
@@ -36,10 +36,10 @@ class GameServiceImpl(private val gameRepository: GameRepository, private val pl
     override fun createGame(
         session: UserSession,
         tableId: UUID,
-        team1Player1: CreateGameParticipant,
-        team1Player2: CreateGameParticipant,
-        team2Player1: CreateGameParticipant,
-        team2Player2: CreateGameParticipant,
+        team1Player1: CreateGameParticipation,
+        team1Player2: CreateGameParticipation,
+        team2Player1: CreateGameParticipation,
+        team2Player2: CreateGameParticipation,
     ): Game {
         val newGame = Game(
             id = UUID.randomUUID(),
@@ -79,16 +79,16 @@ class GameServiceImpl(private val gameRepository: GameRepository, private val pl
         gameRepository.updateGame(existingGame.copy(endTime = updatedGame.endTime))
     }
 
-    private fun createParticipant(createGameParticipant: CreateGameParticipant): GameParticipant {
-        if (createGameParticipant.playerId != null) {
-            return GameParticipant(createGameParticipant.playerId, createGameParticipant.displayName)
+    private fun createParticipant(createGameParticipation: CreateGameParticipation): GameParticipation {
+        if (createGameParticipation.playerId != null) {
+            return GameParticipation(createGameParticipation.playerId, createGameParticipation.displayName)
         }
 
         val newGuest = GuestPlayer(
             id = UUID.randomUUID(),
         )
         playerRepository.savePlayer(newGuest)
-        return GameParticipant(newGuest.id, createGameParticipant.displayName)
+        return GameParticipation(newGuest.id, createGameParticipation.displayName)
     }
 
     override fun deleteGameById(session: UserSession, id: UUID): Boolean {

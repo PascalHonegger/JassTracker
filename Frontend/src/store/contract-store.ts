@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { getContracts } from "@/services/contract-service";
 import { RoundType, Row } from "@/types/types";
-import { WebContract, WebGameParticipant } from "@/services/web-model";
+import { WebContract, WebGameParticipation } from "@/services/web-model";
 
 export const useContractStore = defineStore("contract", {
   state: () => ({
@@ -13,7 +13,7 @@ export const useContractStore = defineStore("contract", {
       return state.contracts.length > 0;
     },
     emptyRows(state) {
-      return (players: WebGameParticipant[]): Row[] =>
+      return (players: WebGameParticipation[]): Row[] =>
         state.contracts.map((contract) => {
           return {
             contract,

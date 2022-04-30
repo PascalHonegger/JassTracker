@@ -1,7 +1,7 @@
 package dev.honegger.jasstracker.domain.services
 
 import dev.honegger.jasstracker.domain.Game
-import dev.honegger.jasstracker.domain.GameParticipant
+import dev.honegger.jasstracker.domain.GameParticipation
 import dev.honegger.jasstracker.domain.Player
 import dev.honegger.jasstracker.domain.UserSession
 import dev.honegger.jasstracker.domain.repositories.GameRepository
@@ -41,10 +41,10 @@ class GameServiceImplTest {
     @Test
     fun `createGame creates game and guest players in repository`() {
         val dummyTableId = UUID.randomUUID()
-        val team1Player1 = CreateGameParticipant(UUID.randomUUID(), "T1P1")
-        val team1Player2 = CreateGameParticipant(null, "T1P2")
-        val team2Player1 = CreateGameParticipant(null, "T2P1")
-        val team2Player2 = CreateGameParticipant(null, "T2P2")
+        val team1Player1 = CreateGameParticipation(UUID.randomUUID(), "T1P1")
+        val team1Player2 = CreateGameParticipation(null, "T1P2")
+        val team2Player1 = CreateGameParticipation(null, "T2P1")
+        val team2Player2 = CreateGameParticipation(null, "T2P2")
         val created = service.createGame(
             dummySession, dummyTableId,
             team1Player1,
@@ -61,10 +61,10 @@ class GameServiceImplTest {
         assertEquals(dummyNow, created.startTime)
         assertEquals(null, created.endTime)
         assertEquals(emptyList(), created.rounds)
-        assertEquals(GameParticipant(team1Player1.playerId!!, "T1P1"), created.team1.player1)
-        assertEquals(GameParticipant(createdPlayer1.id, "T1P2"), created.team1.player2)
-        assertEquals(GameParticipant(createdPlayer2.id, "T2P1"), created.team2.player1)
-        assertEquals(GameParticipant(createdPlayer3.id, "T2P2"), created.team2.player2)
+        assertEquals(GameParticipation(team1Player1.playerId!!, "T1P1"), created.team1.player1)
+        assertEquals(GameParticipation(createdPlayer1.id, "T1P2"), created.team1.player2)
+        assertEquals(GameParticipation(createdPlayer2.id, "T2P1"), created.team2.player1)
+        assertEquals(GameParticipation(createdPlayer3.id, "T2P2"), created.team2.player2)
         assertEquals(dummyTableId, passedTableId.captured)
         verify(exactly = 1) {
             gameRepository.saveGame(any(), any())

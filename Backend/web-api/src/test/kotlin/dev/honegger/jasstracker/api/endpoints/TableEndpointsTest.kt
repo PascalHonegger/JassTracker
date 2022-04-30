@@ -1,7 +1,7 @@
 package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.domain.Game
-import dev.honegger.jasstracker.domain.GameParticipant
+import dev.honegger.jasstracker.domain.GameParticipation
 import dev.honegger.jasstracker.domain.Table
 import dev.honegger.jasstracker.domain.Team
 import dev.honegger.jasstracker.domain.services.TableService
@@ -95,8 +95,8 @@ class TableEndpointsTest {
                     startTime = LocalDateTime(2022, 4, 10, 20, 20, 0, 0),
                     endTime = null,
                     rounds = emptyList(),
-                    team1 = Team(GameParticipant(p1Id, "p1"), GameParticipant(p2Id, "p2")),
-                    team2 = Team(GameParticipant(p3Id, "p3"), GameParticipant(p4Id, "p4")),
+                    team1 = Team(GameParticipation(p1Id, "p1"), GameParticipation(p2Id, "p2")),
+                    team2 = Team(GameParticipation(p3Id, "p3"), GameParticipation(p4Id, "p4")),
                 )
             ),
         )
@@ -213,12 +213,12 @@ class TableEndpointsTest {
                     endTime = later,
                     rounds = emptyList(),
                     team1 = Team(
-                        player1 = GameParticipant(p1Id, "p1"),
-                        player2 = GameParticipant(p2Id, "p2")
+                        player1 = GameParticipation(p1Id, "p1"),
+                        player2 = GameParticipation(p2Id, "p2")
                     ),
                     team2 = Team(
-                        player1 = GameParticipant(p3Id, "p3"),
-                        player2 = GameParticipant(p4Id, "p4")
+                        player1 = GameParticipation(p3Id, "p3"),
+                        player2 = GameParticipation(p4Id, "p4")
                     )
                 ),
                 Game(
@@ -227,12 +227,12 @@ class TableEndpointsTest {
                     endTime = null,
                     rounds = emptyList(),
                     team1 = Team(
-                        player1 = GameParticipant(p1Id, "p1"),
-                        player2 = GameParticipant(p2Id, "p2")
+                        player1 = GameParticipation(p1Id, "p1"),
+                        player2 = GameParticipation(p2Id, "p2")
                     ),
                     team2 = Team(
-                        player1 = GameParticipant(p3Id, "p3"),
-                        player2 = GameParticipant(p4Id, "p4")
+                        player1 = GameParticipation(p3Id, "p3"),
+                        player2 = GameParticipation(p4Id, "p4")
                     )
                 )
             )

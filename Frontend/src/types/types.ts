@@ -17,15 +17,15 @@ export interface Game {
   rows: Row[];
   team1: Team;
   team2: Team;
-  currentPlayer: GameParticipant;
+  currentPlayer: GameParticipation;
 }
 
 export interface Team {
-  player1: GameParticipant;
-  player2: GameParticipant;
+  player1: GameParticipation;
+  player2: GameParticipation;
 }
 
-export interface GameParticipant {
+export interface GameParticipation {
   playerId: string;
   displayName: string;
 }

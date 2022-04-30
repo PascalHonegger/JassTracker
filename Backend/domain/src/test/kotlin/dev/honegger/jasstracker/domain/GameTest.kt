@@ -5,10 +5,10 @@ import java.util.*
 import kotlin.test.*
 
 class GameTest {
-    private val anna = GameParticipant(UUID.randomUUID(), "Anna")
-    private val andrin = GameParticipant(UUID.randomUUID(), "Andrin")
-    private val joe = GameParticipant(UUID.randomUUID(), "Joe")
-    private val jan = GameParticipant(UUID.randomUUID(), "Jan")
+    private val anna = GameParticipation(UUID.randomUUID(), "Anna")
+    private val andrin = GameParticipation(UUID.randomUUID(), "Andrin")
+    private val joe = GameParticipation(UUID.randomUUID(), "Joe")
+    private val jan = GameParticipation(UUID.randomUUID(), "Jan")
     private val baseGame = Game(
         id = UUID.randomUUID(),
         startTime = LocalDateTime(2022, 4, 23, 15, 23),
@@ -17,16 +17,16 @@ class GameTest {
         rounds = emptyList(),
     )
 
-    private fun getCurrentPlayer(playerRounds: Map<GameParticipant, Int>) = baseGame.copy(
+    private fun getCurrentPlayer(playerRounds: Map<GameParticipation, Int>) = baseGame.copy(
         rounds = playerRounds
             .flatMap { (participant, numRounds) -> List(numRounds) { participant } }
-            .mapIndexed { index, gameParticipant ->
+            .mapIndexed { index, gameParticipation ->
                 Round(
                     id = UUID.randomUUID(),
                     number = index + 1,
                     score = 150,
                     gameId = baseGame.id,
-                    playerId = gameParticipant.playerId,
+                    playerId = gameParticipation.playerId,
                     contractId = UUID.randomUUID(),
                 )
             }

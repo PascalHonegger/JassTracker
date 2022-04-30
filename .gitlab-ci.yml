@@ -41,11 +41,10 @@ publish:
       fi
     - docker build --pull -t "$CI_REGISTRY_IMAGE${tag}" .
     - docker push "$CI_REGISTRY_IMAGE${tag}"
-  # Run this job in a branch where a Dockerfile exists
-  rules:
-    - if: $CI_COMMIT_BRANCH
-      exists:
-        - Dockerfile
+  # The OST GitLab is subject to the Dockerhub rate limit, so we only build an image after the merge
+  only:
+    variables:
+      - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 .deploy_template: &deploy_configuration
   image: alpine:3
