@@ -1,7 +1,7 @@
 {
     "latex-workshop.latex.outDir": "../out",
     "spellright.language": [
-        "en_GB"
+        "en_US"
     ],
     "spellright.documentTypes": [
         "markdown",

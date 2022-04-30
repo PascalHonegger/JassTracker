@@ -58,27 +58,27 @@
 
 \subsubsection*{Project Idea}
 
-JassTracker is a webapp which allows tracking and analysis of the popular swiss card game "\href{https://de.wikipedia.org/wiki/Jass}{Jass}".
+JassTracker is a web app which allows tracking and analysis of the popular Swiss card game "\href{https://de.wikipedia.org/wiki/Jass}{Jass}".
 There are many different forms of playing, but the one we're focusing on is called "Coiffeur".
 The two teams have two players each and need to keep track of what they've already played and which options are available to them.
 They also track who's turn it is, apply the correct multiplication to the score and sum it all up in the end.
-To work around this, a project team member is currently using a excel spresheet, but this solution provides limited functionality and has many drawbacks.
+To work around this, a project team member is currently using a excel spreadsheet, but this solution provides limited functionality and has many drawbacks.
 
 To make the scoring easier JassTracker allows players to easily track, analyze and sync games digitally.
 In a first step you will be able to create and arrange team members for a given game.
 Then you start playing the game physically and assign scored rounds to the correct member.
 During this phase you'll also be able to see live stats such as average score by player so far.
 After the game some highlights (e.g. the best player) are highlighted.
-You can also gain exhaustive insight into your playstyle by looking at personal or group statistics such as average score by player or historic averages.
-To enable this, other physical members are able to associate their game to their personal account to track personal statistics accross games.
+You can also gain exhaustive insight into your play style by looking at personal or group statistics such as average score by player or historic averages.
+To enable this, other physical members are able to associate their game to their personal account to track personal statistics across games.
 
 
 Some potential ideas to expand on: configurable Jass game (e.g. Coiffeur with 8 instead of 10 options), prediction of scores based on past performance, current game trajectory (win probability by team).
 
-\subsubsection*{Proposed Realisation}
+\subsubsection*{Proposed Realization}
 
 We plan on implementing a web app using \href{https://vuejs.org/}{Vue.js} as a frontend library. For styling we plan on using \href{https://getbootstrap.com/}{Bootstrap} for basic styles.
 The server will implemented in Kotlin using the \href{https://ktor.io/}{Ktor} framework.
-Presistent data is stored in a \href{https://www.postgresql.org/}{PostgreSQL} database and accessed using \href{https://www.jooq.org/}{jOOQ}.
+Persistent data is stored in a \href{https://www.postgresql.org/}{PostgreSQL} database and accessed using \href{https://www.jooq.org/}{jOOQ}.
 Development will be done locally in \href{https://www.jetbrains.com/idea/}{IntelliJ IDEA}, production deployments will be using Docker containers.
 CI / CD will be implemented using the OST GitLab.
