@@ -48,19 +48,19 @@ fun Application.configureGameEndpoints(
                     return@get
                 }
 
-                call.respond(HttpStatusCode.OK, game.currentPlayer.toWebGameParticipant())
+                call.respond(HttpStatusCode.OK, game.currentPlayer.toWebGameParticipation())
             }
             post {
                 val newGame = call.receive<WebCreateGame>()
-                fun CreateGameParticipant(game: WebCreateGameParticipant) =
-                    dev.honegger.jasstracker.domain.services.CreateGameParticipant(game.playerId, game.displayName)
+                fun CreateGameParticipation(game: WebCreateGameParticipation) =
+                    dev.honegger.jasstracker.domain.services.CreateGameParticipation(game.playerId, game.displayName)
                 val createdGame = gameService.createGame(
                     dummySession,
                     UUID.fromString(newGame.tableId),
-                    CreateGameParticipant(newGame.team1Player1),
-                    CreateGameParticipant(newGame.team1Player2),
-                    CreateGameParticipant(newGame.team2Player1),
-                    CreateGameParticipant(newGame.team2Player2),
+                    CreateGameParticipation(newGame.team1Player1),
+                    CreateGameParticipation(newGame.team1Player2),
+                    CreateGameParticipation(newGame.team2Player1),
+                    CreateGameParticipation(newGame.team2Player2),
                 )
                 call.respond(HttpStatusCode.Created, createdGame.toWebGame())
             }

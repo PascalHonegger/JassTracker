@@ -13,12 +13,12 @@ class TableTest {
         ownerId = UUID.randomUUID(),
     )
     private val dummyTeam1 = Team(
-        player1 = GameParticipant(UUID.randomUUID(), "Dummy 1"),
-        player2 = GameParticipant(UUID.randomUUID(), "Dummy 2"),
+        player1 = GameParticipation(UUID.randomUUID(), "Dummy 1"),
+        player2 = GameParticipation(UUID.randomUUID(), "Dummy 2"),
     )
     private val dummyTeam2 = Team(
-        player1 = GameParticipant(UUID.randomUUID(), "Dummy 3"),
-        player2 = GameParticipant(UUID.randomUUID(), "Dummy 4"),
+        player1 = GameParticipation(UUID.randomUUID(), "Dummy 3"),
+        player2 = GameParticipation(UUID.randomUUID(), "Dummy 4"),
     )
 
     private fun dummyGame(startMonth: Month, endMonth: Month? = null) = Game(

@@ -13,11 +13,11 @@ data class Game(
 )
 
 data class Team(
-    val player1: GameParticipant,
-    val player2: GameParticipant,
+    val player1: GameParticipation,
+    val player2: GameParticipation,
 )
 
-data class GameParticipant(
+data class GameParticipation(
     val playerId: UUID,
     val displayName: String,
 )
@@ -31,7 +31,7 @@ operator fun Team.contains(playerId: UUID): Boolean = player1.playerId == player
  * If all rounds have been played, team1 player1 is returned.
  */
 val Game.currentPlayer
-    get(): GameParticipant = when (val playedRounds = rounds.size) {
+    get(): GameParticipation = when (val playedRounds = rounds.size) {
         0, 20 -> team1.player1
         in 1..19 -> when {
             // Team 1 has played their 10 rounds, switch between the two remaining players from team 2

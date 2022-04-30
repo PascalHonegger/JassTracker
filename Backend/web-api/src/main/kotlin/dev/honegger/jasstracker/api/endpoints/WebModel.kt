@@ -37,24 +37,24 @@ data class WebGame(
     val rounds: List<WebRound>,
     val team1: WebTeam,
     val team2: WebTeam,
-    val currentPlayer: WebGameParticipant,
+    val currentPlayer: WebGameParticipation,
 )
 
 @Serializable
 data class WebTeam(
-    val player1: WebGameParticipant,
-    val player2: WebGameParticipant,
+    val player1: WebGameParticipation,
+    val player2: WebGameParticipation,
 )
 
 @Serializable
-data class WebGameParticipant(
+data class WebGameParticipation(
     @Serializable(with = UUIDSerializer::class)
     val playerId: UUID,
     val displayName: String,
 )
 
 @Serializable
-data class WebCreateGameParticipant(
+data class WebCreateGameParticipation(
     @Serializable(with = UUIDSerializer::class)
     val playerId: UUID?,
     val displayName: String,
@@ -63,10 +63,10 @@ data class WebCreateGameParticipant(
 @Serializable
 data class WebCreateGame(
     val tableId: String,
-    val team1Player1: WebCreateGameParticipant,
-    val team1Player2: WebCreateGameParticipant,
-    val team2Player1: WebCreateGameParticipant,
-    val team2Player2: WebCreateGameParticipant,
+    val team1Player1: WebCreateGameParticipation,
+    val team1Player2: WebCreateGameParticipation,
+    val team2Player1: WebCreateGameParticipation,
+    val team2Player2: WebCreateGameParticipation,
 )
 
 @Serializable
@@ -151,20 +151,20 @@ fun Game.toWebGame() = WebGame(
     rounds = rounds.map { it.toWebRound() },
     team1 = team1.toWebTeam(),
     team2 = team2.toWebTeam(),
-    currentPlayer = currentPlayer.toWebGameParticipant()
+    currentPlayer = currentPlayer.toWebGameParticipation()
 )
 
 fun WebTeam.toTeam() = Team(
-    player1 = player1.toGameParticipant(),
-    player2 = player2.toGameParticipant(),
+    player1 = player1.toGameParticipation(),
+    player2 = player2.toGameParticipation(),
 )
 fun Team.toWebTeam() = WebTeam(
-    player1 = player1.toWebGameParticipant(),
-    player2 = player2.toWebGameParticipant(),
+    player1 = player1.toWebGameParticipation(),
+    player2 = player2.toWebGameParticipation(),
 )
 
-fun WebGameParticipant.toGameParticipant() = GameParticipant(playerId, displayName)
-fun GameParticipant.toWebGameParticipant() = WebGameParticipant(playerId, displayName)
+fun WebGameParticipation.toGameParticipation() = GameParticipation(playerId, displayName)
+fun GameParticipation.toWebGameParticipation() = WebGameParticipation(playerId, displayName)
 
 fun Contract.toWebContract() = WebContract(
     id = id,

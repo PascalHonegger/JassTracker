@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { WebCreateGame, WebCreateGameParticipant } from "@/services/web-model";
+import {
+  WebCreateGame,
+  WebCreateGameParticipation,
+} from "@/services/web-model";
 
 export type PartialCreateGame = Omit<WebCreateGame, "tableId">;
 
@@ -12,7 +15,7 @@ const emit = defineEmits<{
 }>();
 
 function setAnonymousPlayer(key: keyof PartialCreateGame, value: string) {
-  const anonymousPlayer: WebCreateGameParticipant = {
+  const anonymousPlayer: WebCreateGameParticipation = {
     playerId: null,
     displayName: value,
   };

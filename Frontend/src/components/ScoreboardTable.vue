@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import RoundRow from "./RoundRow.vue";
-import { Game, GameParticipant } from "@/types/types";
+import { Game, GameParticipation } from "@/types/types";
 
 const props = defineProps<{ game: Game }>();
 
@@ -12,7 +12,7 @@ const total = {
   player4: 0,
 };
 
-function isActive(participant: GameParticipant): boolean {
+function isActive(participant: GameParticipation): boolean {
   return (
     props.game.endTime === undefined &&
     props.game.currentPlayer.playerId === participant.playerId

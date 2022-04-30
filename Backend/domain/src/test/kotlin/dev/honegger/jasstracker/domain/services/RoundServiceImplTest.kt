@@ -47,8 +47,8 @@ class RoundServiceImplTest {
                     id = dummyGame,
                     startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
                     rounds = emptyList(),
-                    team1 = Team(GameParticipant(UUID.randomUUID(), "p1"), GameParticipant(UUID.randomUUID(), "p2")),
-                    team2 = Team(GameParticipant(UUID.randomUUID(), "p3"), GameParticipant(UUID.randomUUID(), "p4")),
+                    team1 = Team(GameParticipation(UUID.randomUUID(), "p1"), GameParticipation(UUID.randomUUID(), "p2")),
+                    team2 = Team(GameParticipation(UUID.randomUUID(), "p3"), GameParticipation(UUID.randomUUID(), "p4")),
                 )
             )
         )
