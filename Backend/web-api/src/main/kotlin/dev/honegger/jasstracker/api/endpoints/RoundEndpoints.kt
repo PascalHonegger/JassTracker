@@ -44,6 +44,19 @@ fun Application.configureRoundEndpoints(
                 roundService.updateRound(dummySession, updatedRound)
                 call.respond(HttpStatusCode.OK)
             }
+            delete("/{id}") {
+                val id = call.parameters["id"]
+                if (id.isNullOrBlank()) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@delete
+                }
+                val success = roundService.deleteRoundById(dummySession, UUID.fromString(id))
+                if (!success) {
+                    call.respond(HttpStatusCode.NotFound)
+                    return@delete
+                }
+                call.respond(HttpStatusCode.OK)
+            }
         }
     }
 }

@@ -104,4 +104,45 @@ class RoundServiceImplTest {
         assertEquals(emptyList(), service.getRounds(dummySession, dummyGame))
         verify(exactly = 1) { roundRepository.getRoundsForGame(dummyGame) }
     }
+
+    @Test
+    fun `deleteRoundById removes a created round`() {
+        val dummyRound = Round(UUID.randomUUID(), 1, 157, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID())
+        every {
+            roundRepository.getRoundOrNull(dummyRound.id)
+        } returns dummyRound
+
+        every {
+            roundRepository.deleteRoundById(dummyRound.id)
+        } returns true
+
+        val deleted = service.deleteRoundById(dummySession, dummyRound.id)
+        assertTrue { deleted }
+        verify(exactly = 1) {
+            roundRepository.getRoundOrNull(dummyRound.id)
+            roundRepository.deleteRoundById(dummyRound.id)
+        }
+    }
+
+    @Test
+    fun `deleteRoundById removes a round, table can't be found afterwards anymore`() {
+        val roundId = UUID.randomUUID()
+        val dummyRound = Round(roundId, 1, 157, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID())
+
+        every {
+            roundRepository.getRoundOrNull(roundId)
+        } returns dummyRound
+
+        every {
+            roundRepository.deleteRoundById(roundId)
+        } returns false
+
+        val deleted = service.deleteRoundById(dummySession, roundId)
+        assertFalse { deleted }
+
+        verify(exactly = 1) {
+            roundRepository.deleteRoundById(roundId)
+            roundRepository.getRoundOrNull(roundId)
+        }
+    }
 }

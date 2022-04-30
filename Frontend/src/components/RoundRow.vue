@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Round, Row } from "@/types/types";
-import { WebCreateRound } from "@/services/web-model";
+import { WebCreateRound, WebRound } from "@/services/web-model";
 import { useRoundStore } from "@/store/round-store";
 import { useGameStore } from "@/store/game-store";
 import { storeToRefs } from "pinia";
@@ -26,7 +26,19 @@ async function handleInput(event: Event, round: Round) {
   }
   const actualScore = inputScore < 0 ? 157 - Math.abs(inputScore) : inputScore;
   if (round.id) {
-    // update, TBD
+    if (actualScore == null || isNaN(actualScore)) {
+      await roundStore.removeRound(round.id, round.playerId, round.contractId);
+      return;
+    }
+    const updatedRound: WebRound = {
+      id: round.id,
+      number: round.number,
+      score: actualScore,
+      gameId: currentGame.value.id,
+      playerId: round.playerId,
+      contractId: round.contractId,
+    };
+    await roundStore.updateRound(updatedRound);
   } else {
     const newRound: WebCreateRound = {
       number: currentGame.value.rounds.length + 1,

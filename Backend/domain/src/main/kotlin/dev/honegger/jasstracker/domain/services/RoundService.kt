@@ -17,9 +17,9 @@ interface RoundService {
         playerId: UUID,
         contractId: UUID
     ): Round
-
     fun getRounds(session: UserSession, gameId: UUID): List<Round>
     fun updateRound(session: UserSession, updatedRound: Round)
+    fun deleteRoundById(session: UserSession, id: UUID): Boolean
 }
 
 private val log = KotlinLogging.logger { }
@@ -80,5 +80,13 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
         // TODO verify round is part of game / table which is owned by current user
 
         roundRepository.updateRound(existingRound)
+    }
+
+    override fun deleteRoundById(session: UserSession, id: UUID): Boolean {
+        val existingRound =
+            roundRepository.getRoundOrNull(id)
+        checkNotNull(existingRound)
+        // TODO verify round is part of game / table which is owned by current user
+        return roundRepository.deleteRoundById(id)
     }
 }

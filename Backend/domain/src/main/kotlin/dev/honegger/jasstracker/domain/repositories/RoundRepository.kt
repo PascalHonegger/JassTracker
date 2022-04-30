@@ -8,4 +8,5 @@ interface RoundRepository {
     fun getRoundsForGame(gameId: UUID): List<Round>
     fun updateRound(updatedRound: Round)
     fun saveRound(newRound: Round)
+    fun deleteRoundById(id: UUID): Boolean
 }
