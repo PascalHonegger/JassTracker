@@ -5,8 +5,8 @@ export async function getRound(roundId: string) {
   return api.get<WebRound>(`rounds/${roundId}`);
 }
 
-export async function updateGame(id: string, round: WebRound) {
-  return api.put(`rounds/${id}`, round);
+export async function updateRound(id: string, round: WebRound) {
+  return api.put<WebRound>(`rounds/${id}`, round);
 }
 
 export async function createRound(round: WebCreateRound) {

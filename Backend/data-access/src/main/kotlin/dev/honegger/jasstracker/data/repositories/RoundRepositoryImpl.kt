@@ -47,4 +47,8 @@ class RoundRepositoryImpl : RoundRepository {
         }
         newRecord.insert()
     }
+
+    override fun deleteRoundById(id: UUID): Boolean = withContext {
+        return@withContext deleteFrom(ROUND).where(ROUND.ID.eq(id)).execute() == 1
+    }
 }
