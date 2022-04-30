@@ -4,6 +4,7 @@ import kotlinx.datetime.LocalDateTime as KotlinLocalDateTime
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime as JavaLocalDateTime
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class LocalDateTimeConverterTest {
     @Test
@@ -32,11 +33,11 @@ class LocalDateTimeConverterTest {
 
     @Test
     fun `from null is null`() {
-        assertEquals(null, LocalDateTimeConverter().from(null))
+        assertNull(LocalDateTimeConverter().from(null))
     }
 
     @Test
     fun `to null is null`() {
-        assertEquals(null, LocalDateTimeConverter().to(null))
+        assertNull(LocalDateTimeConverter().to(null))
     }
 }
