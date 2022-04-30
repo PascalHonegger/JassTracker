@@ -7,9 +7,9 @@ module.exports = {
     assert: {
       preset: "lighthouse:no-pwa",
       assertions: {
-        'color-contrast': 'off',
-        'csp-xss': 'off',
-        'render-blocking-resources': 'off',
+        "color-contrast": "off",
+        "csp-xss": "off",
+        "render-blocking-resources": "off",
       },
     },
     upload: {
