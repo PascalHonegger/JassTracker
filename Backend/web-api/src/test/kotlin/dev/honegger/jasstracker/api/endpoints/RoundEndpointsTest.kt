@@ -2,6 +2,7 @@ package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.domain.Round
 import dev.honegger.jasstracker.domain.services.RoundService
+import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -91,7 +92,7 @@ class RoundEndpointsTest {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals("[]", bodyAsText())
         }
-        verify(exactly = 1) { service.getRounds(any(), UUID.fromString("84c532b1-dd87-4ca0-bc85-81c9c5d51c21")) }
+        verify(exactly = 1) { service.getRounds(any(), "84c532b1-dd87-4ca0-bc85-81c9c5d51c21".toUUID()) }
     }
 
     @Test
@@ -104,7 +105,7 @@ class RoundEndpointsTest {
         client.delete("/api/rounds/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.NotFound, status)
         }
-        verify(exactly = 1) { service.deleteRoundById(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
+        verify(exactly = 1) { service.deleteRoundById(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
     }
 
     @Test
@@ -117,6 +118,6 @@ class RoundEndpointsTest {
         client.delete("/api/rounds/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.OK, status)
         }
-        verify(exactly = 1) { service.deleteRoundById(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
+        verify(exactly = 1) { service.deleteRoundById(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
     }
 }

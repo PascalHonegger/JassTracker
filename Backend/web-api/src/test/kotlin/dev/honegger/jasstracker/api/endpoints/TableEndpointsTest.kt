@@ -5,6 +5,7 @@ import dev.honegger.jasstracker.domain.GameParticipation
 import dev.honegger.jasstracker.domain.Table
 import dev.honegger.jasstracker.domain.Team
 import dev.honegger.jasstracker.domain.services.TableService
+import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -152,7 +153,7 @@ class TableEndpointsTest {
         client.get("/api/tables/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.NotFound, status)
         }
-        verify(exactly = 1) { service.getTableOrNull(any(), UUID.fromString("3de81ab0-792e-43b0-838b-acad78f29ba6")) }
+        verify(exactly = 1) { service.getTableOrNull(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
     }
 
     @Test
@@ -165,7 +166,7 @@ class TableEndpointsTest {
         client.delete("/api/tables/aafd71ae-a6c1-4722-8ee1-2c9ff4f505ec").apply {
             assertEquals(HttpStatusCode.NotFound, status)
         }
-        verify(exactly = 1) { service.deleteTableById(any(), UUID.fromString("aafd71ae-a6c1-4722-8ee1-2c9ff4f505ec")) }
+        verify(exactly = 1) { service.deleteTableById(any(), "aafd71ae-a6c1-4722-8ee1-2c9ff4f505ec".toUUID()) }
     }
 
     @Test
@@ -178,7 +179,7 @@ class TableEndpointsTest {
         client.delete("/api/tables/7351c4e4-c798-467a-a890-b28e59b9e5a5").apply {
             assertEquals(HttpStatusCode.OK, status)
         }
-        verify(exactly = 1) { service.deleteTableById(any(), UUID.fromString("7351c4e4-c798-467a-a890-b28e59b9e5a5")) }
+        verify(exactly = 1) { service.deleteTableById(any(), "7351c4e4-c798-467a-a890-b28e59b9e5a5".toUUID()) }
     }
 
     @Test

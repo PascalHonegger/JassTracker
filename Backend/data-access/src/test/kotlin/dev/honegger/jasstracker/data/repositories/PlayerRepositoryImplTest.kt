@@ -1,25 +1,67 @@
 package dev.honegger.jasstracker.data.repositories
 
+import dev.honegger.jasstracker.domain.GuestPlayer
 import dev.honegger.jasstracker.domain.RegisteredPlayer
-import org.junit.jupiter.api.Disabled
+import dev.honegger.jasstracker.domain.util.toUUID
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
-class PlayerRepositoryImplTest {
+class PlayerRepositoryImplTest : RepositoryTest() {
+    private val repo = PlayerRepositoryImpl()
+
     @Test
-    @Disabled
-    fun `savePlayer saved new player to database`() {
-        val repository = PlayerRepositoryImpl()
+    fun `getPlayerOrNull returns correct RegisteredPlayer`() {
+        val id = "27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID()
+        val expected = RegisteredPlayer(
+            id,
+            "pascal",
+            "Pascal",
+            "honegger"
+        )
+        assertEquals(expected, repo.getPlayerOrNull(id))
+    }
+
+    @Test
+    fun `getPlayerOrNull returns correct GuestPlayer`() {
+        val id = "665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3".toUUID()
+        assertEquals(GuestPlayer(id), repo.getPlayerOrNull(id))
+    }
+
+    @Test
+    fun `updatePlayer updates player`() {
+        val id = UUID.randomUUID()
         val newPlayer = RegisteredPlayer(
-            id = UUID.randomUUID(),
-            username = "dummy",
-            displayName = "dummy",
+            id = id,
+            username = "update_test",
+            displayName = "Old",
             password = "pw",
         )
-        assertNull(repository.getPlayerOrNull(newPlayer.id))
-        repository.savePlayer(newPlayer)
-        assertEquals(newPlayer, repository.getPlayerOrNull(newPlayer.id))
+        repo.savePlayer(newPlayer)
+        val updatedPlayer = newPlayer.copy(displayName = "New")
+        repo.updatePlayer(updatedPlayer)
+        assertEquals(updatedPlayer, repo.getPlayerOrNull(id))
+    }
+
+    @Test
+    fun `getPlayersPerTable returns correct players`() {
+        val tableId = "de940c47-9881-4e95-bc3d-6014ad1902e1".toUUID()
+        val expected = setOf(
+            GuestPlayer("665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3".toUUID()),
+            RegisteredPlayer(
+                "27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(),
+                "pascal",
+                "Pascal",
+                "honegger"
+            ),
+            GuestPlayer("7dad81d3-62db-4553-9d48-f38f404f1596".toUUID()),
+            RegisteredPlayer(
+                "3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(),
+                "marcel",
+                "Marcel",
+                "joss"
+            )
+        )
+        assertEquals(expected, repo.getPlayersPerTable(tableId).toSet())
     }
 }

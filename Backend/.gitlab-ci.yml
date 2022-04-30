@@ -45,3 +45,11 @@ backend_test:
     paths:
       - build/reports/kover/html/
     expose_as: 'Kover Code Coverage'
+  # Testcontainers setup
+  services:
+    - name: docker:dind
+      command: [ "--tls=false" ]
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2

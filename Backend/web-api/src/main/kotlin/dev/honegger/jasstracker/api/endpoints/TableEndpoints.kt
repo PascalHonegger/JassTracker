@@ -1,12 +1,12 @@
 package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.domain.services.TableService
+import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import java.util.*
 
 fun Application.configureTableEndpoints(
     tableService: TableService,
@@ -24,7 +24,7 @@ fun Application.configureTableEndpoints(
                     return@get
                 }
                 val table =
-                    tableService.getTableOrNull(dummySession, UUID.fromString(id))
+                    tableService.getTableOrNull(dummySession, id.toUUID())
 
                 if (table == null) {
                     call.respond(HttpStatusCode.NotFound)
@@ -57,7 +57,7 @@ fun Application.configureTableEndpoints(
                     call.respond(HttpStatusCode.BadRequest)
                     return@delete
                 }
-                val success = tableService.deleteTableById(dummySession, UUID.fromString(id))
+                val success = tableService.deleteTableById(dummySession, id.toUUID())
                 if (!success) {
                     call.respond(HttpStatusCode.NotFound)
                     return@delete

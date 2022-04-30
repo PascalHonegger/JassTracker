@@ -52,8 +52,7 @@ async function handleInput(event: Event, round: Round) {
 }
 
 function validateNumber(event: KeyboardEvent) {
-  const keyCode = event.keyCode;
-  if (keyCode !== 45 && (keyCode < 48 || keyCode > 57)) {
+  if (!/^[-\d]$/.test(event.key)) {
     event.preventDefault();
   }
 }

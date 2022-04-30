@@ -2,6 +2,7 @@ package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.domain.*
 import dev.honegger.jasstracker.api.serializer.UUIDSerializer
+import dev.honegger.jasstracker.domain.util.toUUID
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -12,7 +13,7 @@ import java.util.*
 // Keep in sync with web-model.ts !!
 
 // Would be loaded once authentication is implemented
-val dummySession = UserSession(userId = UUID.fromString("27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0"), "dummy")
+val dummySession = UserSession(userId = "27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "dummy")
 
 @Serializable
 data class WebTable(

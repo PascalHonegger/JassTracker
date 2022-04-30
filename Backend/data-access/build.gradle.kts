@@ -16,6 +16,9 @@ dependencies {
     runtimeOnly(libs.postgresql)
     jooqGenerator(libs.postgresql)
     testImplementation(testLibs.kotlin.test)
+    testImplementation(testLibs.testcontainers)
+    testImplementation(testLibs.testcontainers.junit)
+    testImplementation(testLibs.testcontainers.postgresql)
 }
 
 tasks.withType<Test> {
