@@ -32,7 +32,7 @@
 
 \subsection{Release}
 \begin{itemize}
-    \item Release is documented and all contining tasks are associated 
+    \item Release is documented and all continuing tasks are associated 
     \item Code complete 
     \item Environments are prepared for release 
     \item QA is done \& all issues resolved 
@@ -53,7 +53,7 @@
     \item Use-Case (e.g. view current score)
     \item Estimate 
     \item Epic link 
-    \item Acceptance criterea list specified 
+    \item Acceptance criteria list specified 
     \item Should be doable within a week, otherwise try to split it 
 \end{itemize}
 
@@ -63,6 +63,7 @@
     \item Business Logic will be Unit Tested
     \item Runs on every Push to GitLab, Merging is blocked until failing tests are fixed
     \item Automated
+    \item The data access layer is tested by using \hyperlink{https://www.testcontainers.org/}{Testcontainers} allowing us to use a real PostgreSQL DB in our tests
 \end{itemize}
 
 \subsection{Usability Tests}
@@ -97,8 +98,8 @@ We have chosen to integrate the following code quality tools to ensure proper ac
 \subsection{Qodana}
 To ensure the integrity of our code we have integrated Qodana into our CI pipeline. We decided to use Qodana instead of Sonar to avoid the problem of self-hosting. 
 Other reasons we decided Qodana was a reasonable choice are the easy integration into our CI pipeline and IntelliJ and also qodana works well with all our other used technologies. 
-For our Backend we have the Qodana JVM linter, which statically analizes our Backend (Kotlin \& Java) code. Concretely, code smells, potential bugs, dead code and general improvements in the overall code structure are reported.
-For our Frontend (Vue \& TypeScript), we use Qodana JS, which is based on Webstorms linters.
+For our Backend we have the Qodana JVM linter, which statically analyzes our Backend (Kotlin \& Java) code. Concretely, code smells, potential bugs, dead code and general improvements in the overall code structure are reported.
+For our Frontend (Vue \& TypeScript), we use Qodana JS, which is based on Webstorm's linters.
 
 \subsection{Lighthouse}
 We have also integrated Lighthouse CI to get a performance overview. We decided on Lighthouse CI because it's established in the industry and provides an in depth analysis.
@@ -109,4 +110,3 @@ Failing sections of the Lighthouse report indicate where improvements should be 
 To be able to test our Test-Coverage of 80\% we integrated Kover. Because Kover is a Gradle plugin for native Kotlin code coverage, it encouraged us to use it based on it's easy setup.
 It's important to note that Kover is still in it's incubator phase, however multiple reviews have shown promising results, which is why we decided it was fitting for our Kotlin setup. 
 We have integrated a job in our CI pipeline that fails if the code coverage doesn't reach our specified minimum and provides a Kover Code Coverage Report, showing where the coverage needs to be improved. 
-
