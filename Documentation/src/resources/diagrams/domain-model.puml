@@ -4,7 +4,7 @@ hide class circle
 hide empty methods
 hide empty fields
 
-class User {
+abstract class Player {
 }
 
 class Table {
@@ -29,11 +29,10 @@ note right
     the game type.
 end note
 
-class Player {
+class RegisteredPlayer {
     username
     password
     displayName
-    profilePicture
 }
 
 class PlayerStatistics {
@@ -78,11 +77,6 @@ class GameHighlight {
 class GameHighlightType {
 }
 
-enum GameState {
-    RUNNING
-    COMPLETED
-}
-
 enum ContractType {
     ACORNS
     ROSES
@@ -95,9 +89,9 @@ enum ContractType {
     GUSCHTI
 }
 
-User <|-- Player
-User <|-- Guest
-User "1" -- "*" GameParticipation
+Player <|-- RegisteredPlayer
+Player <|-- GuestPlayer
+Player "1" -- "*" GameParticipation
 Team "1" -- "2" GameParticipation
 note on link
     Team mates must be
@@ -105,12 +99,11 @@ note on link
     on table
 end note
 
-User "1" -- "*" Table : owns >
+Player "1" -- "*" Table : owns >
 Table "1" -- "*" Game : is played on <
 
 Game "1" --  "2" Team  : compete in <
 Game "1" *-- "0..20" Round
-GameState "1" -- "*" Game  : state
 Contract "1" --u "*" Round  : contract
 note on link
     Each contract can only
@@ -128,6 +121,6 @@ end note
 GameHighlightType "1" --l "*" GameHighlight  : type
 
 Team "1" --u  "1" GameStatistics
-Player "1" -- "1"PlayerStatistics
+Player "1" -r- "1"PlayerStatistics
 
 @enduml
