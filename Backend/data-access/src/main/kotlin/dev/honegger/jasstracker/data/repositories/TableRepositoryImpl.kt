@@ -53,8 +53,8 @@ class TableRepositoryImpl(private val gameRepository: GameRepository) : TableRep
         val tableRecord = selectFrom(TABLE).where(TABLE.ID.eq(updatedTable.id)).fetchOne()
         checkNotNull(tableRecord)
 
-        tableRecord.name = tableRecord.name
-        tableRecord.ownerId = tableRecord.ownerId
+        tableRecord.name = updatedTable.name
+        tableRecord.ownerId = updatedTable.ownerId
         tableRecord.update()
     }
 
