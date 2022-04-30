@@ -11,50 +11,52 @@
 
 \subsection{Feature (Defect / Story)}
 \begin{itemize}
-    \item Acceptance criteria / issue of user story is met 
-    \item Code follows best practices and guidelines 
-    \item No TODOs without a issue number are allowed 
-    \item Project builds without errors or warnings 
-    \item Tests are written and all tests are passing 
-    \item Peer Code Review performed 
-    \item Project deployed on the test environment identical to production platform 
-    \item Documentation updated 
-    \item Associated with epic and release 
-    \item Hours worked on are logged correctly 
+    \item Acceptance criteria / issue of user story is met
+    \item Code follows best practices and guidelines
+    \item No TODOs without a issue number are allowed
+    \item Project builds without errors or warnings
+    \item Tests are written and all tests are passing
+    \item Peer Code Review performed
+    \item Project deployed on the test environment identical to production platform
+    \item Documentation updated
+    \item Associated with epic and release
+    \item Hours worked on are logged correctly
 \end{itemize}
 
 \subsection{Sprint}
 \begin{itemize}
-    \item DoD of each item included in the sprint is met 
-    \item Product backlog updated 
-    \item Sprint marked as ready for the production deployment by the Product Owner 
+    \item DoD of each item included in the sprint is met
+    \item Product backlog updated
+    \item Sprint has a defined goal
+    \item Sprint marked as ready for the production deployment by the Product Owner
 \end{itemize}
 
 \subsection{Release}
 \begin{itemize}
-    \item Release is documented and all continuing tasks are associated 
-    \item Code complete 
-    \item Environments are prepared for release 
-    \item QA is done \& all issues resolved 
-    \item Check that no unintegrated work in progress has been left in any development or staging environment. 
+    \item Release is documented and all continuing tasks are associated
+    \item Code complete
+    \item Environments are prepared for release
+    \item QA is done \& all issues resolved
+    \item Manual tests pass
+    \item Check that no unfinished work has been left in any development or staging environment.
 \end{itemize}
 
 \section{Definition of Ready (DoR)}
 
-\subsection{Defect} 
+\subsection{Defect}
 \begin{itemize}
-    \item Steps to reproduce 
-    \item Severity 
-    \item Screenshots 
+    \item Steps to reproduce
+    \item Severity
+    \item Screenshots
 \end{itemize}
 
 \subsection{Story}
 \begin{itemize}
     \item Use-Case (e.g.\ view current score)
-    \item Estimate 
-    \item Epic link 
-    \item Acceptance criteria list specified 
-    \item Should be doable within a week, otherwise try to split it 
+    \item Estimate
+    \item Epic link
+    \item Acceptance criteria list specified
+    \item Should be doable within a week, otherwise try to split it
 \end{itemize}
 
 \section{Test Concept}
@@ -63,7 +65,15 @@
     \item Business Logic will be Unit Tested
     \item Runs on every Push to GitLab, Merging is blocked until failing tests are fixed
     \item Automated
-    \item The data access layer is tested by using \hyperlink{https://www.testcontainers.org/}{Testcontainers} allowing us to use a real PostgreSQL DB in our tests
+\end{itemize}
+
+\subsection{Integration Tests}
+\begin{itemize}
+    \item Framework / technology dependent code will be Integration Tested
+    \item Runs on every Push to GitLab, Merging is blocked until failing tests are fixed
+    \item The web api layer is tested by using \hyperlink{https://ktor.io/docs/testing.html}{Ktor testing}, allowing us to verify our REST endpoints
+    \item The data access layer is tested by using \hyperlink{https://www.testcontainers.org/}{Testcontainers}, allowing us to use a real PostgreSQL DB in our tests
+    \item Automated
 \end{itemize}
 
 \subsection{Usability Tests}
@@ -100,19 +110,19 @@ We have chosen to integrate the following code quality tools to ensure proper ac
 \subsection{Qodana}
 To ensure the integrity of our code we have integrated Qodana into our CI pipeline.
 We decided to use Qodana instead of Sonar to avoid the problem of self-hosting.
-Other reasons we decided Qodana was a reasonable choice are the easy integration into our CI pipeline and IntelliJ and also qodana works well with all our other used technologies. 
+Other reasons we decided Qodana was a reasonable choice are the easy integration into our CI pipeline and IntelliJ and also qodana works well with all our other used technologies.
 For our Backend we have the Qodana JVM linter, which statically analyzes our Backend (Kotlin \& Java) code.
 Concretely, code smells, potential bugs, dead code and general improvements in the overall code structure are reported.
 For our Frontend (Vue \& TypeScript), we use Qodana JS, which is based on Webstorm's linters.
 
 \subsection{Lighthouse}
-We have also integrated Lighthouse CI to get a performance overview.
+We have also integrated \href{https://github.com/GoogleChrome/lighthouse-ci}{Lighthouse CI} to get a performance overview.
 We decided on Lighthouse CI because it's established in the industry and provides an in depth analysis.
 A single Lighthouse report provides a snapshot of a web page's performance at the time that it is run.
-Failing sections of the Lighthouse report indicate where improvements should be made. 
+Failing sections of the Lighthouse report indicate where improvements should be made.
 
 \subsection{Kover}
-To be able to test our Test-Coverage of 80\% we integrated Kover.
+To be able to test our Test-Coverage of 80\% we integrated \href{https://github.com/Kotlin/kotlinx-kover}{Kover}.
 Because Kover is a Gradle plugin for native Kotlin code coverage, it encouraged us to use it based on it's easy setup.
-It's important to note that Kover is still in it's incubator phase, however multiple reviews have shown promising results, which is why we decided it was fitting for our Kotlin setup. 
-We have integrated a job in our CI pipeline that fails if the code coverage doesn't reach our specified minimum and provides a Kover Code Coverage Report, showing where the coverage needs to be improved. 
+It's important to note that Kover is still in it's incubator phase, however multiple reviews have shown promising results, which is why we decided it was fitting for our Kotlin setup.
+We have integrated a job in our CI pipeline that fails if the code coverage doesn't reach our specified minimum and provides a Kover Code Coverage Report, showing where the coverage needs to be improved.
