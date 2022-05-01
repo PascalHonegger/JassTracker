@@ -135,6 +135,9 @@ export const useRoundStore = defineStore("round", {
       this.removeRoundFromCurrentGame(roundId, playerId, contractId);
       try {
         await deleteRoundById(roundId);
+        currentGame.value.currentPlayer = await getCurrentPlayerOfGame(
+          currentGame.value.id
+        );
       } catch (e) {
         return false;
       }
