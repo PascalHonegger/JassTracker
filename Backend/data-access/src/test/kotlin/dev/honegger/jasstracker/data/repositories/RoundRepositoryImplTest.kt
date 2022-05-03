@@ -7,8 +7,7 @@ import dev.honegger.jasstracker.domain.Team
 import dev.honegger.jasstracker.domain.util.toUUID
 import kotlinx.datetime.LocalDateTime
 import java.util.UUID
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.*
 
 class RoundRepositoryImplTest : RepositoryTest() {
     private val repo = RoundRepositoryImpl()
@@ -89,6 +88,34 @@ class RoundRepositoryImplTest : RepositoryTest() {
         assertEquals(listOf(updatedRound), repo.getRoundsForGame(game.id))
     }
 
+    @Test
+    fun `deleteRound updates higher numbers`() {
+        val game = createEmptyGame()
+        val id = UUID.randomUUID()
+        val round = Round(
+            id,
+            1,
+            120,
+            game.id,
+            game.team1.player1.playerId,
+            "58bae0f8-8c59-4a40-aa2d-9c6a489366b3".toUUID()
+        )
+        val round2 = Round(
+            UUID.randomUUID(),
+            1,
+            120,
+            game.id,
+            game.team1.player2.playerId,
+            "58bae0f8-8c59-4a40-aa2d-9c6a489366b3".toUUID()
+        )
+        repo.saveRound(round)
+        repo.saveRound(round2)
+        repo.deleteRoundById(round.id)
+        val loadedRound = repo.getRoundOrNull(round2.id)
+        assertNotNull(loadedRound)
+        assertEquals(1, loadedRound.number)
+    }
+
     private fun createEmptyGame(): Game {
         val game = Game(
             id = UUID.randomUUID(),
@@ -106,5 +133,22 @@ class RoundRepositoryImplTest : RepositoryTest() {
         )
         GameRepositoryImpl().saveGame(game, "92968e55-6df0-4f21-a7cc-a243025e5f87".toUUID())
         return game
+    }
+
+    @Test
+    fun `deleteRound removes round`() {
+        val game = createEmptyGame()
+        val id = UUID.randomUUID()
+        val round = Round(
+            id,
+            1,
+            120,
+            game.id,
+            game.team1.player1.playerId,
+            "58bae0f8-8c59-4a40-aa2d-9c6a489366b3".toUUID()
+        )
+        repo.saveRound(round)
+        repo.deleteRoundById(round.id)
+        assertNull(repo.getRoundOrNull(round.id))
     }
 }
