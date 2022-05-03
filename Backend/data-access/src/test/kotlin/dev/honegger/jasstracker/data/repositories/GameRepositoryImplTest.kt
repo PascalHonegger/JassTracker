@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDateTime
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
 
 class GameRepositoryImplTest : RepositoryTest() {
@@ -259,5 +260,11 @@ class GameRepositoryImplTest : RepositoryTest() {
         repo.saveGame(game, "de940c47-9881-4e95-bc3d-6014ad1902e1".toUUID())
         repo.deleteGameById(id)
         assertNull(repo.getGameOrNull(id))
+    }
+
+    @Test
+    fun `deleteGame returns false if no round is found for id`() {
+        val result = repo.deleteGameById(UUID.randomUUID())
+        assertFalse { result }
     }
 }
