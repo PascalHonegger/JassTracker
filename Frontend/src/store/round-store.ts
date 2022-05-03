@@ -127,7 +127,12 @@ export const useRoundStore = defineStore("round", {
           return -1;
       }
     },
-    async removeRound(roundId: string, playerId: string, contractId: string) {
+    async removeRound(
+      roundId: string,
+      playerId: string,
+      contractId: string,
+      roundNumber: number
+    ) {
       if (currentGame.value === undefined) {
         alert("currentGame should not be undefined");
         return;
@@ -135,6 +140,7 @@ export const useRoundStore = defineStore("round", {
       this.removeRoundFromCurrentGame(roundId, playerId, contractId);
       try {
         await deleteRoundById(roundId);
+        this.updateRoundNumbers(roundNumber);
         currentGame.value.currentPlayer = await getCurrentPlayerOfGame(
           currentGame.value.id
         );
@@ -142,6 +148,24 @@ export const useRoundStore = defineStore("round", {
         return false;
       }
       return true;
+    },
+    updateRoundNumbers(roundNumber: number) {
+      if (currentGame.value === undefined) {
+        alert("currentGame should not be undefined");
+        return;
+      }
+      currentGame.value.rounds.forEach((round) => {
+        if (round.number > roundNumber) {
+          round.number -= 1;
+        }
+      });
+      currentGame.value.rows.forEach((row) => {
+        row.rounds.forEach((rowRound) => {
+          if (rowRound.number > roundNumber) {
+            rowRound.number -= 1;
+          }
+        });
+      });
     },
   },
 });
