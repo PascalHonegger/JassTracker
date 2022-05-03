@@ -30,6 +30,8 @@ dependencyResolutionManagement {
             library("ktor-serialization-kotlinx-json", "io.ktor", "ktor-serialization-kotlinx-json-jvm").version(ktor)
             library("ktor-server-netty", "io.ktor", "ktor-server-netty-jvm").version(ktor)
             library("ktor-client-content-negotiation", "io.ktor", "ktor-client-content-negotiation").version(ktor)
+            library("ktor-server-auth", "io.ktor", "ktor-server-auth").version(ktor)
+            library("ktor-server-auth-jwt", "io.ktor", "ktor-server-auth-jwt").version(ktor)
             library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime-jvm").version(kotlinxDatetime)
             library("logback", "ch.qos.logback", "logback-classic").version(logback)
             library("kotlin-logging", "io.github.microutils", "kotlin-logging-jvm").version(kotlinLogging)
