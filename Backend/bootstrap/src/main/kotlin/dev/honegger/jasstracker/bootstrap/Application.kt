@@ -7,6 +7,8 @@ import dev.honegger.jasstracker.data.repositories.*
 import dev.honegger.jasstracker.domain.services.*
 import dev.honegger.jasstracker.api.endpoints.*
 import io.ktor.server.application.*
+import io.ktor.server.routing.*
+import io.ktor.server.auth.*
 
 fun main(args: Array<String>): Unit =
     io.ktor.server.netty.EngineMain.main(args)
@@ -30,9 +32,16 @@ fun Application.module() {
     val contractService = ContractServiceImpl(contractRepository)
     val playerService = PlayerServiceImpl(playerRepository)
 
+    routing {
+        authenticate {
+
+        }
+    }
+
     configureGameEndpoints(gameService)
     configureTableEndpoints(tableService)
     configureContractEndpoints(contractService)
     configurePlayerEndpoints(playerService)
     configureRoundEndpoints(roundService)
+
 }
