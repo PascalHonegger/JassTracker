@@ -12,7 +12,7 @@
 # runtime for each build is more reliable since the runtime is completely
 # isolated from any previous builds.
 .backend_template: &backend_configuration
-  image: openjdk:17
+  image: openjdk:18
   variables:
     GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   before_script:
