@@ -27,7 +27,12 @@ async function handleInput(event: Event, round: Round) {
   const actualScore = inputScore < 0 ? 157 - Math.abs(inputScore) : inputScore;
   if (round.id) {
     if (actualScore == null || isNaN(actualScore)) {
-      await roundStore.removeRound(round.id, round.playerId, round.contractId);
+      await roundStore.removeRound(
+        round.id,
+        round.playerId,
+        round.contractId,
+        round.number
+      );
       return;
     }
     const updatedRound: WebRound = {

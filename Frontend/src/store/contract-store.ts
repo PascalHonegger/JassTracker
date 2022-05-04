@@ -17,10 +17,10 @@ export const useContractStore = defineStore("contract", {
         state.contracts.map((contract) => {
           return {
             contract,
-            rounds: players.map(({ playerId }, index) => ({
+            rounds: players.map(({ playerId }) => ({
               id: "",
               type: RoundType.Open,
-              number: index,
+              number: 0,
               score: null,
               playerId,
               contractId: contract.id,

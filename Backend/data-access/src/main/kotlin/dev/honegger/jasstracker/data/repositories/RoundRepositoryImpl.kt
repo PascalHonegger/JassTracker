@@ -49,6 +49,8 @@ class RoundRepositoryImpl : RoundRepository {
     }
 
     override fun deleteRoundById(id: UUID): Boolean = withContext {
+        val roundNumber = selectFrom(ROUND).where(ROUND.ID.eq(id)).fetchOne(ROUND.NUMBER) ?: return@withContext false
+        update(ROUND).set(ROUND.NUMBER, ROUND.NUMBER.minus(1)).where(ROUND.NUMBER.gt(roundNumber)).execute()
         return@withContext deleteFrom(ROUND).where(ROUND.ID.eq(id)).execute() == 1
     }
 }
