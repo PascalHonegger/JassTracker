@@ -17,8 +17,8 @@ class ContractRepositoryImplTest : RepositoryTest() {
     }
 
     @Test
-    fun `getContracts returns all contracts`() {
-        val expected = setOf(
+    fun `getContracts returns all contracts in the right order`() {
+        val expected = listOf(
             Contract("58bae0f8-8c59-4a40-aa2d-9c6a489366b3".toUUID(), "Eichle", 1, ContractType.Acorns),
             Contract("d895b400-3d89-48db-a7ed-5e593f54b7f6".toUUID(), "Rose", 2, ContractType.Roses),
             Contract("41c7bd00-3da4-4926-bcb6-08e12aafbe6d".toUUID(), "Schilte", 3, ContractType.Shields),
@@ -30,6 +30,6 @@ class ContractRepositoryImplTest : RepositoryTest() {
             Contract("28d6e9ac-fc8e-4dad-8af8-2ae126b8d691".toUUID(), "Slalom", 9, ContractType.Slalom),
             Contract("345bde8f-a316-4952-b021-7cbe7ad62306".toUUID(), "Guschti", 10, ContractType.Guschti),
         )
-        assertEquals(expected, repo.getContracts().toSet())
+        assertEquals(expected, repo.getContracts())
     }
 }
