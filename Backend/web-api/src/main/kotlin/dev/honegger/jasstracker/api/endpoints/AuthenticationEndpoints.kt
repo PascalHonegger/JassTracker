@@ -3,52 +3,29 @@ package dev.honegger.jasstracker.api.endpoints
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import dev.honegger.jasstracker.domain.services.AuthenticationService
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 
-fun Application.configureAuthenticationEndpoints(
+fun Route.configureAuthenticationEndpoints(
     authenticationService: AuthenticationService,
 ) {
-    install(Authentication) {
-        jwt("auth-jwt") {
-            realm = "TODO"
-            verifier(JWT
-                .require(Algorithm.HMAC256("/TODO"))
-                .withAudience("TODO")
-                .withIssuer("TODO")
-                .build())
-            validate { credential ->
-                if (credential.payload.getClaim("username").asString() != "") {
-                    JWTPrincipal(credential.payload)
-                } else {
-                    null
-                }
-            }
-            challenge { defaultScheme, realm ->
-                call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")
-            }
+    post {
+        val token = JWT.create()
+            .withAudience()
+            .withClaim("username", "TODO")
+            //.withExpiresAt()
+            .sign(Algorithm.HMAC256("TODO"))
+        call.respond(hashMapOf("token" to token))
+    }
+
+    authenticate("auth-jwt") {
+        get("/overview") {
+            val principal = call.principal<JWTPrincipal>()
+
         }
     }
 
-    routing {
-            post {
-                val token = JWT.create()
-                    .withAudience()
-                    .withClaim("username", "TODO")
-                    //.withExpiresAt()
-                    .sign(Algorithm.HMAC256("TODO"))
-                call.respond(hashMapOf("token" to token))
-            }
-
-        authenticate("auth-jwt") {
-            get ("/overview"){
-                val principal = call.principal<JWTPrincipal>()
-
-            }
-        }
-    }
 }
