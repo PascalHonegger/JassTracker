@@ -12,17 +12,17 @@ class ContractRepositoryImplTest : RepositoryTest() {
     @Test
     fun `getContract returns contract`() {
         val id = "58bae0f8-8c59-4a40-aa2d-9c6a489366b3".toUUID()
-        val expected = Contract(id, "Eicheln", 1, ContractType.Acorns)
+        val expected = Contract(id, "Eichle", 1, ContractType.Acorns)
         assertEquals(expected, repo.getContractOrNull(id))
     }
 
     @Test
     fun `getContracts returns all contracts`() {
         val expected = setOf(
-            Contract("58bae0f8-8c59-4a40-aa2d-9c6a489366b3".toUUID(), "Eicheln", 1, ContractType.Acorns),
-            Contract("d895b400-3d89-48db-a7ed-5e593f54b7f6".toUUID(), "Rosen", 2, ContractType.Roses),
-            Contract("41c7bd00-3da4-4926-bcb6-08e12aafbe6d".toUUID(), "Schilten", 3, ContractType.Shields),
-            Contract("38fb8cbb-b22d-40f7-b9a1-b4adc1740075".toUUID(), "Schellen", 4, ContractType.Bells),
+            Contract("58bae0f8-8c59-4a40-aa2d-9c6a489366b3".toUUID(), "Eichle", 1, ContractType.Acorns),
+            Contract("d895b400-3d89-48db-a7ed-5e593f54b7f6".toUUID(), "Rose", 2, ContractType.Roses),
+            Contract("41c7bd00-3da4-4926-bcb6-08e12aafbe6d".toUUID(), "Schilte", 3, ContractType.Shields),
+            Contract("38fb8cbb-b22d-40f7-b9a1-b4adc1740075".toUUID(), "Schälle", 4, ContractType.Bells),
             Contract("62aeb3b0-7b2d-4670-9789-6acd23fb8609".toUUID(), "Obenabe", 5, ContractType.TopsDown),
             Contract("5a8de6ea-8da6-4c2b-b572-3d2335a7cbe2".toUUID(), "Undenufe", 6, ContractType.BottomsUp),
             Contract("168b6602-07c3-4600-b39a-d08aca3323b0".toUUID(), "Joker", 7, ContractType.Joker),
