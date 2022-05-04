@@ -18,6 +18,7 @@ export interface Game {
   team1: Team;
   team2: Team;
   currentPlayer: GameParticipation;
+  total: Record<string, number>;
 }
 
 export interface Team {

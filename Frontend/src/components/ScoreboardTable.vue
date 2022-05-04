@@ -4,14 +4,6 @@ import { Game, GameParticipation } from "@/types/types";
 
 const props = defineProps<{ game: Game }>();
 
-// Will be in store one day
-const total = {
-  player1: 0,
-  player2: 0,
-  player3: 0,
-  player4: 0,
-};
-
 function isActive(participant: GameParticipation): boolean {
   return (
     props.game.endTime === undefined &&
@@ -91,10 +83,9 @@ function isActive(participant: GameParticipation): boolean {
           <tfoot>
             <tr class="border-t-2 border-slate-300 h-10 text-xl font-bold">
               <th scope="row">Total</th>
-              <td>{{ total.player1 }}</td>
-              <td>{{ total.player2 }}</td>
-              <td>{{ total.player3 }}</td>
-              <td>{{ total.player4 }}</td>
+              <template v-for="t in game.total" :key="t">
+                <td>{{ t }}</td>
+              </template>
             </tr>
           </tfoot>
         </table>

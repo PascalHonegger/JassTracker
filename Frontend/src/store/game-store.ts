@@ -9,7 +9,11 @@ import {
 } from "@/services/game-service";
 import { useContractStore } from "@/store/contract-store";
 import { Game, RoundType } from "@/types/types";
-import { WebCreateGame, WebGame } from "@/services/web-model";
+import {
+  WebCreateGame,
+  WebGame,
+  WebGameParticipation,
+} from "@/services/web-model";
 
 export const useGameStore = defineStore("game", {
   getters: {
@@ -130,7 +134,15 @@ export const useGameStore = defineStore("game", {
           }
         }
       }
-
+      const emptyTotal = this.createEmptyTotal([
+        game.team1.player1,
+        game.team1.player2,
+        game.team2.player1,
+        game.team2.player2,
+      ]);
+      game.rounds.forEach((round) => {
+        emptyTotal[round.playerId] += round.score;
+      });
       const preparedGame: Game = {
         id: game.id,
         startTime: new Date(game.startTime),
@@ -140,6 +152,7 @@ export const useGameStore = defineStore("game", {
         team2: game.team2,
         currentPlayer: game.currentPlayer,
         rows,
+        total: emptyTotal,
       };
       table.loadedGames[preparedGame.id] = preparedGame;
     },
@@ -180,6 +193,13 @@ export const useGameStore = defineStore("game", {
         currentPlayer: game.team1.player1,
       };
       await updateGame(gameId, webGame);
+    },
+    createEmptyTotal(players: WebGameParticipation[]) {
+      const total = {} as Record<string, number>;
+      players.forEach((player) => {
+        total[player.playerId] = 0;
+      });
+      return total;
     },
   },
 });
