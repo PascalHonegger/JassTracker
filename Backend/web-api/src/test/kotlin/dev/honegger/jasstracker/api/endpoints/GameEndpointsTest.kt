@@ -9,6 +9,7 @@ import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import io.mockk.*
 import kotlinx.datetime.LocalDateTime
@@ -35,7 +36,7 @@ class GameEndpointsTest {
     fun `get games finds empty list`() = testApplication {
         application {
             installJson()
-            configureGameEndpoints(service)
+            routing { configureGameEndpoints(service) }
         }
         val client = createClient {
             installJson()
@@ -53,7 +54,7 @@ class GameEndpointsTest {
     fun `get game finds dummy game`() = testApplication {
         application {
             installJson()
-            configureGameEndpoints(service)
+            routing { configureGameEndpoints(service) }
         }
         val client = createClient {
             installJson()
@@ -87,7 +88,7 @@ class GameEndpointsTest {
                     |"team1":{"player1":{"playerId":"$p1Id","displayName":"p1"},"player2":{"playerId":"$p2Id","displayName":"p2"}},
                     |"team2":{"player1":{"playerId":"$p3Id","displayName":"p3"},"player2":{"playerId":"$p4Id","displayName":"p4"}},
                     |"currentPlayer":{"playerId":"$p1Id","displayName":"p1"}
-                |}""".trimMargin().replace("\n",""), bodyAsText())
+                |}""".trimMargin().replace("\n", ""), bodyAsText())
         }
         verify(exactly = 1) { service.getGameOrNull(any(), dummyId) }
     }
@@ -95,7 +96,7 @@ class GameEndpointsTest {
     @Test
     fun `get game returns 404 if not found`() = testApplication {
         application {
-            configureGameEndpoints(service)
+            routing { configureGameEndpoints(service) }
         }
         every { service.getGameOrNull(any(), any()) } returns null
 
@@ -108,7 +109,7 @@ class GameEndpointsTest {
     @Test
     fun `delete game returns 404 if not found`() = testApplication {
         application {
-            configureGameEndpoints(service)
+            routing { configureGameEndpoints(service) }
         }
         every { service.deleteGameById(any(), any()) } returns false
 
@@ -121,7 +122,7 @@ class GameEndpointsTest {
     @Test
     fun `delete game returns 200 if deleted`() = testApplication {
         application {
-            configureGameEndpoints(service)
+            routing { configureGameEndpoints(service) }
         }
         every { service.deleteGameById(any(), any()) } returns true
 
@@ -135,7 +136,7 @@ class GameEndpointsTest {
     fun `get game currentPlayer finds current player`() = testApplication {
         application {
             installJson()
-            configureGameEndpoints(service)
+            routing { configureGameEndpoints(service) }
         }
         val client = createClient {
             installJson()
@@ -170,7 +171,7 @@ class GameEndpointsTest {
     fun `get game currentPlayer finds current player even with multiple rounds played`() = testApplication {
         application {
             installJson()
-            configureGameEndpoints(service)
+            routing { configureGameEndpoints(service) }
         }
         val client = createClient {
             installJson()
@@ -215,7 +216,7 @@ class GameEndpointsTest {
         client.get("/api/games/$dummyId/currentPlayer").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(
-                """{"playerId":"$p2Id","displayName":"p2"}""".trimMargin().replace("\n",""), bodyAsText())
+                """{"playerId":"$p2Id","displayName":"p2"}""".trimMargin().replace("\n", ""), bodyAsText())
         }
         verify(exactly = 1) { service.getGameOrNull(any(), dummyId) }
     }

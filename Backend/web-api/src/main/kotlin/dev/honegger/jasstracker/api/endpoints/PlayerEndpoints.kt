@@ -10,51 +10,49 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Application.configurePlayerEndpoints(
+fun Route.configurePlayerEndpoints(
     playerService: PlayerService,
 ) {
-    routing {
-        route("/api/players") {
-            get("/{id}") {
-                val id = call.parameters["id"]
-                if (id.isNullOrBlank()) {
-                    call.respond(HttpStatusCode.BadRequest)
-                    return@get
-                }
-                val player =
-                    playerService.getPlayerOrNull(dummySession, id.toUUID())
-
-                if (player == null) {
-                    call.respond(HttpStatusCode.NotFound)
-                    return@get
-                }
-
-                call.respond(HttpStatusCode.OK, player.toWebPlayer())
+    route("/api/players") {
+        get("/{id}") {
+            val id = call.parameters["id"]
+            if (id.isNullOrBlank()) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@get
             }
-            post {
-                val newPlayer = call.receive<WebCreatePlayer>()
-                val createdPlayer = playerService.createPlayer(
-                    session = dummySession,
-                    displayName = newPlayer.displayName,
-                    username = newPlayer.username,
-                    password = newPlayer.password,
-                )
-                call.respond(HttpStatusCode.Created, createdPlayer.toWebPlayer())
+            val player =
+                playerService.getPlayerOrNull(dummySession, id.toUUID())
+
+            if (player == null) {
+                call.respond(HttpStatusCode.NotFound)
+                return@get
             }
-            put("/{id}") {
-                val id = call.parameters["id"]
-                if (id.isNullOrBlank()) {
-                    call.respond(HttpStatusCode.BadRequest)
-                    return@put
+
+            call.respond(HttpStatusCode.OK, player.toWebPlayer())
+        }
+        post {
+            val newPlayer = call.receive<WebCreatePlayer>()
+            val createdPlayer = playerService.createPlayer(
+                session = dummySession,
+                displayName = newPlayer.displayName,
+                username = newPlayer.username,
+                password = newPlayer.password,
+            )
+            call.respond(HttpStatusCode.Created, createdPlayer.toWebPlayer())
+        }
+        put("/{id}") {
+            val id = call.parameters["id"]
+            if (id.isNullOrBlank()) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@put
+            }
+            when (val updatedPlayer = call.receive<WebPlayer>().toPlayer()) {
+                is GuestPlayer -> {
+                    call.respond(HttpStatusCode.BadRequest, "Cannot update guest player")
                 }
-                when (val updatedPlayer = call.receive<WebPlayer>().toPlayer()) {
-                    is GuestPlayer -> {
-                        call.respond(HttpStatusCode.BadRequest, "Cannot update guest player")
-                    }
-                    is RegisteredPlayer -> {
-                        playerService.updatePlayer(dummySession, updatedPlayer)
-                        call.respond(HttpStatusCode.OK)
-                    }
+                is RegisteredPlayer -> {
+                    playerService.updatePlayer(dummySession, updatedPlayer)
+                    call.respond(HttpStatusCode.OK)
                 }
             }
         }

@@ -7,6 +7,7 @@ import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import io.mockk.*
 import java.util.*
@@ -33,7 +34,7 @@ class PlayerEndpointsTest {
     fun `get registered player finds dummy player`() = testApplication {
         application {
             installJson()
-            configurePlayerEndpoints(service)
+            routing { configurePlayerEndpoints(service) }
         }
         val client = createClient {
             installJson()
@@ -53,7 +54,8 @@ class PlayerEndpointsTest {
         } returns dummyPlayer
         client.get("/api/players/$dummyId").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("""{"id":"$dummyId","username":"bar","displayName":"foo","password":null,"isGuest":false}""", bodyAsText())
+            assertEquals("""{"id":"$dummyId","username":"bar","displayName":"foo","password":null,"isGuest":false}""",
+                bodyAsText())
         }
         verify(exactly = 1) { service.getPlayerOrNull(any(), dummyId) }
     }
@@ -62,7 +64,7 @@ class PlayerEndpointsTest {
     fun `get guest player finds dummy guest`() = testApplication {
         application {
             installJson()
-            configurePlayerEndpoints(service)
+            routing { configurePlayerEndpoints(service) }
         }
         val client = createClient {
             installJson()
@@ -79,7 +81,8 @@ class PlayerEndpointsTest {
         } returns guest
         client.get("/api/players/$guestId").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("""{"id":"$guestId","username":null,"displayName":null,"password":null,"isGuest":true}""", bodyAsText())
+            assertEquals("""{"id":"$guestId","username":null,"displayName":null,"password":null,"isGuest":true}""",
+                bodyAsText())
         }
         verify(exactly = 1) { service.getPlayerOrNull(any(), guestId) }
     }
@@ -87,7 +90,7 @@ class PlayerEndpointsTest {
     @Test
     fun `get game returns 404 if not found`() = testApplication {
         application {
-            configurePlayerEndpoints(service)
+            routing { configurePlayerEndpoints(service) }
         }
 
         client.get("/api/players/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {

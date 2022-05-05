@@ -9,6 +9,7 @@ import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import io.mockk.*
 import kotlinx.datetime.LocalDateTime
@@ -35,7 +36,7 @@ class TableEndpointsTest {
     fun `get table finds dummy table`() = testApplication {
         application {
             installJson()
-            configureTableEndpoints(service)
+            routing { configureTableEndpoints(service) }
         }
         val client = createClient {
             installJson()
@@ -66,7 +67,7 @@ class TableEndpointsTest {
     fun `get tables finds multiple tables`() = testApplication {
         application {
             installJson()
-            configureTableEndpoints(service)
+            routing { configureTableEndpoints(service) }
         }
         val client = createClient {
             installJson()
@@ -145,7 +146,7 @@ class TableEndpointsTest {
     @Test
     fun `get table returns 404 if not found`() = testApplication {
         application {
-            configureTableEndpoints(service)
+            routing { configureTableEndpoints(service) }
         }
 
         every { service.getTableOrNull(any(), any()) } returns null
@@ -159,7 +160,7 @@ class TableEndpointsTest {
     @Test
     fun `delete table returns 404 if not found`() = testApplication {
         application {
-            configureTableEndpoints(service)
+            routing { configureTableEndpoints(service) }
         }
 
         every { service.deleteTableById(any(), any()) } returns false
@@ -172,7 +173,7 @@ class TableEndpointsTest {
     @Test
     fun `delete table returns 200 if deleted`() = testApplication {
         application {
-            configureTableEndpoints(service)
+            routing { configureTableEndpoints(service) }
         }
 
         every { service.deleteTableById(any(), any()) } returns true
@@ -186,7 +187,7 @@ class TableEndpointsTest {
     fun `open game with earlier startGame is preferred for latestGame`() = testApplication {
         application {
             installJson()
-            configureTableEndpoints(service)
+            routing { configureTableEndpoints(service) }
         }
         val client = createClient {
             installJson()
@@ -266,7 +267,7 @@ class TableEndpointsTest {
                             |},
                             |"currentPlayer":{"playerId":"$p1Id","displayName":"p1"}
                         |}
-                    |}""".trimMargin().replace("\n",""),
+                    |}""".trimMargin().replace("\n", ""),
                 bodyAsText()
             )
         }

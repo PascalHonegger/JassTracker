@@ -6,6 +6,7 @@ import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import io.mockk.*
 import java.util.*
@@ -31,7 +32,7 @@ class RoundEndpointsTest {
     fun `get rounds of game returns all rounds of the game`() = testApplication {
         application {
             installJson()
-            configureRoundEndpoints(service)
+            routing { configureRoundEndpoints(service) }
         }
         val client = createClient {
             installJson()
@@ -78,7 +79,7 @@ class RoundEndpointsTest {
     fun `get rounds of game returns empty list if game not found`() = testApplication {
         application {
             installJson()
-            configureRoundEndpoints(service)
+            routing { configureRoundEndpoints(service) }
         }
         val client = createClient {
             installJson()
@@ -98,7 +99,7 @@ class RoundEndpointsTest {
     @Test
     fun `delete round returns 404 if not found`() = testApplication {
         application {
-            configureRoundEndpoints(service)
+            routing { configureRoundEndpoints(service) }
         }
         every { service.deleteRoundById(any(), any()) } returns false
 
@@ -111,7 +112,7 @@ class RoundEndpointsTest {
     @Test
     fun `delete round returns 200 if deleted`() = testApplication {
         application {
-            configureRoundEndpoints(service)
+            routing { configureRoundEndpoints(service) }
         }
         every { service.deleteRoundById(any(), any()) } returns true
 

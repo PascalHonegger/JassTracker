@@ -6,6 +6,7 @@ import dev.honegger.jasstracker.bootstrap.plugins.initializeDatabase
 import dev.honegger.jasstracker.data.repositories.*
 import dev.honegger.jasstracker.domain.services.*
 import dev.honegger.jasstracker.api.endpoints.*
+import dev.honegger.jasstracker.bootstrap.plugins.configureAuthentication
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.auth.*
@@ -18,6 +19,7 @@ fun Application.module() {
     initializeDatabase()
     configureHTTP()
     configureStaticRouting()
+    configureAuthentication()
 
     // Could be provided by a DI framework like Koin
     val gameRepository = GameRepositoryImpl()
@@ -34,14 +36,13 @@ fun Application.module() {
 
     routing {
         authenticate {
-
+            configureGameEndpoints(gameService)
+            configureTableEndpoints(tableService)
+            configureContractEndpoints(contractService)
+            configurePlayerEndpoints(playerService)
+            configureRoundEndpoints(roundService)
         }
     }
 
-    configureGameEndpoints(gameService)
-    configureTableEndpoints(tableService)
-    configureContractEndpoints(contractService)
-    configurePlayerEndpoints(playerService)
-    configureRoundEndpoints(roundService)
 
 }

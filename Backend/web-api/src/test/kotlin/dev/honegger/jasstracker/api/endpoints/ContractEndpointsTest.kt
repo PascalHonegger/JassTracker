@@ -6,6 +6,7 @@ import dev.honegger.jasstracker.domain.services.ContractService
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import io.mockk.*
 import java.util.*
@@ -31,7 +32,7 @@ class ContractEndpointsTest {
     fun `get contracts returns all contracts`() = testApplication {
         application {
             installJson()
-            configureContractEndpoints(service)
+            routing { configureContractEndpoints(service) }
         }
         val client = createClient {
             installJson()
