@@ -4,27 +4,30 @@ import { useRouter } from "vue-router";
 import { computed, onMounted, ref } from "vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
 
-const store = useAuthStore();
+const authStore = useAuthStore();
 const router = useRouter();
 
 const loginLoading = ref<boolean>(false);
 const loginAsGuestLoading = ref<boolean>(false);
 const loading = computed(() => loginLoading.value || loginAsGuestLoading.value);
+const username = ref("");
+const password = ref("");
 
 onMounted(() => {
-  if (store.loggedIn) {
+  if (authStore.loggedIn) {
     router.push("/overview");
   }
 });
 
 async function login() {
   loginLoading.value = true;
-  await store.setLoggedIn();
+  const newLoginRequest = await authStore.createLoginRequest(username.value, password.value);
   await router.push("/overview");
+  await authStore.setLoggedIn();
 }
 async function loginAsGuest() {
   loginAsGuestLoading.value = true;
-  await store.setLoggedIn();
+  await authStore.setLoggedIn();
   await router.push("/overview");
 }
 </script>
@@ -66,6 +69,7 @@ async function loginAsGuest() {
               name="username"
               type="text"
               :disabled="loading"
+              v-model="username"
             />
           </div>
           <div class="mb-6">
@@ -80,6 +84,7 @@ async function loginAsGuest() {
               name="password"
               type="password"
               :disabled="loading"
+              v-model="password"
             />
           </div>
           <button

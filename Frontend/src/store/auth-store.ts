@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { useContractStore } from "@/store/contract-store";
 import { useGameStore } from "@/store/game-store";
 import { useTableStore } from "@/store/table-store";
+import {createLoginRequest} from "@/services/auth-service";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -10,6 +11,10 @@ export const useAuthStore = defineStore("auth", {
     loggedIn: false,
   }),
   actions: {
+    async createLoginRequest(username: String, password: String): Promise<string>{
+      const createdLoginRequest = await createLoginRequest(username, password)
+      return createdLoginRequest.id
+    },
     async setLoggedIn() {
       // Load all available contracts once after login
       // These shouldn't change and loading them
