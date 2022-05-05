@@ -8,20 +8,24 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
+import io.ktor.server.request.*
 
 fun Route.configureAuthenticationEndpoints(
     authenticationService: AuthenticationService,
 ) {
     post {
+        val newUserSession = call.receive<WebCreatePlayer>()
         val token = JWT.create()
             .withAudience()
             .withClaim("username", "TODO")
             //.withExpiresAt()
             .sign(Algorithm.HMAC256("TODO"))
+
+       // val createdSession = authenticationService.createUserSession()
         call.respond(hashMapOf("token" to token))
     }
 
-    authenticate("auth-jwt") {
+    authenticate {
         get("/overview") {
             val principal = call.principal<JWTPrincipal>()
 
