@@ -89,7 +89,7 @@ function getClass(round: Round): string {
           <ContractIcon :contract="row.contract" />
         </div>
         <div>{{ row.contract.name }}</div>
-        <div class="ml-auto">x{{ row.contract.multiplier }}</div>
+        <div class="ml-auto">×{{ row.contract.multiplier }}</div>
       </div>
     </th>
     <template v-for="r in row.rounds" :key="r">
