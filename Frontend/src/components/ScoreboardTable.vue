@@ -70,7 +70,11 @@ function isActive(participant: GameParticipation): boolean {
               >
                 {{ game.team2.player1.displayName }}
               </th>
-              <th scope="col" :class="{ active: isActive(game.team2.player2) }">
+              <th
+                scope="col"
+                :class="{ active: isActive(game.team2.player2) }"
+                class="border-l-2 border-slate-300"
+              >
                 {{ game.team2.player2.displayName }}
               </th>
             </tr>
