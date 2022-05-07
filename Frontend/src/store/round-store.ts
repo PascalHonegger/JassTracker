@@ -45,7 +45,6 @@ export const useRoundStore = defineStore("round", {
         return;
       }
       this.addRoundToCurrentGame(round);
-      this.updateTotalForPlayer(round.playerId);
       currentGame.value.currentPlayer = await getCurrentPlayerOfGame(
         currentGame.value.id
       );
@@ -109,7 +108,6 @@ export const useRoundStore = defineStore("round", {
           });
         }
       });
-      this.updateTotalForPlayer(playerId);
     },
     findTeamPartnerIndex(id: string): number {
       if (currentGame.value === undefined) {
@@ -168,19 +166,6 @@ export const useRoundStore = defineStore("round", {
           }
         });
       });
-    },
-    updateTotalForPlayer(playerId: string) {
-      if (currentGame.value === undefined) {
-        alert("currentGame should not be undefined");
-        return;
-      }
-      let tempTotal = 0;
-      currentGame.value.rounds.forEach((r) => {
-        if (r.playerId === playerId) {
-          tempTotal += r.score;
-        }
-      });
-      currentGame.value.total[playerId] = tempTotal;
     },
   },
 });

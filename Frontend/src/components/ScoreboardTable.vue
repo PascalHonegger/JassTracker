@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import RoundRow from "./RoundRow.vue";
 import { Game, GameParticipation } from "@/types/types";
+import { computed } from "vue";
 
 const props = defineProps<{ game: Game }>();
 
@@ -10,6 +11,20 @@ function isActive(participant: GameParticipation): boolean {
     props.game.currentPlayer.playerId === participant.playerId
   );
 }
+
+const tempTotal: Record<string, number> = {
+  [props.game.team1.player1.playerId]: 0,
+  [props.game.team1.player2.playerId]: 0,
+  [props.game.team2.player1.playerId]: 0,
+  [props.game.team2.player2.playerId]: 0,
+};
+
+const total = computed(() => {
+  props.game.rounds.forEach((r) => {
+    tempTotal[r.playerId] += r.score;
+  });
+  return tempTotal;
+});
 </script>
 <style lang="scss">
 .active {
@@ -83,7 +98,7 @@ function isActive(participant: GameParticipation): boolean {
           <tfoot>
             <tr class="border-t-2 border-slate-300 h-10 text-xl font-bold">
               <th scope="row">Total</th>
-              <template v-for="t in game.total" :key="t">
+              <template v-for="t in total" :key="t">
                 <td>{{ t }}</td>
               </template>
             </tr>
