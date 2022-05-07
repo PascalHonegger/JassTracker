@@ -88,7 +88,7 @@ function getClass(round: Round): string {
         <input
           type="text"
           inputmode="numeric"
-          class="text-center w-24"
+          class="text-right w-24 px-1"
           @change="handleInput($event, r)"
           @keypress="validateNumber"
           :disabled="r.type === 'locked' || readonly"
