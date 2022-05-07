@@ -80,8 +80,11 @@ function getClass(round: Round): string {
 </style>
 <template>
   <tr>
-    <th scope="row" class="border-r-2 border-slate-300">
-      {{ row.contract.name }}
+    <th scope="row" class="border-r-2 border-slate-300 px-1">
+      <div class="flex flex-row">
+        <span>{{ row.contract.name }}</span>
+        <span class="ml-auto">x{{ row.contract.multiplier }}</span>
+      </div>
     </th>
     <template v-for="r in row.rounds" :key="r">
       <td>

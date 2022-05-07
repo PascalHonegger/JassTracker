@@ -68,6 +68,7 @@ export enum RoundType {
 export interface Contract {
   id: string;
   name: string;
+  multiplier: number;
 }
 
 export interface Player {
