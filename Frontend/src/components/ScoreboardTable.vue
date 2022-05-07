@@ -25,7 +25,7 @@ function isActive(participant: GameParticipation): boolean {
 }
 </style>
 <template>
-  <div class="max-w-2xl w-full my-2 text-center">
+  <div class="max-w-3xl w-full my-2 text-center">
     <div class="border rounded border-black border-solid my-4">
       <div class="flex justify-between">
         <table class="table-fixed w-full">

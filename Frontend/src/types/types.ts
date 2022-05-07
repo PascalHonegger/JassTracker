@@ -1,4 +1,4 @@
-import { WebRound } from "@/services/web-model";
+import type { WebRound } from "@/services/web-model";
 
 export interface Table {
   id: string;
@@ -65,10 +65,22 @@ export enum RoundType {
   Locked = "locked",
 }
 
+export type ContractType =
+  | "Acorns"
+  | "Roses"
+  | "Shields"
+  | "Bells"
+  | "TopsDown"
+  | "BottomsUp"
+  | "Joker"
+  | "Slalom"
+  | "Guschti";
+
 export interface Contract {
   id: string;
   name: string;
   multiplier: number;
+  type: ContractType;
 }
 
 export interface Player {
