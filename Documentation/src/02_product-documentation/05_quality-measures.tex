@@ -62,23 +62,23 @@
 \section{Test Concept}
 \subsection{Unit Tests}
 \begin{itemize}
-    \item Business Logic will be Unit Tested
-    \item Runs on every Push to GitLab, Merging is blocked until failing tests are fixed
+    \item Business Logic will be unit tested
+    \item Runs on every push to GitLab, merging is blocked until failing tests are fixed
     \item Automated
 \end{itemize}
 
 \subsection{Integration Tests}
 \begin{itemize}
-    \item Framework / technology dependent code will be Integration Tested
-    \item Runs on every Push to GitLab, Merging is blocked until failing tests are fixed
-    \item The web api layer is tested by using \hyperlink{https://ktor.io/docs/testing.html}{Ktor testing}, allowing us to verify our REST endpoints
+    \item Framework / technology dependent code will be integration tested
+    \item Runs on every push to GitLab, merging is blocked until failing tests are fixed
+    \item The web API layer is tested by using \hyperlink{https://ktor.io/docs/testing.html}{Ktor testing}, allowing us to verify our REST endpoints
     \item The data access layer is tested by using \hyperlink{https://www.testcontainers.org/}{Testcontainers}, allowing us to use a real PostgreSQL DB in our tests
     \item Automated
 \end{itemize}
 
 \subsection{Usability Tests (See Chapter~\ref{sec:uxTesting})}
 \begin{itemize}
-    \item Project will be given to multiple people for testing (Hallway Testing)
+    \item Project will be given to multiple people for testing (hallway testing)
     \item Testers should be able to use website without having to ask any questions
     \item Manual
 \end{itemize}
@@ -86,9 +86,9 @@
 \subsection{System Tests}
 \begin{itemize}
     \item How full System works together - how components interact
-    \item Influenced by Usability Testing
-    \item Manual / Automated
-    \item Evaluation of automated Frontend Tests (Cypress) to reduce manual testing in Frontend
+    \item Influenced by usability testing
+    \item Manual
+    \item \hyperlink{https://www.cypress.io}{Cypress} was evaluated for automated end-to-end testing, but we came to the conclusion that our time is better invested in manual usability testing and actually improving our app.
 \end{itemize}
 
 \section{Continuous Integration and Deployment}
