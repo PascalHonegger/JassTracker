@@ -3,6 +3,7 @@ include("Backend:bootstrap")
 include("Backend:data-access")
 include("Backend:domain")
 include("Backend:web-api")
+include("Backend:security")
 
 dependencyResolutionManagement {
     versionCatalogs {
@@ -19,6 +20,8 @@ dependencyResolutionManagement {
         val jooqPlugin = "7.1.1"
         val kover = "0.5.1"
         val testcontainers = "1.17.1"
+        val javaJwt = "3.19.2"
+        val argon2 = "2.11"
 
         create("libs") {
             library("ktor-server-core", "io.ktor", "ktor-server-core-jvm").version(ktor)
@@ -38,6 +41,8 @@ dependencyResolutionManagement {
             library("flyway", "org.flywaydb", "flyway-core").version(flyway)
             library("postgresql", "org.postgresql", "postgresql").version(postgresql)
             library("jooq", "org.jooq", "jooq").version(jooq)
+            library("java-jwt", "com.auth0", "java-jwt").version(javaJwt)
+            library("argon2-jvm", "de.mkammerer", "argon2-jvm-nolibs").version(argon2)
 
             version("jooq", jooq)
 

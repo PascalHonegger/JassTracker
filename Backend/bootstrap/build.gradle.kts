@@ -17,6 +17,7 @@ dependencies {
     implementation(project(":Backend:data-access"))
     implementation(project(":Backend:domain"))
     implementation(project(":Backend:web-api"))
+    implementation(project(":Backend:security"))
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.host.common)
     implementation(libs.ktor.server.auto.head.response)
