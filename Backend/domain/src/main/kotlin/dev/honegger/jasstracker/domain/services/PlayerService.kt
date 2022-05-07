@@ -5,6 +5,7 @@ import dev.honegger.jasstracker.domain.Player
 import dev.honegger.jasstracker.domain.RegisteredPlayer
 import dev.honegger.jasstracker.domain.UserSession
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
+import dev.honegger.jasstracker.security.Argon2PasswordHashService
 import mu.KotlinLogging
 import java.util.*
 
@@ -22,7 +23,7 @@ interface PlayerService {
 
 private val log = KotlinLogging.logger { }
 
-class PlayerServiceImpl(private val playerRepository: PlayerRepository) : PlayerService {
+class PlayerServiceImpl(private val playerRepository: PlayerRepository, private val passwordHashService: Argon2PasswordHashService) : PlayerService {
     override fun createPlayer(
         session: UserSession,
         displayName: String,
@@ -33,7 +34,7 @@ class PlayerServiceImpl(private val playerRepository: PlayerRepository) : Player
             id = UUID.randomUUID(),
             displayName = displayName,
             username = username,
-            password = password, // TODO Hashing & Security once we look at authentication
+            password = passwordHashService.hashPassword(password).toString(),
         )
 
         log.info { "Saving new player $newPlayer" }
