@@ -43,6 +43,7 @@ async function loginAsGuest() {
   <div class="grid grid-rows-1 grid-cols-1 md:grid-cols-2 w-full h-full">
     <div class="image hidden md:block h-full">
       <img
+        loading="lazy"
         class="object-cover h-full w-full"
         src="../assets/jass.webp"
         alt="Jasskarten"
