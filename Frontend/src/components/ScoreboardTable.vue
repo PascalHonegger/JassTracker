@@ -2,6 +2,11 @@
 import RoundRow from "./RoundRow.vue";
 import { Game, GameParticipation } from "@/types/types";
 import { computed } from "vue";
+import { useContractStore } from "@/store/contract-store";
+import { storeToRefs } from "pinia";
+
+const contractStore = useContractStore();
+const { contracts } = storeToRefs(contractStore);
 
 const props = defineProps<{ game: Game }>();
 
@@ -12,16 +17,16 @@ function isActive(participant: GameParticipation): boolean {
   );
 }
 
-const tempTotal: Record<string, number> = {
-  [props.game.team1.player1.playerId]: 0,
-  [props.game.team1.player2.playerId]: 0,
-  [props.game.team2.player1.playerId]: 0,
-  [props.game.team2.player2.playerId]: 0,
-};
-
 const total = computed(() => {
+  let tempTotal = {} as Record<string, number>;
+  tempTotal[props.game.team1.player1.playerId] = 0;
+  tempTotal[props.game.team1.player2.playerId] = 0;
+  tempTotal[props.game.team2.player1.playerId] = 0;
+  tempTotal[props.game.team2.player2.playerId] = 0;
   props.game.rounds.forEach((r) => {
-    tempTotal[r.playerId] += r.score;
+    tempTotal[r.playerId] +=
+      r.score *
+      contracts.value.filter((c) => c.id === r.contractId)[0].multiplier;
   });
   return tempTotal;
 });
