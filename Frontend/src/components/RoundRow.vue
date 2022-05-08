@@ -116,8 +116,10 @@ function getClass(round: Round): string {
           min="-157"
           max="157"
         />
-        <span v-if="r.score" class="absolute pointer-events-none right-8"
-          >| {{ getMultiplierValue(r.score, r.contractId) }}</span
+        <span
+          v-if="r.score"
+          class="absolute pointer-events-none text-right border-l border-dotted border-black w-10 right-8"
+          >{{ getMultiplierValue(r.score, r.contractId) }}</span
         >
       </td>
     </template>
