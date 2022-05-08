@@ -103,7 +103,7 @@ const total = computed(() => {
           <tfoot>
             <tr class="border-t-2 border-slate-300 h-10 text-xl font-bold">
               <th scope="row">Total</th>
-              <template v-for="t in total" :key="t">
+              <template v-for="(t, i) in total" :key="i">
                 <td>{{ t }}</td>
               </template>
             </tr>
