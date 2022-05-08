@@ -104,7 +104,7 @@ async function loginAsGuest() {
 
         <WaitSpinner v-if="loginAsGuestLoading"></WaitSpinner>
       </button>
-      <div class="mb-auto">
+      <div class="mb-auto mx-1">
         <p>Neu beim JassTracker? Erstellen Sie einen Account!</p>
       </div>
     </div>
