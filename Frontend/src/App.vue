@@ -24,8 +24,8 @@ nav a.router-link-exact-active {
 }
 </style>
 <template>
-  <div>
-    <nav class="border-gray-200 px-2 sm:px-4 py-2.5 bg-gray-800">
+  <div class="flex flex-col h-screen overflow-hidden">
+    <nav class="border-gray-200 px-2 sm:px-4 py-2.5 bg-gray-800 grow-0">
       <div
         class="container flex flex-wrap justify-between items-center mx-auto"
       >
@@ -62,6 +62,8 @@ nav a.router-link-exact-active {
         </div>
       </div>
     </nav>
-    <RouterView />
+    <div class="overflow-auto grow">
+      <RouterView />
+    </div>
   </div>
 </template>
