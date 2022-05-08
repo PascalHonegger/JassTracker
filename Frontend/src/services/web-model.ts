@@ -1,5 +1,7 @@
 // Keep in sync with WebModel.kt !!
 
+import type { ContractType } from "@/types/types";
+
 export interface WebTable {
   id: string;
   name: string;
@@ -62,14 +64,5 @@ export interface WebContract {
   id: string;
   name: string;
   multiplier: number;
-  type:
-    | "Acorns"
-    | "Roses"
-    | "Shields"
-    | "Bells"
-    | "TopsDown"
-    | "BottomsUp"
-    | "Joker"
-    | "Slalom"
-    | "Guschti";
+  type: ContractType;
 }

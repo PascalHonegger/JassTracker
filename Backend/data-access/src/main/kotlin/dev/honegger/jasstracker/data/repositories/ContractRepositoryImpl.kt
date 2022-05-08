@@ -28,7 +28,7 @@ class ContractRepositoryImpl : ContractRepository {
     )
 
     override fun getContracts(): List<Contract> = withContext {
-        selectFrom(CONTRACT).fetch().map { it.toContract() }
+        selectFrom(CONTRACT).orderBy(CONTRACT.MULTIPLIER).fetch().map { it.toContract() }
     }
 
     override fun getContractOrNull(id: UUID): Contract? = withContext {

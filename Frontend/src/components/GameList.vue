@@ -4,6 +4,10 @@ import { toDateTimeString } from "@/util/dates";
 import GamePreview from "@/components/GamePreview.vue";
 
 defineProps<{ tableId: string; games: Game[] }>();
+
+function getFormattedTime(game: Game) {
+  return toDateTimeString(game.endTime ?? game.startTime);
+}
 </script>
 
 <template>
@@ -17,7 +21,7 @@ defineProps<{ tableId: string; games: Game[] }>();
         }"
       >
         <GamePreview :game="game" />
-        <span>{{ toDateTimeString(game.endTime) }}</span>
+        <span>{{ getFormattedTime(game) }}</span>
       </RouterLink>
     </li>
   </ul>

@@ -4,6 +4,7 @@ import { WebCreateRound, WebRound } from "@/services/web-model";
 import { useRoundStore } from "@/store/round-store";
 import { useGameStore } from "@/store/game-store";
 import { storeToRefs } from "pinia";
+import ContractIcon from "./ContractIcon.vue";
 
 const roundStore = useRoundStore();
 const gameStore = useGameStore();
@@ -68,6 +69,7 @@ function getClass(round: Round): string {
   return props.readonly ? "locked" : round.type;
 }
 </script>
+
 <style lang="scss">
 .played,
 .locked {
@@ -78,17 +80,24 @@ function getClass(round: Round): string {
   background-color: lightblue;
 }
 </style>
+
 <template>
   <tr>
-    <th scope="row" class="border-r-2 border-slate-300">
-      {{ row.contract.name }}
+    <th scope="row" class="border-r-2 border-slate-300 h-full">
+      <div class="h-full items-center flex flex-row gap-1 px-1">
+        <div class="shrink-0">
+          <ContractIcon :contract="row.contract" />
+        </div>
+        <div>{{ row.contract.name }}</div>
+        <div class="ml-auto">×{{ row.contract.multiplier }}</div>
+      </div>
     </th>
     <template v-for="r in row.rounds" :key="r">
       <td>
         <input
           type="text"
           inputmode="numeric"
-          class="text-center w-24"
+          class="text-right w-24 px-1"
           @change="handleInput($event, r)"
           @keypress="validateNumber"
           :disabled="r.type === 'locked' || readonly"
