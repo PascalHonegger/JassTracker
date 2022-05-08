@@ -2,6 +2,8 @@
 import type { Round, Row } from "@/types/types";
 import { WebCreateRound, WebRound } from "@/services/web-model";
 import { useRoundStore } from "@/store/round-store";
+import { useContractStore } from "@/store/contract-store";
+
 import { useGameStore } from "@/store/game-store";
 import { storeToRefs } from "pinia";
 import ContractIcon from "./ContractIcon.vue";
@@ -9,6 +11,14 @@ import ContractIcon from "./ContractIcon.vue";
 const roundStore = useRoundStore();
 const gameStore = useGameStore();
 const { currentGame } = storeToRefs(gameStore);
+
+const contractStore = useContractStore();
+const { contracts } = storeToRefs(contractStore);
+
+function getMultiplierValue(score: number, contractId: string): number {
+  const contract = contracts.value.filter((c) => c.id === contractId)[0];
+  return score * contract.multiplier;
+}
 
 async function handleInput(event: Event, round: Round) {
   if (currentGame.value === undefined) {
@@ -93,11 +103,11 @@ function getClass(round: Round): string {
       </div>
     </th>
     <template v-for="r in row.rounds" :key="r">
-      <td>
+      <td class="relative">
         <input
           type="text"
           inputmode="numeric"
-          class="text-right w-24 px-1"
+          class="w-24 px-1"
           @change="handleInput($event, r)"
           @keypress="validateNumber"
           :disabled="r.type === 'locked' || readonly"
@@ -106,6 +116,11 @@ function getClass(round: Round): string {
           min="-157"
           max="157"
         />
+        <span
+          v-if="r.score"
+          class="absolute pointer-events-none text-right border-l border-dotted border-black w-10 right-8"
+          >{{ getMultiplierValue(r.score, r.contractId) }}</span
+        >
       </td>
     </template>
   </tr>

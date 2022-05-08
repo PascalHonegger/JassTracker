@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import RoundRow from "./RoundRow.vue";
 import { Game, GameParticipation } from "@/types/types";
+import { computed } from "vue";
+import { useContractStore } from "@/store/contract-store";
+import { storeToRefs } from "pinia";
+
+const contractStore = useContractStore();
+const { contracts } = storeToRefs(contractStore);
 
 const props = defineProps<{ game: Game }>();
-
-// Will be in store one day
-const total = {
-  player1: 0,
-  player2: 0,
-  player3: 0,
-  player4: 0,
-};
 
 function isActive(participant: GameParticipation): boolean {
   return (
@@ -18,6 +16,20 @@ function isActive(participant: GameParticipation): boolean {
     props.game.currentPlayer.playerId === participant.playerId
   );
 }
+
+const total = computed(() => {
+  let tempTotal = {} as Record<string, number>;
+  tempTotal[props.game.team1.player1.playerId] = 0;
+  tempTotal[props.game.team1.player2.playerId] = 0;
+  tempTotal[props.game.team2.player1.playerId] = 0;
+  tempTotal[props.game.team2.player2.playerId] = 0;
+  props.game.rounds.forEach((r) => {
+    tempTotal[r.playerId] +=
+      r.score *
+      contracts.value.filter((c) => c.id === r.contractId)[0].multiplier;
+  });
+  return tempTotal;
+});
 </script>
 <style lang="scss">
 .active {
@@ -91,10 +103,9 @@ function isActive(participant: GameParticipation): boolean {
           <tfoot>
             <tr class="border-t-2 border-slate-300 h-10 text-xl font-bold">
               <th scope="row">Total</th>
-              <td>{{ total.player1 }}</td>
-              <td>{{ total.player2 }}</td>
-              <td>{{ total.player3 }}</td>
-              <td>{{ total.player4 }}</td>
+              <template v-for="(t, i) in total" :key="i">
+                <td>{{ t }}</td>
+              </template>
             </tr>
           </tfoot>
         </table>
