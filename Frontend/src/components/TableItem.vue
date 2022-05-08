@@ -31,10 +31,11 @@ function closeModal() {
   isModalVisible.value = false;
 }
 </script>
+
 <template>
   <RouterLink
     :to="{ name: 'table', params: { tableId: table.id } }"
-    class="table max-w-sm w-full lg:max-w-full lg:flex flex-col text-center relative z-0"
+    class="jass-table max-w-sm w-full lg:max-w-full flex flex-col text-center relative z-0"
   >
     <p class="font-bold">{{ table.name }}</p>
     <icon

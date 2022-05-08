@@ -46,11 +46,14 @@ async function createNewTable() {
 <template>
   <div class="table-container container mx-auto">
     <WaitSpinner v-if="loadingTables"></WaitSpinner>
-    <div v-else class="flex items-stretch flex-wrap gap-4 p-4">
+    <div
+      v-else
+      class="flex flex-col items-stretch md:flex-wrap md:flex-row gap-4 p-4"
+    >
       <TableItem v-for="t in tablesAsArray" :key="t.id" :table="t"></TableItem>
       <button
         @click="isModalVisible = true"
-        class="table cursor-pointer max-w-sm w-full lg:max-w-full lg:flex"
+        class="jass-table cursor-pointer max-w-sm w-full lg:max-w-full lg:flex"
       >
         <span class="self-center text-6xl">+</span>
       </button>
