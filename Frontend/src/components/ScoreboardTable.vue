@@ -27,8 +27,7 @@ const total = computed(() => {
   };
   rounds.forEach((r) => {
     tempTotal[r.playerId] +=
-      r.score *
-      contracts.value.filter((c) => c.id === r.contractId)[0].multiplier;
+      r.score * contracts.value.find((c) => c.id === r.contractId)!.multiplier;
   });
   return tempTotal;
 });
