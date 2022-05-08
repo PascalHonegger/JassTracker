@@ -5,6 +5,7 @@ tasks.xml
 usage.statistics.xml
 dictionaries
 shelf
+prettier.xml
 
 # AWS User-specific
 aws.xml
