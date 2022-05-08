@@ -18,12 +18,14 @@ function isActive(participant: GameParticipation): boolean {
 }
 
 const total = computed(() => {
-  let tempTotal = {} as Record<string, number>;
-  tempTotal[props.game.team1.player1.playerId] = 0;
-  tempTotal[props.game.team1.player2.playerId] = 0;
-  tempTotal[props.game.team2.player1.playerId] = 0;
-  tempTotal[props.game.team2.player2.playerId] = 0;
-  props.game.rounds.forEach((r) => {
+  const { team1, team2, rounds } = props.game;
+  const tempTotal: Record<string, number> = {
+    [team1.player1.playerId]: 0,
+    [team1.player2.playerId]: 0,
+    [team2.player1.playerId]: 0,
+    [team2.player2.playerId]: 0,
+  };
+  rounds.forEach((r) => {
     tempTotal[r.playerId] +=
       r.score *
       contracts.value.filter((c) => c.id === r.contractId)[0].multiplier;
