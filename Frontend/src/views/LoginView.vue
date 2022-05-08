@@ -35,7 +35,7 @@ async function loginAsGuest() {
 }
 
 .default-h1 {
-  @apply font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600;
+  @apply font-medium leading-tight text-5xl mb-2 text-blue-600;
 }
 </style>
 
@@ -49,8 +49,8 @@ async function loginAsGuest() {
         alt="Jasskarten"
       />
     </div>
-    <div class="login text-center flex flex-col justify-center">
-      <h1 class="default-h1">JassTracker</h1>
+    <div class="login text-center flex flex-col h-full overflow-auto">
+      <h1 class="default-h1 mt-auto">JassTracker</h1>
       <p class="font-medium">Slogan TBD</p>
       <div class="flex flex-col my-8 self-center">
         <form @submit.prevent="login" autocomplete="on">
@@ -104,7 +104,7 @@ async function loginAsGuest() {
 
         <WaitSpinner v-if="loginAsGuestLoading"></WaitSpinner>
       </button>
-      <div>
+      <div class="mb-auto">
         <p>Neu beim JassTracker? Erstellen Sie einen Account!</p>
       </div>
     </div>
