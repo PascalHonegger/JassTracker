@@ -10,6 +10,7 @@ const props = defineProps<{
   newGame: PartialCreateGame;
   disabled: boolean;
 }>();
+
 const emit = defineEmits<{
   (event: "update:newGame", createGame: PartialCreateGame): void;
 }>();
@@ -25,9 +26,10 @@ function setAnonymousPlayer(key: keyof PartialCreateGame, value: string) {
   });
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 input {
   border-bottom: solid black 1px;
+  @apply w-full;
 }
 
 label {
@@ -35,7 +37,7 @@ label {
 }
 </style>
 <template>
-  <div class="mb-4">
+  <div class="mb-4 w-1/2">
     <label for="player1">Spieler 1</label>
     <input
       autocomplete="username"
@@ -47,6 +49,7 @@ label {
 
     <label for="player2">Spieler 2</label>
     <input
+      class="w-full"
       autocomplete="username"
       id="player2"
       :value="newGame.team1Player2.displayName"
@@ -54,7 +57,7 @@ label {
       :disabled="disabled"
     />
   </div>
-  <div class="mb-4">
+  <div class="mb-4 w-1/2">
     <label for="player3">Spieler 3</label>
     <input
       autocomplete="username"

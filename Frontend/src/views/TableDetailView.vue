@@ -111,7 +111,10 @@ function backToOverview() {
       <p class="font-bold">Neues Spiel erstellen</p>
     </template>
     <template v-slot:body>
-      <form @submit.prevent="createNewGame" class="flex justify-around">
+      <form
+        @submit.prevent="createNewGame"
+        class="flex flex-row justify-around gap-2"
+      >
         <CreateGame
           :disabled="creatingGame"
           v-model:new-game="newGame"
