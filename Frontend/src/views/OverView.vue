@@ -64,11 +64,14 @@ async function createNewTable() {
         <p class="font-bold">Neuen Tisch erstellen</p>
       </template>
       <template v-slot:body>
-        <div class="table-name mb-2 text-center">
+        <div class="flex flex-row gap-2 table-name mb-2 text-center">
           <label for="tableName">Tisch Name</label>
           <input id="tableName" v-model="newTableName" />
         </div>
-        <form @submit.prevent="createNewTable" class="flex justify-around">
+        <form
+          @submit.prevent="createNewTable"
+          class="flex flex-row gap-2 justify-around"
+        >
           <CreateGame
             :disabled="creatingGame"
             v-model:new-game="newGame"
