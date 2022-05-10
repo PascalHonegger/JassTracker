@@ -1,6 +1,29 @@
 <template>
   <div class="container mx-auto text-center">
     <h1>Hier kommt das Hilfezentrum hin!</h1>
+
+    <h2>Jass Regeln</h2>
+
+    <h2>JassTracker Bedienung</h2>
+    <h3>Login / Registierung</h3>
+    <ul>
+      <li>
+        Der JassTracker kann entweder als Gast oder mit einem erstellen Benutzer
+        Profil benutzt werden
+      </li>
+      <li>
+        Um einen Benutzer Account zu erhalten, muss man sich zuerst registrieren
+        unter <a href="/">Registrieren</a>. Danach kann man sich mit den
+        Benutzer Informationen einloggen und den JassTracker im vollen Umfang
+        verwenden
+      </li>
+      <li>
+        Wenn man sich keinen Account erstellen möchte, oder den JassTracker mal
+        ausprobieren möchte, kann man sich "als Gast" anmelden. Man kann die
+        Kern-Funktionalitaten der Applikation ausprobieren und sehen, ob mann
+        einen Account erstellen möchte.
+      </li>
+    </ul>
     <p>
       Jasskarten-Icons bereitgestellt von Wikimedia Commons User Jensche,
       lizensiert unter
