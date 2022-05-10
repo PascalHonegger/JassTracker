@@ -67,8 +67,12 @@ async function handleInput(event: Event, round: Round) {
   }
 }
 
-function validateNumber(event: KeyboardEvent) {
-  if (!/^[-\d]$/.test(event.key)) {
+function handleKeypress(event: KeyboardEvent) {
+  const { key, currentTarget } = event;
+  if (key === "Enter" && currentTarget instanceof HTMLInputElement) {
+    currentTarget.blur();
+  }
+  if (!/^[-\d]$/.test(key)) {
     event.preventDefault();
   }
 }
@@ -109,7 +113,7 @@ function getClass(round: Round): string {
           inputmode="numeric"
           class="w-24 px-1"
           @change="handleInput($event, r)"
-          @keypress="validateNumber"
+          @keypress="handleKeypress"
           :disabled="r.type === 'locked' || readonly"
           :value="r.score"
           :class="getClass(r)"
