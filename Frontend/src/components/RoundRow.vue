@@ -35,7 +35,7 @@ async function handleInput(event: Event, round: Round) {
   if (target.classList.contains("!bg-red-500")) {
     target.classList.remove("!bg-red-500");
   }
-  const actualScore = inputScore < 0 ? 157 - Math.abs(inputScore) : inputScore;
+  const actualScore = inputScore < 0 ? 157 + inputScore : inputScore;
   if (round.id) {
     if (actualScore == null || isNaN(actualScore)) {
       await roundStore.removeRound(
