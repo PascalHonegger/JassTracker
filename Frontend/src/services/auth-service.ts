@@ -1,6 +1,9 @@
 import { api } from "@/services/requests";
-import {Player} from "@/types/types";
 
-export async function createLoginRequest(username: String, password: String){
-    return api.post<Player>("login", {username, password});
+export async function loginPlayer(username: String, password: String){
+    return api.post<string>("login", {username, password});
+}
+
+export async function loginGuestPlayer(){
+    return api.post<string>("guestAccess");
 }
