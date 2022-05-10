@@ -58,6 +58,33 @@
       </li>
     </ul>
 
+    <h3 class="text-3xl font-normal leading-normal mt-4">Spielregeln</h3>
+    <ul>
+      <li>
+        Beim Coiffeur gibt es klare Regeln, wann welche Farben gespielt werden
+        dürfen.
+      </li>
+
+      <li>
+        1. Wer eine Karte der ausgespielten Farbe besitzt, muss diese Farbe
+        spielen. Die Ausnahme ist der Trumpf-Bauer/Trumpf-Under.
+      </li>
+      <li>
+        2. Wer keine Karte der ausgespielten Farbe hat, darf irgendeine Karte
+        spielen (Untertrumpfen ist nur erlaubt, wenn man nur noch Trumpfkarten
+        besitzen).
+      </li>
+      <li>
+        3. Es darf jederzeit einen Trumpf gespielt werden anstatt Farbe zu
+        bekennen.
+      </li>
+      <li>
+        4. Wurde die Trumpffarbe ausgespielt, dann muss ebenfalls eine
+        Trumpfkarte gespielt werden. Wer neben dem Trumpf-Bauer/Trumpf-Under
+        keine andere Trumpfkarte mehr besitzt, darf statt des
+        Trumpf-Bauer/Trumpf-Under auch jede andere Karte spielen.
+      </li>
+    </ul>
     <h2 class="text-4xl font-normal leading-normal mt-4">
       JassTracker Bedienung
     </h2>
