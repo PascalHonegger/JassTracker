@@ -3,6 +3,60 @@
     <h1 class="text-5xl font-normal leading-normal">Hilfezentrum</h1>
 
     <h2 class="text-4xl font-normal leading-normal mt-4">Jass Regeln</h2>
+    <h3 class="text-3xl font-normal leading-normal mt-4">Spielablauf</h3>
+    <ul>
+      <li>
+        Der Coiffeur ist ein Partnerjass, bei dem jeweils die beiden
+        gegenüberliegenden Spieler ein Team bilden.
+      </li>
+      <li>
+        Beim Coiffeur geht es darum, sämtliche Trumpfarten einmal zuspielen und
+        dabei möglichst viele Punkte zu erzielen. Es werden jeweils nur die
+        Punkte des ansagenden Teams geschrieben.
+      </li>
+      <li>
+        Das Team, welches nach Beendigung aller Runden am meisten Punkte
+        aufweist, gewinnt.
+      </li>
+      <li>
+        Jedem Trumpf ist ein Multiplikator zugeteilt, mit welchem am Ende der
+        Runde die erzielten Punkte multipliziert werden. Dieser Umstand
+        erfordert eine vorausschauende Planung bei der Trumpfwahl.
+      </li>
+      <li>
+        Beim Coiffeur auf 8 Runden müssen von jedem Team jede Trumpffarbe,
+        Obenabe, Undenufe, und zwei Joker (freie Wahl der Trumpfart) je einmal
+        gespielt werden. Beim Coiffeur auf 10 Runden müssen zusätzlich einmal
+        Slalom und einmal Guschti 5/4 gespielt werden.
+      </li>
+      <li>
+        Beim Slalom wird abwechslungsweise ein Stich Obenabe und dann ein Stich
+        Undenufe gespielt.
+      </li>
+      <li>
+        Beim Slalom-Obenabe wird der erste Stich Obenabe gespielt. Beim
+        Slalom-Undenufe wird hingegen mit Undenufe begonnen.
+      </li>
+      <li>
+        Beim Guschti-Obenabe werden zuerst fünf Stiche Obenabe und dann vier
+        Stiche Undenufe
+      </li>
+      <li>
+        Beim Guschti-Undenufe zuerst fünf Stiche Undenufe und dann vier Stiche
+        Obenabe gejasst.
+      </li>
+      <li>
+        Das Schieben erfolgt nicht wie beim Schieber zum Partner, sondern im
+        Gegenuhrzeigersinn zum nächsten Mitspieler.
+      </li>
+      <li>
+        Schieben alle Spieler weiter, kommt die Aufforderung zum Trumpfen wieder
+        zum ersten Spieler zurück. Dieser kann nicht mehr weiterschieben und
+        muss einen Trumpf wählen. Derjenige Spieler, welcher die Trumpfart
+        bestimmt hat, startet mit dem Ablegen der ersten Karte. Der Coiffeur
+        wird ohne Weisen gespielt.
+      </li>
+    </ul>
 
     <h2 class="text-4xl font-normal leading-normal mt-4">
       JassTracker Bedienung
