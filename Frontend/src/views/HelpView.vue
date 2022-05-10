@@ -40,6 +40,38 @@
         immer mit seinen Familienmitgliedern spielt
       </li>
     </ul>
+    <h3>Spiele</h3>
+    <ul>
+      <li>
+        Spiele sind immer in einem Tisch enthalten. Bei der Erstellung eines
+        Tisches wird automatisch das erste Spiel erstellt.
+      </li>
+      <li>
+        Spiele können mit "Spiel abschliessen" entweder frühzeitig oder sobald
+        alle Möglichkeiten gespielt wurden abgeschlossen werden.
+      </li>
+      <li>
+        Ein neues Spiel kann via "Neues Spiel erstellen" eröffnet werden, man
+        erhaält die Option, die Teams neu zu bilden bei Wunsch.
+      </li>
+      <li>
+        Beim Klick auf ein Spiel in der unteren Box Ansicht, kommt man auf die
+        Detail Seite wo man die Möglichkeit hat, ein Spiel zu löschen. Nur
+        abgeschlossene Spiele können geloscht werden.
+      </li>
+      <li>
+        In dieser Detail Ansicht, sieht man zusätzlichen aktuelle
+        Spielstatistiken wie aktuelle Siegeschancen pro Team oder
+        Durchschnittliche Punktzahl etc.
+      </li>
+      <li>
+        Anstatt z.B. 157 - 15 zu rechnen und dann 142 einzugeben, kann auch
+        direkt "-15" eigetragen werden. Eingaben im Spiel können angepasst und
+        auch gelöscht werden. Es werden nur Zahlen und "-" in den Feldern
+        erlaubt. Bei einer invaliden Eingabe, wird das Feld rot markiert, bis
+        der Fehler korrigiert wurde.
+      </li>
+    </ul>
     <p>
       Jasskarten-Icons bereitgestellt von Wikimedia Commons User Jensche,
       lizensiert unter
