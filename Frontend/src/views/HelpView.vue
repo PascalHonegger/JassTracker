@@ -1,11 +1,15 @@
 <template>
   <div class="container mx-auto text-center">
-    <h1>Hier kommt das Hilfezentrum hin!</h1>
+    <h1 class="text-5xl font-normal leading-normal">Hilfezentrum</h1>
 
-    <h2>Jass Regeln</h2>
+    <h2 class="text-4xl font-normal leading-normal mt-4">Jass Regeln</h2>
 
-    <h2>JassTracker Bedienung</h2>
-    <h3>Login / Registierung</h3>
+    <h2 class="text-4xl font-normal leading-normal mt-4">
+      JassTracker Bedienung
+    </h2>
+    <h3 class="text-3xl font-normal leading-normal mt-4">
+      Login / Registierung
+    </h3>
     <ul>
       <li>
         Der JassTracker kann entweder als Gast oder mit einem erstellen Benutzer
@@ -24,7 +28,7 @@
         einen Account erstellen möchte.
       </li>
     </ul>
-    <h3>Tische</h3>
+    <h3 class="text-3xl font-normal leading-normal mt-4">Tische</h3>
     <ul>
       <li>
         Sobald man sich eingeloggt hat (entweder mit dem eigenen Benutzer
@@ -40,7 +44,7 @@
         immer mit seinen Familienmitgliedern spielt
       </li>
     </ul>
-    <h3>Spiele</h3>
+    <h3 class="text-3xl font-normal leading-normal mt-4">Spiele</h3>
     <ul>
       <li>
         Spiele sind immer in einem Tisch enthalten. Bei der Erstellung eines
@@ -72,7 +76,9 @@
         der Fehler korrigiert wurde.
       </li>
     </ul>
-    <h3>Profil / Statistiken</h3>
+    <h3 class="text-3xl font-normal leading-normal mt-4">
+      Profil / Statistiken
+    </h3>
     <ul>
       <li>
         Unter dem <a href="/profile">Profil</a> kann man seine Benutzerdaten
