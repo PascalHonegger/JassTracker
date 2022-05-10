@@ -24,6 +24,22 @@
         einen Account erstellen möchte.
       </li>
     </ul>
+    <h3>Tische</h3>
+    <ul>
+      <li>
+        Sobald man sich eingeloggt hat (entweder mit dem eigenen Benutzer
+        Account oder als Gast), kann man neue Tische erstellen
+      </li>
+      <li>
+        Tische enthalten immer 4 Personen, somit hat man alle Spiele die man mit
+        diesen Personen spielt, immer an einem Ort und sorgt für eine
+        übersichtliche Übersicht.
+      </li>
+      <li>
+        Ein Tisch kann zu dem einen Namen haben, z.B. "Familientisch", wo man
+        immer mit seinen Familienmitgliedern spielt
+      </li>
+    </ul>
     <p>
       Jasskarten-Icons bereitgestellt von Wikimedia Commons User Jensche,
       lizensiert unter
