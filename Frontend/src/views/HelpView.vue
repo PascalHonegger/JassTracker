@@ -72,6 +72,24 @@
         der Fehler korrigiert wurde.
       </li>
     </ul>
+    <h3>Profil / Statistiken</h3>
+    <ul>
+      <li>
+        Unter dem <a href="/profile">Profil</a> kann man seine Benutzerdaten
+        anpassen und sieht auch persönliche Statistiken
+      </li>
+      <li>
+        Der "Benutzername" lässt sich nicht anpassen, nachdem er inital gesetzt
+        wurde
+      </li>
+      <li>
+        Die Statistiken zeigen in der Übersicht generelle Statistiken an wie
+        z.B. Anzahl Spiele, Siegesrate und durchschnittliche Punktzahl pro
+        Spiel. Man kann mit einem klick auf die Statistiken die Detail Ansicht
+        öffnen. Dort sieht man genauere Informationen auch visuell dargestellt
+        und kann dieese auch beliebig filtern.
+      </li>
+    </ul>
     <p>
       Jasskarten-Icons bereitgestellt von Wikimedia Commons User Jensche,
       lizensiert unter
