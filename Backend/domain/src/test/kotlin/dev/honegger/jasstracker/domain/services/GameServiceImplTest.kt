@@ -3,7 +3,7 @@ package dev.honegger.jasstracker.domain.services
 import dev.honegger.jasstracker.domain.Game
 import dev.honegger.jasstracker.domain.GameParticipation
 import dev.honegger.jasstracker.domain.Player
-import dev.honegger.jasstracker.domain.UserSession
+import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.repositories.GameRepository
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
 import io.mockk.*
@@ -17,7 +17,7 @@ import kotlin.test.*
 class GameServiceImplTest {
     private val gameRepository = mockk<GameRepository>()
     private val playerRepository = mockk<PlayerRepository>()
-    private val dummySession = UserSession(UUID.randomUUID(), "dummy")
+    private val dummySession = PlayerSession(UUID.randomUUID(), "dummy")
     private val passedGame = slot<Game>()
     private val passedPlayers = mutableListOf<Player>()
     private val passedTableId = slot<UUID>()

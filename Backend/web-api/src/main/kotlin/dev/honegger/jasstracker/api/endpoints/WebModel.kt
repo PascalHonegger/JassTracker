@@ -13,7 +13,7 @@ import java.util.*
 // Keep in sync with web-model.ts !!
 
 // Would be loaded once authentication is implemented
-val dummySession = UserSession(userId = "27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "dummy")
+val dummySession = PlayerSession(userId = "27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(), "dummy")
 
 @Serializable
 data class WebTable(

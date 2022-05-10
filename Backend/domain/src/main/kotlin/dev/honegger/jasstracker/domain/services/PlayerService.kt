@@ -3,7 +3,7 @@ package dev.honegger.jasstracker.domain.services
 import dev.honegger.jasstracker.domain.GuestPlayer
 import dev.honegger.jasstracker.domain.Player
 import dev.honegger.jasstracker.domain.RegisteredPlayer
-import dev.honegger.jasstracker.domain.UserSession
+import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
 import mu.KotlinLogging
 import java.util.*
@@ -16,8 +16,8 @@ interface PlayerService {
     ): RegisteredPlayer
 
     fun registerGuestPlayer(): GuestPlayer
-    fun getPlayerOrNull(session: UserSession, id: UUID): Player?
-    fun updatePlayer(session: UserSession, updatedPlayer: RegisteredPlayer)
+    fun getPlayerOrNull(session: PlayerSession, id: UUID): Player?
+    fun updatePlayer(session: PlayerSession, updatedPlayer: RegisteredPlayer)
     fun authenticatePlayer(username: String, password: String): RegisteredPlayer?
 }
 
@@ -55,7 +55,7 @@ class PlayerServiceImpl(
     }
 
     override fun getPlayerOrNull(
-        session: UserSession,
+        session: PlayerSession,
         id: UUID,
     ): Player? {
         // Users can load any player they know the ID of
@@ -63,7 +63,7 @@ class PlayerServiceImpl(
     }
 
     override fun updatePlayer(
-        session: UserSession,
+        session: PlayerSession,
         updatedPlayer: RegisteredPlayer,
     ) {
         val existingPlayer =

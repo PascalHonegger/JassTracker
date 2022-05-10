@@ -2,7 +2,7 @@ package dev.honegger.jasstracker.domain.services
 
 import dev.honegger.jasstracker.domain.Contract
 import dev.honegger.jasstracker.domain.ContractType
-import dev.honegger.jasstracker.domain.UserSession
+import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.repositories.ContractRepository
 import io.mockk.*
 import java.util.*
@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 
 class ContractServiceImplTest {
     private val repository = mockk<ContractRepository>()
-    private val dummySession = UserSession(UUID.randomUUID(), "dummy")
+    private val dummySession = PlayerSession(UUID.randomUUID(), "dummy")
     private val service = ContractServiceImpl(repository)
 
     @BeforeTest

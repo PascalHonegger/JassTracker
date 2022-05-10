@@ -1,7 +1,7 @@
 package dev.honegger.jasstracker.domain.services
 
 import dev.honegger.jasstracker.domain.Table
-import dev.honegger.jasstracker.domain.UserSession
+import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.repositories.TableRepository
 import io.mockk.*
 import org.junit.jupiter.api.Disabled
@@ -11,7 +11,7 @@ import kotlin.test.*
 class TableServiceImplTest {
     private val repository = mockk<TableRepository>()
     private val service = TableServiceImpl(repository)
-    private val dummySession = UserSession(UUID.randomUUID(), "dummy")
+    private val dummySession = PlayerSession(UUID.randomUUID(), "dummy")
     private val passedTable = slot<Table>()
 
     @BeforeTest
