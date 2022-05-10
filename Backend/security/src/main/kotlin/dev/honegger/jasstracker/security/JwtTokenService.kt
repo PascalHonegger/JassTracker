@@ -1,8 +1,9 @@
 package dev.honegger.jasstracker.security
 
 import com.auth0.jwt.JWT
-import com.auth0.jwt.JWTVerifier
+
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.JWTVerifier
 import dev.honegger.jasstracker.domain.GuestPlayer
 import dev.honegger.jasstracker.domain.Player
 import dev.honegger.jasstracker.domain.RegisteredPlayer
@@ -22,14 +23,14 @@ data class JwtConfig(
 
 class JwtTokenService(private val jwtConfig: JwtConfig, private val clock: Clock = Clock.System) : AuthTokenService {
     override fun createToken(player: Player): String {
-        val token = JWT.create()
+        return JWT.create()
             .withAudience(jwtConfig.audience)
+            .withIssuer(jwtConfig.issuer)
             .withClaim("PlayerId", player.id.toString())
             .withClaim("IsGuest", player is GuestPlayer)
             .withClaim("Username", if (player is RegisteredPlayer) player.username else "Gast")
             .withExpiresAt(Date.from((clock.now() + jwtConfig.expiryTime).toJavaInstant()))
             .sign(Algorithm.HMAC256(jwtConfig.secret))
-        return token
     }
 
     val tokenVerifier: JWTVerifier = JWT

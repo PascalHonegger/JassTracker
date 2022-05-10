@@ -23,7 +23,7 @@ fun Application.module() {
     environment.config.apply {
         val jwtConfig = JwtConfig(
             secret = property("jwt.secret").getString(),
-            issuer = property("jwt.issuer").getString(),
+            issuer = property("jwt.issuer").getString().let {  },
             audience = property("jwt.audience").getString(),
             realm = property("jwt.realm").getString(),
             expiryTime = property("jwt.expiryTime").getString().let { Duration.parse(it) },

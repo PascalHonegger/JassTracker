@@ -67,4 +67,20 @@ class PlayerRepositoryImpl : PlayerRepository {
         }
         newRecord.insert()
     }
+
+    override fun findPlayerByUsername(username: String): RegisteredPlayer? = withContext {
+        val playerRecord = selectFrom(PLAYER).where(PLAYER.USERNAME.eq(username)).fetchOne()
+
+        playerRecord?.let {
+            when {
+                it.isGuest -> error("Cannot find guest by username")
+                else -> RegisteredPlayer(
+                    id = it.id,
+                    username = it.username,
+                    displayName = it.displayName,
+                    password = it.password,
+                )
+            }
+        }
+    }
 }
