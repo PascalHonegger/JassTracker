@@ -32,13 +32,12 @@ fun Route.configurePlayerEndpoints(
         }
         post {
             val newPlayer = call.receive<WebCreatePlayer>()
-            val createdPlayer = playerService.createPlayer(
-                session = dummySession,
+            val registeredPlayer = playerService.registerPlayer(
                 displayName = newPlayer.displayName,
                 username = newPlayer.username,
                 password = newPlayer.password,
             )
-            call.respond(HttpStatusCode.Created, createdPlayer.toWebPlayer())
+            call.respond(HttpStatusCode.Created, registeredPlayer.toWebPlayer())
         }
         put("/{id}") {
             val id = call.parameters["id"]

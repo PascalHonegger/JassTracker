@@ -14,26 +14,26 @@ import dev.honegger.jasstracker.security.JwtTokenService
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.auth.*
+import kotlin.time.Duration
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
     environment.config.apply {
-        val jwtConfig = JwtConfig(secret = property("jwt.secret").getString(),
+        val jwtConfig = JwtConfig(
+            secret = property("jwt.secret").getString(),
             issuer = property("jwt.issuer").getString(),
             audience = property("jwt.audience").getString(),
             realm = property("jwt.realm").getString(),
-            expiryTime = property("jwt.expiryTime").getString())
+            expiryTime = property("jwt.expiryTime").getString().let { Duration.parse(it) },
+        )
         val argon2HashConfig =
-            Argon2HashConfig(iterations = property("hash.iterations").toString(),
-                memory = property("hash.memory").toString(),
-                parallelization = property("hash.parallelization").toString())
-
-        initializeDatabase()
-        configureHTTP()
-        configureStaticRouting()
-        configureAuthentication(jwtConfig)
+            Argon2HashConfig(
+                iterations = property("hash.iterations").getString().toInt(),
+                memory = property("hash.memory").getString().toInt(),
+                parallelization = property("hash.parallelization").getString().toInt(),
+            )
 
         // Could be provided by a DI framework like Koin
         val gameRepository = GameRepositoryImpl()
@@ -50,9 +50,13 @@ fun Application.module() {
         val contractService = ContractServiceImpl(contractRepository)
         val playerService = PlayerServiceImpl(playerRepository, passwordHashService)
 
-        configureAuthenticationEndpoints(authTokenService)
+        initializeDatabase()
+        configureHTTP()
+        configureStaticRouting()
+        configureAuthentication(authTokenService)
 
         routing {
+            configureAuthenticationEndpoints(playerService, authTokenService)
             authenticate {
                 configureGameEndpoints(gameService)
                 configureTableEndpoints(tableService)

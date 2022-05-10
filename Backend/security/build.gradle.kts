@@ -5,15 +5,10 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":Backend:security"))
-    implementation(libs.ktor.server.core)
+    implementation(project(":Backend:domain"))
     implementation(libs.java.jwt)
     implementation(libs.argon2.jvm)
-    implementation(libs.ktor.serialization.kotlinx.json)
-    implementation(libs.logback)
     implementation(libs.kotlinx.datetime)
-    testImplementation(libs.ktor.client.content.negotiation)
-    testImplementation(testLibs.ktor.server.tests)
     testImplementation(testLibs.kotlin.test)
     testImplementation(testLibs.mockk)
 }

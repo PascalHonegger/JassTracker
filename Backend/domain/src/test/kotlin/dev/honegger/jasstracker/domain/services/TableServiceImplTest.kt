@@ -2,7 +2,6 @@ package dev.honegger.jasstracker.domain.services
 
 import dev.honegger.jasstracker.domain.Table
 import dev.honegger.jasstracker.domain.UserSession
-import dev.honegger.jasstracker.domain.repositories.GameRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
 import io.mockk.*
 import org.junit.jupiter.api.Disabled
@@ -83,7 +82,7 @@ class TableServiceImplTest {
         val tableShouldBeNull = service.getTableOrNull(dummySession, created.id)
 
         assertTrue { deleted }
-        assertNull(tableShouldBeNull);
+        assertNull(tableShouldBeNull)
 
         verify(exactly = 1) {
             repository.deleteTableById(created.id)

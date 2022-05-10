@@ -1,35 +1,33 @@
 package dev.honegger.jasstracker.api.endpoints
 
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
-import dev.honegger.jasstracker.domain.services.AuthenticationService
+import dev.honegger.jasstracker.domain.services.AuthTokenService
+import dev.honegger.jasstracker.domain.services.PlayerService
+import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
+import io.ktor.server.response.*
 
 fun Route.configureAuthenticationEndpoints(
-    authenticationService: AuthenticationService,
+    playerService: PlayerService,
+    authTokenService: AuthTokenService,
 ) {
-    post {
+    post("/login") {
         val newUserSession = call.receive<WebCreatePlayer>()
-        val token = JWT.create()
-            .withAudience()
-            .withClaim("username", "TODO")
-            //.withExpiresAt()
-            .sign(Algorithm.HMAC256("TODO"))
 
-       // val createdSession = authenticationService.createUserSession()
-        call.respond(hashMapOf("token" to token))
-    }
-
-    authenticate {
-        get("/overview") {
-            val principal = call.principal<JWTPrincipal>()
-
+        val player = playerService.authenticatePlayer(newUserSession.username, newUserSession.password)
+        if (player == null) {
+            call.respond(HttpStatusCode.BadRequest)
+            return@post
         }
+
+        val token = authTokenService.createToken(player)
+        call.respond(token)
     }
 
+    post("/guestAccess") {
+        val player = playerService.registerGuestPlayer()
+        val token = authTokenService.createToken(player)
+        call.respond(token)
+    }
 }

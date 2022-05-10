@@ -9,4 +9,5 @@ interface PlayerRepository {
     fun getPlayerOrNull(id: UUID): Player?
     fun updatePlayer(updatedPlayer: RegisteredPlayer)
     fun savePlayer(newPlayer: Player)
+    fun findPlayerByUsername(username: String): RegisteredPlayer?
 }
