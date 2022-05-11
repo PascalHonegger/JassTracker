@@ -23,7 +23,7 @@ fun Application.module() {
     environment.config.apply {
         val jwtConfig = JwtConfig(
             secret = property("jwt.secret").getString(),
-            issuer = property("jwt.issuer").getString().let {  },
+            issuer = property("jwt.issuer").getString(),
             audience = property("jwt.audience").getString(),
             realm = property("jwt.realm").getString(),
             expiryTime = property("jwt.expiryTime").getString().let { Duration.parse(it) },
@@ -56,13 +56,15 @@ fun Application.module() {
         configureAuthentication(authTokenService)
 
         routing {
-            configureAuthenticationEndpoints(playerService, authTokenService)
-            authenticate {
-                configureGameEndpoints(gameService)
-                configureTableEndpoints(tableService)
-                configureContractEndpoints(contractService)
-                configurePlayerEndpoints(playerService)
-                configureRoundEndpoints(roundService)
+            route("/api") {
+                configureAuthenticationEndpoints(playerService, authTokenService)
+                authenticate {
+                    configureGameEndpoints(gameService)
+                    configureTableEndpoints(tableService)
+                    configureContractEndpoints(contractService)
+                    configurePlayerEndpoints(playerService)
+                    configureRoundEndpoints(roundService)
+                }
             }
         }
     }
