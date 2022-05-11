@@ -12,7 +12,7 @@ import io.ktor.server.routing.*
 fun Route.configureGameEndpoints(
     gameService: GameService,
 ) {
-    route("/api/games") {
+    route("/games") {
         get {
             val games = gameService.getAllGames(dummySession)
             call.respond(HttpStatusCode.OK, games.map { it.toWebGame() })

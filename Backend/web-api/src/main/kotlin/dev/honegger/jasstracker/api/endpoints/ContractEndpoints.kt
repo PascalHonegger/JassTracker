@@ -7,7 +7,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.configureContractEndpoints(contractService: ContractService) {
-    route("/api/contracts") {
+    route("/contracts") {
         get {
             val contracts = contractService.getContracts(dummySession)
             call.respond(HttpStatusCode.OK, contracts.map { it.toWebContract() })

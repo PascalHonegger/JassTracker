@@ -11,7 +11,7 @@ import io.ktor.server.routing.*
 fun Route.configureRoundEndpoints(
     roundService: RoundService,
 ) {
-    route("/api/rounds") {
+    route("/rounds") {
         get("/byGame/{gameId}") {
             val gameId = call.parameters["gameId"]
             if (gameId.isNullOrBlank()) {

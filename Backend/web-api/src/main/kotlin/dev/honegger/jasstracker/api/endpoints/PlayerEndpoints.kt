@@ -13,7 +13,7 @@ import io.ktor.server.routing.*
 fun Route.configurePlayerEndpoints(
     playerService: PlayerService,
 ) {
-    route("/api/players") {
+    route("/players") {
         get("/{id}") {
             val id = call.parameters["id"]
             if (id.isNullOrBlank()) {

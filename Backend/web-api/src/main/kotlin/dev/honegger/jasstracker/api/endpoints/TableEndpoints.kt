@@ -11,7 +11,7 @@ import io.ktor.server.routing.*
 fun Route.configureTableEndpoints(
     tableService: TableService,
 ) {
-    route("/api/tables") {
+    route("/tables") {
         get {
             val tables = tableService.getTables(dummySession)
             call.respond(HttpStatusCode.OK, tables.map { it.toWebTable() })
