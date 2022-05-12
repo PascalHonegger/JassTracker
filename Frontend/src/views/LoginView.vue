@@ -23,12 +23,10 @@ async function login() {
   loginLoading.value = true;
   await authStore.loginPlayer(username.value, password.value);
   await router.push("/overview");
-  await authStore.setLoggedIn();
 }
 async function loginAsGuest() {
   loginAsGuestLoading.value = true;
   await authStore.guestAccess();
-  await authStore.setLoggedIn();
   await router.push("/overview");
 }
 </script>
