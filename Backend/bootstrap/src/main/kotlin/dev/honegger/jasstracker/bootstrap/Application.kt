@@ -50,10 +50,11 @@ fun Application.module() {
         val contractService = ContractServiceImpl(contractRepository)
         val playerService = PlayerServiceImpl(playerRepository, passwordHashService)
 
+        configureAuthentication(authTokenService)
         initializeDatabase()
         configureHTTP()
         configureStaticRouting()
-        configureAuthentication(authTokenService)
+
 
         routing {
             route("/api") {

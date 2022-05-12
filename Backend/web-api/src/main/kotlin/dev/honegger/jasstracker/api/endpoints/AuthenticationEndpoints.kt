@@ -28,6 +28,6 @@ fun Route.configureAuthenticationEndpoints(
     post("/guestAccess") {
         val player = playerService.registerGuestPlayer()
         val token = authTokenService.createToken(player)
-        call.respond(token)
+        call.respond(hashMapOf("token" to token))
     }
 }
