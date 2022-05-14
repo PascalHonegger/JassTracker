@@ -37,6 +37,7 @@ function closeModal() {
     :to="{ name: 'table', params: { tableId: table.id } }"
     class="jass-table max-w-sm w-full lg:max-w-full flex flex-col text-center relative z-0"
   >
+    <p class="font-bold">Dein Jasstisch</p>
     <p class="font-bold">{{ table.name }}</p>
     <icon
       @click="showModal"
