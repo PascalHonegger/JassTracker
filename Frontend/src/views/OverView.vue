@@ -46,11 +46,14 @@ async function createNewTable() {
 <template>
   <div class="table-container container mx-auto">
     <WaitSpinner v-if="loadingTables"></WaitSpinner>
-    <div v-else class="flex items-stretch flex-wrap gap-4 p-4">
+    <div
+      v-else
+      class="flex flex-col items-stretch md:flex-wrap md:flex-row gap-4 p-4"
+    >
       <TableItem v-for="t in tablesAsArray" :key="t.id" :table="t"></TableItem>
       <button
         @click="isModalVisible = true"
-        class="table cursor-pointer max-w-sm w-full lg:max-w-full lg:flex"
+        class="jass-table cursor-pointer max-w-sm w-full lg:max-w-full lg:flex"
       >
         <span class="self-center text-6xl">+</span>
       </button>
@@ -61,11 +64,14 @@ async function createNewTable() {
         <p class="font-bold">Neuen Tisch erstellen</p>
       </template>
       <template v-slot:body>
-        <div class="table-name mb-2 text-center">
+        <div class="flex flex-row gap-2 table-name mb-2 text-center">
           <label for="tableName">Tisch Name</label>
           <input id="tableName" v-model="newTableName" />
         </div>
-        <form @submit.prevent="createNewTable" class="flex justify-around">
+        <form
+          @submit.prevent="createNewTable"
+          class="flex flex-row gap-2 justify-around"
+        >
           <CreateGame
             :disabled="creatingGame"
             v-model:new-game="newGame"

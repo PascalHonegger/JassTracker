@@ -7,7 +7,7 @@ function close() {
 }
 </script>
 <template>
-  <div class="modal-backdrop">
+  <div class="modal-backdrop z-50">
     <div class="modal">
       <header class="modal-header">
         <slot name="header"></slot>

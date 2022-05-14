@@ -85,33 +85,36 @@ function backToOverview() {
 }
 </script>
 <template>
-  <div class="container mx-auto" v-if="currentTable">
+  <div class="container mx-auto p-4" v-if="currentTable">
     <button @click="backToOverview" class="btn btn-blue mt-2">Zurück</button>
     <button @click="isModalVisible = true" class="btn btn-blue ml-2 mt-2">
       Neues Spiel erstellen
     </button>
     <GameItem v-if="currentGame" :game="currentGame" />
     <p v-else>Momentan läuft kein Spiel</p>
+
+    <div class="my-2" v-if="openGames.length > 0">
+      <h2 class="font-bold text-lg">Offene Spiele</h2>
+      <GameList :table-id="currentTableId" :games="openGames" />
+    </div>
+
+    <div v-if="completedGames.length > 0" class="my-2">
+      <h2 class="font-bold text-lg">Abgeschlossene Spiele</h2>
+      <GameList :table-id="currentTableId" :games="completedGames" />
+    </div>
   </div>
 
   <WaitSpinner v-else />
-
-  <div v-if="openGames.length > 0" class="container mx-auto my-2">
-    <h2 class="font-bold text-lg">Offene Spiele</h2>
-    <GameList :table-id="currentTableId" :games="openGames" />
-  </div>
-
-  <div v-if="completedGames.length > 0" class="container mx-auto my-2">
-    <h2 class="font-bold text-lg">Abgeschlossene Spiele</h2>
-    <GameList :table-id="currentTableId" :games="completedGames" />
-  </div>
 
   <ModalDialog v-show="isModalVisible" @close="isModalVisible = false">
     <template v-slot:header>
       <p class="font-bold">Neues Spiel erstellen</p>
     </template>
     <template v-slot:body>
-      <form @submit.prevent="createNewGame" class="flex justify-around">
+      <form
+        @submit.prevent="createNewGame"
+        class="flex flex-row justify-around gap-2"
+      >
         <CreateGame
           :disabled="creatingGame"
           v-model:new-game="newGame"

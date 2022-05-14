@@ -28,41 +28,29 @@ async function loginAsGuest() {
   await router.push("/overview");
 }
 </script>
-<style lang="scss">
-.home {
-  width: 100%;
-  display: flex;
+
+<style lang="scss" scoped>
+.login input {
+  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5;
 }
 
-.login {
-  text-align: center;
-  width: 50%;
-}
-
-.image {
-  width: 50%;
-  img {
-    height: auto;
-    width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .image {
-    display: none;
-  }
-  .login {
-    width: 100%;
-  }
+.default-h1 {
+  @apply font-medium leading-tight text-5xl mb-2 text-blue-600;
 }
 </style>
+
 <template>
-  <div class="home">
-    <div class="image">
-      <img src="../assets/jass.webp" alt="Jasskarten" />
+  <div class="grid grid-rows-1 grid-cols-1 md:grid-cols-2 w-full h-full">
+    <div class="image hidden md:block h-full">
+      <img
+        loading="lazy"
+        class="object-cover h-full w-full"
+        src="../assets/jass.webp"
+        alt="Jasskarten"
+      />
     </div>
-    <div class="login flex flex-col justify-center">
-      <h1 class="default-h1">JassTracker</h1>
+    <div class="login text-center flex flex-col h-full overflow-auto">
+      <h1 class="default-h1 mt-auto">JassTracker</h1>
       <p class="font-medium">Slogan TBD</p>
       <div class="flex flex-col my-8 self-center">
         <form @submit.prevent="login" autocomplete="on">
@@ -116,7 +104,7 @@ async function loginAsGuest() {
 
         <WaitSpinner v-if="loginAsGuestLoading"></WaitSpinner>
       </button>
-      <div>
+      <div class="mb-auto mx-1">
         <p>Neu beim JassTracker? Erstellen Sie einen Account!</p>
       </div>
     </div>
