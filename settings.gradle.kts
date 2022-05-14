@@ -7,18 +7,18 @@ include("Backend:web-api")
 dependencyResolutionManagement {
     versionCatalogs {
         val kotlin = "1.6.21"
-        val mockk = "1.12.3"
-        val ktor = "2.0.0"
+        val mockk = "1.12.4"
+        val ktor = "2.0.1"
         val logback = "1.2.11"
         val shadow = "7.1.2"
         val kotlinxDatetime = "0.3.2"
         val kotlinLogging = "2.1.21"
-        val flyway = "8.5.9"
-        val postgresql = "42.3.4"
+        val flyway = "8.5.10"
+        val postgresql = "42.3.5"
         val jooq = "3.16.5"
         val jooqPlugin = "7.1.1"
-        val kover = "0.5.0"
-        val testcontainers = "1.16.3"
+        val kover = "0.5.1"
+        val testcontainers = "1.17.1"
 
         create("libs") {
             library("ktor-server-core", "io.ktor", "ktor-server-core-jvm").version(ktor)
