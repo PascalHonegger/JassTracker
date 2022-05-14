@@ -27,7 +27,7 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
         val newTable = Table(
             id = UUID.randomUUID(),
             name = name,
-            ownerId = session.userId,
+            ownerId = session.playerId,
             games = emptyList(),
         )
 
@@ -48,7 +48,7 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
         session: PlayerSession
     ): List<Table> {
         // Users can load all tables (that belong to them / they are a part of)
-        return tableRepository.getTables(session.userId)
+        return tableRepository.getTables(session.playerId)
     }
 
     override fun updateTable(
@@ -59,7 +59,7 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
             tableRepository.getTableOrNull(updatedTable.id)
         // User can only update a table which exists and is owned by himself
         checkNotNull(existingTable)
-        check(updatedTable.ownerId == session.userId)
+        check(updatedTable.ownerId == session.playerId)
         tableRepository.saveTable(existingTable.copy(name = updatedTable.name))
     }
 
@@ -67,7 +67,7 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
         val existingTable =
             tableRepository.getTableOrNull(id)
         checkNotNull(existingTable)
-        check(existingTable.ownerId == session.userId)
+        check(existingTable.ownerId == session.playerId)
         return tableRepository.deleteTableById(id)
     }
 }

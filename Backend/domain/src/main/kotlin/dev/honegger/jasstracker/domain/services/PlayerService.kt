@@ -70,7 +70,7 @@ class PlayerServiceImpl(
             playerRepository.getPlayerOrNull(updatedPlayer.id)
         // User can only update themselves
         checkNotNull(existingPlayer)
-        check(existingPlayer.id == session.userId)
+        check(existingPlayer.id == session.playerId)
 
         val sanitizedPlayer = when (existingPlayer) {
             is GuestPlayer -> updatedPlayer

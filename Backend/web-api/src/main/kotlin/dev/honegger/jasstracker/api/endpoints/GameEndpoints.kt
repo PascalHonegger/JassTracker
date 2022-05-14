@@ -1,5 +1,6 @@
 package dev.honegger.jasstracker.api.endpoints
 
+import dev.honegger.jasstracker.api.util.playerSession
 import dev.honegger.jasstracker.domain.currentPlayer
 import dev.honegger.jasstracker.domain.services.GameService
 import dev.honegger.jasstracker.domain.util.toUUID
@@ -14,7 +15,7 @@ fun Route.configureGameEndpoints(
 ) {
     route("/games") {
         get {
-            val games = gameService.getAllGames(dummySession)
+            val games = gameService.getAllGames(call.playerSession())
             call.respond(HttpStatusCode.OK, games.map { it.toWebGame() })
         }
         get("/{id}") {
@@ -24,7 +25,7 @@ fun Route.configureGameEndpoints(
                 return@get
             }
             val game =
-                gameService.getGameOrNull(dummySession, id.toUUID())
+                gameService.getGameOrNull(call.playerSession(), id.toUUID())
 
             if (game == null) {
                 call.respond(HttpStatusCode.NotFound)
@@ -40,7 +41,7 @@ fun Route.configureGameEndpoints(
                 return@get
             }
             val game =
-                gameService.getGameOrNull(dummySession, id.toUUID())
+                gameService.getGameOrNull(call.playerSession(), id.toUUID())
 
             if (game == null) {
                 call.respond(HttpStatusCode.NotFound)
@@ -55,7 +56,7 @@ fun Route.configureGameEndpoints(
                 dev.honegger.jasstracker.domain.services.CreateGameParticipation(game.playerId, game.displayName)
 
             val createdGame = gameService.createGame(
-                dummySession,
+                call.playerSession(),
                 newGame.tableId.toUUID(),
                 CreateGameParticipation(newGame.team1Player1),
                 CreateGameParticipation(newGame.team1Player2),
@@ -71,7 +72,7 @@ fun Route.configureGameEndpoints(
                 return@put
             }
             val updatedGame = call.receive<WebGame>().toGame()
-            gameService.updateGame(dummySession, updatedGame)
+            gameService.updateGame(call.playerSession(), updatedGame)
             call.respond(HttpStatusCode.OK)
         }
         delete("/{id}") {
@@ -80,7 +81,7 @@ fun Route.configureGameEndpoints(
                 call.respond(HttpStatusCode.BadRequest)
                 return@delete
             }
-            val success = gameService.deleteGameById(dummySession, id.toUUID())
+            val success = gameService.deleteGameById(call.playerSession(), id.toUUID())
             if (!success) {
                 call.respond(HttpStatusCode.NotFound)
                 return@delete

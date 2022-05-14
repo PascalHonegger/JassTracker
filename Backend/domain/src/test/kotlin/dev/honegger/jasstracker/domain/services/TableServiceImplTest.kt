@@ -11,7 +11,7 @@ import kotlin.test.*
 class TableServiceImplTest {
     private val repository = mockk<TableRepository>()
     private val service = TableServiceImpl(repository)
-    private val dummySession = PlayerSession(UUID.randomUUID(), "dummy")
+    private val dummySession = PlayerSession(UUID.randomUUID(), false, "dummy")
     private val passedTable = slot<Table>()
 
     @BeforeTest
@@ -34,7 +34,7 @@ class TableServiceImplTest {
         assertTrue { passedTable.isCaptured }
         assertEquals(created, passedTable.captured)
         assertEquals(dummyName, created.name)
-        assertEquals(dummySession.userId, created.ownerId)
+        assertEquals(dummySession.playerId, created.ownerId)
         verify(exactly = 1) { repository.saveTable(any()) }
     }
 
@@ -46,7 +46,7 @@ class TableServiceImplTest {
         assertTrue { passedTable.isCaptured }
         assertEquals(created, passedTable.captured)
         assertEquals(dummyName, created.name)
-        assertEquals(dummySession.userId, created.ownerId)
+        assertEquals(dummySession.playerId, created.ownerId)
         verify(exactly = 1) { repository.saveTable(created) }
         every {
             repository.getTableOrNull(created.id)

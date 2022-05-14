@@ -17,7 +17,7 @@ import kotlin.test.*
 class GameServiceImplTest {
     private val gameRepository = mockk<GameRepository>()
     private val playerRepository = mockk<PlayerRepository>()
-    private val dummySession = PlayerSession(UUID.randomUUID(), "dummy")
+    private val dummySession = PlayerSession(UUID.randomUUID(), false, "dummy")
     private val passedGame = slot<Game>()
     private val passedPlayers = mutableListOf<Player>()
     private val passedTableId = slot<UUID>()

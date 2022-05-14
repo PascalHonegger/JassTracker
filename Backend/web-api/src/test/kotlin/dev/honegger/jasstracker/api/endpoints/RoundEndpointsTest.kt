@@ -3,10 +3,10 @@ package dev.honegger.jasstracker.api.endpoints
 import dev.honegger.jasstracker.domain.Round
 import dev.honegger.jasstracker.domain.services.RoundService
 import dev.honegger.jasstracker.domain.util.toUUID
+import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import io.mockk.*
 import java.util.*
@@ -28,15 +28,20 @@ class RoundEndpointsTest {
         confirmVerified(service)
     }
 
-    @Test
-    fun `get rounds of game returns all rounds of the game`() = testApplication {
+    private fun ApplicationTestBuilder.setup(): HttpClient {
         application {
             installJson()
-            routing { configureRoundEndpoints(service) }
+            installSecuredRoute { configureRoundEndpoints(service) }
         }
-        val client = createClient {
+        return createClient {
             installJson()
+            addJwtHeader()
         }
+    }
+
+    @Test
+    fun `get rounds of game returns all rounds of the game`() = testApplication {
+        val client = setup()
 
         val id1 = UUID.randomUUID()
         val id2 = UUID.randomUUID()
@@ -65,7 +70,7 @@ class RoundEndpointsTest {
             service.getRounds(any(), gameId)
         } returns listOf(round1, round2)
 
-        client.get("/api/rounds/byGame/$gameId").apply {
+        client.get("/rounds/byGame/$gameId").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(
                 """[{"id":"$id1","number":1,"score":150,"gameId":"$gameId","playerId":"$playerId","contractId":"$contractId1"},{"id":"$id2","number":2,"score":140,"gameId":"$gameId","playerId":"$playerId","contractId":"$contractId2"}]""",
@@ -77,19 +82,13 @@ class RoundEndpointsTest {
 
     @Test
     fun `get rounds of game returns empty list if game not found`() = testApplication {
-        application {
-            installJson()
-            routing { configureRoundEndpoints(service) }
-        }
-        val client = createClient {
-            installJson()
-        }
+        val client = setup()
 
         every {
             service.getRounds(any(), any())
         } returns emptyList()
 
-        client.get("/api/rounds/byGame/84c532b1-dd87-4ca0-bc85-81c9c5d51c21").apply {
+        client.get("/rounds/byGame/84c532b1-dd87-4ca0-bc85-81c9c5d51c21").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals("[]", bodyAsText())
         }
@@ -98,12 +97,10 @@ class RoundEndpointsTest {
 
     @Test
     fun `delete round returns 404 if not found`() = testApplication {
-        application {
-            routing { configureRoundEndpoints(service) }
-        }
+        val client = setup()
         every { service.deleteRoundById(any(), any()) } returns false
 
-        client.delete("/api/rounds/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
+        client.delete("/rounds/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.NotFound, status)
         }
         verify(exactly = 1) { service.deleteRoundById(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
@@ -111,12 +108,10 @@ class RoundEndpointsTest {
 
     @Test
     fun `delete round returns 200 if deleted`() = testApplication {
-        application {
-            routing { configureRoundEndpoints(service) }
-        }
+        val client = setup()
         every { service.deleteRoundById(any(), any()) } returns true
 
-        client.delete("/api/rounds/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
+        client.delete("/rounds/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.OK, status)
         }
         verify(exactly = 1) { service.deleteRoundById(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }

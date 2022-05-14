@@ -12,13 +12,7 @@ fun Application.configureAuthentication(jwtTokenService: JwtTokenService) {
         jwt {
             realm = jwtTokenService.realm
             verifier(jwtTokenService.tokenVerifier)
-            validate { credential ->
-                if (credential.payload.getClaim("username").asString() != "") {
-                    JWTPrincipal(credential.payload)
-                } else {
-                    null
-                }
-            }
+            validate { JWTPrincipal(it.payload) }
             challenge { _, _ ->
                 call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")
             }

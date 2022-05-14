@@ -1,5 +1,6 @@
 package dev.honegger.jasstracker.api.endpoints
 
+import dev.honegger.jasstracker.api.util.playerSession
 import dev.honegger.jasstracker.domain.services.TableService
 import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.http.*
@@ -13,7 +14,7 @@ fun Route.configureTableEndpoints(
 ) {
     route("/tables") {
         get {
-            val tables = tableService.getTables(dummySession)
+            val tables = tableService.getTables(call.playerSession())
             call.respond(HttpStatusCode.OK, tables.map { it.toWebTable() })
         }
         get("/{id}") {
@@ -23,7 +24,7 @@ fun Route.configureTableEndpoints(
                 return@get
             }
             val table =
-                tableService.getTableOrNull(dummySession, id.toUUID())
+                tableService.getTableOrNull(call.playerSession(), id.toUUID())
 
             if (table == null) {
                 call.respond(HttpStatusCode.NotFound)
@@ -35,7 +36,7 @@ fun Route.configureTableEndpoints(
         post {
             val newTable = call.receive<WebCreateTable>()
             val createdTable = tableService.createTable(
-                dummySession,
+                call.playerSession(),
                 newTable.name
             )
             call.respond(HttpStatusCode.Created, createdTable.toWebTable())
@@ -47,7 +48,7 @@ fun Route.configureTableEndpoints(
                 return@put
             }
             val updatedTable = call.receive<WebTable>().toTable()
-            tableService.updateTable(dummySession, updatedTable)
+            tableService.updateTable(call.playerSession(), updatedTable)
             call.respond(HttpStatusCode.OK)
         }
         delete("/{id}") {
@@ -56,7 +57,7 @@ fun Route.configureTableEndpoints(
                 call.respond(HttpStatusCode.BadRequest)
                 return@delete
             }
-            val success = tableService.deleteTableById(dummySession, id.toUUID())
+            val success = tableService.deleteTableById(call.playerSession(), id.toUUID())
             if (!success) {
                 call.respond(HttpStatusCode.NotFound)
                 return@delete

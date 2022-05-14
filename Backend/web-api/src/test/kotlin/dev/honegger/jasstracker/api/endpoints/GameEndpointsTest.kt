@@ -6,10 +6,10 @@ import dev.honegger.jasstracker.domain.Round
 import dev.honegger.jasstracker.domain.Team
 import dev.honegger.jasstracker.domain.services.GameService
 import dev.honegger.jasstracker.domain.util.toUUID
+import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import io.mockk.*
 import kotlinx.datetime.LocalDateTime
@@ -32,18 +32,22 @@ class GameEndpointsTest {
         confirmVerified(service)
     }
 
-    @Test
-    fun `get games finds empty list`() = testApplication {
+    private fun ApplicationTestBuilder.setup(): HttpClient {
         application {
             installJson()
-            routing { configureGameEndpoints(service) }
+            installSecuredRoute { configureGameEndpoints(service) }
         }
-        val client = createClient {
+        return createClient {
             installJson()
+            addJwtHeader()
         }
+    }
 
+    @Test
+    fun `get games finds empty list`() = testApplication {
+        val client = setup()
         every { service.getAllGames(any()) } returns emptyList()
-        client.get("/api/games").apply {
+        client.get("/games").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals("[]", bodyAsText())
         }
@@ -52,13 +56,7 @@ class GameEndpointsTest {
 
     @Test
     fun `get game finds dummy game`() = testApplication {
-        application {
-            installJson()
-            routing { configureGameEndpoints(service) }
-        }
-        val client = createClient {
-            installJson()
-        }
+        val client = setup()
         val dummyId = UUID.randomUUID()
         val p1Id = UUID.randomUUID()
         val p2Id = UUID.randomUUID()
@@ -77,7 +75,7 @@ class GameEndpointsTest {
                 dummyId
             )
         } returns dummyGame
-        client.get("/api/games/$dummyId").apply {
+        client.get("/games/$dummyId").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(
                 """{
@@ -95,12 +93,10 @@ class GameEndpointsTest {
 
     @Test
     fun `get game returns 404 if not found`() = testApplication {
-        application {
-            routing { configureGameEndpoints(service) }
-        }
+        val client = setup()
         every { service.getGameOrNull(any(), any()) } returns null
 
-        client.get("/api/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
+        client.get("/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.NotFound, status)
         }
         verify(exactly = 1) { service.getGameOrNull(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
@@ -108,12 +104,10 @@ class GameEndpointsTest {
 
     @Test
     fun `delete game returns 404 if not found`() = testApplication {
-        application {
-            routing { configureGameEndpoints(service) }
-        }
+        val client = setup()
         every { service.deleteGameById(any(), any()) } returns false
 
-        client.delete("/api/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
+        client.delete("/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.NotFound, status)
         }
         verify(exactly = 1) { service.deleteGameById(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
@@ -121,12 +115,10 @@ class GameEndpointsTest {
 
     @Test
     fun `delete game returns 200 if deleted`() = testApplication {
-        application {
-            routing { configureGameEndpoints(service) }
-        }
+        val client = setup()
         every { service.deleteGameById(any(), any()) } returns true
 
-        client.delete("/api/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
+        client.delete("/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.OK, status)
         }
         verify(exactly = 1) { service.deleteGameById(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
@@ -134,13 +126,7 @@ class GameEndpointsTest {
 
     @Test
     fun `get game currentPlayer finds current player`() = testApplication {
-        application {
-            installJson()
-            routing { configureGameEndpoints(service) }
-        }
-        val client = createClient {
-            installJson()
-        }
+        val client = setup()
         val dummyId = UUID.randomUUID()
         val p1Id = UUID.randomUUID()
         val p2Id = UUID.randomUUID()
@@ -159,7 +145,7 @@ class GameEndpointsTest {
                 dummyId
             )
         } returns dummyGame
-        client.get("/api/games/$dummyId/currentPlayer").apply {
+        client.get("/games/$dummyId/currentPlayer").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(
                 """{"playerId":"$p1Id","displayName":"p1"}""", bodyAsText())
@@ -169,14 +155,7 @@ class GameEndpointsTest {
 
     @Test
     fun `get game currentPlayer finds current player even with multiple rounds played`() = testApplication {
-        application {
-            installJson()
-            routing { configureGameEndpoints(service) }
-        }
-        val client = createClient {
-            installJson()
-        }
-
+        val client = setup()
         val dummyId = UUID.randomUUID()
         val p1Id = UUID.randomUUID()
         val p2Id = UUID.randomUUID()
@@ -213,7 +192,7 @@ class GameEndpointsTest {
                 dummyId
             )
         } returns dummyGame
-        client.get("/api/games/$dummyId/currentPlayer").apply {
+        client.get("/games/$dummyId/currentPlayer").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(
                 """{"playerId":"$p2Id","displayName":"p2"}""".trimMargin().replace("\n", ""), bodyAsText())

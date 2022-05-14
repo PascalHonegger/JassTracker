@@ -1,5 +1,6 @@
 package dev.honegger.jasstracker.api.endpoints
 
+import dev.honegger.jasstracker.api.util.playerSession
 import dev.honegger.jasstracker.domain.GuestPlayer
 import dev.honegger.jasstracker.domain.RegisteredPlayer
 import dev.honegger.jasstracker.domain.services.PlayerService
@@ -21,7 +22,7 @@ fun Route.configurePlayerEndpoints(
                 return@get
             }
             val player =
-                playerService.getPlayerOrNull(dummySession, id.toUUID())
+                playerService.getPlayerOrNull(call.playerSession(), id.toUUID())
 
             if (player == null) {
                 call.respond(HttpStatusCode.NotFound)
@@ -50,7 +51,7 @@ fun Route.configurePlayerEndpoints(
                     call.respond(HttpStatusCode.BadRequest, "Cannot update guest player")
                 }
                 is RegisteredPlayer -> {
-                    playerService.updatePlayer(dummySession, updatedPlayer)
+                    playerService.updatePlayer(call.playerSession(), updatedPlayer)
                     call.respond(HttpStatusCode.OK)
                 }
             }

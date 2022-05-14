@@ -1,5 +1,6 @@
 package dev.honegger.jasstracker.api.endpoints
 
+import dev.honegger.jasstracker.api.util.playerSession
 import dev.honegger.jasstracker.domain.services.RoundService
 import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.http.*
@@ -18,13 +19,13 @@ fun Route.configureRoundEndpoints(
                 call.respond(HttpStatusCode.BadRequest)
                 return@get
             }
-            val rounds = roundService.getRounds(dummySession, gameId.toUUID())
+            val rounds = roundService.getRounds(call.playerSession(), gameId.toUUID())
             call.respond(HttpStatusCode.OK, rounds.map { it.toWebRound() })
         }
         post {
             val newRound = call.receive<WebCreateRound>()
             val createdRound = roundService.createRound(
-                dummySession,
+                call.playerSession(),
                 newRound.number,
                 newRound.score,
                 newRound.gameId,
@@ -40,7 +41,7 @@ fun Route.configureRoundEndpoints(
                 return@put
             }
             val updatedRound = call.receive<WebRound>().toRound()
-            roundService.updateRound(dummySession, updatedRound)
+            roundService.updateRound(call.playerSession(), updatedRound)
             call.respond(HttpStatusCode.OK)
         }
         delete("/{id}") {
@@ -49,7 +50,7 @@ fun Route.configureRoundEndpoints(
                 call.respond(HttpStatusCode.BadRequest)
                 return@delete
             }
-            val success = roundService.deleteRoundById(dummySession, id.toUUID())
+            val success = roundService.deleteRoundById(call.playerSession(), id.toUUID())
             if (!success) {
                 call.respond(HttpStatusCode.NotFound)
                 return@delete
