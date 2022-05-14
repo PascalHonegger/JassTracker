@@ -5,7 +5,8 @@ import { useTableStore } from "@/store/table-store";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    name: "",
+    playerId: "27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0",
+    name: "<Gast>",
     loggedIn: false,
   }),
   actions: {
