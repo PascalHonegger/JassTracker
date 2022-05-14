@@ -27,6 +27,7 @@ const total = computed(() => {
   };
   rounds.forEach((r) => {
     tempTotal[r.playerId] +=
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       r.score * contracts.value.find((c) => c.id === r.contractId)!.multiplier;
   });
   return tempTotal;
