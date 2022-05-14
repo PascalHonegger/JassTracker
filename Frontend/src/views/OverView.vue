@@ -2,30 +2,46 @@
 import TableItem from "../components/TableItem.vue";
 import ModalDialog from "../components/ModalDialog.vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useTableStore } from "@/store/table-store";
 import { storeToRefs } from "pinia";
 import { useGameStore } from "@/store/game-store";
-import { WebCreateGame } from "@/services/web-model";
-import CreateGame, { PartialCreateGame } from "@/components/CreateGame.vue";
+import {
+  WebCreateGame,
+  WebCreateGameParticipation,
+  WebGameParticipation,
+} from "@/services/web-model";
+import CreateGame, { CreateNewGameForm } from "@/components/CreateGame.vue";
+import { useAuthStore } from "@/store/auth-store";
 
 const router = useRouter();
 const tableStore = useTableStore();
 const gameStore = useGameStore();
+const authStore = useAuthStore();
 
 const { tablesAsArray } = storeToRefs(tableStore);
 
+const newPlayer: WebCreateGameParticipation = {
+  playerId: null,
+  displayName: "",
+};
+
 const loadingTables = ref(false);
-const creatingGame = ref(false);
+const creatingTable = ref(false);
 const isModalVisible = ref(false);
 const newTableName = ref("");
-const newGame = ref<PartialCreateGame>({
-  team1Player1: { playerId: null, displayName: "" },
-  team1Player2: { playerId: null, displayName: "" },
-  team2Player1: { playerId: null, displayName: "" },
-  team2Player2: { playerId: null, displayName: "" },
+const newGame = reactive<CreateNewGameForm>({
+  team1Player1: newPlayer,
+  team1Player2: newPlayer,
+  team2Player1: newPlayer,
+  team2Player2: newPlayer,
 });
+const availablePlayers = computed<WebCreateGameParticipation[]>(() => [
+  { playerId: authStore.playerId, displayName: authStore.name }, // Logged in player
+  newPlayer,
+]);
+
 onMounted(async () => {
   loadingTables.value = true;
   await tableStore.loadTables();
@@ -33,14 +49,24 @@ onMounted(async () => {
 });
 
 async function createNewTable() {
-  creatingGame.value = true;
+  creatingTable.value = true;
   const newTableId = await tableStore.createTable(newTableName.value);
   const createGame: WebCreateGame = {
-    ...newGame.value,
+    team1Player1: newGame.team1Player1,
+    team1Player2: newGame.team1Player2,
+    team2Player1: newGame.team2Player1,
+    team2Player2: newGame.team2Player2,
     tableId: newTableId,
   };
   await gameStore.createGame(createGame);
   await router.push({ name: "table", params: { tableId: newTableId } });
+}
+
+function updatePlayer(
+  player: keyof CreateNewGameForm,
+  participation: WebGameParticipation | null
+) {
+  newGame[player] = participation ?? newPlayer;
 }
 </script>
 <template>
@@ -59,35 +85,43 @@ async function createNewTable() {
       </button>
     </div>
 
-    <ModalDialog v-show="isModalVisible" @close="isModalVisible = false">
+    <ModalDialog v-if="isModalVisible" @close="isModalVisible = false">
       <template v-slot:header>
-        <p class="font-bold">Neuen Tisch erstellen</p>
+        <p class="font-bold">Tisch erstellen</p>
       </template>
       <template v-slot:body>
-        <div class="flex flex-row gap-2 table-name mb-2 text-center">
-          <label for="tableName">Tisch Name</label>
-          <input id="tableName" v-model="newTableName" />
-        </div>
-        <form
-          @submit.prevent="createNewTable"
-          class="flex flex-row gap-2 justify-around"
-        >
+        <div class="flex flex-col">
+          <div
+            class="flex flex-row gap-2 table-name mb-4 pb-4 justify-center border-b-2 border-black border-dashed"
+          >
+            <label for="tableName" class="text-center block self-center"
+              >Tisch Name:</label
+            >
+            <input
+              id="tableName"
+              class="box-input self-center w-60"
+              placeholder="Beispiel: Samschtig-Jass Familie"
+              v-model="newTableName"
+            />
+          </div>
           <CreateGame
-            :disabled="creatingGame"
-            v-model:new-game="newGame"
+            :disabled="creatingTable"
+            :existing-players="availablePlayers"
+            :new-game-form="newGame"
+            @updatePlayer="updatePlayer"
           ></CreateGame>
-        </form>
+        </div>
       </template>
       <template v-slot:footer>
         <button
           type="button"
           class="btn btn-blue"
-          :disabled="creatingGame"
+          :disabled="creatingTable"
           @click="createNewTable"
         >
           Neues Spiel starten
 
-          <WaitSpinner v-if="creatingGame"></WaitSpinner>
+          <WaitSpinner v-if="creatingTable"></WaitSpinner>
         </button>
       </template>
     </ModalDialog>

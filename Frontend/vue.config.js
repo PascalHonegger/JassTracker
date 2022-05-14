@@ -7,7 +7,7 @@ module.exports = defineConfig({
   chainWebpack: (config) =>
     config.plugin("feature-flags").use(require("webpack").DefinePlugin, [
       {
-        __VUE_OPTIONS_API__: "false",
+        __VUE_OPTIONS_API__: "true", // Used by vue-draggable-next
         __VUE_PROD_DEVTOOLS__: "false",
       },
     ]),
