@@ -42,7 +42,7 @@ dependencyResolutionManagement {
             library("postgresql", "org.postgresql", "postgresql").version(postgresql)
             library("jooq", "org.jooq", "jooq").version(jooq)
             library("java-jwt", "com.auth0", "java-jwt").version(javaJwt)
-            library("argon2-jvm", "de.mkammerer", "argon2-jvm-nolibs").version(argon2)
+            library("argon2-jvm", "de.mkammerer", "argon2-jvm").version(argon2)
 
             version("jooq", jooq)
 

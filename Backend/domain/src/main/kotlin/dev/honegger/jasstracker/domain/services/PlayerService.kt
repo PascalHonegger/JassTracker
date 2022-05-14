@@ -36,7 +36,7 @@ class PlayerServiceImpl(
             id = UUID.randomUUID(),
             displayName = displayName,
             username = username,
-            password = passwordHashService.hashPassword(password).toString(),
+            password = passwordHashService.hashPassword(password),
         )
 
         log.info { "Registering new player: $newPlayer" }

@@ -13,16 +13,14 @@ class Argon2PasswordHashService(private val argon2HashConfig: Argon2HashConfig) 
 
     private val argon2 = Argon2Factory.create()
 
-    override fun hashPassword(password: String) {
+    override fun hashPassword(password: String): String =
         argon2.hash(
             argon2HashConfig.iterations,
             argon2HashConfig.memory,
             argon2HashConfig.parallelization,
-            password.toCharArray())
-    }
+            password.toCharArray()
+        )
 
-    override fun verifyPassword(hash: String, password: String): Boolean {
-        return argon2.verify(hash, password.toCharArray())
-    }
-
+    override fun verifyPassword(hash: String, password: String): Boolean =
+        argon2.verify(hash, password.toCharArray())
 }
