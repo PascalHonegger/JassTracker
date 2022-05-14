@@ -19,7 +19,7 @@ class GameTest {
 
     private fun getCurrentPlayer(playerRounds: Map<GameParticipation, Int>) = baseGame.copy(
         rounds = playerRounds
-            .flatMap { (participant, numRounds) -> List(numRounds) { participant } }
+            .flatMap { (participation, numRounds) -> List(numRounds) { participation } }
             .mapIndexed { index, gameParticipation ->
                 Round(
                     id = UUID.randomUUID(),

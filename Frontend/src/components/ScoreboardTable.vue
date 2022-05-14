@@ -10,10 +10,10 @@ const { contracts } = storeToRefs(contractStore);
 
 const props = defineProps<{ game: Game }>();
 
-function isActive(participant: GameParticipation): boolean {
+function isActive(participation: GameParticipation): boolean {
   return (
     props.game.endTime === undefined &&
-    props.game.currentPlayer.playerId === participant.playerId
+    props.game.currentPlayer.playerId === participation.playerId
   );
 }
 
