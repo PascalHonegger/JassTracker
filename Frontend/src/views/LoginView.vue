@@ -51,8 +51,8 @@ async function loginAsGuest() {
     </div>
     <div class="login text-center flex flex-col h-full overflow-auto">
       <h1 class="default-h1 mt-auto">JassTracker</h1>
-      <p class="font-medium">Slogan TBD</p>
-      <div class="flex flex-col my-8 self-center">
+      <p class="font-medium">Coiffer Jass auf das nächste Level anheben</p>
+      <div class="flex flex-col my-8 self-center w-48">
         <form @submit.prevent="login" autocomplete="on">
           <div class="mb-6">
             <label
