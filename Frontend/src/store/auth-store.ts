@@ -7,19 +7,26 @@ import { clearToken, setToken } from "@/services/requests";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    playerId: "27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0",
-    name: "<Gast>",
+    token: "",
+    name: "",
     loggedIn: false,
   }),
   actions: {
-    async loginPlayer(username: string, password: string) {
-      const playerToken = await loginPlayer(username, password);
-      setToken(playerToken);
-      await this.setLoggedIn();
+    async loginPlayer(username: string, password: string): Promise<boolean> {
+      try {
+        const { token } = await loginPlayer(username, password);
+        this.token = token;
+        setToken(token);
+        await this.setLoggedIn();
+        return true;
+      } catch (e) {
+        return false;
+      }
     },
     async guestAccess() {
-      const guestToken = await loginGuestPlayer();
-      setToken(guestToken.token);
+      const { token } = await loginGuestPlayer();
+      this.token = token;
+      setToken(token);
       await this.setLoggedIn();
     },
     async setLoggedIn() {

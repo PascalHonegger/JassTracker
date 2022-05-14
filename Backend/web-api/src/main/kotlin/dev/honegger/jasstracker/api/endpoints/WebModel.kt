@@ -118,6 +118,12 @@ data class WebCreatePlayer(
     val password: String,
 )
 
+@Serializable
+data class WebLogin(
+    val username: String,
+    val password: String,
+)
+
 fun WebTable.toTable() = Table(
     id = id,
     name = name,

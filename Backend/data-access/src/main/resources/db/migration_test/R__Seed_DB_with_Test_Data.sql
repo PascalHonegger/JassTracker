@@ -15,11 +15,12 @@ delete from "player" where id in (
     '7dad81d3-62db-4553-9d48-f38f404f1596'
 );
 
+-- Password is equal to username for test data
 insert into "player" (id, username, display_name, password) values
-	('27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0', 'pascal', 'Pascal', 'honegger'),
-	('3095c042-d0a9-4219-9f65-53d4565fd1e6', 'marcel', 'Marcel', 'joss'),
-	('283c0a20-b293-40e7-8858-da098a53b756', 'david', 'David', 'kalchofner'),
-	('cdfa5ae5-d182-4e11-b7f1-a173b2b4b797', 'jamie', 'Jamie', 'maier'),
+	('27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0', 'pascal', 'Pascal', '$argon2i$v=19$m=65536,t=10,p=1$5wpH0v3ZedN9jKSnHL2ZEA$YzAaj767apGmM1NVn9Kz8gwQg8XcINq5Sc4q8Ho0dyU'),
+	('3095c042-d0a9-4219-9f65-53d4565fd1e6', 'marcel', 'Marcel', '$argon2i$v=19$m=65536,t=10,p=1$k+zwEFts6FNMRf/LLKU2mw$kq4McVUA9mOUcbmWg4sQeQv98/m5d5b37QEPIoBxQrQ'),
+	('283c0a20-b293-40e7-8858-da098a53b756', 'david', 'David', '$argon2i$v=19$m=65536,t=10,p=1$3tq7ruJ0Vf/7DAxdUL9vxQ$BsZyZY/Y+T5bA2xq6TekxwVOErAZZRSp3qBQEYaVWO0'),
+	('cdfa5ae5-d182-4e11-b7f1-a173b2b4b797', 'jamie', 'Jamie', '$argon2i$v=19$m=65536,t=10,p=1$BN8acI67L09nZqYgHksqQg$8Cbx0gbUUUnkcMtWvW3gynymLOlyUKoBSKv7wPCrn6A'),
 	('665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3', null, null, null),
 	('7dad81d3-62db-4553-9d48-f38f404f1596', null, null, null);
 

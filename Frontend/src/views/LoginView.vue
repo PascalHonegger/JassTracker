@@ -8,6 +8,7 @@ const authStore = useAuthStore();
 const router = useRouter();
 
 const loginLoading = ref<boolean>(false);
+const loginFailed = ref<boolean>(false);
 const loginAsGuestLoading = ref<boolean>(false);
 const loading = computed(() => loginLoading.value || loginAsGuestLoading.value);
 const username = ref("");
@@ -21,8 +22,17 @@ onMounted(() => {
 
 async function login() {
   loginLoading.value = true;
-  await authStore.loginPlayer(username.value, password.value);
-  await router.push("/overview");
+  loginFailed.value = false;
+  const loginSuccessful = await authStore.loginPlayer(
+    username.value,
+    password.value
+  );
+  if (loginSuccessful) {
+    await router.push("/overview");
+  } else {
+    loginLoading.value = false;
+    loginFailed.value = true;
+  }
 }
 async function loginAsGuest() {
   loginAsGuestLoading.value = true;
@@ -95,6 +105,9 @@ async function loginAsGuest() {
 
             <WaitSpinner v-if="loginLoading"></WaitSpinner>
           </button>
+          <div v-if="loginFailed" class="text-red-600 mt-4">
+            Ungültiger Benutzername oder Passwort
+          </div>
         </form>
       </div>
       <p>------ oder -----</p>

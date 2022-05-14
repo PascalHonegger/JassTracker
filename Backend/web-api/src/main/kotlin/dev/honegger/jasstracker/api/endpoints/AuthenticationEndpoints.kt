@@ -13,19 +13,19 @@ fun Route.configureAuthenticationEndpoints(
     authTokenService: AuthTokenService,
 ) {
     post("/login") {
-        val newUserSession = call.receive<WebCreatePlayer>()
+        val login = call.receive<WebLogin>()
 
-        val player = playerService.authenticatePlayer(newUserSession.username, newUserSession.password)
+        val player = playerService.authenticatePlayer(login.username, login.password)
         if (player == null) {
             call.respond(HttpStatusCode.BadRequest)
             return@post
         }
 
         val token = authTokenService.createToken(player)
-        call.respond(token)
+        call.respond(hashMapOf("token" to token))
     }
 
-    post("/guestAccess") {
+    post("/guest-access") {
         val player = playerService.registerGuestPlayer()
         val token = authTokenService.createToken(player)
         call.respond(hashMapOf("token" to token))

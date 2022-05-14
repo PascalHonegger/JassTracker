@@ -17,7 +17,7 @@ class PlayerRepositoryImplTest : RepositoryTest() {
             id,
             "pascal",
             "Pascal",
-            "honegger"
+            "\$argon2i\$v=19\$m=65536,t=10,p=1\$5wpH0v3ZedN9jKSnHL2ZEA\$YzAaj767apGmM1NVn9Kz8gwQg8XcINq5Sc4q8Ho0dyU"
         )
         assertEquals(expected, repo.getPlayerOrNull(id))
     }
@@ -52,14 +52,14 @@ class PlayerRepositoryImplTest : RepositoryTest() {
                 "27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(),
                 "pascal",
                 "Pascal",
-                "honegger"
+                "\$argon2i\$v=19\$m=65536,t=10,p=1\$5wpH0v3ZedN9jKSnHL2ZEA\$YzAaj767apGmM1NVn9Kz8gwQg8XcINq5Sc4q8Ho0dyU"
             ),
             GuestPlayer("7dad81d3-62db-4553-9d48-f38f404f1596".toUUID()),
             RegisteredPlayer(
                 "3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(),
                 "marcel",
                 "Marcel",
-                "joss"
+                "\$argon2i\$v=19\$m=65536,t=10,p=1\$k+zwEFts6FNMRf/LLKU2mw\$kq4McVUA9mOUcbmWg4sQeQv98/m5d5b37QEPIoBxQrQ"
             )
         )
         assertEquals(expected, repo.getPlayersPerTable(tableId).toSet())
