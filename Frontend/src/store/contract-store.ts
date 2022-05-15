@@ -1,7 +1,11 @@
 import { defineStore } from "pinia";
 import { getContracts } from "@/services/contract-service";
-import { RoundType, Row } from "@/types/types";
-import { WebContract, WebGameParticipation } from "@/services/web-model";
+import { Round, RoundType, Row } from "@/types/types";
+import {
+  WebContract,
+  WebGameParticipation,
+  WebRound,
+} from "@/services/web-model";
 
 export const useContractStore = defineStore("contract", {
   state: () => ({
@@ -27,6 +31,15 @@ export const useContractStore = defineStore("contract", {
             })),
           };
         });
+    },
+    getCalculatedScore(state) {
+      return (round: WebRound | Round) => {
+        const contract = state.contracts.find((c) => c.id === round.contractId);
+        if (contract === undefined) {
+          throw new Error(`Contract with ID ${round.contractId} not found`);
+        }
+        return contract.multiplier * (round.score ?? 0);
+      };
     },
   },
   actions: {

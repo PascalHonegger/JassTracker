@@ -14,12 +14,6 @@ const gameStore = useGameStore();
 const { currentGame } = storeToRefs(gameStore);
 
 const contractStore = useContractStore();
-const { contracts } = storeToRefs(contractStore);
-
-function getMultiplierValue(score: number, contractId: string): number {
-  const contract = contracts.value.filter((c) => c.id === contractId)[0];
-  return score * contract.multiplier;
-}
 
 async function handleInput(score: number | undefined, round: Round) {
   if (currentGame.value === undefined) {
@@ -101,7 +95,7 @@ function getClass(round: Round): string {
           <span
             v-if="r.score"
             class="absolute pointer-events-none border-l border-dotted border-black w-1/2 right-0"
-            >{{ getMultiplierValue(r.score, r.contractId) }}</span
+            >{{ contractStore.getCalculatedScore(r) }}</span
           >
         </div>
       </td>
