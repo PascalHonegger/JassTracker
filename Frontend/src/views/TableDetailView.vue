@@ -14,7 +14,8 @@ import {
 } from "@/services/web-model";
 import type { Game, GameParticipation } from "@/types/types";
 import GameItem from "@/components/GameItem.vue";
-import GameList from "@/components/GameList.vue";
+import GameList, { NamedGame } from "@/components/GameList.vue";
+import { dateCompare } from "@/util/dates";
 
 const router = useRouter();
 const route = useRoute();
@@ -39,12 +40,6 @@ const newGame = reactive<CreateNewGameForm>({
   team2Player2: newPlayer,
 });
 
-const otherGames = computed<Game[]>(() =>
-  Object.values(currentTable.value?.loadedGames ?? {}).filter(
-    (g) => g !== currentGame.value
-  )
-);
-
 const currentGamePlayers = computed<GameParticipation[]>(() => {
   const game: Game | null = currentGame.value;
   if (game == null) {
@@ -59,12 +54,20 @@ const currentGamePlayers = computed<GameParticipation[]>(() => {
   ];
 });
 
-const openGames = computed<Game[]>(() =>
-  otherGames.value.filter((e) => e.endTime === undefined)
+const namedGames = computed<NamedGame[]>(() => {
+  return Object.values(currentTable.value?.loadedGames ?? {})
+    .filter((g) => g !== gameStore.currentGame)
+    .sort((g1, g2) => dateCompare(g1.startTime, g2.startTime))
+    .map((game, index) => ({ name: `Spiel ${index + 1}`, game }))
+    .reverse();
+});
+
+const openGames = computed(() =>
+  namedGames.value.filter(({ game }) => game.endTime === undefined)
 );
 
-const completedGames = computed<Game[]>(() =>
-  otherGames.value.filter((e) => e.endTime !== undefined)
+const completedGames = computed(() =>
+  namedGames.value.filter(({ game }) => game.endTime !== undefined)
 );
 
 watch(
@@ -132,7 +135,7 @@ function backToOverview() {
     <GameItem v-if="currentGame" :game="currentGame" />
     <p v-else>Momentan läuft kein Spiel</p>
 
-    <div class="my-2" v-if="openGames.length > 0">
+    <div v-if="openGames.length > 0" class="my-2">
       <h2 class="font-bold text-lg">Offene Spiele</h2>
       <GameList :table-id="currentTableId" :games="openGames" />
     </div>
@@ -162,7 +165,8 @@ function backToOverview() {
         ></CreateGame>
       </form>
     </template>
-    <template v-slot:footer>
+    <template v-slot:footer
+      >echo 'source /usr/share/nvm/init-nvm.sh' >> ~/.bashrc
       <button
         type="button"
         class="btn btn-blue"
