@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/store/auth-store";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import IconSelector from "@/components/IconSelector.vue";
 
@@ -10,19 +10,18 @@ const router = useRouter();
 const logoLink = computed(() => (store.loggedIn ? "/overview" : "/login"));
 const hideMobileMenu = ref(true);
 
+onMounted(() => {
+  store.loadTokenFromStorage();
+});
+
 function logout() {
   store.logout();
   router.push("/login");
 }
 </script>
-<style lang="scss">
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
+<style lang="scss" scoped>
 nav a.router-link-exact-active {
-  color: #42b983;
+  @apply text-emerald-400;
 }
 </style>
 <template>

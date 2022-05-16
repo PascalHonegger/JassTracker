@@ -1,4 +1,4 @@
-import { defineStore, storeToRefs } from "pinia";
+import { defineStore } from "pinia";
 
 import { RoundType } from "@/types/types";
 import { WebCreateRound, WebRound } from "@/services/web-model";
@@ -10,13 +10,11 @@ import {
 import { useGameStore } from "@/store/game-store";
 import { getCurrentPlayerOfGame } from "@/services/game-service";
 
-const gameStore = useGameStore();
-const { currentGame } = storeToRefs(gameStore);
-
 export const useRoundStore = defineStore("round", {
   actions: {
     async createRound(round: WebCreateRound) {
-      if (currentGame.value === undefined) {
+      const gameStore = useGameStore();
+      if (gameStore.currentGame === undefined) {
         alert("currentGame should not be undefined");
         return;
       }
@@ -28,7 +26,8 @@ export const useRoundStore = defineStore("round", {
       }
     },
     async updateRound(round: WebRound) {
-      if (currentGame.value === undefined) {
+      const gameStore = useGameStore();
+      if (gameStore.currentGame === undefined) {
         alert("currentGame should not be undefined");
         return;
       }
@@ -40,28 +39,30 @@ export const useRoundStore = defineStore("round", {
       }
     },
     async handleRoundCreateOrUpdate(round: WebRound) {
-      if (currentGame.value === undefined) {
+      const gameStore = useGameStore();
+      if (gameStore.currentGame === undefined) {
         alert("currentGame should not be undefined");
         return;
       }
       this.addRoundToCurrentGame(round);
-      currentGame.value.currentPlayer = await getCurrentPlayerOfGame(
-        currentGame.value.id
+      gameStore.currentGame.currentPlayer = await getCurrentPlayerOfGame(
+        gameStore.currentGame.id
       );
     },
     addRoundToCurrentGame(round: WebRound) {
-      if (currentGame.value === undefined) {
+      const gameStore = useGameStore();
+      if (gameStore.currentGame === undefined) {
         alert("currentGame should not be undefined");
         return;
       }
-      currentGame.value.rounds.push(round);
+      gameStore.currentGame.rounds.push(round);
       const teamPartnerIndex = this.findTeamPartnerIndex(round.playerId);
       if (teamPartnerIndex === -1) {
         alert("no team partner found, something's wrong I can feel it");
         return;
       }
 
-      currentGame.value.rows.forEach((row) => {
+      gameStore.currentGame.rows.forEach((row) => {
         if (row.contract.id === round.contractId) {
           row.rounds.forEach((r, i) => {
             if (i === teamPartnerIndex) {
@@ -82,11 +83,12 @@ export const useRoundStore = defineStore("round", {
       playerId: string,
       contractId: string
     ) {
-      if (currentGame.value === undefined) {
+      const gameStore = useGameStore();
+      if (gameStore.currentGame === undefined) {
         alert("currentGame should not be undefined");
         return;
       }
-      currentGame.value.rounds = currentGame.value.rounds.filter(
+      gameStore.currentGame.rounds = gameStore.currentGame.rounds.filter(
         (r) => r.id !== roundId
       );
       const teamPartnerIndex = this.findTeamPartnerIndex(playerId);
@@ -94,7 +96,7 @@ export const useRoundStore = defineStore("round", {
         alert("no team partner found, something's wrong I can feel it");
         return;
       }
-      currentGame.value.rows.forEach((row) => {
+      gameStore.currentGame.rows.forEach((row) => {
         if (row.contract.id === contractId) {
           row.rounds.forEach((r, i) => {
             if (i === teamPartnerIndex) {
@@ -110,18 +112,19 @@ export const useRoundStore = defineStore("round", {
       });
     },
     findTeamPartnerIndex(id: string): number {
-      if (currentGame.value === undefined) {
+      const gameStore = useGameStore();
+      if (gameStore.currentGame === undefined) {
         alert("currentGame should not be undefined");
         return -1;
       }
       switch (id) {
-        case currentGame.value.team1.player1.playerId:
+        case gameStore.currentGame.team1.player1.playerId:
           return 1;
-        case currentGame.value.team1.player2.playerId:
+        case gameStore.currentGame.team1.player2.playerId:
           return 0;
-        case currentGame.value.team2.player1.playerId:
+        case gameStore.currentGame.team2.player1.playerId:
           return 3;
-        case currentGame.value.team2.player2.playerId:
+        case gameStore.currentGame.team2.player2.playerId:
           return 2;
         default:
           return -1;
@@ -133,7 +136,8 @@ export const useRoundStore = defineStore("round", {
       contractId: string,
       roundNumber: number
     ) {
-      if (currentGame.value === undefined) {
+      const gameStore = useGameStore();
+      if (gameStore.currentGame === undefined) {
         alert("currentGame should not be undefined");
         return;
       }
@@ -141,8 +145,8 @@ export const useRoundStore = defineStore("round", {
       try {
         await deleteRoundById(roundId);
         this.updateRoundNumbers(roundNumber);
-        currentGame.value.currentPlayer = await getCurrentPlayerOfGame(
-          currentGame.value.id
+        gameStore.currentGame.currentPlayer = await getCurrentPlayerOfGame(
+          gameStore.currentGame.id
         );
       } catch (e) {
         return false;
@@ -150,16 +154,17 @@ export const useRoundStore = defineStore("round", {
       return true;
     },
     updateRoundNumbers(roundNumber: number) {
-      if (currentGame.value === undefined) {
+      const gameStore = useGameStore();
+      if (gameStore.currentGame === undefined) {
         alert("currentGame should not be undefined");
         return;
       }
-      currentGame.value.rounds.forEach((round) => {
+      gameStore.currentGame.rounds.forEach((round) => {
         if (round.number > roundNumber) {
           round.number -= 1;
         }
       });
-      currentGame.value.rows.forEach((row) => {
+      gameStore.currentGame.rows.forEach((row) => {
         row.rounds.forEach((rowRound) => {
           if (rowRound.number > roundNumber) {
             rowRound.number -= 1;

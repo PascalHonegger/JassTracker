@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { useContractStore } from "@/store/contract-store";
 import { useGameStore } from "@/store/game-store";
 import { useTableStore } from "@/store/table-store";
+import { useRoundStore } from "@/store/round-store";
 import {
   loginGuestPlayer,
   loginPlayer,
@@ -20,6 +21,8 @@ interface JwtToken {
   playerId: string;
   username: string;
 }
+
+const tokenKey = "JassTrackerToken";
 
 /**
  * Parses a JWT, supports unicode
@@ -65,8 +68,7 @@ export const useAuthStore = defineStore("auth", {
     async loginPlayer(username: string, password: string): Promise<boolean> {
       try {
         const { token } = await loginPlayer(username, password);
-        this.token = token;
-        setToken(token);
+        this.setToken(token);
         await this.loadContracts();
         return true;
       } catch (e) {
@@ -80,8 +82,7 @@ export const useAuthStore = defineStore("auth", {
     ): Promise<boolean> {
       try {
         const { token } = await registerPlayer(username, displayName, password);
-        this.token = token;
-        setToken(token);
+        this.setToken(token);
         await this.loadContracts();
         return true;
       } catch (e) {
@@ -90,8 +91,7 @@ export const useAuthStore = defineStore("auth", {
     },
     async guestAccess() {
       const { token } = await loginGuestPlayer();
-      this.token = token;
-      setToken(token);
+      this.setToken(token);
       await this.loadContracts();
     },
     async loadContracts() {
@@ -106,14 +106,28 @@ export const useAuthStore = defineStore("auth", {
         this.loading = false;
       }
     },
+    setToken(token: string) {
+      this.token = token;
+      if (token) {
+        setToken(token);
+        localStorage.setItem(tokenKey, token);
+      } else {
+        clearToken();
+        localStorage.removeItem(tokenKey);
+      }
+    },
+    loadTokenFromStorage() {
+      const token = localStorage.getItem(tokenKey);
+      this.setToken(token ?? "");
+    },
     logout() {
-      this.token = "";
+      this.setToken("");
 
       // Reset all stores to prevent any weird behavior on logout / login
       useContractStore().$reset();
       useGameStore().$reset();
       useTableStore().$reset();
-      clearToken();
+      useRoundStore().$reset();
     },
   },
 });
