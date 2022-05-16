@@ -31,15 +31,6 @@ fun Route.configurePlayerEndpoints(
 
             call.respond(HttpStatusCode.OK, player.toWebPlayer())
         }
-        post {
-            val newPlayer = call.receive<WebCreatePlayer>()
-            val registeredPlayer = playerService.registerPlayer(
-                displayName = newPlayer.displayName,
-                username = newPlayer.username,
-                password = newPlayer.password,
-            )
-            call.respond(HttpStatusCode.Created, registeredPlayer.toWebPlayer())
-        }
         put("/{id}") {
             val id = call.parameters["id"]
             if (id.isNullOrBlank()) {

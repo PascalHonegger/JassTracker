@@ -25,6 +25,17 @@ fun Route.configureAuthenticationEndpoints(
         call.respond(hashMapOf("token" to token))
     }
 
+    post("/register") {
+        val newPlayer = call.receive<WebCreatePlayer>()
+        val registeredPlayer = playerService.registerPlayer(
+            displayName = newPlayer.displayName,
+            username = newPlayer.username,
+            password = newPlayer.password,
+        )
+        val token = authTokenService.createToken(registeredPlayer)
+        call.respond(hashMapOf("token" to token))
+    }
+
     post("/guest-access") {
         val player = playerService.registerGuestPlayer()
         val token = authTokenService.createToken(player)

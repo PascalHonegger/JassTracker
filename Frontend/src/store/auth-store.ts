@@ -2,22 +2,87 @@ import { defineStore } from "pinia";
 import { useContractStore } from "@/store/contract-store";
 import { useGameStore } from "@/store/game-store";
 import { useTableStore } from "@/store/table-store";
-import { loginGuestPlayer, loginPlayer } from "@/services/auth-service";
+import {
+  loginGuestPlayer,
+  loginPlayer,
+  registerPlayer,
+} from "@/services/auth-service";
 import { clearToken, setToken } from "@/services/requests";
+
+interface JwtToken {
+  // JWT Default
+  aud: string;
+  iss: string;
+  exp: number;
+  iat: number;
+  // Our claims
+  isGuest: boolean;
+  playerId: string;
+  username: string;
+}
+
+/**
+ * Parses a JWT, supports unicode
+ * @see https://stackoverflow.com/a/38552302
+ * @param token
+ */
+function parseJwt(token: string): JwtToken | null {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    return null;
+  }
+}
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     token: "",
-    name: "",
-    loggedIn: false,
   }),
+  getters: {
+    playerId(state): string | null {
+      return parseJwt(state.token)?.playerId ?? null;
+    },
+    username(state): string | null {
+      return parseJwt(state.token)?.username ?? null;
+    },
+    isGuest(state): boolean | null {
+      return parseJwt(state.token)?.isGuest ?? null;
+    },
+    loggedIn(state): boolean {
+      return parseJwt(state.token) != null;
+    },
+  },
   actions: {
     async loginPlayer(username: string, password: string): Promise<boolean> {
       try {
         const { token } = await loginPlayer(username, password);
         this.token = token;
         setToken(token);
-        await this.setLoggedIn();
+        await this.loadContracts();
+        return true;
+      } catch (e) {
+        return false;
+      }
+    },
+    async registerPlayer(
+      username: string,
+      displayName: string,
+      password: string
+    ): Promise<boolean> {
+      try {
+        const { token } = await registerPlayer(username, displayName, password);
+        this.token = token;
+        setToken(token);
+        await this.loadContracts();
         return true;
       } catch (e) {
         return false;
@@ -27,10 +92,9 @@ export const useAuthStore = defineStore("auth", {
       const { token } = await loginGuestPlayer();
       this.token = token;
       setToken(token);
-      await this.setLoggedIn();
+      await this.loadContracts();
     },
-    async setLoggedIn() {
-      this.loggedIn = true;
+    async loadContracts() {
       // Load all available contracts once after login
       // These shouldn't change and loading them
       // For each game seems excessive
@@ -38,13 +102,12 @@ export const useAuthStore = defineStore("auth", {
       try {
         this.loading = true;
         await contractStore.loadContracts();
-        this.loggedIn = true;
       } finally {
         this.loading = false;
       }
     },
     logout() {
-      this.loggedIn = false;
+      this.token = "";
 
       // Reset all stores to prevent any weird behavior on logout / login
       useContractStore().$reset();

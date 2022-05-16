@@ -8,11 +8,14 @@ import LoginRegisterLayout from "@/components/LoginRegisterLayout.vue";
 const authStore = useAuthStore();
 const router = useRouter();
 
-const loginLoading = ref<boolean>(false);
-const loginFailed = ref<boolean>(false);
+const registerLoading = ref<boolean>(false);
+const registerFailed = ref<boolean>(false);
 const loginAsGuestLoading = ref<boolean>(false);
-const loading = computed(() => loginLoading.value || loginAsGuestLoading.value);
+const loading = computed(
+  () => registerLoading.value || loginAsGuestLoading.value
+);
 const username = ref("");
+const displayName = ref("");
 const password = ref("");
 
 onMounted(() => {
@@ -21,26 +24,32 @@ onMounted(() => {
   }
 });
 
-async function login() {
-  loginLoading.value = true;
-  loginFailed.value = false;
-  const loginSuccessful = await authStore.loginPlayer(
+async function register() {
+  registerLoading.value = true;
+  registerFailed.value = false;
+  const registerSuccessful = await authStore.registerPlayer(
     username.value,
+    displayName.value,
     password.value
   );
-  if (loginSuccessful) {
+  if (registerSuccessful) {
     await router.push("/overview");
   } else {
-    loginLoading.value = false;
-    loginFailed.value = true;
+    registerLoading.value = false;
+    registerFailed.value = true;
   }
+}
+async function loginAsGuest() {
+  loginAsGuestLoading.value = true;
+  await authStore.guestAccess();
+  await router.push("/overview");
 }
 </script>
 
 <template>
   <LoginRegisterLayout>
     <div class="flex flex-col my-8 self-center w-48">
-      <form @submit.prevent="login" autocomplete="on">
+      <form @submit.prevent="register" autocomplete="on">
         <div class="mb-6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900"
@@ -60,11 +69,27 @@ async function login() {
         <div class="mb-6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900"
+            for="nickname"
+            >Anzeigename</label
+          >
+          <input
+            autocomplete="nickname"
+            class="box-input"
+            id="nickname"
+            name="nickname"
+            type="text"
+            :disabled="loading"
+            v-model="displayName"
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900"
             for="password"
             >Passwort</label
           >
           <input
-            autocomplete="current-password"
+            autocomplete="new-password"
             class="box-input"
             id="password"
             name="password"
@@ -78,20 +103,31 @@ async function login() {
           :disabled="loading"
           class="btn btn-blue self-center"
         >
-          Login
+          Registrieren
 
-          <WaitSpinner v-if="loginLoading"></WaitSpinner>
+          <WaitSpinner v-if="registerLoading"></WaitSpinner>
         </button>
-        <div v-if="loginFailed" class="text-red-600 mt-4">
-          Ungültiger Benutzername oder Passwort
+        <div v-if="registerFailed" class="text-red-600 mt-4">
+          Registrierung fehlgeschlagen
         </div>
       </form>
     </div>
+    <p>------ oder -----</p>
+    <button
+      type="button"
+      @click="loginAsGuest"
+      :disabled="loading"
+      class="btn btn-blue self-center my-8"
+    >
+      Als Gast spielen
+
+      <WaitSpinner v-if="loginAsGuestLoading"></WaitSpinner>
+    </button>
     <div class="mb-auto mx-1">
       <p>
-        Neu beim JassTracker?
-        <RouterLink to="/register" class="underline"
-          >Erstelle einen neuen Account!</RouterLink
+        Bereits registriert?
+        <RouterLink to="/login" class="underline"
+          >Melde dich stattdessen an!</RouterLink
         >
       </p>
     </div>
