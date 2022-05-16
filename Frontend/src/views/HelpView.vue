@@ -11,5 +11,14 @@
         >Creative Commons Attribution-Share Alike 4.0 International Lizenz</a
       >.
     </p>
+    <p>
+      Esstisch wurde erstellt von
+      <a
+        target="_blank"
+        class="underline"
+        href="https://www.freepik.com/vectors/dinner-table"
+        >www.freepik.com</a
+      >.
+    </p>
   </div>
 </template>

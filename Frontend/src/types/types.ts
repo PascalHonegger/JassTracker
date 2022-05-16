@@ -82,11 +82,3 @@ export interface Contract {
   multiplier: number;
   type: ContractType;
 }
-
-export interface Player {
-  id: string;
-  displayName: string;
-  isGuest: boolean;
-  username: string;
-  password: string;
-}

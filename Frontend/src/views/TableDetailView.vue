@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useTableStore } from "@/store/table-store";
 import { useGameStore } from "@/store/game-store";
 import { storeToRefs } from "pinia";
-import CreateGame, { PartialCreateGame } from "@/components/CreateGame.vue";
+import CreateGame, { CreateNewGameForm } from "@/components/CreateGame.vue";
 import ModalDialog from "@/components/ModalDialog.vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
-import { WebCreateGame } from "@/services/web-model";
-import type { Game } from "@/types/types";
+import {
+  WebCreateGame,
+  WebCreateGameParticipation,
+  WebGameParticipation,
+} from "@/services/web-model";
+import type { Game, GameParticipation } from "@/types/types";
 import GameItem from "@/components/GameItem.vue";
 import GameList from "@/components/GameList.vue";
 
@@ -23,18 +27,37 @@ const { currentGame } = storeToRefs(gameStore);
 const creatingGame = ref(false);
 const isModalVisible = ref(false);
 
-const newGame = ref<PartialCreateGame>({
-  team1Player1: { playerId: null, displayName: "" },
-  team1Player2: { playerId: null, displayName: "" },
-  team2Player1: { playerId: null, displayName: "" },
-  team2Player2: { playerId: null, displayName: "" },
+const newPlayer: WebCreateGameParticipation = {
+  playerId: null,
+  displayName: "",
+};
+
+const newGame = reactive<CreateNewGameForm>({
+  team1Player1: newPlayer,
+  team1Player2: newPlayer,
+  team2Player1: newPlayer,
+  team2Player2: newPlayer,
 });
 
 const otherGames = computed<Game[]>(() =>
   Object.values(currentTable.value?.loadedGames ?? {}).filter(
-    (g) => g !== gameStore.currentGame
+    (g) => g !== currentGame.value
   )
 );
+
+const currentGamePlayers = computed<GameParticipation[]>(() => {
+  const game: Game | null = currentGame.value;
+  if (game == null) {
+    return [newPlayer];
+  }
+  return [
+    game.team1.player1,
+    game.team1.player2,
+    game.team2.player1,
+    game.team2.player2,
+    newPlayer,
+  ];
+});
 
 const openGames = computed<Game[]>(() =>
   otherGames.value.filter((e) => e.endTime === undefined)
@@ -72,12 +95,28 @@ async function createNewGame() {
     return;
   }
   const createGame: WebCreateGame = {
-    ...newGame.value,
+    ...newGame,
     tableId,
   };
   const createdId = await gameStore.createGame(createGame);
   gameStore.setCurrentGame(tableId, createdId);
   isModalVisible.value = false;
+}
+
+function updatePlayer(
+  player: keyof CreateNewGameForm,
+  participation: WebGameParticipation | null
+) {
+  newGame[player] = participation ?? newPlayer;
+}
+
+function openCreateGameDialog() {
+  const game: Game | null = currentGame.value;
+  newGame.team1Player1 = game?.team1?.player1 ?? newPlayer;
+  newGame.team1Player2 = game?.team1?.player2 ?? newPlayer;
+  newGame.team2Player1 = game?.team2?.player1 ?? newPlayer;
+  newGame.team2Player2 = game?.team2?.player2 ?? newPlayer;
+  isModalVisible.value = true;
 }
 
 function backToOverview() {
@@ -87,7 +126,7 @@ function backToOverview() {
 <template>
   <div class="container mx-auto p-4" v-if="currentTable">
     <button @click="backToOverview" class="btn btn-blue mt-2">Zurück</button>
-    <button @click="isModalVisible = true" class="btn btn-blue ml-2 mt-2">
+    <button @click="openCreateGameDialog" class="btn btn-blue ml-2 mt-2">
       Neues Spiel erstellen
     </button>
     <GameItem v-if="currentGame" :game="currentGame" />
@@ -106,7 +145,7 @@ function backToOverview() {
 
   <WaitSpinner v-else />
 
-  <ModalDialog v-show="isModalVisible" @close="isModalVisible = false">
+  <ModalDialog v-if="isModalVisible" @close="isModalVisible = false">
     <template v-slot:header>
       <p class="font-bold">Neues Spiel erstellen</p>
     </template>
@@ -117,7 +156,9 @@ function backToOverview() {
       >
         <CreateGame
           :disabled="creatingGame"
-          v-model:new-game="newGame"
+          :existing-players="currentGamePlayers"
+          :new-game-form="newGame"
+          @updatePlayer="updatePlayer"
         ></CreateGame>
       </form>
     </template>

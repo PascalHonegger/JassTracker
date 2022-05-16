@@ -45,8 +45,8 @@ class GameServiceImpl(private val gameRepository: GameRepository, private val pl
             id = UUID.randomUUID(),
             startTime = clock.now().toLocalDateTime(TimeZone.UTC),
             rounds = emptyList(),
-            team1 = Team(createParticipant(team1Player1), createParticipant(team1Player2)),
-            team2 = Team(createParticipant(team2Player1), createParticipant(team2Player2)),
+            team1 = Team(createParticipation(team1Player1), createParticipation(team1Player2)),
+            team2 = Team(createParticipation(team2Player1), createParticipation(team2Player2)),
         )
 
         log.info { "Saving new game $newGame for table $tableId" }
@@ -79,7 +79,7 @@ class GameServiceImpl(private val gameRepository: GameRepository, private val pl
         gameRepository.updateGame(existingGame.copy(endTime = updatedGame.endTime))
     }
 
-    private fun createParticipant(createGameParticipation: CreateGameParticipation): GameParticipation {
+    private fun createParticipation(createGameParticipation: CreateGameParticipation): GameParticipation {
         if (createGameParticipation.playerId != null) {
             return GameParticipation(createGameParticipation.playerId, createGameParticipation.displayName)
         }

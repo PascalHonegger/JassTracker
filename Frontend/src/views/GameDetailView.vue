@@ -73,7 +73,7 @@ function backToTable() {
     <WaitSpinner v-else />
     <ModalDialog
       class="delete-game-modal"
-      v-show="isModalVisible"
+      v-if="isModalVisible"
       @close="closeModal"
     >
       <template v-slot:header>

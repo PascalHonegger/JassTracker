@@ -6,7 +6,7 @@ import io.ktor.server.application.*
 import io.ktor.server.plugins.autohead.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.plugins.cors.*
+import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.request.*
 
 fun Application.configureHTTP() {
