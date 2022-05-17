@@ -7,37 +7,22 @@ import { useContractStore } from "@/store/contract-store";
 import { useGameStore } from "@/store/game-store";
 import { storeToRefs } from "pinia";
 import ContractIcon from "./ContractIcon.vue";
+import ScoreInput from "@/components/ScoreInput.vue";
 
 const roundStore = useRoundStore();
 const gameStore = useGameStore();
 const { currentGame } = storeToRefs(gameStore);
 
 const contractStore = useContractStore();
-const { contracts } = storeToRefs(contractStore);
 
-function getMultiplierValue(score: number, contractId: string): number {
-  const contract = contracts.value.filter((c) => c.id === contractId)[0];
-  return score * contract.multiplier;
-}
-
-async function handleInput(event: Event, round: Round) {
+async function handleInput(score: number | undefined, round: Round) {
   if (currentGame.value === undefined) {
     alert("undefined table or game, this should not happen");
     return;
   }
-  const target = event.target as HTMLInputElement;
-  const inputScore = parseInt(target.value, 10);
-  if (Math.abs(inputScore) > 157) {
-    target.classList.add("!bg-red-500");
-    event.preventDefault();
-    return;
-  }
-  if (target.classList.contains("!bg-red-500")) {
-    target.classList.remove("!bg-red-500");
-  }
-  const actualScore = inputScore < 0 ? 157 + inputScore : inputScore;
+  round.score = score ?? null;
   if (round.id) {
-    if (actualScore == null || isNaN(actualScore)) {
+    if (score == null || isNaN(score)) {
       await roundStore.removeRound(
         round.id,
         round.playerId,
@@ -49,31 +34,21 @@ async function handleInput(event: Event, round: Round) {
     const updatedRound: WebRound = {
       id: round.id,
       number: round.number,
-      score: actualScore,
+      score: score,
       gameId: currentGame.value.id,
       playerId: round.playerId,
       contractId: round.contractId,
     };
     await roundStore.updateRound(updatedRound);
-  } else {
+  } else if (score != null) {
     const newRound: WebCreateRound = {
       number: currentGame.value.rounds.length + 1,
-      score: actualScore,
+      score: score,
       gameId: currentGame.value.id,
       playerId: round.playerId,
       contractId: round.contractId,
     };
     await roundStore.createRound(newRound);
-  }
-}
-
-function handleKeypress(event: KeyboardEvent) {
-  const { key, currentTarget } = event;
-  if (key === "Enter" && currentTarget instanceof HTMLInputElement) {
-    currentTarget.blur();
-  }
-  if (!/^[-\d]$/.test(key)) {
-    event.preventDefault();
   }
 }
 
@@ -84,7 +59,7 @@ function getClass(round: Round): string {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .played,
 .locked {
   background-color: lightgray;
@@ -107,24 +82,22 @@ function getClass(round: Round): string {
       </div>
     </th>
     <template v-for="r in row.rounds" :key="r">
-      <td class="relative">
-        <input
-          type="text"
-          inputmode="numeric"
-          class="w-24 px-1"
-          @change="handleInput($event, r)"
-          @keypress="handleKeypress"
-          :disabled="r.type === 'locked' || readonly"
-          :value="r.score"
-          :class="getClass(r)"
-          min="-157"
-          max="157"
-        />
-        <span
-          v-if="r.score"
-          class="absolute pointer-events-none text-right border-l border-dotted border-black w-10 right-8"
-          >{{ getMultiplierValue(r.score, r.contractId) }}</span
-        >
+      <td>
+        <div class="relative w-fit mx-auto">
+          <ScoreInput
+            class="w-24 px-1"
+            :class="getClass(r)"
+            :disabled="r.type === 'locked' || readonly"
+            :max="157"
+            v-model="r.score"
+            @update:model-value="(score) => handleInput(score, r)"
+          />
+          <span
+            v-if="r.score"
+            class="absolute pointer-events-none border-l border-dotted border-black w-1/2 right-0"
+            >{{ contractStore.getCalculatedScore(r) }}</span
+          >
+        </div>
       </td>
     </template>
   </tr>

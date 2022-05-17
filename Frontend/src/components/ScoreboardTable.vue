@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import RoundRow from "./RoundRow.vue";
-import { Game, GameParticipation } from "@/types/types";
+import { Game, GameParticipation, Team } from "@/types/types";
 import { computed } from "vue";
 import { useContractStore } from "@/store/contract-store";
-import { storeToRefs } from "pinia";
 
 const contractStore = useContractStore();
-const { contracts } = storeToRefs(contractStore);
 
 const props = defineProps<{ game: Game }>();
 
@@ -26,14 +24,20 @@ const total = computed(() => {
     [team2.player2.playerId]: 0,
   };
   rounds.forEach((r) => {
-    tempTotal[r.playerId] +=
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      r.score * contracts.value.find((c) => c.id === r.contractId)!.multiplier;
+    tempTotal[r.playerId] += contractStore.getCalculatedScore(r);
   });
   return tempTotal;
 });
+
+function getTeamTotal(team: Team): number {
+  return (
+    total.value[team.player1.playerId] + total.value[team.player2.playerId]
+  );
+}
+
+const teams = computed(() => [props.game.team1, props.game.team2]);
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .active {
   @apply bg-green-300;
 }
@@ -47,50 +51,33 @@ const total = computed(() => {
         <tr class="h-10">
           <th></th>
           <th
+            v-for="teamNumber in [1, 2]"
+            :key="teamNumber"
             colspan="2"
             scope="colgroup"
             class="border-x-2 border-slate-300 text-xl"
           >
-            Team 1
-          </th>
-          <th
-            colspan="2"
-            scope="colgroup"
-            class="border-l-2 border-slate-300 text-xl"
-          >
-            Team 2
+            Team {{ teamNumber }}
           </th>
         </tr>
         <tr class="border-b-2 border-slate-300">
           <th></th>
-          <th
-            scope="col"
-            :class="{ active: isActive(game.team1.player1) }"
-            class="border-l-2 border-slate-300"
-          >
-            {{ game.team1.player1.displayName }}
-          </th>
-          <th
-            scope="col"
-            :class="{ active: isActive(game.team1.player2) }"
-            class="border-l-2 border-slate-300"
-          >
-            {{ game.team1.player2.displayName }}
-          </th>
-          <th
-            scope="col"
-            :class="{ active: isActive(game.team2.player1) }"
-            class="border-l-2 border-slate-300"
-          >
-            {{ game.team2.player1.displayName }}
-          </th>
-          <th
-            scope="col"
-            :class="{ active: isActive(game.team2.player2) }"
-            class="border-l-2 border-slate-300"
-          >
-            {{ game.team2.player2.displayName }}
-          </th>
+          <template v-for="(team, index) in teams" :key="index">
+            <th
+              scope="col"
+              :class="{ active: isActive(game.team1.player1) }"
+              class="border-l-2 border-slate-300"
+            >
+              {{ team.player1.displayName }}
+            </th>
+            <th
+              scope="col"
+              :class="{ active: isActive(game.team1.player2) }"
+              class="border-l-2 border-slate-300"
+            >
+              {{ team.player2.displayName }}
+            </th>
+          </template>
         </tr>
       </thead>
       <tbody>
@@ -104,10 +91,22 @@ const total = computed(() => {
       </tbody>
       <tfoot>
         <tr class="border-t-2 border-slate-300 h-10 text-xl font-bold">
-          <th scope="row">Total</th>
-          <template v-for="(t, i) in total" :key="i">
+          <th rowspan="2" scope="row" class="border-r-2 border-slate-300">
+            Total
+          </th>
+          <template v-for="(t, playerId) in total" :key="playerId">
             <td>{{ t }}</td>
           </template>
+        </tr>
+        <tr class="border-t-2 border-slate-300">
+          <td
+            class="h-10 text-xl font-bold"
+            colspan="2"
+            v-for="(team, index) in teams"
+            :key="index"
+          >
+            {{ getTeamTotal(team) }}
+          </td>
         </tr>
       </tfoot>
     </table>
