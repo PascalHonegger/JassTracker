@@ -1,9 +1,17 @@
+<style lang="scss">
+h2 {
+  @apply text-4xl font-normal leading-normal mt-4;
+}
+h3 {
+  @apply text-3xl font-normal leading-normal mt-4;
+}
+</style>
+
 <template>
   <div class="container mx-auto text-center">
     <h1 class="text-5xl font-normal leading-normal">Hilfezentrum</h1>
-
-    <h2 class="text-4xl font-normal leading-normal mt-4">Jass Regeln</h2>
-    <h3 class="text-3xl font-normal leading-normal mt-4">Spielablauf</h3>
+    <h2>Jass Regeln</h2>
+    <h3>Spielablauf</h3>
     <div class="flex py-2">
       <p class="text-left">
         Der Coiffeur ist ein Partnerjass, bei dem jeweils die beiden
@@ -53,7 +61,7 @@
       />
     </div>
 
-    <h3 class="text-3xl font-normal leading-normal mt-4">Spielregeln</h3>
+    <h3>Spielregeln</h3>
     <div class="flex py-2">
       <img
         class="max-w-[50%] pr-4"
@@ -80,12 +88,8 @@
         Trumpf-Bauer/Trumpf-Under auch jede andere Karte spielen.
       </p>
     </div>
-    <h2 class="text-4xl font-normal leading-normal mt-4">
-      JassTracker Bedienung
-    </h2>
-    <h3 class="text-3xl font-normal leading-normal mt-4">
-      Login / Registierung
-    </h3>
+    <h2>JassTracker Bedienung</h2>
+    <h3>Login / Registierung</h3>
     <div class="flex py-2">
       <p class="text-left">
         Der JassTracker kann entweder als Gast oder mit einem erstellen Benutzer
@@ -107,7 +111,7 @@
         alt="Login Screen"
       />
     </div>
-    <h3 class="text-3xl font-normal leading-normal mt-4">Tische</h3>
+    <h3>Tische</h3>
     <div class="flex py-2">
       <img
         class="max-w-[50%] pr-4"
@@ -126,7 +130,7 @@
         immer mit seinen Familienmitgliedern spielt
       </p>
     </div>
-    <h3 class="text-3xl font-normal leading-normal mt-4">Spiele</h3>
+    <h3>Spiele</h3>
     <div class="flex py-2">
       <p class="text-left">
         Spiele sind immer in einem Tisch enthalten. Bei der Erstellung eines
@@ -158,9 +162,7 @@
         alt="Spiel Übersicht"
       />
     </div>
-    <h3 class="text-3xl font-normal leading-normal mt-4">
-      Profil / Statistiken
-    </h3>
+    <h3>Profil / Statistiken</h3>
     <div class="flex py-2">
       <p class="text-left">
         Unter dem <a href="/profile">Profil</a> kann man seine Benutzerdaten
