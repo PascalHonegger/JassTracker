@@ -97,8 +97,8 @@
         verwenden
         <br />
         Wenn man sich keinen Account erstellen möchte, oder den JassTracker mal
-        ausprobieren möchte, kann man sich "als Gast" anmelden. Man kann die
-        Kern-Funktionalitaten der Applikation ausprobieren und sehen, ob mann
+        ausprobieren möchte, kann man sich als "Gast" anmelden. Man kann die
+        alle Funktionalitaten der Applikation ausprobieren und sehen, ob mann
         einen Account erstellen möchte.
       </p>
       <img
