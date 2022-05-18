@@ -10,3 +10,11 @@ const globalOptions: OptionsRaw = {
 };
 
 export const api = mande(apiUrl, globalOptions);
+
+export function setToken(token: string) {
+  api.options.headers.Authorization = "Bearer " + token;
+}
+
+export function clearToken() {
+  delete api.options.headers.Authorization;
+}

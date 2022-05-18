@@ -15,7 +15,7 @@ class RoundServiceImplTest {
     private val roundRepository = mockk<RoundRepository>()
     private val tableRepository = mockk<TableRepository>()
     private val service = RoundServiceImpl(roundRepository, tableRepository)
-    private val dummySession = UserSession(UUID.randomUUID(), "dummy")
+    private val dummySession = PlayerSession(UUID.randomUUID(), false, "dummy")
     private val passedRound = slot<Round>()
 
     @BeforeTest

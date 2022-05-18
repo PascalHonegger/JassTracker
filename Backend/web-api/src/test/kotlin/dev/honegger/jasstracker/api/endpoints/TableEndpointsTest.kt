@@ -6,6 +6,7 @@ import dev.honegger.jasstracker.domain.Table
 import dev.honegger.jasstracker.domain.Team
 import dev.honegger.jasstracker.domain.services.TableService
 import dev.honegger.jasstracker.domain.util.toUUID
+import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -31,15 +32,20 @@ class TableEndpointsTest {
         confirmVerified(service)
     }
 
-    @Test
-    fun `get table finds dummy table`() = testApplication {
+    private fun ApplicationTestBuilder.setup(): HttpClient {
         application {
             installJson()
-            configureTableEndpoints(service)
+            installSecuredRoute { configureTableEndpoints(service) }
         }
-        val client = createClient {
+        return createClient {
             installJson()
+            addJwtHeader()
         }
+    }
+
+    @Test
+    fun `get table finds dummy table`() = testApplication {
+        val client = setup()
         val id = UUID.randomUUID()
         val ownerId = UUID.randomUUID()
         val dummyTable = Table(
@@ -54,7 +60,7 @@ class TableEndpointsTest {
                 id
             )
         } returns dummyTable
-        client.get("/api/tables/$id").apply {
+        client.get("/tables/$id").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals("""{"id":"$id","name":"dummy","ownerId":"$ownerId","gameIds":[],"latestGame":null}""",
                 bodyAsText())
@@ -64,13 +70,7 @@ class TableEndpointsTest {
 
     @Test
     fun `get tables finds multiple tables`() = testApplication {
-        application {
-            installJson()
-            configureTableEndpoints(service)
-        }
-        val client = createClient {
-            installJson()
-        }
+        val client = setup()
         val owner1UUID = UUID.randomUUID()
         val owner2UUID = UUID.randomUUID()
         val id1 = UUID.randomUUID()
@@ -105,7 +105,7 @@ class TableEndpointsTest {
             service.getTables(any())
         } returns listOf(dummyTable1, dummyTable2)
 
-        client.get("/api/tables").apply {
+        client.get("/tables").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(
                 """[
@@ -144,13 +144,10 @@ class TableEndpointsTest {
 
     @Test
     fun `get table returns 404 if not found`() = testApplication {
-        application {
-            configureTableEndpoints(service)
-        }
-
+        val client = setup()
         every { service.getTableOrNull(any(), any()) } returns null
 
-        client.get("/api/tables/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
+        client.get("/tables/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.NotFound, status)
         }
         verify(exactly = 1) { service.getTableOrNull(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
@@ -158,12 +155,9 @@ class TableEndpointsTest {
 
     @Test
     fun `delete table returns 404 if not found`() = testApplication {
-        application {
-            configureTableEndpoints(service)
-        }
-
+        val client = setup()
         every { service.deleteTableById(any(), any()) } returns false
-        client.delete("/api/tables/aafd71ae-a6c1-4722-8ee1-2c9ff4f505ec").apply {
+        client.delete("/tables/aafd71ae-a6c1-4722-8ee1-2c9ff4f505ec").apply {
             assertEquals(HttpStatusCode.NotFound, status)
         }
         verify(exactly = 1) { service.deleteTableById(any(), "aafd71ae-a6c1-4722-8ee1-2c9ff4f505ec".toUUID()) }
@@ -171,12 +165,9 @@ class TableEndpointsTest {
 
     @Test
     fun `delete table returns 200 if deleted`() = testApplication {
-        application {
-            configureTableEndpoints(service)
-        }
-
+        val client = setup()
         every { service.deleteTableById(any(), any()) } returns true
-        client.delete("/api/tables/7351c4e4-c798-467a-a890-b28e59b9e5a5").apply {
+        client.delete("/tables/7351c4e4-c798-467a-a890-b28e59b9e5a5").apply {
             assertEquals(HttpStatusCode.OK, status)
         }
         verify(exactly = 1) { service.deleteTableById(any(), "7351c4e4-c798-467a-a890-b28e59b9e5a5".toUUID()) }
@@ -184,13 +175,7 @@ class TableEndpointsTest {
 
     @Test
     fun `open game with earlier startGame is preferred for latestGame`() = testApplication {
-        application {
-            installJson()
-            configureTableEndpoints(service)
-        }
-        val client = createClient {
-            installJson()
-        }
+        val client = setup()
 
         val tableId = UUID.randomUUID()
         val ownerId = UUID.randomUUID()
@@ -243,7 +228,7 @@ class TableEndpointsTest {
             service.getTableOrNull(any(), tableId)
         } returns dummyTable
 
-        client.get("/api/tables/$tableId").apply {
+        client.get("/tables/$tableId").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(
                 """|{
@@ -266,7 +251,7 @@ class TableEndpointsTest {
                             |},
                             |"currentPlayer":{"playerId":"$p1Id","displayName":"p1"}
                         |}
-                    |}""".trimMargin().replace("\n",""),
+                    |}""".trimMargin().replace("\n", ""),
                 bodyAsText()
             )
         }

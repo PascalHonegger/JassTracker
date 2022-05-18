@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/Backend/bootstrap" />
             <option value="$PROJECT_DIR$/Backend/data-access" />
             <option value="$PROJECT_DIR$/Backend/domain" />
+            <option value="$PROJECT_DIR$/Backend/security" />
             <option value="$PROJECT_DIR$/Backend/web-api" />
           </set>
         </option>

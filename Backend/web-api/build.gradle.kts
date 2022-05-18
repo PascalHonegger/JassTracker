@@ -7,8 +7,11 @@ plugins {
 dependencies {
     implementation(project(":Backend:domain"))
     implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.auth)
+    implementation(libs.ktor.server.auth.jwt)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.logback)
+    implementation(libs.java.jwt)
     implementation(libs.kotlinx.datetime)
     testImplementation(libs.ktor.client.content.negotiation)
     testImplementation(testLibs.ktor.server.tests)

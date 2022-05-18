@@ -1,7 +1,7 @@
 package dev.honegger.jasstracker.domain.services
 
 import dev.honegger.jasstracker.domain.Round
-import dev.honegger.jasstracker.domain.UserSession
+import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.repositories.RoundRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
 
@@ -10,16 +10,16 @@ import java.util.*
 
 interface RoundService {
     fun createRound(
-        session: UserSession,
+        session: PlayerSession,
         number: Int,
         score: Int,
         gameId: UUID,
         playerId: UUID,
         contractId: UUID
     ): Round
-    fun getRounds(session: UserSession, gameId: UUID): List<Round>
-    fun updateRound(session: UserSession, updatedRound: Round)
-    fun deleteRoundById(session: UserSession, id: UUID): Boolean
+    fun getRounds(session: PlayerSession, gameId: UUID): List<Round>
+    fun updateRound(session: PlayerSession, updatedRound: Round)
+    fun deleteRoundById(session: PlayerSession, id: UUID): Boolean
 }
 
 private val log = KotlinLogging.logger { }
@@ -27,7 +27,7 @@ private val log = KotlinLogging.logger { }
 class RoundServiceImpl(private val roundRepository: RoundRepository, private val tableRepository: TableRepository) :
     RoundService {
     override fun createRound(
-        session: UserSession,
+        session: PlayerSession,
         number: Int,
         score: Int,
         gameId: UUID,
@@ -61,14 +61,14 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
     }
 
     override fun getRounds(
-        session: UserSession,
+        session: PlayerSession,
         gameId: UUID,
     ): List<Round> {
         return roundRepository.getRoundsForGame(gameId)
     }
 
     override fun updateRound(
-        session: UserSession,
+        session: PlayerSession,
         updatedRound: Round,
     ) {
         check(updatedRound.score in 0..157) { "Score must be between 0 and 157" }
@@ -82,7 +82,7 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
         roundRepository.updateRound(existingRound)
     }
 
-    override fun deleteRoundById(session: UserSession, id: UUID): Boolean {
+    override fun deleteRoundById(session: PlayerSession, id: UUID): Boolean {
         val existingRound =
             roundRepository.getRoundOrNull(id)
         checkNotNull(existingRound)
