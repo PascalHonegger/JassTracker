@@ -79,7 +79,7 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
 
         // TODO verify round is part of game / table which is owned by current user
 
-        roundRepository.updateRound(existingRound)
+        roundRepository.updateRound(existingRound.copy(score = updatedRound.score))
     }
 
     override fun deleteRoundById(session: PlayerSession, id: UUID): Boolean {

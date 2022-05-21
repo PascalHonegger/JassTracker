@@ -145,4 +145,27 @@ class RoundServiceImplTest {
             roundRepository.getRoundOrNull(roundId)
         }
     }
+
+    @Test
+    fun `updateRound updates score`() {
+        val id = UUID.randomUUID()
+        val oldRound = Round(id, 1, 80, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID())
+        val updatedRound = oldRound.copy(score = 95)
+
+        every {
+            roundRepository.getRoundOrNull(id)
+        } returns oldRound
+
+        every {
+            roundRepository.updateRound(updatedRound)
+        } just Runs
+
+        val session = PlayerSession(UUID.randomUUID(), false, "dummy")
+        service.updateRound(session, updatedRound)
+
+        verify (exactly = 1) {
+            roundRepository.getRoundOrNull(id)
+            roundRepository.updateRound(updatedRound)
+        }
+    }
 }
