@@ -20,10 +20,7 @@ fun Route.configureGameEndpoints(
         }
         get("/{id}") {
             val id = call.parameters["id"]
-            if (id.isNullOrBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@get
-            }
+            checkNotNull(id)
             val game =
                 gameService.getGameOrNull(call.playerSession(), id.toUUID())
 
@@ -36,10 +33,7 @@ fun Route.configureGameEndpoints(
         }
         get("/{id}/currentPlayer") {
             val id = call.parameters["id"]
-            if (id.isNullOrBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@get
-            }
+            checkNotNull(id)
             val game =
                 gameService.getGameOrNull(call.playerSession(), id.toUUID())
 
@@ -67,20 +61,14 @@ fun Route.configureGameEndpoints(
         }
         put("/{id}") {
             val id = call.parameters["id"]
-            if (id.isNullOrBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@put
-            }
+            checkNotNull(id)
             val updatedGame = call.receive<WebGame>().toGame()
             gameService.updateGame(call.playerSession(), updatedGame)
             call.respond(HttpStatusCode.OK)
         }
         delete("/{id}") {
             val id = call.parameters["id"]
-            if (id.isNullOrBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@delete
-            }
+            checkNotNull(id)
             val success = gameService.deleteGameById(call.playerSession(), id.toUUID())
             if (!success) {
                 call.respond(HttpStatusCode.NotFound)

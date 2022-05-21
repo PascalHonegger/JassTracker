@@ -17,10 +17,7 @@ fun Route.configurePlayerEndpoints(
     route("/players") {
         get("/{id}") {
             val id = call.parameters["id"]
-            if (id.isNullOrBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@get
-            }
+            checkNotNull(id)
             val player =
                 playerService.getPlayerOrNull(call.playerSession(), id.toUUID())
 
@@ -33,10 +30,7 @@ fun Route.configurePlayerEndpoints(
         }
         put("/{id}") {
             val id = call.parameters["id"]
-            if (id.isNullOrBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@put
-            }
+            checkNotNull(id)
             when (val updatedPlayer = call.receive<WebPlayer>().toPlayer()) {
                 is GuestPlayer -> {
                     call.respond(HttpStatusCode.BadRequest, "Cannot update guest player")
