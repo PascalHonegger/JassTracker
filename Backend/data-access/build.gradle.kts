@@ -13,6 +13,7 @@ dependencies {
     implementation(libs.flyway)
     implementation(libs.jooq)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlin.reflect)
     runtimeOnly(libs.postgresql)
     jooqGenerator(libs.postgresql)
     testImplementation(testLibs.kotlin.test)
