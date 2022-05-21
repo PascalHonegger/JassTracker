@@ -165,8 +165,7 @@ function backToOverview() {
         ></CreateGame>
       </form>
     </template>
-    <template v-slot:footer
-      >echo 'source /usr/share/nvm/init-nvm.sh' >> ~/.bashrc
+    <template v-slot:footer>
       <button
         type="button"
         class="btn btn-blue"
