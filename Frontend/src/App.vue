@@ -10,8 +10,8 @@ const router = useRouter();
 const logoLink = computed(() => (store.loggedIn ? "/overview" : "/login"));
 const hideMobileMenu = ref(true);
 
-onMounted(() => {
-  store.loadTokenFromStorage();
+onMounted(async () => {
+  await store.loadTokenFromStorage();
 });
 
 function logout() {

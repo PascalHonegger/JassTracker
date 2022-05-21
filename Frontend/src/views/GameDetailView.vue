@@ -17,13 +17,24 @@ const tableStore = useTableStore();
 const { currentGame } = storeToRefs(gameStore);
 
 watch(
+  () => route.params.tableId,
+  async (newId) => await setCurrentTableId(newId)
+);
+
+watch(
   () => route.params.gameId,
   async (newId) => await setCurrentGameId(newId)
 );
 
-onMounted(async () => await setCurrentGameId(route.params.gameId));
+onMounted(async () => {
+  await setCurrentTableId(route.params.tableId);
+  await setCurrentGameId(route.params.gameId);
+});
 
-onUnmounted(async () => await setCurrentGameId(""));
+onUnmounted(async () => {
+  await setCurrentGameId("");
+  await setCurrentTableId("");
+});
 
 const isModalVisible = ref(false);
 
@@ -53,6 +64,12 @@ async function setCurrentGameId(newId: string | string[]) {
   if (newId) {
     await gameStore.loadGame(tableStore.currentTableId, newId);
   }
+}
+
+async function setCurrentTableId(newId: string | string[] | undefined) {
+  if (typeof newId !== "string") return;
+  tableStore.setCurrentTable(newId);
+  await tableStore.loadTable(newId);
 }
 
 function backToTable() {
