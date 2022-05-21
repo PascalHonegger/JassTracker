@@ -195,7 +195,7 @@ class GameEndpointsTest {
         client.get("/games/$dummyId/currentPlayer").apply {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals(
-                """{"playerId":"$p2Id","displayName":"p2"}""".trimMargin().replace("\n", ""), bodyAsText())
+                """{"playerId":"$p2Id","displayName":"p2"}""", bodyAsText())
         }
         verify(exactly = 1) { service.getGameOrNull(any(), dummyId) }
     }

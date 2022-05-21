@@ -36,7 +36,28 @@ class AuthenticationEndpointsTest {
     }
 
     @Test
-    fun `post login returns playerToken`() = testApplication {
+    fun `register returns playerToken`() = testApplication {
+        val client = setup()
+
+        every {
+            playerService.registerPlayer(any(), any(), any())
+        } returns AuthToken("dummyToken")
+
+        client.post("/register") {
+            contentType(ContentType.Application.Json)
+            setBody(WebCreatePlayer("dummy", "Dummy", "password"))
+        }.apply {
+            assertEquals(HttpStatusCode.OK, status)
+            assertEquals("""{"token":"dummyToken"}""", bodyAsText())
+        }
+
+        verify(exactly = 1) {
+            playerService.registerPlayer("Dummy", "dummy", "password")
+        }
+    }
+
+    @Test
+    fun `login returns playerToken`() = testApplication {
         val client = setup()
 
         every {
@@ -57,7 +78,7 @@ class AuthenticationEndpointsTest {
     }
 
     @Test
-    fun `post login returns badRequest if player is null`() = testApplication {
+    fun `login returns BadRequest if player is null`() = testApplication {
         val client = setup()
         every { playerService.authenticatePlayer(any(), any()) } returns null
         client.post("/login") {
@@ -72,7 +93,7 @@ class AuthenticationEndpointsTest {
     }
 
     @Test
-    fun `post guestAccess returns guestToken`() = testApplication {
+    fun `guestAccess returns guestToken`() = testApplication {
         val client = setup()
         every { playerService.registerGuestPlayer() } returns AuthToken("dummyToken")
         client.post("/guest-access") {
