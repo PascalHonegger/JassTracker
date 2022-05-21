@@ -22,7 +22,7 @@ async function deleteTable() {
   closeModal();
 }
 
-function showModal(event: PointerEvent) {
+function showModal(event: MouseEvent) {
   event.preventDefault();
   isModalVisible.value = true;
 }

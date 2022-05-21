@@ -8,6 +8,7 @@ import dev.honegger.jasstracker.domain.GuestPlayer
 import dev.honegger.jasstracker.domain.Player
 import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.RegisteredPlayer
+import dev.honegger.jasstracker.domain.services.AuthToken
 import dev.honegger.jasstracker.domain.services.AuthTokenService
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toJavaInstant
@@ -22,17 +23,20 @@ data class JwtConfig(
     val expiryTime: Duration,
 )
 
+private const val guestUsername = "Gast"
+
 class JwtTokenService(private val jwtConfig: JwtConfig, private val clock: Clock = Clock.System) : AuthTokenService {
-    override fun createToken(player: Player): String {
+    override fun createToken(player: Player): AuthToken {
         return JWT.create()
             .withIssuedAt(clock.now().toJavaInstant().let { Date.from(it) })
             .withAudience(jwtConfig.audience)
             .withIssuer(jwtConfig.issuer)
             .withClaim(PlayerSession::playerId.name, player.id.toString())
             .withClaim(PlayerSession::isGuest.name, player is GuestPlayer)
-            .withClaim(PlayerSession::username.name, if (player is RegisteredPlayer) player.username else "Gast")
+            .withClaim(PlayerSession::username.name, if (player is RegisteredPlayer) player.username else guestUsername)
             .withExpiresAt((clock.now() + jwtConfig.expiryTime).toJavaInstant().let { Date.from(it) })
             .sign(Algorithm.HMAC256(jwtConfig.secret))
+            .let { AuthToken(it) }
     }
 
     val tokenVerifier: JWTVerifier = JWT

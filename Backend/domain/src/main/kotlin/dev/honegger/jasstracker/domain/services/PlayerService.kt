@@ -13,12 +13,12 @@ interface PlayerService {
         displayName: String,
         username: String,
         password: String,
-    ): RegisteredPlayer
+    ): AuthToken
 
-    fun registerGuestPlayer(): GuestPlayer
+    fun registerGuestPlayer(): AuthToken
+    fun authenticatePlayer(username: String, password: String): AuthToken?
     fun getPlayerOrNull(session: PlayerSession, id: UUID): Player?
     fun updatePlayer(session: PlayerSession, updatedPlayer: RegisteredPlayer)
-    fun authenticatePlayer(username: String, password: String): RegisteredPlayer?
 }
 
 private val log = KotlinLogging.logger { }
@@ -26,12 +26,13 @@ private val log = KotlinLogging.logger { }
 class PlayerServiceImpl(
     private val playerRepository: PlayerRepository,
     private val passwordHashService: PasswordHashService,
+    private val authTokenService: AuthTokenService,
 ) : PlayerService {
     override fun registerPlayer(
         displayName: String,
         username: String,
         password: String,
-    ): RegisteredPlayer {
+    ): AuthToken {
         val newPlayer = RegisteredPlayer(
             id = UUID.randomUUID(),
             displayName = displayName,
@@ -41,17 +42,27 @@ class PlayerServiceImpl(
 
         log.info { "Registering new player: $newPlayer" }
         playerRepository.savePlayer(newPlayer)
-        return newPlayer
+        return authTokenService.createToken(newPlayer)
     }
 
-    override fun registerGuestPlayer(): GuestPlayer {
+    override fun registerGuestPlayer(): AuthToken {
         val newPlayer = GuestPlayer(
             id = UUID.randomUUID(),
         )
 
         log.info { "Registering new guest: $newPlayer" }
         playerRepository.savePlayer(newPlayer)
-        return newPlayer
+        return authTokenService.createToken(newPlayer)
+    }
+
+    override fun authenticatePlayer(username: String, password: String): AuthToken? {
+        val player = playerRepository.findPlayerByUsername(username)
+        if (player == null || !passwordHashService.verifyPassword(
+                hash = player.password,
+                password = password
+            )
+        ) return null
+        return authTokenService.createToken(player)
     }
 
     override fun getPlayerOrNull(
@@ -77,14 +88,5 @@ class PlayerServiceImpl(
             is RegisteredPlayer -> existingPlayer.copy(displayName = updatedPlayer.displayName)
         }
         playerRepository.updatePlayer(sanitizedPlayer)
-    }
-
-    override fun authenticatePlayer(username: String, password: String): RegisteredPlayer? {
-        return playerRepository.findPlayerByUsername(username)?.takeIf {
-            passwordHashService.verifyPassword(
-                hash = it.password,
-                password = password
-            )
-        }
     }
 }

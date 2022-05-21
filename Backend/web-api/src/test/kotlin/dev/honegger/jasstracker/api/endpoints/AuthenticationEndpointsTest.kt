@@ -1,8 +1,6 @@
 package dev.honegger.jasstracker.api.endpoints
 
-import dev.honegger.jasstracker.domain.GuestPlayer
-import dev.honegger.jasstracker.domain.RegisteredPlayer
-import dev.honegger.jasstracker.domain.services.AuthTokenService
+import dev.honegger.jasstracker.domain.services.AuthToken
 import dev.honegger.jasstracker.domain.services.PlayerService
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -11,28 +9,26 @@ import io.ktor.http.*
 import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import io.mockk.*
-import java.util.*
 import kotlin.test.*
 
 class AuthenticationEndpointsTest {
 
     private val playerService = mockk<PlayerService>()
-    private val authService = mockk<AuthTokenService>()
 
     @BeforeTest
     fun setup() {
-        clearMocks(playerService, authService)
+        clearMocks(playerService)
     }
 
     @AfterTest
     fun teardown() {
-        confirmVerified(playerService, authService)
+        confirmVerified(playerService)
     }
 
     private fun ApplicationTestBuilder.setup(): HttpClient {
         application {
             installJson()
-            routing { configureAuthenticationEndpoints(playerService, authService) }
+            routing { configureAuthenticationEndpoints(playerService) }
         }
         return createClient {
             installJson()
@@ -45,14 +41,7 @@ class AuthenticationEndpointsTest {
 
         every {
             playerService.authenticatePlayer(any(), any())
-        } returns RegisteredPlayer(
-            id = UUID.randomUUID(),
-            username = "dummy",
-            displayName = "Dummy",
-            password = "<redacted>"
-        )
-
-        every { authService.createToken(any()) } returns "dummyToken"
+        } returns AuthToken("dummyToken")
 
         client.post("/login") {
             contentType(ContentType.Application.Json)
@@ -64,7 +53,6 @@ class AuthenticationEndpointsTest {
 
         verify(exactly = 1) {
             playerService.authenticatePlayer("dummy", "password")
-            authService.createToken(match { it is RegisteredPlayer && it.username == "dummy" })
         }
     }
 
@@ -86,9 +74,7 @@ class AuthenticationEndpointsTest {
     @Test
     fun `post guestAccess returns guestToken`() = testApplication {
         val client = setup()
-        val guestId = UUID.randomUUID()
-        every { playerService.registerGuestPlayer() } returns GuestPlayer(guestId)
-        every { authService.createToken(any()) } returns "dummyToken"
+        every { playerService.registerGuestPlayer() } returns AuthToken("dummyToken")
         client.post("/guest-access") {
             contentType(ContentType.Application.Json)
         }.apply {
@@ -98,7 +84,6 @@ class AuthenticationEndpointsTest {
 
         verify(exactly = 1) {
             playerService.registerGuestPlayer()
-            authService.createToken(match { it is GuestPlayer && it.id == guestId })
         }
     }
 }
