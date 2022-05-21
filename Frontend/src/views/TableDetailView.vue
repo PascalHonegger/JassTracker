@@ -12,7 +12,6 @@ import {
   WebCreateGameParticipation,
   WebGameParticipation,
 } from "@/services/web-model";
-import type { Game, GameParticipation } from "@/types/types";
 import GameItem from "@/components/GameItem.vue";
 import GameList, { NamedGame } from "@/components/GameList.vue";
 import { dateCompare } from "@/util/dates";
@@ -40,8 +39,8 @@ const newGame = reactive<CreateNewGameForm>({
   team2Player2: newPlayer,
 });
 
-const currentGamePlayers = computed<GameParticipation[]>(() => {
-  const game: Game | null = currentGame.value;
+const currentGamePlayers = computed(() => {
+  const game = currentGame.value;
   if (game == null) {
     return [newPlayer];
   }
@@ -114,7 +113,7 @@ function updatePlayer(
 }
 
 function openCreateGameDialog() {
-  const game: Game | null = currentGame.value;
+  const game = currentGame.value;
   newGame.team1Player1 = game?.team1?.player1 ?? newPlayer;
   newGame.team1Player2 = game?.team1?.player2 ?? newPlayer;
   newGame.team2Player1 = game?.team2?.player1 ?? newPlayer;
