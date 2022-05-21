@@ -98,14 +98,6 @@ class RoundServiceImplTest {
     }
 
     @Test
-    fun `getRounds returns all rounds for a game`() {
-        val dummyGame = UUID.randomUUID()
-        every { roundRepository.getRoundsForGame(dummyGame) } returns emptyList()
-        assertEquals(emptyList(), service.getRounds(dummySession, dummyGame))
-        verify(exactly = 1) { roundRepository.getRoundsForGame(dummyGame) }
-    }
-
-    @Test
     fun `deleteRoundById removes a created round`() {
         val dummyRound = Round(UUID.randomUUID(), 1, 157, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID())
         every {

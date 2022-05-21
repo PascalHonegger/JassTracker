@@ -17,7 +17,6 @@ interface RoundService {
         playerId: UUID,
         contractId: UUID
     ): Round
-    fun getRounds(session: PlayerSession, gameId: UUID): List<Round>
     fun updateRound(session: PlayerSession, updatedRound: Round)
     fun deleteRoundById(session: PlayerSession, id: UUID): Boolean
 }
@@ -58,13 +57,6 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
         log.info { "Saving new round $newRound" }
         roundRepository.saveRound(newRound)
         return newRound
-    }
-
-    override fun getRounds(
-        session: PlayerSession,
-        gameId: UUID,
-    ): List<Round> {
-        return roundRepository.getRoundsForGame(gameId)
     }
 
     override fun updateRound(

@@ -13,82 +13,6 @@ class RoundRepositoryImplTest : RepositoryTest() {
     private val repo = RoundRepositoryImpl()
 
     @Test
-    fun `getRoundsForGame returns rounds`() {
-        val game = createEmptyGame()
-        val round1 = Round(UUID.randomUUID(),
-            1,
-            157,
-            game.id,
-            "3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(),
-            "58bae0f8-8c59-4a40-aa2d-9c6a489366b3".toUUID())
-        val round2 = Round(UUID.randomUUID(),
-            2,
-            89,
-            game.id,
-            "665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3".toUUID(),
-            "38fb8cbb-b22d-40f7-b9a1-b4adc1740075".toUUID())
-        val round3 = Round(UUID.randomUUID(),
-            3,
-            73,
-            game.id,
-            "7dad81d3-62db-4553-9d48-f38f404f1596".toUUID(),
-            "d895b400-3d89-48db-a7ed-5e593f54b7f6".toUUID())
-        repo.saveRound(round1)
-        repo.saveRound(round2)
-        repo.saveRound(round3)
-        val expected = listOf(round1, round2, round3)
-        assertEquals(expected, repo.getRoundsForGame(game.id))
-        repo.deleteRoundById(round3.id)
-        repo.deleteRoundById(round2.id)
-        repo.deleteRoundById(round1.id)
-        assertNull(repo.getRoundOrNull(round1.id))
-        assertNull(repo.getRoundOrNull(round2.id))
-        assertNull(repo.getRoundOrNull(round3.id))
-        assertEquals(emptyList(), repo.getRoundsForGame(game.id))
-    }
-
-    @Test
-    fun `getRoundsForGame only returns rounds of passed gameid`() {
-        val game = createEmptyGame()
-        val game2 = createEmptyGame()
-        val round1 = Round(UUID.randomUUID(),
-            1,
-            157,
-            game.id,
-            "3095c042-d0a9-4219-9f65-53d4565fd1e6".toUUID(),
-            "58bae0f8-8c59-4a40-aa2d-9c6a489366b3".toUUID())
-        val round2 = Round(UUID.randomUUID(),
-            2,
-            89,
-            game.id,
-            "665032ec-8c6a-4ff7-a5e1-ea5a705ef0b3".toUUID(),
-            "38fb8cbb-b22d-40f7-b9a1-b4adc1740075".toUUID())
-        val round3 = Round(UUID.randomUUID(),
-            3,
-            73,
-            game2.id,
-            "7dad81d3-62db-4553-9d48-f38f404f1596".toUUID(),
-            "d895b400-3d89-48db-a7ed-5e593f54b7f6".toUUID())
-        repo.saveRound(round1)
-        repo.saveRound(round2)
-        repo.saveRound(round3)
-        val expectedGame1 = listOf(round1, round2)
-        val expectedGame2 = listOf(round3)
-
-        assertEquals(expectedGame1, repo.getRoundsForGame(game.id))
-        assertEquals(expectedGame2, repo.getRoundsForGame(game2.id))
-
-        repo.deleteRoundById(round3.id)
-        repo.deleteRoundById(round2.id)
-        repo.deleteRoundById(round1.id)
-        assertNull(repo.getRoundOrNull(round1.id))
-        assertNull(repo.getRoundOrNull(round2.id))
-        assertNull(repo.getRoundOrNull(round3.id))
-        assertEquals(emptyList(), repo.getRoundsForGame(game.id))
-        assertEquals(emptyList(), repo.getRoundsForGame(game2.id))
-    }
-
-    @Test
     fun `getRound returns round`() {
         val repo = RoundRepositoryImpl()
         val round = Round(
@@ -118,7 +42,6 @@ class RoundRepositoryImplTest : RepositoryTest() {
         )
         repo.saveRound(round)
         assertEquals(round, repo.getRoundOrNull(round.id))
-        assertEquals(listOf(round), repo.getRoundsForGame(game.id))
         repo.deleteRoundById(round.id)
     }
 
@@ -137,7 +60,6 @@ class RoundRepositoryImplTest : RepositoryTest() {
         val updatedRound = round.copy(score = 121)
         repo.updateRound(updatedRound)
         assertEquals(updatedRound, repo.getRoundOrNull(round.id))
-        assertEquals(listOf(updatedRound), repo.getRoundsForGame(game.id))
         repo.deleteRoundById(round.id)
     }
 

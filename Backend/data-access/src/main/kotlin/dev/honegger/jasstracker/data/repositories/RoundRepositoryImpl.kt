@@ -20,10 +20,6 @@ class RoundRepositoryImpl : RoundRepository {
         selectFrom(ROUND).where(ROUND.ID.eq(id)).fetchOne()?.toRound()
     }
 
-    override fun getRoundsForGame(gameId: UUID): List<Round> = withContext {
-        selectFrom(ROUND).where(ROUND.GAME_ID.eq(gameId)).fetch().map { it.toRound() }
-    }
-
     override fun updateRound(updatedRound: Round): Unit = withContext {
         val roundRecord = selectFrom(ROUND).where(ROUND.ID.eq(updatedRound.id)).fetchOne()
         checkNotNull(roundRecord)

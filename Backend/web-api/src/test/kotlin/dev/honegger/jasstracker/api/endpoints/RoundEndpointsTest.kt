@@ -1,15 +1,12 @@
 package dev.honegger.jasstracker.api.endpoints
 
-import dev.honegger.jasstracker.domain.Round
 import dev.honegger.jasstracker.domain.services.RoundService
 import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.client.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.mockk.*
-import java.util.*
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -37,62 +34,6 @@ class RoundEndpointsTest {
             installJson()
             addJwtHeader()
         }
-    }
-
-    @Test
-    fun `get rounds of game returns all rounds of the game`() = testApplication {
-        val client = setup()
-
-        val id1 = UUID.randomUUID()
-        val id2 = UUID.randomUUID()
-        val gameId = UUID.randomUUID()
-        val playerId = UUID.randomUUID()
-        val contractId1 = UUID.randomUUID()
-        val contractId2 = UUID.randomUUID()
-
-        val round1 = Round(
-            id = id1,
-            number = 1,
-            score = 150,
-            gameId = gameId,
-            playerId = playerId,
-            contractId = contractId1,
-        )
-        val round2 = Round(
-            id = id2,
-            number = 2,
-            score = 140,
-            gameId = gameId,
-            playerId = playerId,
-            contractId = contractId2,
-        )
-        every {
-            service.getRounds(any(), gameId)
-        } returns listOf(round1, round2)
-
-        client.get("/rounds/byGame/$gameId").apply {
-            assertEquals(HttpStatusCode.OK, status)
-            assertEquals(
-                """[{"id":"$id1","number":1,"score":150,"gameId":"$gameId","playerId":"$playerId","contractId":"$contractId1"},{"id":"$id2","number":2,"score":140,"gameId":"$gameId","playerId":"$playerId","contractId":"$contractId2"}]""",
-                bodyAsText()
-            )
-        }
-        verify(exactly = 1) { service.getRounds(any(), any()) }
-    }
-
-    @Test
-    fun `get rounds of game returns empty list if game not found`() = testApplication {
-        val client = setup()
-
-        every {
-            service.getRounds(any(), any())
-        } returns emptyList()
-
-        client.get("/rounds/byGame/84c532b1-dd87-4ca0-bc85-81c9c5d51c21").apply {
-            assertEquals(HttpStatusCode.OK, status)
-            assertEquals("[]", bodyAsText())
-        }
-        verify(exactly = 1) { service.getRounds(any(), "84c532b1-dd87-4ca0-bc85-81c9c5d51c21".toUUID()) }
     }
 
     @Test

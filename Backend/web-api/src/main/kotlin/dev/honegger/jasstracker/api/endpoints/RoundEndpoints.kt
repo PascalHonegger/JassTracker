@@ -13,15 +13,6 @@ fun Route.configureRoundEndpoints(
     roundService: RoundService,
 ) {
     route("/rounds") {
-        get("/byGame/{gameId}") {
-            val gameId = call.parameters["gameId"]
-            if (gameId.isNullOrBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@get
-            }
-            val rounds = roundService.getRounds(call.playerSession(), gameId.toUUID())
-            call.respond(HttpStatusCode.OK, rounds.map { it.toWebRound() })
-        }
         post {
             val newRound = call.receive<WebCreateRound>()
             val createdRound = roundService.createRound(
