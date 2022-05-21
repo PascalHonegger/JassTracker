@@ -6,29 +6,35 @@
 title JassTracker - Component Diagram
 
 Container_Boundary(frontend, "Frontend") {
-    Component(components, "Components", "Vue Router", "Pages and user interface")
+    Component(components, "Components", "", "Re-Usable Vue components")
+    Component(views, "Views", "Vue Router", "Pages and user interface")
     Component(store, "Store", "Pinia", "Manage state and state updates")
     Component(backendApi, "Services", "mande", "Call backend API")
 }
 
 Container_Boundary(backend, "Backend") {
-    Component(webApi, "Web API", "Ktor", "Routing and security")
+    Component(webApi, "Web API", "Ktor, kotlinx.serialization", "Routing and authentication")
     Component(domain, "Domain", "Plain Kotlin", "Business logic")
     Component(dataAccess, "Data Access", "jOOQ, Flyway", "Connect to DB")
-    Component(bootstrap, "Bootstrap", "Ktor", "Bootstrap app")
+    Component(bootstrap, "Bootstrap", "Ktor", "Bootstrap app, configure Ktor")
+    Component(security, "Security", "Argon2, JWT", "Handle security critical sections")
 }
 
 ContainerDb(database, "Database", "PostgreSQL", "Stores persistent data", $sprite="postgresql")
 
-Rel(components, store, "Send actions")
-Rel(store, backendApi, "Trigger effect")
-Rel_R(backendApi, webApi, "Calls", "HTTPS/REST")
+Rel(views, components, "Uses")
+Rel(views, store, "Sends actions")
+Rel(store, backendApi, "Triggers effect")
+Rel(backendApi, webApi, "Calls", "HTTPS/REST")
 
-Rel_R(webApi, domain, "Calls")
-Rel_L(dataAccess, domain, "Provides services to")
+Rel(webApi, domain, "Calls")
+Rel(dataAccess, domain, "Provides repositories")
+Rel(security, domain, "Provides Token- & HashService")
 Rel(dataAccess, database, "Reads and stores data")
-Rel_D(bootstrap, webApi, "bootstraps")
-Rel_D(bootstrap, dataAccess, "bootstraps")
-Rel(bootstrap, domain, "bootstraps")
+Rel(bootstrap, webApi, "Bootstraps")
+Rel(bootstrap, dataAccess, "Bootstraps")
+Rel(bootstrap, security, "Bootstraps")
+
+Rel(bootstrap, domain, "Bootstraps")
 
 @enduml

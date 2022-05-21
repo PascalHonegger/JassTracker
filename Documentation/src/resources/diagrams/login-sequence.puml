@@ -1,0 +1,26 @@
+@startuml
+
+title "Successful Login - Sequence Diagram"
+
+actor User
+participant AuthenticationEndpoints <<Web API>>
+participant PlayerService <<Domain>>
+participant PlayerRepository <<Data Access>>
+participant AuthTokenService <<Security>>
+participant PasswordHashService <<Security>>
+database Database
+
+User -> AuthenticationEndpoints : Calls /login with credentials in body
+AuthenticationEndpoints -> PlayerService : Check credentials, passed as arguments
+PlayerService -> PlayerRepository : Load user by username
+PlayerRepository -> Database : Query user by username
+Database -> PlayerRepository : Return player db record
+PlayerRepository -> PlayerService : Return player domain object
+PlayerService -> PasswordHashService : Verify password hash
+PasswordHashService -> PlayerService : Return true
+PlayerService -> AuthTokenService : Create JWT token for user
+AuthTokenService -> PlayerService : Valid JWT token
+PlayerService -> AuthenticationEndpoints : Return valid JWT token
+AuthenticationEndpoints -> User : Valid JWT token
+
+@enduml

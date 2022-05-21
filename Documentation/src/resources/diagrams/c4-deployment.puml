@@ -1,48 +1,34 @@
 @startuml
 
+!include <C4/C4_Deployment>
+
 cloud Internet as internet {
 }
 
 cloud OST-Server {
 
-    node "Traefik" as proxy
-    note left
-      Reverse proxy, chooses container based on domain
-    end note
+  Node(proxy, "Proxy", "Traefik", "Reverse proxy, chooses container based on domain")
 
-    node "JassTracker" as prod {
-      artifact Backend as backendProd {
-        artifact "Frontend" as frontendProd {
-        }
-      }
-    }
+  Node(prod, "Production") {
+    Container(jassProd, "JassTracker", "Ktor, jOOQ, Vue3", "Delivers the static Frontend and provides REST API.")
+  }
 
-    node "JassTracker Test" as test {
-      artifact Backend as backendTest {
-        artifact "Frontend" as frontendTest {
-        }
-      }
-    }
+  Node(test, "Test") {
+    Container(jassTest, "JassTracker", "Ktor, jOOQ, Vue3", "Delivers the static Frontend and provides REST API.")
+  }
 
-    note "Frontend is served by the Backend and\npart of the same docker container" as n1
-    frontendTest .. n1
-
-    node Database as db {
-      database PostgreSQL {
-        storage Prod as dbProd {
-        }
-        storage Test as dbTest {
-        }
-      }
-    }
+  Node(postgres, "Postgres") {
+    ContainerDb(dbProd, "prod", "JassTracker Schema")
+    ContainerDb(dbTest, "staging", "JassTracker Schema")
+  }
 }
 
-internet --> proxy
+Rel(internet, proxy, "Uses JassTracker", "HTTPS")
 
-proxy --> prod : Proxies requests to
-proxy --> test : Proxies requests to
+Rel(proxy, prod, "Proxies requests to", "HTTP")
+Rel(proxy, test, "Proxies requests to", "HTTP")
 
-backendProd --> dbProd : uses
-backendTest --> dbTest : uses
+Rel(jassProd, dbProd, "Queries", "JDBC")
+Rel(jassTest, dbTest, "Queries", "JDBC")
 
 @endum
