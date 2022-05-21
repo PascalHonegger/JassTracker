@@ -27,7 +27,7 @@ class JwtTokenServiceTest {
 
     @Test
     fun `test createToken for RegisteredPlayer`() {
-        val playerToken = service.createToken(registeredPlayer)
+        val playerToken = service.createToken(registeredPlayer).token
         val jwt = service.tokenVerifier.verify(playerToken)
         assertEquals(registeredPlayer.id.toString(), jwt.getClaim(PlayerSession::playerId.name).asString())
         assertEquals(registeredPlayer.username, jwt.getClaim(PlayerSession::username.name).asString())
@@ -36,7 +36,7 @@ class JwtTokenServiceTest {
 
     @Test
     fun `test createToken for GuestPlayer`() {
-        val playerToken = service.createToken(guestPlayer)
+        val playerToken = service.createToken(guestPlayer).token
         val jwt = service.tokenVerifier.verify(playerToken)
         assertEquals(guestPlayer.id.toString(), jwt.getClaim(PlayerSession::playerId.name).asString())
         assertEquals("Gast", jwt.getClaim(PlayerSession::username.name).asString())

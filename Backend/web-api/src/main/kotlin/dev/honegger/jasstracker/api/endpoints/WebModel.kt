@@ -2,6 +2,7 @@ package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.domain.*
 import dev.honegger.jasstracker.api.serializer.UUIDSerializer
+import dev.honegger.jasstracker.domain.services.AuthToken
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -124,6 +125,11 @@ data class WebLogin(
     val password: String,
 )
 
+@Serializable
+data class TokenResponse(
+    val token: String,
+)
+
 fun WebTable.toTable() = Table(
     id = id,
     name = name,
@@ -174,6 +180,10 @@ fun Contract.toWebContract() = WebContract(
     name = name,
     multiplier = multiplier,
     type = type,
+)
+
+fun AuthToken.toTokenResponse() = TokenResponse(
+    token = token,
 )
 
 fun WebRound.toRound() = Round(

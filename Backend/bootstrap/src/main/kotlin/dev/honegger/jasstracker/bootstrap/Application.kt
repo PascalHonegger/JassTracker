@@ -48,7 +48,7 @@ fun Application.module() {
         val roundRepository = RoundRepositoryImpl()
         val roundService = RoundServiceImpl(roundRepository, tableRepository)
         val contractService = ContractServiceImpl(contractRepository)
-        val playerService = PlayerServiceImpl(playerRepository, passwordHashService)
+        val playerService = PlayerServiceImpl(playerRepository, passwordHashService, authTokenService)
 
         configureAuthentication(authTokenService)
         initializeDatabase()
@@ -58,7 +58,7 @@ fun Application.module() {
 
         routing {
             route("/api") {
-                configureAuthenticationEndpoints(playerService, authTokenService)
+                configureAuthenticationEndpoints(playerService)
                 authenticate {
                     configureGameEndpoints(gameService)
                     configureTableEndpoints(tableService)
