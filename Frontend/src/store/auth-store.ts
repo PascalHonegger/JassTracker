@@ -70,8 +70,10 @@ export const useAuthStore = defineStore("auth", {
         const { token } = await loginPlayer(username, password);
         this.setToken(token);
         await this.loadContracts();
+
         return true;
       } catch (e) {
+        this.setToken("");
         return false;
       }
     },
@@ -86,6 +88,7 @@ export const useAuthStore = defineStore("auth", {
         await this.loadContracts();
         return true;
       } catch (e) {
+        this.setToken("");
         return false;
       }
     },
@@ -116,13 +119,18 @@ export const useAuthStore = defineStore("auth", {
         localStorage.removeItem(tokenKey);
       }
     },
-    loadTokenFromStorage() {
-      const token = localStorage.getItem(tokenKey);
-      this.setToken(token ?? "");
+    async loadTokenFromStorage() {
+      const token = localStorage.getItem(tokenKey) ?? "";
+      const jwt = parseJwt(token);
+      const isValid = jwt != null && jwt.exp * 1000 >= new Date().getTime();
+      if (isValid) {
+        this.setToken(token);
+        await this.loadContracts();
+      }
+      return isValid;
     },
     logout() {
       this.setToken("");
-
       // Reset all stores to prevent any weird behavior on logout / login
       useContractStore().$reset();
       useGameStore().$reset();
