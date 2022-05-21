@@ -30,6 +30,13 @@ class GameRepositoryImpl : GameRepository {
         )
     }
 
+    override fun getGroupedGamesOfTables(tableIds: List<UUID>): Map<UUID, List<Game>> = withContext {
+        val records = selectFrom(GAME).where(GAME.TABLE_ID.`in`(tableIds)).fetch()
+        val lookup = records.intoMap(GAME.ID)
+        val games = toDomainObjects(records)
+        games.groupBy { lookup.getValue(it.id).tableId }.withDefault { emptyList() }
+    }
+
     override fun getGameOrNull(id: UUID): Game? = withContext {
         toDomainObjects(selectFrom(GAME).where(GAME.ID.eq(id)).fetch()).singleOrNull()
     }

@@ -267,4 +267,12 @@ class GameRepositoryImplTest : RepositoryTest() {
         val result = repo.deleteGameById(UUID.randomUUID())
         assertFalse { result }
     }
+
+    @Test
+    fun `getGroupedGamesOfTables returns correctly grouped games`() {
+        val tableId1 = "92968e55-6df0-4f21-a7cc-a243025e5f87".toUUID()
+        val tableId2 = "de940c47-9881-4e95-bc3d-6014ad1902e1".toUUID()
+        val expected = mapOf(tableId1 to listOf(game1), tableId2 to listOf(game2))
+        assertEquals(expected, repo.getGroupedGamesOfTables(listOf(tableId1, tableId2)))
+    }
 }

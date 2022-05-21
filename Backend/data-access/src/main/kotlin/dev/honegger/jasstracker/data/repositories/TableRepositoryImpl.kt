@@ -39,12 +39,15 @@ class TableRepositoryImpl(private val gameRepository: GameRepository) : TableRep
     }
 
     override fun getTables(ownerId: UUID): List<Table> = withContext {
-        selectFrom(TABLE).where(TABLE.OWNER_ID.eq(ownerId)).fetch().map {
+        val records = selectFrom(TABLE).where(TABLE.OWNER_ID.eq(ownerId)).fetch()
+        val groupedGames = gameRepository.getGroupedGamesOfTables(records.map { it.id })
+
+        records.map {
             Table(
                 id = it.id,
                 name = it.name,
                 ownerId = it.ownerId,
-                games = gameRepository.getAllGamesOfTable(it.id),
+                games = groupedGames[it.id] ?: emptyList(),
             )
         }
     }
