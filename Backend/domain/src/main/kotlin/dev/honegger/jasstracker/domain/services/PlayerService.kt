@@ -19,6 +19,7 @@ interface PlayerService {
     fun authenticatePlayer(username: String, password: String): AuthToken?
     fun getPlayerOrNull(session: PlayerSession, id: UUID): Player?
     fun updatePlayer(session: PlayerSession, updatedPlayer: RegisteredPlayer)
+    fun deletePlayer(session: PlayerSession, playerToDelete: RegisteredPlayer)
 }
 
 private val log = KotlinLogging.logger { }
@@ -88,5 +89,15 @@ class PlayerServiceImpl(
             is RegisteredPlayer -> existingPlayer.copy(displayName = updatedPlayer.displayName)
         }
         playerRepository.updatePlayer(sanitizedPlayer)
+    }
+
+    override fun deletePlayer(session: PlayerSession, playerToDelete: RegisteredPlayer) {
+        val existingPlayer = playerRepository.getPlayerOrNull(playerToDelete.id)
+        checkNotNull(existingPlayer)
+        check(existingPlayer is RegisteredPlayer)
+        check(existingPlayer.id == session.playerId)
+
+        val updatedPlayer = GuestPlayer(existingPlayer.id)
+        playerRepository.updatePlayer(updatedPlayer)
     }
 }
