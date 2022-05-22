@@ -126,7 +126,11 @@ function updatePlayer(
       </button>
     </div>
 
-    <ModalDialog v-if="isModalVisible" @close="isModalVisible = false">
+    <ModalDialog
+      v-if="isModalVisible"
+      @close="isModalVisible = false"
+      class="overflow-auto"
+    >
       <template v-slot:header>
         <p class="font-bold">Tisch erstellen</p>
       </template>
