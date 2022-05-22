@@ -10,7 +10,7 @@ class UUIDTest {
     fun `toUUID converts to UUID correctly`() {
         val str = "28d6dc01-2d19-41d7-a6c1-a2af7c7838c7"
         val uuid = str.toUUID()
-        assertEquals(uuid, UUID.fromString(str))
+        assertEquals(UUID.fromString(str), uuid)
         assertEquals(str, uuid.toString())
     }
 
