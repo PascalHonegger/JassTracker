@@ -115,8 +115,6 @@ async function deleteAccount() {
     </form>
     <div v-if="!isGuest" class="p-4">
       <button @click="deleteAccount" class="btn btn-blue">Konto löschen</button>
-      <div />
-      <template></template>
     </div>
   </div>
 </template>
