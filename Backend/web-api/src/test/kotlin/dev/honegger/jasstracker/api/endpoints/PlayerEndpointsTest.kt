@@ -87,7 +87,7 @@ class PlayerEndpointsTest {
     }
 
     @Test
-    fun `get game returns 404 if not found`() = testApplication {
+    fun `get player returns 404 if not found`() = testApplication {
         val client = setup()
         client.get("/players/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
             assertEquals(HttpStatusCode.NotFound, status)
