@@ -47,5 +47,29 @@ fun Route.configurePlayerEndpoints(
                 }
             }
         }
+        delete("/{id}") {
+            val id = call.parameters["id"]
+            if (id.isNullOrBlank()) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@delete
+            }
+
+            val player = playerService.getPlayerOrNull(call.playerSession(), id.toUUID())
+
+            if (player == null) {
+                call.respond(HttpStatusCode.NotFound)
+                return@delete
+            }
+
+            when (player) {
+                is GuestPlayer -> {
+                    call.respond(HttpStatusCode.BadRequest, "Cannot delete guest player")
+                }
+                is RegisteredPlayer -> {
+                    playerService.deletePlayer(call.playerSession(), player)
+                    call.respond(HttpStatusCode.OK)
+                }
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@ package dev.honegger.jasstracker.domain.services
 
 import dev.honegger.jasstracker.domain.GuestPlayer
 import dev.honegger.jasstracker.domain.Player
+import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.RegisteredPlayer
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
 import io.mockk.*
@@ -137,7 +138,7 @@ class PlayerServiceImplTest {
     }
 
     @Test
-    fun `registerGuestPlayer registers a new GuestPlayer`(){
+    fun `registerGuestPlayer registers a new GuestPlayer`() {
         every { playerRepository.savePlayer(any()) } just Runs
         every { authTokenService.createToken(capture(player)) } returns dummyToken
 
@@ -147,9 +148,29 @@ class PlayerServiceImplTest {
         val guest = player.captured
         assertIs<GuestPlayer>(guest)
 
-        verify (exactly = 1){
+        verify (exactly = 1) {
             playerRepository.savePlayer(guest)
             authTokenService.createToken(guest)
+        }
+    }
+
+    @Test
+    fun `deletePlayer calls update with guest player`() {
+        val id = UUID.randomUUID()
+        val playerToDelete = RegisteredPlayer(id, "marcel", "Marcel", "hash")
+
+        every { playerRepository.getPlayerOrNull(id) } returns playerToDelete
+        every { playerRepository.updatePlayer(capture(player)) } just Runs
+
+        val session = PlayerSession(id, false, "marcel")
+
+        service.deletePlayer(session, playerToDelete)
+
+        assertEquals(GuestPlayer(id), player.captured)
+
+        verify (exactly = 1) {
+            playerRepository.getPlayerOrNull(id)
+            playerRepository.updatePlayer(GuestPlayer(id))
         }
     }
 }

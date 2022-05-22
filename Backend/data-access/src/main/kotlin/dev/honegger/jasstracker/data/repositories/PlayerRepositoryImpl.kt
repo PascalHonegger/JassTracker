@@ -45,11 +45,26 @@ class PlayerRepositoryImpl : PlayerRepository {
         }
     }
 
-    override fun updatePlayer(updatedPlayer: RegisteredPlayer): Unit = withContext {
+    override fun updatePlayer(updatedPlayer: Player): Unit = withContext {
         val playerRecord = selectFrom(PLAYER).where(PLAYER.ID.eq(updatedPlayer.id)).fetchOne()
         checkNotNull(playerRecord)
 
-        playerRecord.displayName = updatedPlayer.displayName
+        when (updatedPlayer) {
+            is GuestPlayer -> {
+                playerRecord.apply {
+                    username = null
+                    password = null
+                    displayName = null
+                }
+            }
+            is RegisteredPlayer -> {
+                playerRecord.apply {
+                    username = updatedPlayer.username
+                    password = updatedPlayer.password
+                    displayName = updatedPlayer.displayName
+                }
+            }
+        }
         playerRecord.update()
     }
 

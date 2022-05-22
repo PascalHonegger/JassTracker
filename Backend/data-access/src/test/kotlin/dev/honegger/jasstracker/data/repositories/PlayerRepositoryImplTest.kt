@@ -44,6 +44,21 @@ class PlayerRepositoryImplTest : RepositoryTest() {
     }
 
     @Test
+    fun `updatePlayer with GuestPlayer makes registered player to guest`() {
+        val id = UUID.randomUUID()
+        val registered = RegisteredPlayer(
+            id = id,
+            username = "update_test",
+            displayName = "Old",
+            password = "pw",
+        )
+        repo.savePlayer(registered)
+        val guest = GuestPlayer(id)
+        repo.updatePlayer(guest)
+        assertEquals(guest, repo.getPlayerOrNull(id))
+    }
+
+    @Test
     fun `getPlayersPerTable returns correct players`() {
         val tableId = "de940c47-9881-4e95-bc3d-6014ad1902e1".toUUID()
         val expected = setOf(
