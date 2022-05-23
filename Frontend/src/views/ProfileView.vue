@@ -35,8 +35,7 @@ async function deleteAccount() {
 </script>
 
 <template>
-  <div class="container mx-auto text-center flex flex-row flex-wrap">
-    <div>Placerholder for Profile Image</div>
+  <div class="container mx-auto text-center flex flex-col">
     <form @submit.prevent="update" autocomplete="on" class="pt-4">
       <div class="mb-6 flex flex-col">
         <label
