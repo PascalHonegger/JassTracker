@@ -137,4 +137,34 @@ class PlayerEndpointsTest {
             service.getPlayerOrNull(any(), dummyId)
         }
     }
+
+    @Test
+    fun `updatePlayerDisplayName returns OK if could update`() = testApplication {
+        val client = setup()
+
+        val dummyId = UUID.randomUUID()
+        val dummyPlayer = RegisteredPlayer(
+            id = dummyId,
+            username = "bar",
+            displayName = "foo",
+            password = "max-security",
+        )
+
+        every {
+            service.getPlayerOrNull(any(), dummyId)
+        } returns dummyPlayer
+
+        every {
+            service.updatePlayerDisplayName(any(), "BarFoo")
+        } just Runs
+
+        client.put("/players/$dummyId/updateDisplayName").apply {
+            assertEquals(HttpStatusCode.OK, status)
+        }
+
+        verify(exactly = 1) {
+            service.getPlayerOrNull(any(), dummyId)
+            service.updatePlayerDisplayName(any(), "BarFoo")
+        }
+    }
 }
