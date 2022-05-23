@@ -1,5 +1,6 @@
 package dev.honegger.jasstracker.data.repositories
 
+import dev.honegger.jasstracker.data.database.Keys
 import dev.honegger.jasstracker.domain.Game
 import dev.honegger.jasstracker.domain.GameParticipation
 import dev.honegger.jasstracker.domain.Round
@@ -7,61 +8,37 @@ import dev.honegger.jasstracker.domain.Team
 import dev.honegger.jasstracker.data.database.tables.GameParticipation.GAME_PARTICIPATION as GP
 import dev.honegger.jasstracker.data.database.tables.Game.GAME
 import dev.honegger.jasstracker.data.database.tables.Round.ROUND
+import dev.honegger.jasstracker.data.database.tables.records.GameParticipationRecord
 import dev.honegger.jasstracker.data.database.tables.records.GameRecord
 import dev.honegger.jasstracker.domain.repositories.GameRepository
 import dev.honegger.jasstracker.data.withContext
 import org.jooq.DSLContext
+import org.jooq.Result
 import java.util.*
 
 class GameRepositoryImpl : GameRepository {
-    private fun DSLContext.toGame(record: GameRecord): Game {
-        val gameParticipations = selectFrom(GP).where(GP.GAME_ID.eq(record.id)).fetch()
-        check(gameParticipations.size == 4) { "Expected exactly 4 game participations for game ${record.id} but found ${gameParticipations.size}" }
-        val team1Player1 = gameParticipations.single { it.tablePosition == 0 }
-        val team1Player2 = gameParticipations.single { it.tablePosition == 1 }
-        val team2Player1 = gameParticipations.single { it.tablePosition == 2 }
-        val team2Player2 = gameParticipations.single { it.tablePosition == 3 }
-        return Game(
-            id = record.id,
-            startTime = record.startTime,
-            endTime = record.endTime,
-            rounds = selectFrom(ROUND).where(ROUND.GAME_ID.eq(record.id)).fetch().map { round ->
-                Round(
-                    round.id,
-                    round.number,
-                    round.score,
-                    round.gameId,
-                    round.playerId,
-                    round.contractId
-                )
-            },
-            team1 = Team(
-                player1 = GameParticipation(team1Player1.playerId, team1Player1.playerName),
-                player2 = GameParticipation(team1Player2.playerId, team1Player2.playerName),
-            ),
-            team2 = Team(
-                player1 = GameParticipation(team2Player1.playerId, team2Player1.playerName),
-                player2 = GameParticipation(team2Player2.playerId, team2Player2.playerName),
-            ),
-        )
-    }
 
     override fun getAllGames(): List<Game> = withContext {
-        selectFrom(GAME).fetch().map {
-            toGame(it)
-        }
+        toDomainObjects(selectFrom(GAME).fetch())
     }
 
     override fun getAllGamesOfTable(tableId: UUID): List<Game> = withContext {
-        selectFrom(GAME).where(GAME.TABLE_ID.eq(tableId)).fetch().map {
-            toGame(it)
-        }
+        toDomainObjects(
+            selectFrom(GAME)
+                .where(GAME.TABLE_ID.eq(tableId))
+                .fetch()
+        )
+    }
+
+    override fun getGroupedGamesOfTables(tableIds: List<UUID>): Map<UUID, List<Game>> = withContext {
+        val records = selectFrom(GAME).where(GAME.TABLE_ID.`in`(tableIds)).fetch()
+        val lookup = records.intoMap(GAME.ID)
+        val games = toDomainObjects(records)
+        games.groupBy { lookup.getValue(it.id).tableId }.withDefault { emptyList() }
     }
 
     override fun getGameOrNull(id: UUID): Game? = withContext {
-        val gameRecord = selectFrom(GAME).where(GAME.ID.eq(id)).fetchOne()
-
-        gameRecord?.let { toGame(it) }
+        toDomainObjects(selectFrom(GAME).where(GAME.ID.eq(id)).fetch()).singleOrNull()
     }
 
     override fun updateGame(updatedGame: Game): Unit = withContext {
@@ -99,4 +76,32 @@ class GameRepositoryImpl : GameRepository {
         deleteFrom(GP).where(GP.GAME_ID.eq(id)).execute()
         return@withContext deleteFrom(GAME).where(GAME.ID.eq(id)).execute() == 1
     }
+
+    private fun DSLContext.toDomainObjects(records: Result<GameRecord>): List<Game> {
+        if (records.isEmpty()) {
+            return emptyList()
+        }
+        val gameIds = records.map { it.id }
+        val participations = records.fetchChildren(Keys.GAME_PARTICIPATION__GAME_PARTICIPATION_GAME_ID_FKEY).intoGroups(GP.GAME_ID)
+        val rounds = selectFrom(ROUND).where(ROUND.GAME_ID.`in`(gameIds)).fetchGroups(ROUND.GAME_ID, Round::class.java)
+        return records.map { convertToDomainGame(it, participations[it.id] ?: emptyList(), rounds[it.id] ?: emptyList()) }
+    }
+
+    private fun convertToDomainGame(record: GameRecord, participations: List<GameParticipationRecord>, rounds: List<Round>): Game {
+        check(participations.size == 4) { "Expected exactly 4 game participations for game ${record.id} but found ${participations.size}" }
+        val team1Player1 = participations.single { it.tablePosition == 0 }.toGameParticipation()
+        val team1Player2 = participations.single { it.tablePosition == 1 }.toGameParticipation()
+        val team2Player1 = participations.single { it.tablePosition == 2 }.toGameParticipation()
+        val team2Player2 = participations.single { it.tablePosition == 3 }.toGameParticipation()
+        return Game(
+            record.id,
+            record.startTime,
+            record.endTime,
+            rounds,
+            Team(team1Player1, team1Player2),
+            Team(team2Player1, team2Player2)
+        )
+    }
+
+    private fun GameParticipationRecord.toGameParticipation() = GameParticipation(playerId, playerName)
 }

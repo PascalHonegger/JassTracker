@@ -43,6 +43,7 @@ dependencyResolutionManagement {
             library("jooq", "org.jooq", "jooq").version(jooq)
             library("java-jwt", "com.auth0", "java-jwt").version(javaJwt)
             library("argon2-jvm", "de.mkammerer", "argon2-jvm").version(argon2)
+            library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").version(kotlin)
 
             version("jooq", jooq)
 
