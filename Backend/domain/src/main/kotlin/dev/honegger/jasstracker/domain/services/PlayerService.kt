@@ -19,6 +19,7 @@ interface PlayerService {
     fun authenticatePlayer(username: String, password: String): AuthToken?
     fun getPlayerOrNull(session: PlayerSession, id: UUID): Player?
     fun updatePlayer(session: PlayerSession, updatedPlayer: RegisteredPlayer)
+    fun updatePlayerDisplayName(session: PlayerSession, updatedDisplayName: String)
     fun deletePlayer(session: PlayerSession, playerToDelete: RegisteredPlayer)
 }
 
@@ -89,6 +90,21 @@ class PlayerServiceImpl(
             is RegisteredPlayer -> existingPlayer.copy(displayName = updatedPlayer.displayName)
         }
         playerRepository.updatePlayer(sanitizedPlayer)
+    }
+
+    override fun  updatePlayerDisplayName(
+        session: PlayerSession,
+        updatedDisplayName: String,
+    ) {
+        // do I rly still need all this?
+        val existingPlayer =
+            playerRepository.getPlayerOrNull(session.playerId)
+        checkNotNull(existingPlayer)
+        // User can only update themselves
+
+        check(existingPlayer.id == session.playerId)
+
+        playerRepository.updatePlayerDisplayName(session.playerId, updatedDisplayName)
     }
 
     override fun deletePlayer(session: PlayerSession, playerToDelete: RegisteredPlayer) {

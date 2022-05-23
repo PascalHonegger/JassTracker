@@ -8,6 +8,7 @@ interface PlayerRepository {
     fun getPlayersPerTable(tableId: UUID): List<Player>
     fun getPlayerOrNull(id: UUID): Player?
     fun updatePlayer(updatedPlayer: Player)
+    fun updatePlayerDisplayName(id: UUID, updatedDisplayName: String)
     fun savePlayer(newPlayer: Player)
     fun findPlayerByUsername(username: String): RegisteredPlayer?
 }
