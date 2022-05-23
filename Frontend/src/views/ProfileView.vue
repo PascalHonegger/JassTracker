@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import { useAuthStore } from "@/store/auth-store";
 import { usePlayerStore } from "@/store/player-store";
-import { deletePlayer } from "@/services/player-service";
 import { storeToRefs } from "pinia";
 import router from "@/router";
 import WaitSpinner from "@/components/WaitSpinner.vue";
@@ -22,14 +21,10 @@ async function update() {
   loading.value = false;
 }
 
-const { playerId, isGuest } = storeToRefs(authStore);
+const { isGuest } = storeToRefs(authStore);
 
 async function deleteAccount() {
-  if (playerId.value == null) {
-    throw new Error("Unexpected: no active login on ProfileView");
-  }
-  await deletePlayer(playerId.value);
-  authStore.logout();
+  await playerStore.deleteCurrentPlayerAccount;
   await router.push("/");
 }
 </script>

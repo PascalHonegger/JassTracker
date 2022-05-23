@@ -1,6 +1,9 @@
 import { defineStore } from "pinia";
 
-import { updatePlayerDisplayName } from "@/services/player-service";
+import {
+  updatePlayerDisplayName,
+  deletePlayer,
+} from "@/services/player-service";
 import { useAuthStore } from "@/store/auth-store";
 
 const authStore = useAuthStore();
@@ -16,6 +19,18 @@ export const usePlayerStore = defineStore("player", {
         await updatePlayerDisplayName(authStore.playerId, displayName);
       } catch (e) {
         alert("There was an error with updating player");
+      }
+    },
+    async deleteCurrentPlayerAccount() {
+      try {
+        if (authStore.playerId === null) {
+          alert("Player should have an ID");
+          return;
+        }
+        await deletePlayer(authStore.playerId);
+        await authStore.logout();
+      } catch (e) {
+        alert("There was an error with deleting the current player");
       }
     },
   },
