@@ -1,7 +1,7 @@
 import { api } from "@/services/requests";
 
 export async function updatePlayerDisplayName(id: string, displayName: string) {
-  return api.put(`players/${id}`, displayName);
+  return api.put(`players/${id}/updateDisplayName`, displayName);
 }
 
 export async function deletePlayer(id: string) {
