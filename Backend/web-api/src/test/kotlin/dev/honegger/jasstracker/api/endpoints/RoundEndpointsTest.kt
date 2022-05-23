@@ -40,59 +40,86 @@ class RoundEndpointsTest {
     }
 
     @Test
-    fun `get rounds of game returns all rounds of the game`() = testApplication {
+    fun `create round returns 201 and created round`() = testApplication {
         val client = setup()
-
-        val id1 = UUID.randomUUID()
-        val id2 = UUID.randomUUID()
-        val gameId = UUID.randomUUID()
-        val playerId = UUID.randomUUID()
-        val contractId1 = UUID.randomUUID()
-        val contractId2 = UUID.randomUUID()
-
-        val round1 = Round(
-            id = id1,
+        val dummyRound = Round(
+            id = UUID.randomUUID(),
             number = 1,
-            score = 150,
-            gameId = gameId,
-            playerId = playerId,
-            contractId = contractId1,
+            score = 42,
+            gameId = UUID.randomUUID(),
+            playerId = UUID.randomUUID(),
+            contractId = UUID.randomUUID()
         )
-        val round2 = Round(
-            id = id2,
-            number = 2,
-            score = 140,
-            gameId = gameId,
-            playerId = playerId,
-            contractId = contractId2,
-        )
-        every {
-            service.getRounds(any(), gameId)
-        } returns listOf(round1, round2)
 
-        client.get("/rounds/byGame/$gameId").apply {
-            assertEquals(HttpStatusCode.OK, status)
+        every { service.createRound(any(), any(), any(), any(), any(), any()) } returns dummyRound
+
+        client.post("/rounds") {
+            contentType(ContentType.Application.Json)
+            setBody(
+                WebCreateRound(
+                    number = dummyRound.number,
+                    score = dummyRound.score,
+                    gameId = dummyRound.gameId,
+                    playerId = dummyRound.playerId,
+                    contractId = dummyRound.contractId
+                )
+            )
+        }.apply {
+            assertEquals(HttpStatusCode.Created, status)
             assertEquals(
-                """[{"id":"$id1","number":1,"score":150,"gameId":"$gameId","playerId":"$playerId","contractId":"$contractId1"},{"id":"$id2","number":2,"score":140,"gameId":"$gameId","playerId":"$playerId","contractId":"$contractId2"}]""",
-                bodyAsText()
+                """{
+                    |"id":"${dummyRound.id}",
+                    |"number":${dummyRound.number},
+                    |"score":${dummyRound.score},
+                    |"gameId":"${dummyRound.gameId}",
+                    |"playerId":"${dummyRound.playerId}",
+                    |"contractId":"${dummyRound.contractId}"
+                |}""".trimMargin().replace("\n", ""), bodyAsText())
+        }
+        verify(exactly = 1) {
+            service.createRound(
+                any(),
+                dummyRound.number,
+                dummyRound.score,
+                dummyRound.gameId,
+                dummyRound.playerId,
+                dummyRound.contractId
             )
         }
-        verify(exactly = 1) { service.getRounds(any(), any()) }
     }
 
     @Test
-    fun `get rounds of game returns empty list if game not found`() = testApplication {
+    fun `update round returns 200`() = testApplication {
         val client = setup()
+        val dummyRound = Round(
+            id = UUID.randomUUID(),
+            number = 1,
+            score = 42,
+            gameId = UUID.randomUUID(),
+            playerId = UUID.randomUUID(),
+            contractId = UUID.randomUUID()
+        )
 
-        every {
-            service.getRounds(any(), any())
-        } returns emptyList()
+        every { service.updateRound(any(), any()) } just Runs
 
-        client.get("/rounds/byGame/84c532b1-dd87-4ca0-bc85-81c9c5d51c21").apply {
+        client.put("/rounds/${dummyRound.id}") {
+            contentType(ContentType.Application.Json)
+            setBody(
+                WebRound(
+                    id = dummyRound.id,
+                    number = dummyRound.number,
+                    score = dummyRound.score,
+                    gameId = dummyRound.gameId,
+                    playerId = dummyRound.playerId,
+                    contractId = dummyRound.contractId
+                )
+            )
+        }.apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("[]", bodyAsText())
         }
-        verify(exactly = 1) { service.getRounds(any(), "84c532b1-dd87-4ca0-bc85-81c9c5d51c21".toUUID()) }
+        verify(exactly = 1) {
+            service.updateRound(any(), dummyRound)
+        }
     }
 
     @Test

@@ -19,10 +19,7 @@ fun Route.configureTableEndpoints(
         }
         get("/{id}") {
             val id = call.parameters["id"]
-            if (id.isNullOrBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@get
-            }
+            checkNotNull(id)
             val table =
                 tableService.getTableOrNull(call.playerSession(), id.toUUID())
 
@@ -43,20 +40,14 @@ fun Route.configureTableEndpoints(
         }
         put("/{id}") {
             val id = call.parameters["id"]
-            if (id.isNullOrBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@put
-            }
+            checkNotNull(id)
             val updatedTable = call.receive<WebTable>().toTable()
             tableService.updateTable(call.playerSession(), updatedTable)
             call.respond(HttpStatusCode.OK)
         }
         delete("/{id}") {
             val id = call.parameters["id"]
-            if (id.isNullOrBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@delete
-            }
+            checkNotNull(id)
             val success = tableService.deleteTableById(call.playerSession(), id.toUUID())
             if (!success) {
                 call.respond(HttpStatusCode.NotFound)

@@ -13,15 +13,6 @@ fun Route.configureRoundEndpoints(
     roundService: RoundService,
 ) {
     route("/rounds") {
-        get("/byGame/{gameId}") {
-            val gameId = call.parameters["gameId"]
-            if (gameId.isNullOrBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@get
-            }
-            val rounds = roundService.getRounds(call.playerSession(), gameId.toUUID())
-            call.respond(HttpStatusCode.OK, rounds.map { it.toWebRound() })
-        }
         post {
             val newRound = call.receive<WebCreateRound>()
             val createdRound = roundService.createRound(
@@ -36,20 +27,14 @@ fun Route.configureRoundEndpoints(
         }
         put("/{id}") {
             val id = call.parameters["id"]
-            if (id.isNullOrBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@put
-            }
+            checkNotNull(id)
             val updatedRound = call.receive<WebRound>().toRound()
             roundService.updateRound(call.playerSession(), updatedRound)
             call.respond(HttpStatusCode.OK)
         }
         delete("/{id}") {
             val id = call.parameters["id"]
-            if (id.isNullOrBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@delete
-            }
+            checkNotNull(id)
             val success = roundService.deleteRoundById(call.playerSession(), id.toUUID())
             if (!success) {
                 call.respond(HttpStatusCode.NotFound)
