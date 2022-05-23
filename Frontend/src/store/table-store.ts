@@ -14,6 +14,7 @@ export const useTableStore = defineStore("table", {
   state: () => ({
     tables: {} as Record<string, Table>,
     currentTableId: "",
+    loadedAllTables: false,
   }),
   getters: {
     tablesAsArray(state) {
@@ -34,7 +35,8 @@ export const useTableStore = defineStore("table", {
   },
   actions: {
     async loadTables() {
-      if (this.isEmpty) {
+      if (!this.loadedAllTables) {
+        this.loadedAllTables = true;
         const loadedTables = await getTables();
         // create object with ID to allow O(1) access time
         for (const loadedTable of loadedTables) {
