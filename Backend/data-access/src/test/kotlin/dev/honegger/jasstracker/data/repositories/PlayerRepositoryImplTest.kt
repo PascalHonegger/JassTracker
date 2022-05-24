@@ -45,16 +45,15 @@ class PlayerRepositoryImplTest : RepositoryTest() {
 
     @Test
     fun `updatePlayerDisplayName updates player displayName`() {
-        val id = UUID.randomUUID()
         val newPlayer = RegisteredPlayer(
-            id = id,
+            id = UUID.randomUUID(),
             username = "update_test",
             displayName = "Old",
             password = "pw",
         )
         repo.savePlayer(newPlayer)
         repo.updatePlayerDisplayName(newPlayer.id, "New")
-        val player = repo.getPlayerOrNull(id)
+        val player = repo.getPlayerOrNull(newPlayer.id)
         check(player is RegisteredPlayer)
         assertEquals("New", player.displayName)
     }
