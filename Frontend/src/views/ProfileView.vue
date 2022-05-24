@@ -60,12 +60,12 @@ async function deleteAccount() {
           id="displayname"
           name="displayname"
           type="text"
-          :disabled="loading"
+          :disabled="loading || isGuest"
           v-model="newDisplayName"
         />
       </div>
       <!-- maybe ask for old pw too, aka old pw, new pw & new pw confirm -->
-      <div class="mb-6 flex flex-col">
+      <div class="mb-6 flex flex-col" v-if="!isGuest">
         <label
           class="block mb-2 text-sm font-medium text-gray-900"
           for="password"
@@ -81,7 +81,7 @@ async function deleteAccount() {
           v-model="password"
         />
       </div>
-      <div class="mb-6 flex flex-col">
+      <div class="mb-6 flex flex-col" v-if="!isGuest">
         <label
           class="block mb-2 text-sm font-medium text-gray-900"
           for="password-confirm"
@@ -100,6 +100,7 @@ async function deleteAccount() {
       <button
         type="submit"
         :disabled="loading"
+        v-if="!isGuest"
         class="btn btn-blue self-center"
       >
         Aktuallisieren
