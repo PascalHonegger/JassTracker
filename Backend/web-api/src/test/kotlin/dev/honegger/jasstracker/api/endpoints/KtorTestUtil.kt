@@ -62,7 +62,8 @@ internal fun HttpClientConfig<out HttpClientEngineConfig>.addJwtHeader(playerSes
 val dummySession = PlayerSession(
     playerId = "27fa77f3-eb56-46a0-8ada-b0a6f2e26cc0".toUUID(),
     isGuest = false,
-    username = "dummy"
+    username = "dummy",
+    displayName = "Dummy"
 )
 
 // Test config
@@ -78,6 +79,7 @@ private fun createToken(playerSession: PlayerSession) = JWT.create()
     .withClaim(PlayerSession::playerId.name, playerSession.playerId.toString())
     .withClaim(PlayerSession::isGuest.name, playerSession.isGuest)
     .withClaim(PlayerSession::username.name, playerSession.username)
+    .withClaim(PlayerSession::displayName.name, playerSession.displayName)
     .withExpiresAt(Date.from((Clock.System.now() + 1.days).toJavaInstant()))
     .sign(Algorithm.HMAC256(testSecret))
 
