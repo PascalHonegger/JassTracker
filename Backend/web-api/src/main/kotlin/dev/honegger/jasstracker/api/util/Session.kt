@@ -14,7 +14,7 @@ fun ApplicationCall.playerSessionOrNull(): PlayerSession? = principal<JWTPrincip
     val userId: UUID = it.getClaim(PlayerSession::playerId.name).asString()?.toUUID() ?: return@let null
     val isGuest: Boolean = it.getClaim(PlayerSession::isGuest.name).asBoolean() ?: error("isGuest claim missing for user $userId")
     val username = it.getClaim(PlayerSession::username.name).asString().takeIf { !isGuest }
-    val displayName = it.getClaim(PlayerSession::displayName.name).asString() ?: error("DisplayName claim missing for user $userId")
+    val displayName = it.getClaim(PlayerSession::displayName.name).asString().takeIf { !isGuest }
 
     PlayerSession(
         playerId = userId,
