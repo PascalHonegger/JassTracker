@@ -47,9 +47,9 @@ fun Route.configurePlayerEndpoints(
                 call.respond(HttpStatusCode.BadRequest)
                 return@put
             }
-            val newDisplayName = call.receive<String>()
-            playerService.updatePlayerDisplayName(call.playerSession(), newDisplayName)
-            call.respond(HttpStatusCode.OK)
+            val (displayName) = call.receive<DisplayNameRequest>()
+            val token = playerService.updatePlayerDisplayName(call.playerSession(), displayName)
+            call.respond(token.toTokenResponse())
         }
         delete("/{id}") {
             val id = call.parameters["id"]

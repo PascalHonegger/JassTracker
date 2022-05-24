@@ -130,6 +130,11 @@ data class TokenResponse(
     val token: String,
 )
 
+@Serializable
+data class DisplayNameRequest(
+    val displayName: String,
+)
+
 fun WebTable.toTable() = Table(
     id = id,
     name = name,

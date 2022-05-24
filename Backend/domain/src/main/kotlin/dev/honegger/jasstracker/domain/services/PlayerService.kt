@@ -19,7 +19,7 @@ interface PlayerService {
     fun authenticatePlayer(username: String, password: String): AuthToken?
     fun getPlayerOrNull(session: PlayerSession, id: UUID): Player?
     fun updatePlayer(session: PlayerSession, updatedPlayer: RegisteredPlayer)
-    fun updatePlayerDisplayName(session: PlayerSession, updatedDisplayName: String)
+    fun updatePlayerDisplayName(session: PlayerSession, updatedDisplayName: String): AuthToken
     fun deletePlayer(session: PlayerSession, playerToDelete: RegisteredPlayer)
 }
 
@@ -95,7 +95,7 @@ class PlayerServiceImpl(
     override fun  updatePlayerDisplayName(
         session: PlayerSession,
         updatedDisplayName: String,
-    ) {
+    ): AuthToken {
         // do I rly still need all this?
         val existingPlayer =
             playerRepository.getPlayerOrNull(session.playerId)
@@ -105,6 +105,10 @@ class PlayerServiceImpl(
         check(existingPlayer.id == session.playerId)
 
         playerRepository.updatePlayerDisplayName(session.playerId, updatedDisplayName)
+        val updatedPlayer =
+            playerRepository.getPlayerOrNull(session.playerId)
+        checkNotNull(updatedPlayer)
+        return authTokenService.createToken(updatedPlayer)
     }
 
     override fun deletePlayer(session: PlayerSession, playerToDelete: RegisteredPlayer) {

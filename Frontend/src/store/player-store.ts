@@ -16,7 +16,11 @@ export const usePlayerStore = defineStore("player", {
           alert("Player should have an ID");
           return;
         }
-        await updatePlayerDisplayName(authStore.playerId, displayName);
+        const { token } = await updatePlayerDisplayName(
+          authStore.playerId,
+          displayName
+        );
+        authStore.setToken(token);
       } catch (e) {
         alert("There was an error with updating player");
       }
