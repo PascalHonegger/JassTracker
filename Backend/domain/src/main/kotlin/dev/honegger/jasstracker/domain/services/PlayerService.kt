@@ -100,14 +100,13 @@ class PlayerServiceImpl(
         val existingPlayer =
             playerRepository.getPlayerOrNull(session.playerId)
         checkNotNull(existingPlayer)
+        check(existingPlayer is RegisteredPlayer)
         // User can only update themselves
-
         check(existingPlayer.id == session.playerId)
 
         playerRepository.updatePlayerDisplayName(session.playerId, updatedDisplayName)
-        val updatedPlayer =
-            playerRepository.getPlayerOrNull(session.playerId)
-        checkNotNull(updatedPlayer)
+        val updatedPlayer = existingPlayer.copy(displayName = updatedDisplayName)
+
         return authTokenService.createToken(updatedPlayer)
     }
 
