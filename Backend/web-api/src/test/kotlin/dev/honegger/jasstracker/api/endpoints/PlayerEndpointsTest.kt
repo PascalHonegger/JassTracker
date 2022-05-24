@@ -2,6 +2,7 @@ package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.domain.GuestPlayer
 import dev.honegger.jasstracker.domain.RegisteredPlayer
+import dev.honegger.jasstracker.domain.services.AuthToken
 import dev.honegger.jasstracker.domain.services.PlayerService
 import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.client.*
@@ -149,22 +150,25 @@ class PlayerEndpointsTest {
             displayName = "foo",
             password = "max-security",
         )
+        val authToken = AuthToken("secureeeee")
 
         every {
             service.getPlayerOrNull(any(), dummyId)
         } returns dummyPlayer
 
         every {
-            service.updatePlayerDisplayName(any(), "BarFoo")
-        } just Runs
+            service.updatePlayerDisplayName(any(), "Bar")
+        } returns authToken
 
-        client.put("/players/$dummyId/updateDisplayName").apply {
+        client.put("/players/$dummyId/displayName") {
+            contentType(ContentType.Application.Json)
+            setBody(DisplayNameRequest("Bar"))
+        }.apply {
             assertEquals(HttpStatusCode.OK, status)
         }
 
         verify(exactly = 1) {
-            service.getPlayerOrNull(any(), dummyId)
-            service.updatePlayerDisplayName(any(), "BarFoo")
+            service.updatePlayerDisplayName(any(), "Bar")
         }
     }
 }
