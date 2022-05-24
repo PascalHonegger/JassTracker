@@ -144,17 +144,7 @@ class PlayerEndpointsTest {
         val client = setup()
 
         val dummyId = UUID.randomUUID()
-        val dummyPlayer = RegisteredPlayer(
-            id = dummyId,
-            username = "bar",
-            displayName = "foo",
-            password = "max-security",
-        )
         val authToken = AuthToken("secureeeee")
-
-        every {
-            service.getPlayerOrNull(any(), dummyId)
-        } returns dummyPlayer
 
         every {
             service.updatePlayerDisplayName(any(), "Bar")
@@ -165,6 +155,7 @@ class PlayerEndpointsTest {
             setBody(DisplayNameRequest("Bar"))
         }.apply {
             assertEquals(HttpStatusCode.OK, status)
+            assertEquals("""{"token":"${authToken.token}"}""", bodyAsText())
         }
 
         verify(exactly = 1) {
