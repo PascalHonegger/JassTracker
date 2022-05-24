@@ -9,7 +9,7 @@ sealed interface Player {
 data class RegisteredPlayer(
     override val id: UUID,
     val username: String,
-    val displayName: String,
+    var displayName: String,
     val password: String,
 ): Player {
     override fun toString(): String {

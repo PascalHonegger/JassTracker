@@ -53,8 +53,9 @@ class PlayerRepositoryImplTest : RepositoryTest() {
             password = "password",
         )
         repo.savePlayer(newPlayer)
-        repo.updatePlayerDisplayName(newPlayer.id, "New")
-        val player = repo.getPlayerOrNull(newPlayer.id)
+        val updatedPlayer = newPlayer.copy(displayName = "New")
+        repo.updatePlayer(updatedPlayer)
+        val player = repo.getPlayerOrNull(updatedPlayer.id)
         assertIs<RegisteredPlayer>(player)
         assertEquals("New", player.displayName)
     }

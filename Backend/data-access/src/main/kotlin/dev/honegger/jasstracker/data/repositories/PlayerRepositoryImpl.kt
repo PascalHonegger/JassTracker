@@ -68,13 +68,6 @@ class PlayerRepositoryImpl : PlayerRepository {
         playerRecord.update()
     }
 
-    override fun updatePlayerDisplayName(id: UUID, updatedDisplayName: String): Unit = withContext {
-        val playerRecord = selectFrom(PLAYER).where(PLAYER.ID.eq(id)).fetchOne()
-        checkNotNull(playerRecord)
-        playerRecord.displayName = updatedDisplayName
-        playerRecord.update()
-    }
-
     override fun savePlayer(newPlayer: Player): Unit = withContext {
         val newRecord = newRecord(PLAYER).apply {
             this.id = newPlayer.id

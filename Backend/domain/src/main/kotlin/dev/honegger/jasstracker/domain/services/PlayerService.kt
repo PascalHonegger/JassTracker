@@ -18,7 +18,7 @@ interface PlayerService {
     fun registerGuestPlayer(): AuthToken
     fun authenticatePlayer(username: String, password: String): AuthToken?
     fun getPlayerOrNull(session: PlayerSession, id: UUID): Player?
-    fun updatePlayer(session: PlayerSession, updatedPlayer: RegisteredPlayer)
+    fun updatePlayer(session: PlayerSession, updatedPlayer: RegisteredPlayer): AuthToken
     fun updatePlayerDisplayName(session: PlayerSession, updatedDisplayName: String): AuthToken
     fun deletePlayer(session: PlayerSession, playerToDelete: RegisteredPlayer)
 }
@@ -78,25 +78,17 @@ class PlayerServiceImpl(
     override fun updatePlayer(
         session: PlayerSession,
         updatedPlayer: RegisteredPlayer,
-    ) {
-        val existingPlayer =
-            playerRepository.getPlayerOrNull(updatedPlayer.id)
+    ): AuthToken {
         // User can only update themselves
-        checkNotNull(existingPlayer)
-        check(existingPlayer.id == session.playerId)
-
-        val sanitizedPlayer = when (existingPlayer) {
-            is GuestPlayer -> updatedPlayer
-            is RegisteredPlayer -> existingPlayer.copy(displayName = updatedPlayer.displayName)
-        }
-        playerRepository.updatePlayer(sanitizedPlayer)
+        check(updatedPlayer.id == session.playerId)
+        playerRepository.updatePlayer(updatedPlayer)
+        return authTokenService.createToken(updatedPlayer)
     }
 
     override fun  updatePlayerDisplayName(
         session: PlayerSession,
         updatedDisplayName: String,
     ): AuthToken {
-        // do I rly still need all this?
         val existingPlayer =
             playerRepository.getPlayerOrNull(session.playerId)
         checkNotNull(existingPlayer)
@@ -104,10 +96,9 @@ class PlayerServiceImpl(
         // User can only update themselves
         check(existingPlayer.id == session.playerId)
 
-        playerRepository.updatePlayerDisplayName(session.playerId, updatedDisplayName)
         val updatedPlayer = existingPlayer.copy(displayName = updatedDisplayName)
 
-        return authTokenService.createToken(updatedPlayer)
+        return updatePlayer(session, updatedPlayer)
     }
 
     override fun deletePlayer(session: PlayerSession, playerToDelete: RegisteredPlayer) {

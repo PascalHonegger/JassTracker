@@ -65,7 +65,6 @@ class RoundServiceImplTest {
 
         verify(exactly = 1) {
             roundRepository.saveRound(any())
-            tableRepository.getTableByGameIdOrNull(dummyGame)
         }
     }
 
