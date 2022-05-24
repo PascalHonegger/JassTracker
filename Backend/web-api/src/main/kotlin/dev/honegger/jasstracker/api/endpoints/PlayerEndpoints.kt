@@ -41,7 +41,7 @@ fun Route.configurePlayerEndpoints(
                 }
             }
         }
-        put("/{id}/updateDisplayName") {
+        put("/{id}/displayName") {
             val id = call.parameters["id"]
             if (id.isNullOrBlank()) {
                 call.respond(HttpStatusCode.BadRequest)
