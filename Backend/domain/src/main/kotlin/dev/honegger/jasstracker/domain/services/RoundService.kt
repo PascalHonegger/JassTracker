@@ -35,8 +35,6 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
     ): Round {
         check(score in 0..157) { "Score must be between 0 and 157" }
 
-        val table = tableRepository.getTableByGameIdOrNull(gameId) ?: error("Couldn't find gameId")
-
         // Santity checks:
         // - contract is valid and not done by other team member
         // - playerId is part of game
