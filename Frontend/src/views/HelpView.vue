@@ -2,6 +2,7 @@
 h2 {
   @apply text-4xl font-normal leading-normal mt-4;
 }
+
 h3 {
   @apply text-3xl font-normal leading-normal mt-4;
 }
@@ -89,20 +90,21 @@ h3 {
       </p>
     </div>
     <h2>JassTracker Bedienung</h2>
-    <h3>Login / Registierung</h3>
+    <h3>Login / Registrierung</h3>
     <div class="flex py-2">
       <p class="text-left">
         Der JassTracker kann entweder als Gast oder mit einem erstellen Benutzer
-        Profil benutzt werden
+        Profil benutzt werden.
         <br />
         Um einen Benutzer Account zu erhalten, muss man sich zuerst registrieren
-        unter <a href="/">Registrieren</a>. Danach kann man sich mit den
-        Benutzer Informationen einloggen und den JassTracker im vollen Umfang
-        verwenden
+        unter
+        <RouterLink to="/register" class="underline">Registrieren</RouterLink>
+        . Danach kann man sich mit den Benutzer Informationen einloggen und den
+        JassTracker im vollen Umfang verwenden.
         <br />
         Wenn man sich keinen Account erstellen möchte, oder den JassTracker mal
         ausprobieren möchte, kann man sich als "Gast" anmelden. Man kann die
-        alle Funktionalitaten der Applikation ausprobieren und sehen, ob mann
+        alle Funktionalitäten der Applikation ausprobieren und sehen, ob mann
         einen Account erstellen möchte.
       </p>
       <img
@@ -120,14 +122,14 @@ h3 {
       />
       <p class="text-left">
         Sobald man sich eingeloggt hat (entweder mit dem eigenen Benutzer
-        Account oder als Gast), kann man neue Tische erstellen
+        Account oder als Gast), kann man neue Tische erstellen.
         <br />
         Tische enthalten immer 4 Personen, somit hat man alle Spiele die man mit
         diesen Personen spielt, immer an einem Ort und sorgt für eine
         übersichtliche Übersicht.
         <br />
         Ein Tisch kann zu dem einen Namen haben, z.B. "Familientisch", wo man
-        immer mit seinen Familienmitgliedern spielt
+        immer mit seinen Familienmitgliedern spielt.
       </p>
     </div>
     <h3>Spiele</h3>
@@ -140,18 +142,18 @@ h3 {
         alle Möglichkeiten gespielt wurden abgeschlossen werden.
         <br />
         Ein neues Spiel kann via "Neues Spiel erstellen" eröffnet werden, man
-        erhaält die Option, die Teams neu zu bilden bei Wunsch.
+        erhält die Option, die Teams neu zu bilden bei Wunsch.
         <br />
         Beim Klick auf ein Spiel in der unteren Box Ansicht, kommt man auf die
         Detail Seite wo man die Möglichkeit hat, ein Spiel zu löschen. Nur
-        abgeschlossene Spiele können geloscht werden.
+        abgeschlossene Spiele können gelöscht werden.
         <br />
         In dieser Detail Ansicht, sieht man zusätzlichen aktuelle
         Spielstatistiken wie aktuelle Siegeschancen pro Team oder
         Durchschnittliche Punktzahl etc.
         <br />
         Anstatt z.B. 157 - 15 zu rechnen und dann 142 einzugeben, kann auch
-        direkt "-15" eigetragen werden. Eingaben im Spiel können angepasst und
+        direkt "-15" eingetragen werden. Eingaben im Spiel können angepasst und
         auch gelöscht werden. Es werden nur Zahlen und "-" in den Feldern
         erlaubt. Bei einer invaliden Eingabe, wird das Feld rot markiert, bis
         der Fehler korrigiert wurde.
@@ -165,17 +167,19 @@ h3 {
     <h3>Profil / Statistiken</h3>
     <div class="flex py-2">
       <p class="text-left">
-        Unter dem <a href="/profile">Profil</a> kann man seine Benutzerdaten
-        anpassen und sieht auch persönliche Statistiken
+        Unter dem
+        <RouterLink to="/profile" class="underline">Profil</RouterLink>
+        kann man seine Benutzerdaten anpassen und sieht auch persönliche
+        Statistiken
         <br />
-        Der "Benutzername" lässt sich nicht anpassen, nachdem er inital gesetzt
+        Der "Benutzername" lässt sich nicht anpassen, nachdem er initial gesetzt
         wurde
         <br />
         Die Statistiken zeigen in der Übersicht generelle Statistiken an wie
         z.B. Anzahl Spiele, Siegesrate und durchschnittliche Punktzahl pro
         Spiel. Man kann mit einem klick auf die Statistiken die Detail Ansicht
         öffnen. Dort sieht man genauere Informationen auch visuell dargestellt
-        und kann dieese auch beliebig filtern.
+        und kann diese auch beliebig filtern.
       </p>
     </div>
     <p class="py-8">
