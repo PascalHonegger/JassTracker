@@ -15,11 +15,13 @@ import {
 import GameItem from "@/components/GameItem.vue";
 import GameList, { NamedGame } from "@/components/GameList.vue";
 import { dateCompare } from "@/util/dates";
+import { useMetaStore } from "@/store/meta-store";
 
 const router = useRouter();
 const route = useRoute();
 const tableStore = useTableStore();
 const gameStore = useGameStore();
+const metaStore = useMetaStore();
 
 const { currentTable, currentTableId } = storeToRefs(tableStore);
 const { currentGame } = storeToRefs(gameStore);
@@ -83,11 +85,15 @@ onMounted(async () => {
 async function setCurrentTableId(newId: string | string[] | undefined) {
   if (typeof newId !== "string") return;
   tableStore.setCurrentTable(newId);
-  await tableStore.loadTable(newId);
-
-  await gameStore.loadGamesForTable(tableStore.currentTableId);
-  // Open the latest game if no game id is specified
-  gameStore.setCurrentGame(newId, currentTable.value?.latestGameId ?? "");
+  metaStore.startLoading();
+  try {
+    await tableStore.loadTable(newId);
+    await gameStore.loadGamesForTable(tableStore.currentTableId);
+    // Open the latest game if no game id is specified
+    gameStore.setCurrentGame(newId, currentTable.value?.latestGameId ?? "");
+  } finally {
+    metaStore.stopLoading();
+  }
 }
 
 async function createNewGame() {
@@ -100,9 +106,11 @@ async function createNewGame() {
     ...newGame,
     tableId,
   };
+  creatingGame.value = true;
   const createdId = await gameStore.createGame(createGame);
   gameStore.setCurrentGame(tableId, createdId);
   isModalVisible.value = false;
+  creatingGame.value = false;
 }
 
 function updatePlayer(
@@ -145,8 +153,6 @@ function backToOverview() {
     </div>
   </div>
 
-  <WaitSpinner v-else />
-
   <ModalDialog v-if="isModalVisible" @close="isModalVisible = false">
     <template v-slot:header>
       <p class="font-bold">Neues Spiel erstellen</p>
@@ -173,7 +179,7 @@ function backToOverview() {
       >
         Neues Spiel starten
 
-        <WaitSpinner v-if="creatingGame"></WaitSpinner>
+        <WaitSpinner v-if="creatingGame" size="medium" />
       </button>
     </template>
   </ModalDialog>

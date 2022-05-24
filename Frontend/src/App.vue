@@ -3,9 +3,15 @@ import { useAuthStore } from "@/store/auth-store";
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import IconSelector from "@/components/IconSelector.vue";
+import { useMetaStore } from "@/store/meta-store";
+import { storeToRefs } from "pinia";
+import WaitSpinner from "@/components/WaitSpinner.vue";
 
 const store = useAuthStore();
 const router = useRouter();
+const metaStore = useMetaStore();
+
+const { isLoading } = storeToRefs(metaStore);
 
 const logoLink = computed(() => (store.loggedIn ? "/overview" : "/login"));
 const hideMobileMenu = ref(true);
@@ -76,7 +82,13 @@ nav a.router-link-exact-active {
         </div>
       </div>
     </nav>
-    <div class="overflow-auto grow">
+    <div
+      v-if="isLoading"
+      class="flex w-full h-full justify-center items-center"
+    >
+      <WaitSpinner size="large" />
+    </div>
+    <div class="overflow-auto grow" :class="{ invisible: isLoading }">
       <RouterView />
     </div>
   </div>

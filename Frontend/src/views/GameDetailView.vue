@@ -4,15 +4,16 @@ import { useGameStore } from "@/store/game-store";
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useTableStore } from "@/store/table-store";
-import WaitSpinner from "@/components/WaitSpinner.vue";
 import ModalDialog from "@/components/ModalDialog.vue";
 import GameItem from "@/components/GameItem.vue";
+import { useMetaStore } from "@/store/meta-store";
 
 const router = useRouter();
 const route = useRoute();
 
 const gameStore = useGameStore();
 const tableStore = useTableStore();
+const metaStore = useMetaStore();
 
 const { currentGame } = storeToRefs(gameStore);
 
@@ -59,7 +60,14 @@ function closeModal() {
 async function setCurrentGameId(newId: string | string[]) {
   if (typeof newId !== "string") return;
   gameStore.setCurrentGame(tableStore.currentTableId, newId);
-  await gameStore.loadGame(tableStore.currentTableId, newId);
+  if (newId) {
+    metaStore.startLoading();
+    try {
+      await gameStore.loadGame(tableStore.currentTableId, newId);
+    } finally {
+      metaStore.stopLoading();
+    }
+  }
 }
 
 async function setCurrentTableId(newId: string | string[] | undefined) {
@@ -83,7 +91,6 @@ function backToTable() {
       Spiel Löschen
     </button>
     <GameItem v-if="currentGame" :game="currentGame" />
-    <WaitSpinner v-else />
     <ModalDialog
       class="delete-game-modal"
       v-if="isModalVisible"
