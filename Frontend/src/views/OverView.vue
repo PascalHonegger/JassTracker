@@ -38,7 +38,7 @@ const newGame = reactive<CreateNewGameForm>({
   team2Player2: newPlayer,
 });
 const availablePlayers = computed<WebCreateGameParticipation[]>(() => [
-  { playerId: authStore.playerId, displayName: authStore.username ?? "" }, // Logged in player
+  { playerId: authStore.playerId, displayName: authStore.displayName ?? "" }, // Logged in player
   newPlayer,
 ]);
 
