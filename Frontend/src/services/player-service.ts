@@ -6,6 +6,6 @@ export async function updatePlayerDisplayName(id: string, displayName: string) {
   });
 }
 
-export async function deletePlayer(id: string) {
+export async function deleteRegisteredPlayer(id: string) {
   return api.delete(`/players/${id}`);
 }

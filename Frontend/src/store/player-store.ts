@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 import {
   updatePlayerDisplayName,
-  deletePlayer,
+  deleteRegisteredPlayer,
 } from "@/services/player-service";
 import { useAuthStore } from "@/store/auth-store";
 
@@ -31,7 +31,7 @@ export const usePlayerStore = defineStore("player", {
           alert("Player should have an ID");
           return;
         }
-        await deletePlayer(authStore.playerId);
+        await deleteRegisteredPlayer(authStore.playerId);
         await authStore.logout();
       } catch (e) {
         alert("There was an error with deleting the current player");
