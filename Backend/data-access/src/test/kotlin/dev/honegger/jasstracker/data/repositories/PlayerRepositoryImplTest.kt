@@ -47,9 +47,9 @@ class PlayerRepositoryImplTest : RepositoryTest() {
     fun `updatePlayerDisplayName updates player displayName`() {
         val newPlayer = RegisteredPlayer(
             id = UUID.randomUUID(),
-            username = "update_test",
-            displayName = "Old",
-            password = "pw",
+            username = "updatedisplayname_test",
+            displayName = "Old DisplayName",
+            password = "password",
         )
         repo.savePlayer(newPlayer)
         repo.updatePlayerDisplayName(newPlayer.id, "New")
