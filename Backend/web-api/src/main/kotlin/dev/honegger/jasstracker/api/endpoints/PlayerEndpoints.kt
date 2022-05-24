@@ -43,10 +43,7 @@ fun Route.configurePlayerEndpoints(
         }
         put("/{id}/displayName") {
             val id = call.parameters["id"]
-            if (id.isNullOrBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@put
-            }
+            checkNotNull(id)
             val (displayName) = call.receive<DisplayNameRequest>()
             val token = playerService.updatePlayerDisplayName(call.playerSession(), displayName)
             call.respond(token.toTokenResponse())
