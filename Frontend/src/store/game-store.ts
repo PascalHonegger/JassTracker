@@ -149,7 +149,7 @@ export const useGameStore = defineStore("game", {
       const table = tableStore.currentTable;
       delete table?.loadedGames[gameId];
       const index: number | undefined = table?.gameIds.indexOf(gameId);
-      if (index && index !== -1) {
+      if (index != null && index !== -1) {
         table?.gameIds.splice(index, 1);
       }
       try {

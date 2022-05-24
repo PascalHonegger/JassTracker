@@ -32,8 +32,8 @@ onMounted(async () => {
 });
 
 onUnmounted(async () => {
-  await setCurrentGameId("");
-  await setCurrentTableId("");
+  gameStore.setCurrentGame(tableStore.currentTableId, "");
+  tableStore.setCurrentTable("");
 });
 
 const isModalVisible = ref(false);
@@ -57,13 +57,9 @@ function closeModal() {
 }
 
 async function setCurrentGameId(newId: string | string[]) {
-  if (Array.isArray(newId)) {
-    return;
-  }
+  if (typeof newId !== "string") return;
   gameStore.setCurrentGame(tableStore.currentTableId, newId);
-  if (newId) {
-    await gameStore.loadGame(tableStore.currentTableId, newId);
-  }
+  await gameStore.loadGame(tableStore.currentTableId, newId);
 }
 
 async function setCurrentTableId(newId: string | string[] | undefined) {
