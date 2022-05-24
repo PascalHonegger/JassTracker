@@ -15,7 +15,7 @@ class RoundServiceImplTest {
     private val roundRepository = mockk<RoundRepository>()
     private val tableRepository = mockk<TableRepository>()
     private val service = RoundServiceImpl(roundRepository, tableRepository)
-    private val dummySession = PlayerSession(UUID.randomUUID(), false, "dummy")
+    private val dummySession = PlayerSession(UUID.randomUUID(), false, "dummy", "Dummy")
     private val passedRound = slot<Round>()
 
     @BeforeTest
@@ -152,8 +152,7 @@ class RoundServiceImplTest {
             roundRepository.updateRound(updatedRound)
         } just Runs
 
-        val session = PlayerSession(UUID.randomUUID(), false, "dummy")
-        service.updateRound(session, updatedRound)
+        service.updateRound(dummySession, updatedRound)
 
         verify (exactly = 1) {
             roundRepository.getRoundOrNull(id)
