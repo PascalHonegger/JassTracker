@@ -9,4 +9,5 @@ data class PlayerSession(
     val playerId: UUID,
     val isGuest: Boolean,
     val username: String?,
+    val displayName: String?,
 )
