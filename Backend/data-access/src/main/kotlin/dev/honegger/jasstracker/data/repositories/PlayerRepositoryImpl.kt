@@ -71,11 +71,7 @@ class PlayerRepositoryImpl : PlayerRepository {
     override fun updatePlayerDisplayName(id: UUID, updatedDisplayName: String): Unit = withContext {
         val playerRecord = selectFrom(PLAYER).where(PLAYER.ID.eq(id)).fetchOne()
         checkNotNull(playerRecord)
-        // is there a different way to check if it's a registeredPlayer?
-        checkNotNull(playerRecord.displayName)
-        playerRecord.apply {
-            displayName = updatedDisplayName
-        }
+        playerRecord.displayName = updatedDisplayName
         playerRecord.update()
     }
 
