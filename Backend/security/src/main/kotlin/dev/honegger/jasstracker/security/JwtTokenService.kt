@@ -24,6 +24,7 @@ data class JwtConfig(
 )
 
 private const val guestUsername = "Gast"
+private const val guestDisplayName = "Gast"
 
 class JwtTokenService(private val jwtConfig: JwtConfig, private val clock: Clock = Clock.System) : AuthTokenService {
     override fun createToken(player: Player): AuthToken {
@@ -34,7 +35,7 @@ class JwtTokenService(private val jwtConfig: JwtConfig, private val clock: Clock
             .withClaim(PlayerSession::playerId.name, player.id.toString())
             .withClaim(PlayerSession::isGuest.name, player is GuestPlayer)
             .withClaim(PlayerSession::username.name, if (player is RegisteredPlayer) player.username else guestUsername)
-            .withClaim("displayName", if (player is RegisteredPlayer) player.displayName else guestUsername)
+            .withClaim("displayName", if (player is RegisteredPlayer) player.displayName else guestDisplayName)
             .withExpiresAt((clock.now() + jwtConfig.expiryTime).toJavaInstant().let { Date.from(it) })
             .sign(Algorithm.HMAC256(jwtConfig.secret))
             .let { AuthToken(it) }
