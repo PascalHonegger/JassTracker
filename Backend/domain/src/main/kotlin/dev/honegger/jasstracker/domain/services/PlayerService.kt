@@ -18,7 +18,6 @@ interface PlayerService {
     fun registerGuestPlayer(): AuthToken
     fun authenticatePlayer(username: String, password: String): AuthToken?
     fun getPlayerOrNull(session: PlayerSession, id: UUID): Player?
-    fun updatePlayer(session: PlayerSession, updatedPlayer: RegisteredPlayer): AuthToken
     fun updatePlayerDisplayName(session: PlayerSession, updatedDisplayName: String): AuthToken
     fun deletePlayer(session: PlayerSession, playerToDelete: RegisteredPlayer)
 }
@@ -75,7 +74,7 @@ class PlayerServiceImpl(
         return playerRepository.getPlayerOrNull(id)
     }
 
-    override fun updatePlayer(
+    private fun updatePlayer(
         session: PlayerSession,
         updatedPlayer: RegisteredPlayer,
     ): AuthToken {
@@ -85,7 +84,7 @@ class PlayerServiceImpl(
         return authTokenService.createToken(updatedPlayer)
     }
 
-    override fun  updatePlayerDisplayName(
+    override fun updatePlayerDisplayName(
         session: PlayerSession,
         updatedDisplayName: String,
     ): AuthToken {
