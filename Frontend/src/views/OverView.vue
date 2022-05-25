@@ -54,6 +54,17 @@ onMounted(async () => {
 
 async function createNewTable() {
   creatingTable.value = true;
+  if (newTableName.value.length < 2 || newTableName.value.length > 30) {
+    alert("Name must be between 2 and 30 characters");
+    creatingTable.value = false;
+    return;
+  }
+  const validateTeamPlayersSuccess = await validatePlayers(newGame);
+  if (!validateTeamPlayersSuccess) {
+    alert("Team Player needs an username");
+    creatingTable.value = false;
+    return;
+  }
   const newTableId = await tableStore.createTable(newTableName.value);
   const createGame: WebCreateGame = {
     team1Player1: newGame.team1Player1,
@@ -64,6 +75,16 @@ async function createNewTable() {
   };
   await gameStore.createGame(createGame);
   await router.push({ name: "table", params: { tableId: newTableId } });
+}
+
+async function validatePlayers(game: CreateNewGameForm): Promise<boolean> {
+  let success = true;
+  Object.values(game).forEach((item) => {
+    if (!item.displayName) {
+      success = false;
+    }
+  });
+  return success;
 }
 
 function updatePlayer(
