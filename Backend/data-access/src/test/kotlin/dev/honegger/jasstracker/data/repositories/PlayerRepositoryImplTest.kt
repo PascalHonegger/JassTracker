@@ -6,6 +6,7 @@ import dev.honegger.jasstracker.domain.util.toUUID
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 
 class PlayerRepositoryImplTest : RepositoryTest() {
     private val repo = PlayerRepositoryImpl()
@@ -41,6 +42,22 @@ class PlayerRepositoryImplTest : RepositoryTest() {
         val updatedPlayer = newPlayer.copy(displayName = "New")
         repo.updatePlayer(updatedPlayer)
         assertEquals(updatedPlayer, repo.getPlayerOrNull(id))
+    }
+
+    @Test
+    fun `updatePlayerDisplayName updates player displayName`() {
+        val newPlayer = RegisteredPlayer(
+            id = UUID.randomUUID(),
+            username = "updatedisplayname_test",
+            displayName = "Old DisplayName",
+            password = "password",
+        )
+        repo.savePlayer(newPlayer)
+        val updatedPlayer = newPlayer.copy(displayName = "New")
+        repo.updatePlayer(updatedPlayer)
+        val player = repo.getPlayerOrNull(updatedPlayer.id)
+        assertIs<RegisteredPlayer>(player)
+        assertEquals("New", player.displayName)
     }
 
     @Test

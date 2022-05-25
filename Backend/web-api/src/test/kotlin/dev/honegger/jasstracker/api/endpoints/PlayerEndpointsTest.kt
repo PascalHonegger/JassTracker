@@ -2,6 +2,7 @@ package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.domain.GuestPlayer
 import dev.honegger.jasstracker.domain.RegisteredPlayer
+import dev.honegger.jasstracker.domain.services.AuthToken
 import dev.honegger.jasstracker.domain.services.PlayerService
 import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.client.*
@@ -135,6 +136,30 @@ class PlayerEndpointsTest {
 
         verify(exactly = 1) {
             service.getPlayerOrNull(any(), dummyId)
+        }
+    }
+
+    @Test
+    fun `updatePlayerDisplayName returns OK if could update`() = testApplication {
+        val client = setup()
+
+        val dummyId = UUID.randomUUID()
+        val authToken = AuthToken("secureeeee")
+
+        every {
+            service.updatePlayerDisplayName(any(), "Bar")
+        } returns authToken
+
+        client.put("/players/$dummyId/displayName") {
+            contentType(ContentType.Application.Json)
+            setBody(DisplayNameRequest("Bar"))
+        }.apply {
+            assertEquals(HttpStatusCode.OK, status)
+            assertEquals("""{"token":"${authToken.token}"}""", bodyAsText())
+        }
+
+        verify(exactly = 1) {
+            service.updatePlayerDisplayName(any(), "Bar")
         }
     }
 }

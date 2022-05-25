@@ -32,6 +32,7 @@ class JwtTokenServiceTest {
         assertEquals(registeredPlayer.id.toString(), jwt.getClaim(PlayerSession::playerId.name).asString())
         assertEquals(registeredPlayer.username, jwt.getClaim(PlayerSession::username.name).asString())
         assertEquals(false, jwt.getClaim(PlayerSession::isGuest.name).asBoolean())
+        assertEquals(registeredPlayer.displayName, jwt.getClaim(PlayerSession::displayName.name).asString())
     }
 
     @Test
@@ -41,6 +42,7 @@ class JwtTokenServiceTest {
         assertEquals(guestPlayer.id.toString(), jwt.getClaim(PlayerSession::playerId.name).asString())
         assertEquals("Gast", jwt.getClaim(PlayerSession::username.name).asString())
         assertEquals(true, jwt.getClaim(PlayerSession::isGuest.name).asBoolean())
+        assertEquals("Gast", jwt.getClaim(PlayerSession::displayName.name).asString())
     }
 
 }

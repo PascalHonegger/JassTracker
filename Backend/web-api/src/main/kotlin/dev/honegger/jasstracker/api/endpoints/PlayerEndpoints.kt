@@ -28,18 +28,12 @@ fun Route.configurePlayerEndpoints(
 
             call.respond(HttpStatusCode.OK, player.toWebPlayer())
         }
-        put("/{id}") {
+        put("/{id}/displayName") {
             val id = call.parameters["id"]
             checkNotNull(id)
-            when (val updatedPlayer = call.receive<WebPlayer>().toPlayer()) {
-                is GuestPlayer -> {
-                    call.respond(HttpStatusCode.BadRequest, "Cannot update guest player")
-                }
-                is RegisteredPlayer -> {
-                    playerService.updatePlayer(call.playerSession(), updatedPlayer)
-                    call.respond(HttpStatusCode.OK)
-                }
-            }
+            val (displayName) = call.receive<DisplayNameRequest>()
+            val token = playerService.updatePlayerDisplayName(call.playerSession(), displayName)
+            call.respond(token.toTokenResponse())
         }
         delete("/{id}") {
             val id = call.parameters["id"]

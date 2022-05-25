@@ -11,7 +11,7 @@ import kotlin.test.*
 class TableServiceImplTest {
     private val repository = mockk<TableRepository>()
     private val service = TableServiceImpl(repository)
-    private val dummySession = PlayerSession(UUID.randomUUID(), false, "dummy")
+    private val dummySession = PlayerSession(UUID.randomUUID(), false, "dummy", "Dummy")
     private val passedTable = slot<Table>()
 
     @BeforeTest

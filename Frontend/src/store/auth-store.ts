@@ -20,6 +20,7 @@ interface JwtToken {
   isGuest: boolean;
   playerId: string;
   username: string;
+  displayName: string;
 }
 
 const tokenKey = "JassTrackerToken";
@@ -56,6 +57,9 @@ export const useAuthStore = defineStore("auth", {
     },
     username(state): string | null {
       return parseJwt(state.token)?.username ?? null;
+    },
+    displayName(state): string | null {
+      return parseJwt(state.token)?.displayName ?? null;
     },
     isGuest(state): boolean | null {
       return parseJwt(state.token)?.isGuest ?? null;

@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 
 class ContractServiceImplTest {
     private val repository = mockk<ContractRepository>()
-    private val dummySession = PlayerSession(UUID.randomUUID(), false, "dummy")
+    private val dummySession = PlayerSession(UUID.randomUUID(), false, "dummy", "Dummy")
     private val service = ContractServiceImpl(repository)
 
     @BeforeTest

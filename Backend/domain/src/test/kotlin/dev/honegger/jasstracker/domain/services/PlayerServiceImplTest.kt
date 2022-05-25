@@ -162,7 +162,7 @@ class PlayerServiceImplTest {
         every { playerRepository.getPlayerOrNull(id) } returns playerToDelete
         every { playerRepository.updatePlayer(capture(player)) } just Runs
 
-        val session = PlayerSession(id, false, "marcel")
+        val session = PlayerSession(id, false, "marcel", "Marcel")
 
         service.deletePlayer(session, playerToDelete)
 
