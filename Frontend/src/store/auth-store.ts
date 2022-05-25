@@ -141,7 +141,7 @@ export const useAuthStore = defineStore("auth", {
       useGameStore().$reset();
       useTableStore().$reset();
       useRoundStore().$reset();
-      usePlayerStore().$reset();
+      //  usePlayerStore().$reset();
     },
   },
 });

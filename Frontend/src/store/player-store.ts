@@ -4,6 +4,7 @@ import { useToast } from "vue-toastification";
 
 import {
   updatePlayerDisplayName,
+  updatePlayerPassword,
   deleteRegisteredPlayer,
 } from "@/services/player-service";
 import { useAuthStore } from "@/store/auth-store";
@@ -23,6 +24,26 @@ export const usePlayerStore = defineStore("player", {
         authStore.setToken(token);
       } catch (e) {
         toast.error("Es gab ein Problem mit der Aktualisierung des Spielers");
+      }
+    },
+    async updatePassword(
+      oldPassword: string,
+      newPassword: string
+    ): Promise<boolean> {
+      try {
+        if (authStore.playerId === null) {
+          alert("Player should have an ID");
+          return false;
+        }
+        const { token } = await updatePlayerPassword(
+          authStore.playerId,
+          oldPassword,
+          newPassword
+        );
+        authStore.setToken(token);
+        return true;
+      } catch (e) {
+        return false;
       }
     },
     async deleteCurrentPlayerAccount() {

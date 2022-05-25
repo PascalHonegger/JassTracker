@@ -11,17 +11,34 @@ const authStore = useAuthStore();
 const playerStore = usePlayerStore();
 const toast = useToast();
 
-const password = "";
-const passwordConfirm = "";
-
-const loading = ref<boolean>(false);
+const loadingDisplayName = ref<boolean>(false);
+const loadingNewPassword = ref<boolean>(false);
 const newDisplayName = ref(authStore.displayName ?? "");
+const oldPassword = ref("");
+const newPassword = ref("");
+const passwordConfirm = ref("");
+const confirmConfirmationFailed = ref<boolean>(false);
+const confirmOldPasswordFailed = ref<boolean>(false);
 
-async function update() {
-  loading.value = true;
+async function updateDisplayName() {
+  loadingDisplayName.value = true;
   await playerStore.updateDisplayName(newDisplayName.value);
   toast.success("Anzeigename erfolgreich aktuallisiert");
-  loading.value = false;
+  loadingDisplayName.value = false;
+}
+async function updatePassword() {
+  loadingNewPassword.value = true;
+  const updatePasswordSuccessful = await playerStore.updatePassword(
+    oldPassword.value,
+    newPassword.value
+  );
+  loadingNewPassword.value = false;
+  if (!updatePasswordSuccessful) {
+    confirmOldPasswordFailed.value = true;
+  }
+  if (newPassword.value != passwordConfirm.value) {
+    confirmConfirmationFailed.value = true;
+  }
 }
 
 const { isGuest } = storeToRefs(authStore);
@@ -35,7 +52,7 @@ async function deleteAccount() {
 
 <template>
   <div class="container mx-auto text-center flex flex-col">
-    <form @submit.prevent="update" autocomplete="on" class="pt-4">
+    <form @submit.prevent="updateDisplayName" autocomplete="on" class="pt-4">
       <div class="mb-6 flex flex-col">
         <label
           class="block mb-2 text-sm font-medium text-gray-900"
@@ -64,32 +81,62 @@ async function deleteAccount() {
           id="displayname"
           name="displayname"
           type="text"
-          :disabled="loading || isGuest"
+          :disabled="loadingDisplayName || isGuest"
           v-model="newDisplayName"
         />
       </div>
-      <!-- maybe ask for old pw too, aka old pw, new pw & new pw confirm -->
+      <button
+        type="submit"
+        :disabled="loadingDisplayName"
+        v-if="!isGuest"
+        class="btn btn-blue self-center"
+      >
+        Anzeige Name Aktuallisieren
+
+        <WaitSpinner v-if="loadingDisplayName" size="small"></WaitSpinner>
+      </button>
+    </form>
+    <form @submit.prevent="updatePassword" autocomplete="on" class="pt-4">
       <div class="mb-6 flex flex-col" v-if="!isGuest">
         <label
           class="block mb-2 text-sm font-medium text-gray-900"
-          for="password"
-          >Passwort</label
+          for="old-password"
+          >Altes Passwort</label
+        >
+        <input
+          autocomplete="old-password"
+          class="box-input"
+          id="old-password"
+          name="old-password"
+          type="password"
+          :disabled="loadingNewPassword"
+          v-model="oldPassword"
+        />
+      </div>
+      <div v-if="confirmOldPasswordFailed" class="text-red-600 mt-4">
+        Das alte Passwort ist falsch!
+      </div>
+      <div class="mb-6 flex flex-col" v-if="!isGuest">
+        <label
+          class="block mb-2 text-sm font-medium text-gray-900"
+          for="new-password"
+          >Neues Passwort</label
         >
         <input
           autocomplete="new-password"
           class="box-input"
-          id="password"
-          name="password"
+          id="new-password"
+          name="new-password"
           type="password"
-          :disabled="loading"
-          v-model="password"
+          :disabled="loadingNewPassword"
+          v-model="newPassword"
         />
       </div>
       <div class="mb-6 flex flex-col" v-if="!isGuest">
         <label
           class="block mb-2 text-sm font-medium text-gray-900"
           for="password-confirm"
-          >Passwort Bestätigen</label
+          >Neues Passwort Bestätigen</label
         >
         <input
           autocomplete="new-password"
@@ -97,20 +144,24 @@ async function deleteAccount() {
           id="password-confirm"
           name="password-confirm"
           type="password"
-          :disabled="loading"
+          :disabled="loadingNewPassword"
           v-model="passwordConfirm"
         />
       </div>
       <button
         type="submit"
-        :disabled="loading"
+        :disabled="loadingNewPassword"
         v-if="!isGuest"
         class="btn btn-blue self-center"
       >
-        Aktuallisieren
+        Passwort Ändern
 
-        <WaitSpinner v-if="loading"></WaitSpinner>
+        <WaitSpinner v-if="loadingNewPassword" size="small"></WaitSpinner>
       </button>
+      <div v-if="confirmConfirmationFailed" class="text-red-600 mt-4">
+        Die Bestätigung vom Passwort ist stimmt nicht mit dem neuen Passwort
+        überein!
+      </div>
     </form>
     <div v-if="!isGuest" class="p-4">
       <button @click="deleteAccount" class="btn btn-blue">Konto löschen</button>
