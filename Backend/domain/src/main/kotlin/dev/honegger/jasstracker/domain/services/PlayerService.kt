@@ -19,6 +19,7 @@ interface PlayerService {
     fun authenticatePlayer(username: String, password: String): AuthToken?
     fun getPlayerOrNull(session: PlayerSession, id: UUID): Player?
     fun updatePlayerDisplayName(session: PlayerSession, updatedDisplayName: String): AuthToken
+    fun updatePlayerPassword(session: PlayerSession, oldPassword: String, newPassword: String): AuthToken?
     fun deletePlayer(session: PlayerSession, playerToDelete: RegisteredPlayer)
 }
 
@@ -97,6 +98,18 @@ class PlayerServiceImpl(
 
         val updatedPlayer = existingPlayer.copy(displayName = updatedDisplayName)
 
+        return updatePlayer(session, updatedPlayer)
+    }
+
+    override fun updatePlayerPassword(session: PlayerSession, oldPassword: String, newPassword: String): AuthToken? {
+        val existingPlayer = playerRepository.getPlayerOrNull(session.playerId)
+        check(existingPlayer is RegisteredPlayer)
+        if (existingPlayer == null || !passwordHashService.verifyPassword(
+                hash = existingPlayer.password,
+                password = oldPassword
+            )
+        ) return null
+        val updatedPlayer = existingPlayer.copy(password = passwordHashService.hashPassword(newPassword))
         return updatePlayer(session, updatedPlayer)
     }
 
