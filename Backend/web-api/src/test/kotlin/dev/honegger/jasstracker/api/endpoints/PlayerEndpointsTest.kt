@@ -162,4 +162,56 @@ class PlayerEndpointsTest {
             service.updatePlayerDisplayName(any(), "Bar")
         }
     }
+
+    @Test
+    fun `updatePassword returns OK if could update`() = testApplication {
+        val client = setup()
+
+        val dummyId = UUID.randomUUID()
+        val authToken = AuthToken("testToken")
+
+        every {
+            service.updatePlayerPassword(any(), "thisIsOld", "thisIsNew")
+        } returns authToken
+
+        client.post("/players/$dummyId/password") {
+            contentType(ContentType.Application.Json)
+            setBody(PasswordChangeRequest("thisIsOld", "thisIsNew"))
+        }.apply {
+            assertEquals(HttpStatusCode.OK, status)
+            assertEquals("""{"token":"${authToken.token}"}""", bodyAsText())
+        }
+
+        verify(exactly = 1) {
+            service.updatePlayerPassword(any(), "thisIsOld", "thisIsNew")
+        }
+    }
+
+    @Test
+    fun `updatePassword returns Bad Request when oldPassword incorrect`() = testApplication {
+        val client = setup()
+        val authToken = AuthToken("wrongPassword")
+        val dummyId = UUID.randomUUID()
+        val dummyPlayer = RegisteredPlayer(
+            id = dummyId,
+            username = "bar",
+            displayName = "foo",
+            password = "max-security",
+        )
+        val dummyPlayerId = dummyPlayer.id
+        every {
+            service.updatePlayerPassword(any(), "thisIsWrong", "thisIsNew")
+        } returns authToken
+
+        client.post("/players/$dummyPlayerId/password") {
+            contentType(ContentType.Application.Json)
+            setBody(PasswordChangeRequest("thisIsWrong", "thisIsNew"))
+        }.apply {
+            assertEquals(HttpStatusCode.BadRequest, status)
+        }
+
+        verify(exactly = 1) {
+            service.updatePlayerPassword(any(), "thisIsWrong", "thisIsNew")
+        }
+    }
 }
