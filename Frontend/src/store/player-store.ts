@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { assertNonNullish } from "@/util/assert";
 
 import {
   updatePlayerDisplayName,
@@ -8,18 +9,11 @@ import { useAuthStore } from "@/store/auth-store";
 
 const authStore = useAuthStore();
 
-function checkInvalid(
-  valueToBeAsserted: string | null
-): asserts valueToBeAsserted is string {
-  if (valueToBeAsserted === null || valueToBeAsserted === undefined) {
-    throw new Error("Value is invalid");
-  }
-}
 export const usePlayerStore = defineStore("player", {
   actions: {
     async updateDisplayName(displayName: string) {
       try {
-        checkInvalid(authStore.playerId);
+        assertNonNullish(authStore.playerId, "PlayerId not defined");
         const { token } = await updatePlayerDisplayName(
           authStore.playerId,
           displayName
@@ -31,7 +25,7 @@ export const usePlayerStore = defineStore("player", {
     },
     async deleteCurrentPlayerAccount() {
       try {
-        checkInvalid(authStore.playerId);
+        assertNonNullish(authStore.playerId, "PlayerId not defined");
         await deleteRegisteredPlayer(authStore.playerId);
         await authStore.logout();
       } catch (e) {
