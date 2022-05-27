@@ -82,6 +82,9 @@ class GameServiceImpl(
     ) {
         val existingGame = gameRepository.getGameOrNull(updatedGame.id)
         validateExists(existingGame) { "Game ${updatedGame.id} was not found and cannot be updated" }
+        val table = tableRepository.getTableByGameIdOrNull(existingGame.id)
+        checkNotNull(table)
+        validateCurrentPlayer(table.ownerId, session) { "Only table owner can update games" }
         require(updatedGame.endTime == null || updatedGame.endTime >= updatedGame.startTime)
         gameRepository.updateGame(existingGame.copy(endTime = updatedGame.endTime))
     }
