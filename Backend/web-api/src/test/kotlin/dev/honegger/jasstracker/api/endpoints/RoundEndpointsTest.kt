@@ -89,7 +89,7 @@ class RoundEndpointsTest {
     }
 
     @Test
-    fun `update round returns 200`() = testApplication {
+    fun `update round returns 204`() = testApplication {
         val client = setup()
         val dummyRound = Round(
             id = UUID.randomUUID(),
@@ -115,7 +115,7 @@ class RoundEndpointsTest {
                 )
             )
         }.apply {
-            assertEquals(HttpStatusCode.OK, status)
+            assertEquals(HttpStatusCode.NoContent, status)
         }
         verify(exactly = 1) {
             service.updateRound(any(), dummyRound)

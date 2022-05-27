@@ -6,6 +6,7 @@ import dev.honegger.jasstracker.domain.Player
 import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.repositories.GameRepository
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
+import dev.honegger.jasstracker.domain.repositories.TableRepository
 import io.mockk.*
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
@@ -16,6 +17,7 @@ import kotlin.test.*
 
 class GameServiceImplTest {
     private val gameRepository = mockk<GameRepository>()
+    private val tableRepository = mockk<TableRepository>()
     private val playerRepository = mockk<PlayerRepository>()
     private val dummySession = PlayerSession(UUID.randomUUID(), false, "dummy", "Dummy")
     private val passedGame = slot<Game>()
@@ -23,11 +25,11 @@ class GameServiceImplTest {
     private val passedTableId = slot<UUID>()
     private val dummyNow = LocalDateTime(2022, 4, 2, 13, 58, 0)
     private val dummyClock = mockk<Clock> { every { now() } returns dummyNow.toInstant(TimeZone.UTC) }
-    private val service = GameServiceImpl(gameRepository, playerRepository, dummyClock)
+    private val service = GameServiceImpl(gameRepository, tableRepository, playerRepository, dummyClock)
 
     @BeforeTest
     fun setup() {
-        clearMocks(gameRepository, playerRepository)
+        clearMocks(gameRepository, tableRepository, playerRepository)
         passedGame.clear()
         every { gameRepository.saveGame(capture(passedGame), capture(passedTableId)) } just Runs
         every { playerRepository.savePlayer(capture(passedPlayers)) } just Runs
@@ -35,7 +37,7 @@ class GameServiceImplTest {
 
     @AfterTest
     fun teardown() {
-        confirmVerified(gameRepository, playerRepository)
+        confirmVerified(gameRepository, tableRepository, playerRepository)
     }
 
     @Test

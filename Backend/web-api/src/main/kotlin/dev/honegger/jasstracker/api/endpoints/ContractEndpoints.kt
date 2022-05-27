@@ -11,7 +11,7 @@ fun Route.configureContractEndpoints(contractService: ContractService) {
     route("/contracts") {
         get {
             val contracts = contractService.getContracts(call.playerSession())
-            call.respond(HttpStatusCode.OK, contracts.map { it.toWebContract() })
+            call.respond(contracts.map { it.toWebContract() })
         }
     }
 }

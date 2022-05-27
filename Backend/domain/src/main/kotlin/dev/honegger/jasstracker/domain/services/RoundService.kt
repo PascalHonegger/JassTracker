@@ -4,6 +4,8 @@ import dev.honegger.jasstracker.domain.Round
 import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.repositories.RoundRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
+import dev.honegger.jasstracker.domain.util.validateCurrentPlayer
+import dev.honegger.jasstracker.domain.util.validateExists
 
 import mu.KotlinLogging
 import java.util.*
@@ -61,20 +63,14 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
         updatedRound: Round,
     ) {
         check(updatedRound.score in 0..157) { "Score must be between 0 and 157" }
-        val existingRound =
-            roundRepository.getRoundOrNull(updatedRound.id)
-        // User can only update a round which exists
-        checkNotNull(existingRound)
-
+        val existingRound = roundRepository.getRoundOrNull(updatedRound.id)
+        validateExists(existingRound) { "Player can only update a round which exists" }
         // TODO verify round is part of game / table which is owned by current user
-
         roundRepository.updateRound(existingRound.copy(score = updatedRound.score))
     }
 
     override fun deleteRoundById(session: PlayerSession, id: UUID): Boolean {
-        val existingRound =
-            roundRepository.getRoundOrNull(id)
-        checkNotNull(existingRound)
+        val existingRound = roundRepository.getRoundOrNull(id) ?: return false
         // TODO verify round is part of game / table which is owned by current user
         return roundRepository.deleteRoundById(id)
     }

@@ -43,7 +43,7 @@ fun Application.module() {
 
         val authTokenService = JwtTokenService(jwtConfig)
         val passwordHashService = Argon2PasswordHashService(argon2HashConfig)
-        val gameService = GameServiceImpl(gameRepository, playerRepository)
+        val gameService = GameServiceImpl(gameRepository, tableRepository, playerRepository)
         val tableService = TableServiceImpl(tableRepository)
         val roundRepository = RoundRepositoryImpl()
         val roundService = RoundServiceImpl(roundRepository, tableRepository)

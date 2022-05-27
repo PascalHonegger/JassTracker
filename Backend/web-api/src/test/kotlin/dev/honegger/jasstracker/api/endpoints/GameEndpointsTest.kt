@@ -103,23 +103,12 @@ class GameEndpointsTest {
     }
 
     @Test
-    fun `delete game returns 404 if not found`() = testApplication {
+    fun `delete game returns 204 if deleted`() = testApplication {
         val client = setup()
-        every { service.deleteGameById(any(), any()) } returns false
+        every { service.deleteGameById(any(), any()) } just Runs
 
         client.delete("/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
-            assertEquals(HttpStatusCode.NotFound, status)
-        }
-        verify(exactly = 1) { service.deleteGameById(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
-    }
-
-    @Test
-    fun `delete game returns 200 if deleted`() = testApplication {
-        val client = setup()
-        every { service.deleteGameById(any(), any()) } returns true
-
-        client.delete("/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
-            assertEquals(HttpStatusCode.OK, status)
+            assertEquals(HttpStatusCode.NoContent, status)
         }
         verify(exactly = 1) { service.deleteGameById(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
     }

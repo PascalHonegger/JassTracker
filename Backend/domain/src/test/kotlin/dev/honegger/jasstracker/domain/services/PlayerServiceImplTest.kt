@@ -187,7 +187,7 @@ class PlayerServiceImplTest {
 
         val session = PlayerSession(id, false, "marcel", "Marcel")
 
-        service.deletePlayer(session, playerToDelete)
+        service.deletePlayer(session, id)
 
         assertEquals(GuestPlayer(id), player.captured)
 

@@ -1,6 +1,7 @@
 package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.api.util.playerSession
+import dev.honegger.jasstracker.api.util.respondNullable
 import dev.honegger.jasstracker.domain.services.TableService
 import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.http.*
@@ -15,20 +16,13 @@ fun Route.configureTableEndpoints(
     route("/tables") {
         get {
             val tables = tableService.getTables(call.playerSession())
-            call.respond(HttpStatusCode.OK, tables.map { it.toWebTable() })
+            call.respond(tables.map { it.toWebTable() })
         }
         get("/{id}") {
             val id = call.parameters["id"]
             checkNotNull(id)
-            val table =
-                tableService.getTableOrNull(call.playerSession(), id.toUUID())
-
-            if (table == null) {
-                call.respond(HttpStatusCode.NotFound)
-                return@get
-            }
-
-            call.respond(HttpStatusCode.OK, table.toWebTable())
+            val table = tableService.getTableOrNull(call.playerSession(), id.toUUID())
+            call.respondNullable(table?.toWebTable())
         }
         post {
             val newTable = call.receive<WebCreateTable>()
@@ -43,17 +37,13 @@ fun Route.configureTableEndpoints(
             checkNotNull(id)
             val updatedTable = call.receive<WebTable>().toTable()
             tableService.updateTable(call.playerSession(), updatedTable)
-            call.respond(HttpStatusCode.OK)
+            call.respond(HttpStatusCode.NoContent)
         }
         delete("/{id}") {
             val id = call.parameters["id"]
             checkNotNull(id)
-            val success = tableService.deleteTableById(call.playerSession(), id.toUUID())
-            if (!success) {
-                call.respond(HttpStatusCode.NotFound)
-                return@delete
-            }
-            call.respond(HttpStatusCode.OK)
+            tableService.deleteTableById(call.playerSession(), id.toUUID())
+            call.respond(HttpStatusCode.NoContent)
         }
     }
 }

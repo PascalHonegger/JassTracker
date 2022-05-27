@@ -100,42 +100,17 @@ class PlayerEndpointsTest {
     fun `delete player calls delete player`() = testApplication {
         val client = setup()
         val dummyId = UUID.randomUUID()
-        val dummyPlayer = RegisteredPlayer(
-            id = dummyId,
-            username = "bar",
-            displayName = "foo",
-            password = "max-security",
-        )
 
         every {
-            service.getPlayerOrNull(any(), dummyId)
-        } returns dummyPlayer
-
-        every {
-            service.deletePlayer(any(), dummyPlayer)
+            service.deletePlayer(any(), dummyId)
         } just Runs
 
         client.delete("/players/$dummyId").apply {
-            assertEquals(HttpStatusCode.OK, status)
+            assertEquals(HttpStatusCode.NoContent, status)
         }
 
         verify(exactly = 1) {
-            service.getPlayerOrNull(any(), dummyId)
-            service.deletePlayer(any(), dummyPlayer)
-        }
-    }
-
-    @Test
-    fun `delete player returns 404 if not found`() = testApplication {
-        val client = setup()
-        val dummyId = UUID.randomUUID()
-
-        client.delete("/players/$dummyId").apply {
-            assertEquals(HttpStatusCode.NotFound, status)
-        }
-
-        verify(exactly = 1) {
-            service.getPlayerOrNull(any(), dummyId)
+            service.deletePlayer(any(), dummyId)
         }
     }
 

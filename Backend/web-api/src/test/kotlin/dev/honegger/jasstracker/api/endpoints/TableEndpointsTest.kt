@@ -154,21 +154,11 @@ class TableEndpointsTest {
     }
 
     @Test
-    fun `delete table returns 404 if not found`() = testApplication {
+    fun `delete table returns 204 if deleted`() = testApplication {
         val client = setup()
-        every { service.deleteTableById(any(), any()) } returns false
-        client.delete("/tables/aafd71ae-a6c1-4722-8ee1-2c9ff4f505ec").apply {
-            assertEquals(HttpStatusCode.NotFound, status)
-        }
-        verify(exactly = 1) { service.deleteTableById(any(), "aafd71ae-a6c1-4722-8ee1-2c9ff4f505ec".toUUID()) }
-    }
-
-    @Test
-    fun `delete table returns 200 if deleted`() = testApplication {
-        val client = setup()
-        every { service.deleteTableById(any(), any()) } returns true
+        every { service.deleteTableById(any(), any()) } just Runs
         client.delete("/tables/7351c4e4-c798-467a-a890-b28e59b9e5a5").apply {
-            assertEquals(HttpStatusCode.OK, status)
+            assertEquals(HttpStatusCode.NoContent, status)
         }
         verify(exactly = 1) { service.deleteTableById(any(), "7351c4e4-c798-467a-a890-b28e59b9e5a5".toUUID()) }
     }

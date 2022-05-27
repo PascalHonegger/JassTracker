@@ -5,6 +5,8 @@ import dev.honegger.jasstracker.domain.Player
 import dev.honegger.jasstracker.domain.RegisteredPlayer
 import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
+import dev.honegger.jasstracker.domain.util.validateCurrentPlayer
+import dev.honegger.jasstracker.domain.util.validateExists
 import mu.KotlinLogging
 import java.util.*
 
@@ -20,7 +22,7 @@ interface PlayerService {
     fun getPlayerOrNull(session: PlayerSession, id: UUID): Player?
     fun updatePlayerDisplayName(session: PlayerSession, updatedDisplayName: String): AuthToken
     fun updatePlayerPassword(session: PlayerSession, oldPassword: String, newPassword: String): AuthToken?
-    fun deletePlayer(session: PlayerSession, playerToDelete: RegisteredPlayer)
+    fun deletePlayer(session: PlayerSession, playerId: UUID)
 }
 
 private val log = KotlinLogging.logger { }
@@ -113,11 +115,11 @@ class PlayerServiceImpl(
         return updatePlayer(session, updatedPlayer)
     }
 
-    override fun deletePlayer(session: PlayerSession, playerToDelete: RegisteredPlayer) {
-        val existingPlayer = playerRepository.getPlayerOrNull(playerToDelete.id)
-        checkNotNull(existingPlayer)
-        check(existingPlayer is RegisteredPlayer)
-        check(existingPlayer.id == session.playerId)
+    override fun deletePlayer(session: PlayerSession, playerId: UUID) {
+        val existingPlayer = playerRepository.getPlayerOrNull(playerId)
+        validateExists(existingPlayer) { "Player $playerId was not found" }
+        // check(existingPlayer is RegisteredPlayer) { "Cannot delete guest player" }
+        validateCurrentPlayer(existingPlayer.id, session) { "Can only delete current user" }
 
         val updatedPlayer = GuestPlayer(existingPlayer.id)
         playerRepository.updatePlayer(updatedPlayer)

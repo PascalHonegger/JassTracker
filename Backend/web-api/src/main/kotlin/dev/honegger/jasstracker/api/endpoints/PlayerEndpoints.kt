@@ -1,8 +1,7 @@
 package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.api.util.playerSession
-import dev.honegger.jasstracker.domain.GuestPlayer
-import dev.honegger.jasstracker.domain.RegisteredPlayer
+import dev.honegger.jasstracker.api.util.respondNullable
 import dev.honegger.jasstracker.domain.services.PlayerService
 import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.http.*
@@ -18,15 +17,8 @@ fun Route.configurePlayerEndpoints(
         get("/{id}") {
             val id = call.parameters["id"]
             checkNotNull(id)
-            val player =
-                playerService.getPlayerOrNull(call.playerSession(), id.toUUID())
-
-            if (player == null) {
-                call.respond(HttpStatusCode.NotFound)
-                return@get
-            }
-
-            call.respond(HttpStatusCode.OK, player.toWebPlayer())
+            val player = playerService.getPlayerOrNull(call.playerSession(), id.toUUID())
+            call.respondNullable(player?.toWebPlayer())
         }
         put("/{id}/displayName") {
             val id = call.parameters["id"]
@@ -50,22 +42,8 @@ fun Route.configurePlayerEndpoints(
             val id = call.parameters["id"]
             checkNotNull(id)
 
-            val player = playerService.getPlayerOrNull(call.playerSession(), id.toUUID())
-
-            if (player == null) {
-                call.respond(HttpStatusCode.NotFound)
-                return@delete
-            }
-
-            when (player) {
-                is GuestPlayer -> {
-                    call.respond(HttpStatusCode.BadRequest, "Cannot delete guest player")
-                }
-                is RegisteredPlayer -> {
-                    playerService.deletePlayer(call.playerSession(), player)
-                    call.respond(HttpStatusCode.OK)
-                }
-            }
+            playerService.deletePlayer(call.playerSession(), id.toUUID())
+            call.respond(HttpStatusCode.NoContent)
         }
     }
 }
