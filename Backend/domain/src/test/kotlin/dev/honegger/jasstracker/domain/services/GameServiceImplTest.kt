@@ -1,12 +1,15 @@
 package dev.honegger.jasstracker.domain.services
 
 import dev.honegger.jasstracker.domain.*
+import dev.honegger.jasstracker.domain.exceptions.NotFoundException
+import dev.honegger.jasstracker.domain.exceptions.UnauthorizedException
 import dev.honegger.jasstracker.domain.repositories.GameRepository
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
 import io.mockk.*
 import kotlinx.datetime.*
 import kotlinx.datetime.TimeZone
+import org.junit.jupiter.api.assertThrows
 import java.util.*
 import kotlin.test.*
 
@@ -110,6 +113,52 @@ class GameServiceImplTest {
             gameRepository.getGameOrNull(gameId)
             tableRepository.getTableByGameIdOrNull(gameId)
             gameRepository.updateGame(updatedGame)
+        }
+    }
+
+    @Test
+    fun `update of unowned game throws UnauthorizedException`() {
+        val game = createDummyGame()
+        val gameId = game.id
+        every { gameRepository.getGameOrNull(gameId) } returns game
+        every { tableRepository.getTableByGameIdOrNull(gameId) } returns createDummyTable(UUID.randomUUID(), game)
+        assertThrows<UnauthorizedException> { service.updateGame(dummySession, game) }
+        verify(exactly = 1) {
+            gameRepository.getGameOrNull(gameId)
+            tableRepository.getTableByGameIdOrNull(gameId)
+        }
+    }
+
+    @Test
+    fun `update of non existent game throws NotFoundException`() {
+        val game = createDummyGame()
+        val gameId = game.id
+        every { gameRepository.getGameOrNull(gameId) } returns null
+        assertThrows<NotFoundException> { service.updateGame(dummySession, game) }
+        verify(exactly = 1) {
+            gameRepository.getGameOrNull(gameId)
+        }
+    }
+
+    @Test
+    fun `delete of unowned game throws UnauthorizedException`() {
+        val game = createDummyGame()
+        val gameId = game.id
+        every { gameRepository.getGameOrNull(gameId) } returns game
+        every { tableRepository.getTableByGameIdOrNull(gameId) } returns createDummyTable(UUID.randomUUID(), game)
+        assertThrows<UnauthorizedException> { service.deleteGameById(dummySession, gameId) }
+        verify(exactly = 1) {
+            tableRepository.getTableByGameIdOrNull(gameId)
+        }
+    }
+
+    @Test
+    fun `delete of non existent game throws NotFoundException`() {
+        val gameId = UUID.randomUUID()
+        every { tableRepository.getTableByGameIdOrNull(gameId) } returns null
+        assertThrows<NotFoundException> { service.deleteGameById(dummySession, gameId) }
+        verify(exactly = 1) {
+            tableRepository.getTableByGameIdOrNull(gameId)
         }
     }
 
