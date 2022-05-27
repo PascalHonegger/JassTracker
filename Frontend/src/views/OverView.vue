@@ -15,6 +15,8 @@ import {
 import CreateGame, { CreateNewGameForm } from "@/components/CreateGame.vue";
 import { useAuthStore } from "@/store/auth-store";
 import { useMetaStore } from "@/store/meta-store";
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 const router = useRouter();
 const tableStore = useTableStore();
@@ -55,13 +57,13 @@ onMounted(async () => {
 async function createNewTable() {
   creatingTable.value = true;
   if (newTableName.value.length < 2 || newTableName.value.length > 30) {
-    alert("Name must be between 2 and 30 characters");
+    toast.error("Tisch Name muss zwischen 2 und 30 Zeichen sein");
     creatingTable.value = false;
     return;
   }
   const validateTeamPlayersSuccess = await validatePlayers(newGame);
   if (!validateTeamPlayersSuccess) {
-    alert("Team Player needs an username");
+    toast.error("Spieler benötigt einen Anzeige Namen");
     creatingTable.value = false;
     return;
   }
