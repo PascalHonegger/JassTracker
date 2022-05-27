@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { assertNonNullish } from "@/util/assert";
+import { useToast } from "vue-toastification";
 
 import {
   updatePlayerDisplayName,
@@ -8,6 +9,7 @@ import {
 import { useAuthStore } from "@/store/auth-store";
 
 const authStore = useAuthStore();
+const toast = useToast();
 
 export const usePlayerStore = defineStore("player", {
   actions: {
@@ -20,7 +22,7 @@ export const usePlayerStore = defineStore("player", {
         );
         authStore.setToken(token);
       } catch (e) {
-        alert("There was an error with updating player");
+        toast.error("Es gab ein Problem mit der Aktuallisierung des Spielers");
       }
     },
     async deleteCurrentPlayerAccount() {
@@ -29,7 +31,7 @@ export const usePlayerStore = defineStore("player", {
         await deleteRegisteredPlayer(authStore.playerId);
         await authStore.logout();
       } catch (e) {
-        alert("There was an error with deleting the current player");
+        toast.error("Es gab ein Problem mit der Löschung des Spielers");
       }
     },
   },

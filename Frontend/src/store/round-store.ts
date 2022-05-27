@@ -9,6 +9,8 @@ import {
 } from "@/services/round-service";
 import { useGameStore } from "@/store/game-store";
 import { getCurrentPlayerOfGame } from "@/services/game-service";
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 export const useRoundStore = defineStore("round", {
   actions: {
@@ -22,7 +24,7 @@ export const useRoundStore = defineStore("round", {
         const newRound = await createRound(round);
         await this.handleRoundCreateOrUpdate(newRound);
       } catch (e) {
-        alert("There was an error with creating round");
+        toast.error("Es gab ein Problem mit der Erstellung der Runde");
       }
     },
     async updateRound(round: WebRound) {
@@ -35,7 +37,7 @@ export const useRoundStore = defineStore("round", {
         await updateRound(round.id, round);
         await this.handleRoundCreateOrUpdate(round);
       } catch (e) {
-        alert("There was an error with updating round");
+        toast.error("Es gab ein Problem mit der Aktuallisierung der Runde");
       }
     },
     async handleRoundCreateOrUpdate(round: WebRound) {
@@ -58,7 +60,7 @@ export const useRoundStore = defineStore("round", {
       gameStore.currentGame.rounds.push(round);
       const teamPartnerIndex = this.findTeamPartnerIndex(round.playerId);
       if (teamPartnerIndex === -1) {
-        alert("no team partner found, something's wrong I can feel it");
+        toast.error("Es wurde kein Team Partner gefunden");
         return;
       }
 
@@ -93,7 +95,7 @@ export const useRoundStore = defineStore("round", {
       );
       const teamPartnerIndex = this.findTeamPartnerIndex(playerId);
       if (teamPartnerIndex === -1) {
-        alert("no team partner found, something's wrong I can feel it");
+        toast.error("Es wurde kein Team Partner gefunden");
         return;
       }
       gameStore.currentGame.rows.forEach((row) => {
@@ -149,6 +151,7 @@ export const useRoundStore = defineStore("round", {
           gameStore.currentGame.id
         );
       } catch (e) {
+        toast.error("Es gab ein Problem bei der Löschung der Runde");
         return false;
       }
       return true;
