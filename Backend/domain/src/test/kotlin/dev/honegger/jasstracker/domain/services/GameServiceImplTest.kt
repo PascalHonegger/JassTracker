@@ -1,17 +1,12 @@
 package dev.honegger.jasstracker.domain.services
 
-import dev.honegger.jasstracker.domain.Game
-import dev.honegger.jasstracker.domain.GameParticipation
-import dev.honegger.jasstracker.domain.Player
-import dev.honegger.jasstracker.domain.PlayerSession
+import dev.honegger.jasstracker.domain.*
 import dev.honegger.jasstracker.domain.repositories.GameRepository
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
 import io.mockk.*
-import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.*
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
 import java.util.*
 import kotlin.test.*
 
@@ -75,4 +70,62 @@ class GameServiceImplTest {
             playerRepository.savePlayer(createdPlayer3)
         }
     }
+
+    @Test
+    fun `deleteGameById deletes game in repository`() {
+        val dummyGame = createDummyGame()
+        val dummyGameId = dummyGame.id
+        every { tableRepository.getTableByGameIdOrNull(dummyGameId) } returns createDummyTable(dummySession.playerId, dummyGame)
+        every { gameRepository.deleteGameById(dummyGameId) } returns true
+        service.deleteGameById(dummySession, dummyGameId)
+        verify(exactly = 1) {
+            tableRepository.getTableByGameIdOrNull(dummyGameId)
+            gameRepository.deleteGameById(dummyGameId)
+        }
+    }
+
+    @Test
+    fun `getGameOrNull returns game from repository`() {
+        val dummyGame = createDummyGame()
+        val dummyGameId = dummyGame.id
+        every { gameRepository.getGameOrNull(dummyGameId) } returns dummyGame
+        assertEquals(dummyGame, service.getGameOrNull(dummySession, dummyGameId))
+        verify(exactly = 1) {
+            gameRepository.getGameOrNull(dummyGameId)
+        }
+    }
+
+    @Test
+    fun `updateGame updates endTime`() {
+        val existingGame = createDummyGame()
+        val gameId = existingGame.id
+        val updatedGame = existingGame.let {
+            it.copy(endTime = it.startTime.toInstant(TimeZone.UTC).plus(1, DateTimeUnit.HOUR).toLocalDateTime(TimeZone.UTC))
+        }
+        every { gameRepository.getGameOrNull(gameId) } returns existingGame
+        every { tableRepository.getTableByGameIdOrNull(gameId) } returns createDummyTable(dummySession.playerId, existingGame)
+        every { gameRepository.updateGame(updatedGame) } just Runs
+        service.updateGame(dummySession, updatedGame)
+        verify(exactly = 1) {
+            gameRepository.getGameOrNull(gameId)
+            tableRepository.getTableByGameIdOrNull(gameId)
+            gameRepository.updateGame(updatedGame)
+        }
+    }
+
+    private fun createDummyGame() = Game(
+        UUID.randomUUID(),
+        LocalDateTime(2022, 4, 20, 13, 37),
+        null,
+        emptyList(),
+        Team(GameParticipation(UUID.randomUUID(), "T1P1"), GameParticipation(UUID.randomUUID(), "T1P2")),
+        Team(GameParticipation(UUID.randomUUID(), "T2P1"), GameParticipation(UUID.randomUUID(), "T2P2"))
+    )
+
+    private fun createDummyTable(ownerId: UUID, game: Game) = Table(
+        UUID.randomUUID(),
+        "Dummy Table",
+        ownerId,
+        listOf(game)
+    )
 }
