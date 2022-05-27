@@ -9,11 +9,15 @@ import "./styles/tailwind.scss";
 import "./styles/custom.scss";
 import "./styles/modal.scss";
 
-const options: PluginOptions = {
+const toastOptions: PluginOptions = {
   position: POSITION.BOTTOM_CENTER,
   closeOnClick: true,
   pauseOnHover: false,
   timeout: 5000,
 };
 
-createApp(App).use(createPinia()).use(router).use(Toast, options).mount("#app");
+createApp(App)
+  .use(createPinia())
+  .use(router)
+  .use(Toast, toastOptions)
+  .mount("#app");

@@ -57,13 +57,13 @@ onMounted(async () => {
 async function createNewTable() {
   creatingTable.value = true;
   if (newTableName.value.length < 2 || newTableName.value.length > 30) {
-    toast.error("Tisch Name muss zwischen 2 und 30 Zeichen sein");
+    toast.error("Tischname muss zwischen 2 und 30 Zeichen sein");
     creatingTable.value = false;
     return;
   }
   const validateTeamPlayersSuccess = await validatePlayers(newGame);
   if (!validateTeamPlayersSuccess) {
-    toast.error("Spieler benötigt einen Anzeige Namen");
+    toast.error("Spieler benötigt einen Alias");
     creatingTable.value = false;
     return;
   }

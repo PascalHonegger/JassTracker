@@ -101,7 +101,7 @@ async function setCurrentTableId(newId: string | string[] | undefined) {
 async function createNewGame() {
   const tableId = currentTable.value?.id;
   if (tableId == null) {
-    toast.error("Kein Tisch gefunden, ohne kan kein Spiel erstellt werden!");
+    toast.error("Kein Tisch gefunden, ohne kann kein Spiel erstellt werden!");
     return;
   }
   const createGame: WebCreateGame = {
