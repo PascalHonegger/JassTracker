@@ -1,7 +1,6 @@
 package dev.honegger.jasstracker.bootstrap.plugins
 
-import dev.honegger.jasstracker.domain.exceptions.NotFoundException
-import dev.honegger.jasstracker.domain.exceptions.UnauthorizedException
+import dev.honegger.jasstracker.api.util.configureExceptionStatusCodes
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -11,7 +10,6 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
-import io.ktor.server.response.*
 
 fun Application.configureHTTP() {
     if (environment.developmentMode) {
@@ -47,24 +45,6 @@ fun Application.configureHTTP() {
     }
 
     install(StatusPages) {
-        exception<Throwable> { call, cause ->
-            when (cause) {
-                is IllegalArgumentException -> {
-                    call.respondText(text = cause.message.orEmpty() , status = HttpStatusCode.BadRequest)
-                }
-                is IllegalStateException -> {
-                    call.respondText(text = cause.message.orEmpty() , status = HttpStatusCode.InternalServerError)
-                }
-                is UnauthorizedException -> {
-                    call.respondText(text = cause.message.orEmpty() , status = HttpStatusCode.Unauthorized)
-                }
-                is NotFoundException -> {
-                    call.respondText(text = cause.message.orEmpty() , status = HttpStatusCode.NotFound)
-                }
-                else -> {
-                    call.respondText(text = cause.message.orEmpty() , status = HttpStatusCode.InternalServerError)
-                }
-            }
-        }
+        configureExceptionStatusCodes()
     }
 }
