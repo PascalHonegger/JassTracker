@@ -22,7 +22,7 @@ interface GameService {
         team2Player2: CreateGameParticipation,
     ): Game
 
-    fun getGameOrNull(session: PlayerSession, id: UUID): Game?
+    fun getGame(session: PlayerSession, id: UUID): Game
     fun getAllGames(session: PlayerSession): List<Game>
     fun updateGame(session: PlayerSession, updatedGame: Game)
     fun deleteGameById(session: PlayerSession, id: UUID)
@@ -63,12 +63,14 @@ class GameServiceImpl(
         return newGame
     }
 
-    override fun getGameOrNull(
+    override fun getGame(
         session: PlayerSession,
         id: UUID,
-    ): Game? {
+    ): Game {
         // Users can load any scoreboard they know the ID of
-        return gameRepository.getGameOrNull(id)
+        val game = gameRepository.getGameOrNull(id)
+        validateExists(game) { "Game $id was not found" }
+        return game
     }
 
     override fun getAllGames(session: PlayerSession): List<Game> {

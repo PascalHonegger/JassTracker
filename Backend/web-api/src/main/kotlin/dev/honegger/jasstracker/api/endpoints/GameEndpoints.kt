@@ -1,7 +1,6 @@
 package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.api.util.playerSession
-import dev.honegger.jasstracker.api.util.respondNullable
 import dev.honegger.jasstracker.domain.currentPlayer
 import dev.honegger.jasstracker.domain.services.GameService
 import dev.honegger.jasstracker.domain.util.toUUID
@@ -22,14 +21,14 @@ fun Route.configureGameEndpoints(
         get("/{id}") {
             val id = call.parameters["id"]
             checkNotNull(id)
-            val game = gameService.getGameOrNull(call.playerSession(), id.toUUID())
-            call.respondNullable(game?.toWebGame())
+            val game = gameService.getGame(call.playerSession(), id.toUUID())
+            call.respond(game.toWebGame())
         }
         get("/{id}/currentPlayer") {
             val id = call.parameters["id"]
             checkNotNull(id)
-            val game = gameService.getGameOrNull(call.playerSession(), id.toUUID())
-            call.respondNullable(game?.currentPlayer?.toWebGameParticipation())
+            val game = gameService.getGame(call.playerSession(), id.toUUID())
+            call.respond(game.currentPlayer.toWebGameParticipation())
         }
         post {
             val newGame = call.receive<WebCreateGame>()

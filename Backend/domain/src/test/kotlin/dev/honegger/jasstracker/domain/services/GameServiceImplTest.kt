@@ -88,11 +88,21 @@ class GameServiceImplTest {
     }
 
     @Test
-    fun `getGameOrNull returns game from repository`() {
+    fun `getGame returns game from repository`() {
         val dummyGame = createDummyGame()
         val dummyGameId = dummyGame.id
         every { gameRepository.getGameOrNull(dummyGameId) } returns dummyGame
-        assertEquals(dummyGame, service.getGameOrNull(dummySession, dummyGameId))
+        assertEquals(dummyGame, service.getGame(dummySession, dummyGameId))
+        verify(exactly = 1) {
+            gameRepository.getGameOrNull(dummyGameId)
+        }
+    }
+
+    @Test
+    fun `getGame with non-existent ID throws NotFoundException`() {
+        val dummyGameId = UUID.randomUUID()
+        every { gameRepository.getGameOrNull(dummyGameId) } returns null
+        assertThrows<NotFoundException> { service.getGame(dummySession, dummyGameId) }
         verify(exactly = 1) {
             gameRepository.getGameOrNull(dummyGameId)
         }
