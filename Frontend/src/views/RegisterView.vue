@@ -105,7 +105,7 @@ async function loginAsGuest() {
         >
           Registrieren
 
-          <WaitSpinner v-if="registerLoading"></WaitSpinner>
+          <WaitSpinner v-if="registerLoading" size="small"></WaitSpinner>
         </button>
         <div v-if="registerFailed" class="text-red-600 mt-4">
           Registrierung fehlgeschlagen
@@ -121,7 +121,7 @@ async function loginAsGuest() {
     >
       Als Gast spielen
 
-      <WaitSpinner v-if="loginAsGuestLoading"></WaitSpinner>
+      <WaitSpinner v-if="loginAsGuestLoading" size="small"></WaitSpinner>
     </button>
     <div class="mb-auto mx-1">
       <p>

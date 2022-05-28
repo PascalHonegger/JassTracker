@@ -80,7 +80,7 @@ async function login() {
         >
           Login
 
-          <WaitSpinner v-if="loginLoading"></WaitSpinner>
+          <WaitSpinner v-if="loginLoading" size="small"></WaitSpinner>
         </button>
         <div v-if="loginFailed" class="text-red-600 mt-4">
           Ungültiger Benutzername oder Passwort

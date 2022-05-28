@@ -14,11 +14,13 @@ import {
 } from "@/services/web-model";
 import CreateGame, { CreateNewGameForm } from "@/components/CreateGame.vue";
 import { useAuthStore } from "@/store/auth-store";
+import { useMetaStore } from "@/store/meta-store";
 
 const router = useRouter();
 const tableStore = useTableStore();
 const gameStore = useGameStore();
 const authStore = useAuthStore();
+const metaStore = useMetaStore();
 
 const { tablesAsArray } = storeToRefs(tableStore);
 
@@ -27,7 +29,6 @@ const newPlayer: WebCreateGameParticipation = {
   displayName: "",
 };
 
-const loadingTables = ref(false);
 const creatingTable = ref(false);
 const isModalVisible = ref(false);
 const newTableName = ref("");
@@ -43,9 +44,12 @@ const availablePlayers = computed<WebCreateGameParticipation[]>(() => [
 ]);
 
 onMounted(async () => {
-  loadingTables.value = true;
-  await tableStore.loadTables();
-  loadingTables.value = false;
+  metaStore.startLoading();
+  try {
+    await tableStore.loadTables();
+  } finally {
+    metaStore.stopLoading();
+  }
 });
 
 async function createNewTable() {
@@ -71,11 +75,7 @@ function updatePlayer(
 </script>
 <template>
   <div class="table-container container mx-auto">
-    <WaitSpinner v-if="loadingTables"></WaitSpinner>
-    <div
-      v-else
-      class="flex flex-col items-stretch md:flex-wrap md:flex-row gap-4 p-4"
-    >
+    <div class="flex flex-col items-stretch md:flex-wrap md:flex-row gap-4 p-4">
       <TableItem v-for="t in tablesAsArray" :key="t.id" :table="t"></TableItem>
       <button
         @click="isModalVisible = true"
@@ -121,7 +121,7 @@ function updatePlayer(
         >
           Neues Spiel starten
 
-          <WaitSpinner v-if="creatingTable"></WaitSpinner>
+          <WaitSpinner v-if="creatingTable" size="medium"></WaitSpinner>
         </button>
       </template>
     </ModalDialog>
