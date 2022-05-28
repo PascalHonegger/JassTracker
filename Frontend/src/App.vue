@@ -65,9 +65,10 @@ nav a.router-link-exact-active {
               >
             </li>
             <li>
-              <RouterLink class="block py-2 pr-4 pl-3 text-white" to="/Help"
-                >Hilfezentrum</RouterLink
-              >
+              <HelpView
+                class="block py-2 pr-4 pl-3 text-white"
+                title="Hilfezentrum"
+              />
             </li>
             <li>
               <button

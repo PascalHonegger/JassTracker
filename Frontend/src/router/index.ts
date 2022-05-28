@@ -26,6 +26,20 @@ const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "help" */ "../views/HelpView.vue"),
   },
   {
+    path: "/help/jassTrackerHelp",
+    name: "jassTrackerHelp",
+    component: () =>
+      import(
+        /* webpackChunkName: "help" */ "../components/JassTrackerHelp.vue"
+      ),
+  },
+  {
+    path: "/help/jassRules",
+    name: "jassRules",
+    component: () =>
+      import(/* webpackChunkName: "help" */ "../components/JassRules.vue"),
+  },
+  {
     path: "/overview",
     name: "overview",
     meta: {

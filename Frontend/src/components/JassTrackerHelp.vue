@@ -1,0 +1,129 @@
+<style lang="scss">
+h2 {
+  @apply text-4xl font-normal leading-normal mt-4;
+}
+</style>
+<template>
+  <div class="container mx-auto text-center">
+    <h1 class="text-5xl font-normal leading-normal mt-4">
+      JassTracker Bedienung
+    </h1>
+    <h2>Login / Registrierung</h2>
+    <div class="flex py-2">
+      <p class="text-left">
+        Der JassTracker kann entweder als Gast oder mit einem erstellen Benutzer
+        Profil benutzt werden.
+        <br />
+        Um einen Benutzer Account zu erhalten, muss man sich zuerst registrieren
+        unter
+        <RouterLink to="/register" class="underline">Registrieren</RouterLink>
+        . Danach kann man sich mit den Benutzer Informationen einloggen und den
+        JassTracker im vollen Umfang verwenden.
+        <br />
+        Wenn man sich keinen Account erstellen möchte, oder den JassTracker mal
+        ausprobieren möchte, kann man sich als "Gast" anmelden. Man kann die
+        alle Funktionalitäten der Applikation ausprobieren und sehen, ob mann
+        einen Account erstellen möchte.
+      </p>
+      <img
+        class="max-w-[50%] pl-4"
+        src="../assets/helpcenter/login.webp"
+        alt="Login Screen"
+      />
+    </div>
+    <h2>Tische</h2>
+    <div class="flex py-2">
+      <img
+        class="max-w-[50%] pr-4"
+        src="../assets/helpcenter/tables.webp"
+        alt="Tisch Übersicht"
+      />
+      <p class="text-left">
+        Sobald man sich eingeloggt hat (entweder mit dem eigenen Benutzer
+        Account oder als Gast), kann man neue Tische erstellen.
+        <br />
+        Tische enthalten immer 4 Personen, somit hat man alle Spiele die man mit
+        diesen Personen spielt, immer an einem Ort und sorgt für eine
+        übersichtliche Übersicht.
+        <br />
+        Ein Tisch kann zu dem einen Namen haben, z.B. "Familientisch", wo man
+        immer mit seinen Familienmitgliedern spielt.
+      </p>
+    </div>
+    <h2>Spiele</h2>
+    <div class="flex py-2">
+      <p class="text-left">
+        Spiele sind immer in einem Tisch enthalten. Bei der Erstellung eines
+        Tisches wird automatisch das erste Spiel erstellt.
+        <br />
+        Spiele können mit "Spiel abschliessen" entweder frühzeitig oder sobald
+        alle Möglichkeiten gespielt wurden abgeschlossen werden.
+        <br />
+        Ein neues Spiel kann via "Neues Spiel erstellen" eröffnet werden, man
+        erhält die Option, die Teams neu zu bilden bei Wunsch.
+        <br />
+        Beim Klick auf ein Spiel in der unteren Box Ansicht, kommt man auf die
+        Detail Seite wo man die Möglichkeit hat, ein Spiel zu löschen. Nur
+        abgeschlossene Spiele können gelöscht werden.
+        <br />
+        In dieser Detail Ansicht, sieht man zusätzlichen aktuelle
+        Spielstatistiken wie aktuelle Siegeschancen pro Team oder
+        Durchschnittliche Punktzahl etc.
+        <br />
+        Anstatt z.B. 157 - 15 zu rechnen und dann 142 einzugeben, kann auch
+        direkt "-15" eingetragen werden. Eingaben im Spiel können angepasst und
+        auch gelöscht werden. Es werden nur Zahlen und "-" in den Feldern
+        erlaubt. Bei einer invaliden Eingabe, wird das Feld rot markiert, bis
+        der Fehler korrigiert wurde.
+      </p>
+      <img
+        class="max-w-[50%] pl-4"
+        src="../assets/helpcenter/games.webp"
+        alt="Spiel Übersicht"
+      />
+    </div>
+    <h2>Profil / Statistiken</h2>
+    <div class="flex py-2">
+      <p class="text-left">
+        Unter dem
+        <RouterLink to="/profile" class="underline">Profil</RouterLink>
+        kann man seine Benutzerdaten anpassen und sieht auch persönliche
+        Statistiken
+        <br />
+        Der "Benutzername" lässt sich nicht anpassen, nachdem er initial gesetzt
+        wurde
+        <br />
+        Die Statistiken zeigen in der Übersicht generelle Statistiken an wie
+        z.B. Anzahl Spiele, Siegesrate und durchschnittliche Punktzahl pro
+        Spiel. Man kann mit einem klick auf die Statistiken die Detail Ansicht
+        öffnen. Dort sieht man genauere Informationen auch visuell dargestellt
+        und kann diese auch beliebig filtern.
+      </p>
+    </div>
+    <p class="py-8">
+      Jasskarten-Icons bereitgestellt von Wikimedia Commons User Jensche,
+      lizensiert unter
+      <a
+        target="_blank"
+        class="underline"
+        href="https://creativecommons.org/licenses/by-sa/4.0/"
+        >Creative Commons Attribution-Share Alike 4.0 International Lizenz</a
+      >.
+    </p>
+    <p>
+      Esstisch wurde erstellt von
+      <a
+        target="_blank"
+        class="underline"
+        href="https://www.freepik.com/vectors/dinner-table"
+        >www.freepik.com</a
+      >.
+    </p>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "JassTrackerHelp",
+};
+</script>
