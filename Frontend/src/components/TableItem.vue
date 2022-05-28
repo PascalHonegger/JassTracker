@@ -4,9 +4,11 @@ import GamePreview from "./GamePreview.vue";
 import Icon from "./IconSelector.vue";
 import { computed, ref } from "vue";
 import Modal from "./ModalDialog.vue";
+import { useToast } from "vue-toastification";
 
 import { useTableStore } from "@/store/table-store";
 const tableStore = useTableStore();
+const toast = useToast();
 
 const props = defineProps<{ table: Table }>();
 
@@ -18,6 +20,7 @@ const latestGame = computed(
 
 async function deleteTable() {
   await tableStore.removeTable(props.table.id);
+  toast.success("Tisch erfolgreich gelöscht");
   // do some additional checking, aka if first success false, error
   closeModal();
 }
