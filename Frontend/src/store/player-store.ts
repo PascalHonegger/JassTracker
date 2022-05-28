@@ -9,12 +9,12 @@ import {
 } from "@/services/player-service";
 import { useAuthStore } from "@/store/auth-store";
 
-const authStore = useAuthStore();
 const toast = useToast();
 
 export const usePlayerStore = defineStore("player", {
   actions: {
     async updateDisplayName(displayName: string) {
+      const authStore = useAuthStore();
       try {
         assertNonNullish(authStore.playerId, "PlayerId not defined");
         const { token } = await updatePlayerDisplayName(
@@ -30,6 +30,7 @@ export const usePlayerStore = defineStore("player", {
       oldPassword: string,
       newPassword: string
     ): Promise<boolean> {
+      const authStore = useAuthStore();
       try {
         if (authStore.playerId === null) {
           alert("Player should have an ID");
@@ -47,6 +48,7 @@ export const usePlayerStore = defineStore("player", {
       }
     },
     async deleteCurrentPlayerAccount() {
+      const authStore = useAuthStore();
       try {
         assertNonNullish(authStore.playerId, "PlayerId not defined");
         await deleteRegisteredPlayer(authStore.playerId);

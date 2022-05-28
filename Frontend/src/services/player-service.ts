@@ -11,7 +11,7 @@ export async function updatePlayerPassword(
   oldPassword: string,
   newPassword: string
 ) {
-  return api.post<{ token: string }>(`players/${id}/password`, {
+  return api.put<{ token: string }>(`players/${id}/password`, {
     oldPassword,
     newPassword,
   });
