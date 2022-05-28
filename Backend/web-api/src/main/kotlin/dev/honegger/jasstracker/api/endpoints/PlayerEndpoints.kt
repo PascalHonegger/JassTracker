@@ -35,14 +35,14 @@ fun Route.configurePlayerEndpoints(
             val token = playerService.updatePlayerDisplayName(call.playerSession(), displayName)
             call.respond(token.toTokenResponse())
         }
-        post("/{id}/password") {
+        put("/{id}/password") {
             val id = call.parameters["id"]
             checkNotNull(id)
             val (oldPassword, newPassword) = call.receive<PasswordChangeRequest>()
-            val token = playerService.updatePassword(call.playerSession(), oldPassword, newPassword);
+            val token = playerService.updatePlayerPassword(call.playerSession(), oldPassword, newPassword)
             if (token == null) {
                 call.respond(HttpStatusCode.BadRequest)
-                return@post
+                return@put
             }
             call.respond(token.toTokenResponse())
         }

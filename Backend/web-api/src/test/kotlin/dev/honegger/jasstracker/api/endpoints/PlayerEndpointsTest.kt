@@ -174,7 +174,7 @@ class PlayerEndpointsTest {
             service.updatePlayerPassword(any(), "thisIsOld", "thisIsNew")
         } returns authToken
 
-        client.post("/players/$dummyId/password") {
+        client.put("/players/$dummyId/password") {
             contentType(ContentType.Application.Json)
             setBody(PasswordChangeRequest("thisIsOld", "thisIsNew"))
         }.apply {
@@ -190,20 +190,12 @@ class PlayerEndpointsTest {
     @Test
     fun `updatePassword returns Bad Request when oldPassword incorrect`() = testApplication {
         val client = setup()
-        val authToken = AuthToken("wrongPassword")
         val dummyId = UUID.randomUUID()
-        val dummyPlayer = RegisteredPlayer(
-            id = dummyId,
-            username = "bar",
-            displayName = "foo",
-            password = "max-security",
-        )
-        val dummyPlayerId = dummyPlayer.id
         every {
             service.updatePlayerPassword(any(), "thisIsWrong", "thisIsNew")
-        } returns authToken
+        } returns null
 
-        client.post("/players/$dummyPlayerId/password") {
+        client.put("/players/$dummyId/password") {
             contentType(ContentType.Application.Json)
             setBody(PasswordChangeRequest("thisIsWrong", "thisIsNew"))
         }.apply {
