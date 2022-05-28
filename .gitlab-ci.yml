@@ -73,7 +73,7 @@ deploy_prod:
 
 qodana-jvm:
   image:
-    name: jetbrains/qodana-jvm:2021.3-eap
+    name: jetbrains/qodana-jvm:2022.1-eap
     entrypoint: ['']
   stage: verify
   script:

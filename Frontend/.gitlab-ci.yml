@@ -38,7 +38,7 @@ lhci:
 qodana-js:
   <<: *frontend_configuration
   image:
-    name: jetbrains/qodana-js:2021.3-eap
+    name: jetbrains/qodana-js:2022.1-eap
     entrypoint: ['']
   stage: verify
   script:
