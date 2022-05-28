@@ -76,6 +76,7 @@ async function createNewTable() {
     tableId: newTableId,
   };
   await gameStore.createGame(createGame);
+  toast.success(`Tisch ${newTableName.value} wurde erfolgreich erstellt`);
   await router.push({ name: "table", params: { tableId: newTableId } });
 }
 

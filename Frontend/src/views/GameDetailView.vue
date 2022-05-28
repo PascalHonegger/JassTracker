@@ -7,9 +7,11 @@ import { useTableStore } from "@/store/table-store";
 import ModalDialog from "@/components/ModalDialog.vue";
 import GameItem from "@/components/GameItem.vue";
 import { useMetaStore } from "@/store/meta-store";
+import { useToast } from "vue-toastification";
 
 const router = useRouter();
 const route = useRoute();
+const toast = useToast();
 
 const gameStore = useGameStore();
 const tableStore = useTableStore();
@@ -44,6 +46,7 @@ async function deleteGame() {
     return;
   }
   await gameStore.removeGame(route.params.gameId);
+  toast.success("Spiel erfolgreich gelöscht");
   // do some additional checking for success / error handling
   closeModal();
   backToTable();

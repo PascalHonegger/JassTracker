@@ -111,6 +111,7 @@ async function createNewGame() {
   creatingGame.value = true;
   const createdId = await gameStore.createGame(createGame);
   gameStore.setCurrentGame(tableId, createdId);
+  toast.success("Neues Spiel erfolgreich erstellt");
   isModalVisible.value = false;
   creatingGame.value = false;
 }
