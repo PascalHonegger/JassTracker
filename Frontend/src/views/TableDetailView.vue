@@ -17,6 +17,7 @@ import GameList, { NamedGame } from "@/components/GameList.vue";
 import { dateCompare } from "@/util/dates";
 import { useMetaStore } from "@/store/meta-store";
 import { useToast } from "vue-toastification";
+import TableStatistics from "@/components/TableStatistics.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -162,6 +163,10 @@ function backToOverview() {
     <div v-if="completedGames.length > 0" class="my-2">
       <h2 class="font-bold text-lg">Abgeschlossene Spiele</h2>
       <GameList :table-id="currentTableId" :games="completedGames" />
+    </div>
+
+    <div class="my-2">
+      <TableStatistics :table="currentTable" />
     </div>
   </div>
 

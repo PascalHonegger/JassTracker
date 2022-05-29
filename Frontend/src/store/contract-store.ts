@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { getContracts } from "@/services/contract-service";
-import { Round, RoundType, Row } from "@/types/types";
+import { Contract, Round, RoundType, Row } from "@/types/types";
 import {
   WebContract,
   WebGameParticipation,
@@ -16,6 +16,16 @@ export const useContractStore = defineStore("contract", {
   getters: {
     hasContracts(state) {
       return state.contracts.length > 0;
+    },
+    getContract(state) {
+      return (contractId: string): Contract => {
+        const contract = state.contracts.find((c) => c.id === contractId);
+        assertNonNullish(
+          contract,
+          `Couldn't find contract by id ${contractId}`
+        );
+        return contract;
+      };
     },
     emptyRows(state) {
       return (players: WebGameParticipation[]): Row[] =>
