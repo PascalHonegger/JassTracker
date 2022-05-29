@@ -16,6 +16,7 @@ import CreateGame, { CreateNewGameForm } from "@/components/CreateGame.vue";
 import { useAuthStore } from "@/store/auth-store";
 import { useMetaStore } from "@/store/meta-store";
 import { useToast } from "vue-toastification";
+import { minTableNameLength, maxTableNameLength } from "@/util/constants";
 const toast = useToast();
 
 const router = useRouter();
@@ -56,7 +57,10 @@ onMounted(async () => {
 
 async function createNewTable() {
   creatingTable.value = true;
-  if (newTableName.value.length < 2 || newTableName.value.length > 30) {
+  if (
+    newTableName.value.length < minTableNameLength ||
+    newTableName.value.length > maxTableNameLength
+  ) {
     toast.error("Tischname muss zwischen 2 und 30 Zeichen sein");
     creatingTable.value = false;
     return;
