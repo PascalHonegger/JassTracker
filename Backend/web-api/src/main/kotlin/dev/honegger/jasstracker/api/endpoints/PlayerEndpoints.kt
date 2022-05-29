@@ -50,7 +50,6 @@ fun Route.configurePlayerEndpoints(
             val id = call.parameters["id"]
             checkNotNull(id)
 
-
             val player = playerService.getPlayerOrNull(call.playerSession(), id.toUUID())
 
             if (player == null) {

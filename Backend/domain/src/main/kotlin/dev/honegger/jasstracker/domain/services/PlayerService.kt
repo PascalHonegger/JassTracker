@@ -104,7 +104,7 @@ class PlayerServiceImpl(
     override fun updatePlayerPassword(session: PlayerSession, oldPassword: String, newPassword: String): AuthToken? {
         val existingPlayer = playerRepository.getPlayerOrNull(session.playerId)
         check(existingPlayer is RegisteredPlayer)
-        if (existingPlayer == null || !passwordHashService.verifyPassword(
+        if (!passwordHashService.verifyPassword(
                 hash = existingPlayer.password,
                 password = oldPassword
             )

@@ -40,8 +40,7 @@ async function updatePassword() {
   }
   if (newPassword.value != passwordConfirm.value) {
     confirmConfirmationFailed.value = true;
-  }
-  if (updatePasswordSuccessful) {
+  } else if (updatePasswordSuccessful) {
     await router.push("/overview");
   }
 }

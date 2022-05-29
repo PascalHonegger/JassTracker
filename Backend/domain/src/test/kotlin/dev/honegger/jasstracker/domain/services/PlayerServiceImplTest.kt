@@ -167,11 +167,7 @@ class PlayerServiceImplTest {
         every { passwordHashService.verifyPassword(wrongPassword, password) } returns false
 
         val session = PlayerSession(id, false, username, "Dummy")
-
-        val token = service.updatePlayerPassword( session,
-            password,
-            newPassword,
-        )
+        val token = service.updatePlayerPassword(session, password, newPassword)
 
         assertNull(token)
 
