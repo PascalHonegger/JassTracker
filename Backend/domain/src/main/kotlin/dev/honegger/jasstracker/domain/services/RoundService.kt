@@ -79,13 +79,19 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
         check(updatedRound.score in 0..157) { "Score must be between 0 and 157" }
         val existingRound = roundRepository.getRoundOrNull(updatedRound.id)
         validateExists(existingRound) { "Player can only update a round which exists" }
-        // TODO verify round is part of game / table which is owned by current user
+        validateOwner(session, existingRound) { "Player can only update rounds on owned table" }
         roundRepository.updateRound(existingRound.copy(score = updatedRound.score))
     }
 
     override fun deleteRoundById(session: PlayerSession, id: UUID): Boolean {
         val existingRound = roundRepository.getRoundOrNull(id) ?: return false
-        // TODO verify round is part of game / table which is owned by current user
+        validateOwner(session, existingRound) { "Player can only delete rounds on owned table" }
         return roundRepository.deleteRoundById(id)
+    }
+
+    private fun validateOwner(session: PlayerSession, round: Round, lazyMessage: () -> String) {
+        val table = tableRepository.getTableByGameIdOrNull(round.gameId)
+        checkNotNull(table)
+        validateCurrentPlayer(table.ownerId, session, lazyMessage)
     }
 }

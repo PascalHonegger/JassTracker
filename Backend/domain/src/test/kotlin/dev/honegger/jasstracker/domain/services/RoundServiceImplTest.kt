@@ -339,6 +339,10 @@ class RoundServiceImplTest {
         } returns dummyRound
 
         every {
+            tableRepository.getTableByGameIdOrNull(dummyRound.gameId)
+        } returns createDummyTable(dummyRound, dummySession.playerId)
+
+        every {
             roundRepository.deleteRoundById(dummyRound.id)
         } returns true
 
@@ -346,41 +350,51 @@ class RoundServiceImplTest {
         assertTrue { deleted }
         verify(exactly = 1) {
             roundRepository.getRoundOrNull(dummyRound.id)
+            tableRepository.getTableByGameIdOrNull(dummyRound.gameId)
             roundRepository.deleteRoundById(dummyRound.id)
         }
     }
 
     @Test
-    fun `deleteRoundById removes a round, table can't be found afterwards anymore`() {
-        val roundId = UUID.randomUUID()
-        val dummyRound = Round(roundId, 1, 157, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID())
-
+    fun `deleteRoundById throws if table is not owned`() {
+        val dummyRound = Round(UUID.randomUUID(), 1, 157, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID())
         every {
-            roundRepository.getRoundOrNull(roundId)
+            roundRepository.getRoundOrNull(dummyRound.id)
         } returns dummyRound
 
         every {
-            roundRepository.deleteRoundById(roundId)
-        } returns false
+            tableRepository.getTableByGameIdOrNull(dummyRound.gameId)
+        } returns createDummyTable(dummyRound, UUID.randomUUID())
 
-        val deleted = service.deleteRoundById(dummySession, roundId)
-        assertFalse { deleted }
+        every {
+            roundRepository.deleteRoundById(dummyRound.id)
+        } returns true
+
+        val thrown = assertThrows<UnauthorizedException> {
+            service.deleteRoundById(dummySession, dummyRound.id)
+        }
+        assertEquals("Player can only delete rounds on owned table", thrown.message)
 
         verify(exactly = 1) {
-            roundRepository.deleteRoundById(roundId)
-            roundRepository.getRoundOrNull(roundId)
+            roundRepository.getRoundOrNull(dummyRound.id)
+            tableRepository.getTableByGameIdOrNull(dummyRound.gameId)
         }
     }
 
     @Test
     fun `updateRound updates score`() {
         val id = UUID.randomUUID()
-        val oldRound = Round(id, 1, 80, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID())
+        val gameId = UUID.randomUUID()
+        val oldRound = Round(id, 1, 80, gameId, UUID.randomUUID(), UUID.randomUUID())
         val updatedRound = oldRound.copy(score = 95)
 
         every {
             roundRepository.getRoundOrNull(id)
         } returns oldRound
+
+        every {
+            tableRepository.getTableByGameIdOrNull(gameId)
+        } returns createDummyTable(oldRound, dummySession.playerId)
 
         every {
             roundRepository.updateRound(updatedRound)
@@ -390,14 +404,16 @@ class RoundServiceImplTest {
 
         verify(exactly = 1) {
             roundRepository.getRoundOrNull(id)
+            tableRepository.getTableByGameIdOrNull(gameId)
             roundRepository.updateRound(updatedRound)
         }
     }
 
     @Test
-    fun `updateRound throws if round`() {
+    fun `updateRound throws if table is not owned`() {
         val id = UUID.randomUUID()
-        val oldRound = Round(id, 1, 80, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID())
+        val gameId = UUID.randomUUID()
+        val oldRound = Round(id, 1, 80, gameId, UUID.randomUUID(), UUID.randomUUID())
         val updatedRound = oldRound.copy(score = 95)
 
         every {
@@ -405,14 +421,35 @@ class RoundServiceImplTest {
         } returns oldRound
 
         every {
+            tableRepository.getTableByGameIdOrNull(gameId)
+        } returns createDummyTable(oldRound, UUID.randomUUID())
+
+        every {
             roundRepository.updateRound(updatedRound)
         } just Runs
 
-        service.updateRound(dummySession, updatedRound)
+        val thrown = assertThrows<UnauthorizedException> {
+            service.updateRound(dummySession, updatedRound)
+        }
+        assertEquals("Player can only update rounds on owned table", thrown.message)
 
         verify(exactly = 1) {
             roundRepository.getRoundOrNull(id)
-            roundRepository.updateRound(updatedRound)
+            tableRepository.getTableByGameIdOrNull(gameId)
         }
     }
+
+    private fun createDummyTable(round: Round, ownerId: UUID) = Table(
+        id = UUID.randomUUID(),
+        name = "dummy",
+        ownerId = ownerId,
+        listOf(Game(
+            id = round.gameId,
+            startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+            endTime = null,
+            rounds = listOf(round),
+            team1 = Team(GameParticipation(ownerId, "T1P1"), GameParticipation(round.playerId, "T1P2")),
+            team2 = Team(GameParticipation(UUID.randomUUID(), "T2P1"), GameParticipation(UUID.randomUUID(), "T2P2"))
+        ))
+    )
 }
