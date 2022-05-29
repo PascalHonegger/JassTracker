@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import HelpTabs from "@/components/HelpTabs.vue";
+</script>
+
 <style lang="scss">
 h2 {
   @apply text-4xl font-normal leading-normal mt-4;
@@ -5,6 +9,18 @@ h2 {
 </style>
 <template>
   <div class="container mx-auto text-center">
+    <help-tabs class="flex border-b border-black mt-4">
+      <div
+        class="-mb-px mr-1 border-black inline-block bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 font-semibold"
+      >
+        JassTracker Bedienung
+      </div>
+      <RouterLink
+        class="inline-block text-blue-600 py-2 px-4 hover:text-blue-800 font-semibold"
+        to="/help/jassRules"
+        >Jass Regeln</RouterLink
+      >
+    </help-tabs>
     <h1 class="text-5xl font-normal leading-normal mt-4">
       JassTracker Bedienung
     </h1>
@@ -121,9 +137,3 @@ h2 {
     </p>
   </div>
 </template>
-
-<script>
-export default {
-  name: "JassTrackerHelp",
-};
-</script>

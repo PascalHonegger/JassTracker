@@ -1,5 +1,20 @@
+<script setup lang="ts">
+import HelpTabs from "@/components/HelpTabs.vue";
+</script>
 <template>
   <div class="container mx-auto text-center">
+    <help-tabs class="flex border-b border-black mt-4">
+      <RouterLink
+        class="text-blue-600 inline-block py-2 px-4 hover:text-blue-800 font-semibold"
+        to="/help/jassTrackerHelp"
+        >JassTracker Bedienung</RouterLink
+      >
+      <div
+        class="-mb-px mr-1 border-black inline-block bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 font-semibold"
+      >
+        Jass Regeln
+      </div>
+    </help-tabs>
     <h1 class="text-5xl font-normal leading-normal mt-4">Jass Regeln</h1>
     <h2 class="text-4xl font-normal leading-normal mt-4">Spielablauf</h2>
     <div class="flex py-2">
@@ -80,9 +95,3 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: "JassRules",
-};
-</script>

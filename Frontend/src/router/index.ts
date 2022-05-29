@@ -20,12 +20,6 @@ const routes: Array<RouteRecordRaw> = [
     component: RegisterView,
   },
   {
-    path: "/help",
-    name: "help",
-    component: () =>
-      import(/* webpackChunkName: "help" */ "../views/HelpView.vue"),
-  },
-  {
     path: "/help/jassTrackerHelp",
     name: "jassTrackerHelp",
     component: () =>
