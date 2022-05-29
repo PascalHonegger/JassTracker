@@ -142,6 +142,15 @@ function backToOverview() {
     <button @click="openCreateGameDialog" class="btn btn-blue ml-2 mt-2">
       Neues Spiel erstellen
     </button>
+    <RouterLink
+      v-if="currentGame"
+      class="btn btn-blue ml-2 mt-2"
+      :to="{
+        name: 'game',
+        params: { tableId: route.params.tableId, gameId: currentGame.id },
+      }"
+      >Detaillierte Auswertung
+    </RouterLink>
     <GameItem v-if="currentGame" :game="currentGame" />
     <p v-else>Momentan läuft kein Spiel</p>
 

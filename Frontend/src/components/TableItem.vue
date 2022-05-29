@@ -45,7 +45,7 @@ function closeModal() {
     <icon
       @click="showModal"
       icon="trash"
-      classes="absolute top-2 right-2 z-10"
+      class="absolute top-2 right-2 z-10"
     ></icon>
     <GamePreview v-if="latestGame != null" :game="latestGame"></GamePreview>
   </RouterLink>
