@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { assertNonNullish } from "@/util/assert";
 
 import { useTableStore } from "@/store/table-store";
 import {
@@ -29,10 +30,7 @@ export const useGameStore = defineStore("game", {
       const tableStore = useTableStore();
       await tableStore.loadTable(tableId);
       const table = tableStore.getTableById(tableId);
-      if (table == null) {
-        alert(`Got unexpected null for tableId ${tableId}`);
-        return;
-      }
+      assertNonNullish(table, `Got unexpected null for tableId ${tableId}`);
       for (const gameId of table.gameIds) {
         await this.loadGame(tableId, gameId);
       }
@@ -41,10 +39,7 @@ export const useGameStore = defineStore("game", {
       const tableStore = useTableStore();
       await tableStore.loadTable(tableId);
       const table = tableStore.getTableById(tableId);
-      if (table == null) {
-        alert(`Got unexpected null for tableId ${tableId}`);
-        return;
-      }
+      assertNonNullish(table, `Got unexpected null for tableId ${tableId}`);
       if (table.loadedGames[gameId] == null) {
         const loadedGame = await getGame(gameId);
         this.addGameToExistingTable(tableId, loadedGame);
@@ -60,29 +55,20 @@ export const useGameStore = defineStore("game", {
     setCurrentGame(tableId: string, gameId: string) {
       const tableStore = useTableStore();
       const table = tableStore.getTableById(tableId);
-      if (table == null) {
-        alert(`Got unexpected null for tableId ${tableId}`);
-        return;
-      }
+      assertNonNullish(table, `Got unexpected null for tableId ${tableId}`);
       table.currentGameId = gameId;
     },
     setLatestGame(tableId: string, gameId: string) {
       const tableStore = useTableStore();
       const table = tableStore.getTableById(tableId);
-      if (table == null) {
-        alert(`Got unexpected null for tableId ${tableId}`);
-        return;
-      }
+      assertNonNullish(table, `Got unexpected null for tableId ${tableId}`);
       table.latestGameId = gameId;
     },
     addGameToExistingTable(tableId: string, game: WebGame) {
       const tableStore = useTableStore();
       const contractStore = useContractStore();
       const table = tableStore.getTableById(tableId);
-      if (table == null) {
-        alert(`Got unexpected null for tableId ${tableId}`);
-        return;
-      }
+      assertNonNullish(table, `Got unexpected null for tableId ${tableId}`);
       const rows = contractStore.emptyRows([
         game.team1.player1,
         game.team1.player2,
@@ -120,11 +106,10 @@ export const useGameStore = defineStore("game", {
               const teamMemberRound = row.rounds.find(
                 (r) => r.playerId === teamMember
               );
-              if (teamMemberRound == null) {
-                throw new Error(
-                  "Couldn't match player id to player, this should not happen"
-                );
-              }
+              assertNonNullish(
+                teamMemberRound,
+                "Couldn't match player id to player, this should not happen"
+              );
               teamMemberRound.type = RoundType.Locked;
             }
           }

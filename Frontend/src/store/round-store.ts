@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-
+import { assertNonNullish } from "@/util/assert";
 import { RoundType } from "@/types/types";
 import { WebCreateRound, WebRound } from "@/services/web-model";
 import {
@@ -9,41 +9,43 @@ import {
 } from "@/services/round-service";
 import { useGameStore } from "@/store/game-store";
 import { getCurrentPlayerOfGame } from "@/services/game-service";
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 export const useRoundStore = defineStore("round", {
   actions: {
     async createRound(round: WebCreateRound) {
       const gameStore = useGameStore();
-      if (gameStore.currentGame === undefined) {
-        alert("currentGame should not be undefined");
-        return;
-      }
+      assertNonNullish(
+        gameStore.currentGame,
+        "currentGame should not be undefined"
+      );
       try {
         const newRound = await createRound(round);
         await this.handleRoundCreateOrUpdate(newRound);
       } catch (e) {
-        alert("There was an error with creating round");
+        toast.error("Es gab ein Problem mit der Erstellung der Runde");
       }
     },
     async updateRound(round: WebRound) {
       const gameStore = useGameStore();
-      if (gameStore.currentGame === undefined) {
-        alert("currentGame should not be undefined");
-        return;
-      }
+      assertNonNullish(
+        gameStore.currentGame,
+        "currentGame should not be undefined"
+      );
       try {
         await updateRound(round.id, round);
         await this.handleRoundCreateOrUpdate(round);
       } catch (e) {
-        alert("There was an error with updating round");
+        toast.error("Es gab ein Problem mit der Aktuallisierung der Runde");
       }
     },
     async handleRoundCreateOrUpdate(round: WebRound) {
       const gameStore = useGameStore();
-      if (gameStore.currentGame === undefined) {
-        alert("currentGame should not be undefined");
-        return;
-      }
+      assertNonNullish(
+        gameStore.currentGame,
+        "currentGame should not be undefined"
+      );
       this.addRoundToCurrentGame(round);
       gameStore.currentGame.currentPlayer = await getCurrentPlayerOfGame(
         gameStore.currentGame.id
@@ -51,14 +53,14 @@ export const useRoundStore = defineStore("round", {
     },
     addRoundToCurrentGame(round: WebRound) {
       const gameStore = useGameStore();
-      if (gameStore.currentGame === undefined) {
-        alert("currentGame should not be undefined");
-        return;
-      }
+      assertNonNullish(
+        gameStore.currentGame,
+        "currentGame should not be undefined"
+      );
       gameStore.currentGame.rounds.push(round);
       const teamPartnerIndex = this.findTeamPartnerIndex(round.playerId);
       if (teamPartnerIndex === -1) {
-        alert("no team partner found, something's wrong I can feel it");
+        toast.error("Es wurde kein Team Partner gefunden");
         return;
       }
 
@@ -84,16 +86,16 @@ export const useRoundStore = defineStore("round", {
       contractId: string
     ) {
       const gameStore = useGameStore();
-      if (gameStore.currentGame === undefined) {
-        alert("currentGame should not be undefined");
-        return;
-      }
+      assertNonNullish(
+        gameStore.currentGame,
+        "currentGame should not be undefined"
+      );
       gameStore.currentGame.rounds = gameStore.currentGame.rounds.filter(
         (r) => r.id !== roundId
       );
       const teamPartnerIndex = this.findTeamPartnerIndex(playerId);
       if (teamPartnerIndex === -1) {
-        alert("no team partner found, something's wrong I can feel it");
+        toast.error("Es wurde kein Team Partner gefunden");
         return;
       }
       gameStore.currentGame.rows.forEach((row) => {
@@ -113,10 +115,10 @@ export const useRoundStore = defineStore("round", {
     },
     findTeamPartnerIndex(id: string): number {
       const gameStore = useGameStore();
-      if (gameStore.currentGame === undefined) {
-        alert("currentGame should not be undefined");
-        return -1;
-      }
+      assertNonNullish(
+        gameStore.currentGame,
+        "currentGame should not be undefined"
+      );
       switch (id) {
         case gameStore.currentGame.team1.player1.playerId:
           return 1;
@@ -137,10 +139,10 @@ export const useRoundStore = defineStore("round", {
       roundNumber: number
     ) {
       const gameStore = useGameStore();
-      if (gameStore.currentGame === undefined) {
-        alert("currentGame should not be undefined");
-        return;
-      }
+      assertNonNullish(
+        gameStore.currentGame,
+        "currentGame should not be undefined"
+      );
       this.removeRoundFromCurrentGame(roundId, playerId, contractId);
       try {
         await deleteRoundById(roundId);
@@ -149,16 +151,17 @@ export const useRoundStore = defineStore("round", {
           gameStore.currentGame.id
         );
       } catch (e) {
+        toast.error("Es gab ein Problem bei der Löschung der Runde");
         return false;
       }
       return true;
     },
     updateRoundNumbers(roundNumber: number) {
       const gameStore = useGameStore();
-      if (gameStore.currentGame === undefined) {
-        alert("currentGame should not be undefined");
-        return;
-      }
+      assertNonNullish(
+        gameStore.currentGame,
+        "currentGame should not be undefined"
+      );
       gameStore.currentGame.rounds.forEach((round) => {
         if (round.number > roundNumber) {
           round.number -= 1;

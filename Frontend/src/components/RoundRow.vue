@@ -3,11 +3,11 @@ import type { Round, Row } from "@/types/types";
 import { WebCreateRound, WebRound } from "@/services/web-model";
 import { useRoundStore } from "@/store/round-store";
 import { useContractStore } from "@/store/contract-store";
-
 import { useGameStore } from "@/store/game-store";
 import { storeToRefs } from "pinia";
 import ContractIcon from "./ContractIcon.vue";
 import ScoreInput from "@/components/ScoreInput.vue";
+import { assertNonNullish } from "@/util/assert";
 
 const roundStore = useRoundStore();
 const gameStore = useGameStore();
@@ -16,10 +16,10 @@ const { currentGame } = storeToRefs(gameStore);
 const contractStore = useContractStore();
 
 async function handleInput(score: number | undefined, round: Round) {
-  if (currentGame.value === undefined) {
-    alert("undefined table or game, this should not happen");
-    return;
-  }
+  assertNonNullish(
+    currentGame.value,
+    "undefined table or game, this should not happen"
+  );
   round.score = score ?? null;
   if (round.id) {
     if (score == null || isNaN(score)) {

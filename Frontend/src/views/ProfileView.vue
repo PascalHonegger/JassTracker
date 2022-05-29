@@ -5,9 +5,11 @@ import { usePlayerStore } from "@/store/player-store";
 import { storeToRefs } from "pinia";
 import router from "@/router";
 import WaitSpinner from "@/components/WaitSpinner.vue";
+import { useToast } from "vue-toastification";
 
 const authStore = useAuthStore();
 const playerStore = usePlayerStore();
+const toast = useToast();
 
 const password = "";
 const passwordConfirm = "";
@@ -18,6 +20,7 @@ const newDisplayName = ref(authStore.displayName ?? "");
 async function update() {
   loading.value = true;
   await playerStore.updateDisplayName(newDisplayName.value);
+  toast.success("Anzeigename erfolgreich aktuallisiert");
   loading.value = false;
 }
 
@@ -25,6 +28,7 @@ const { isGuest } = storeToRefs(authStore);
 
 async function deleteAccount() {
   await playerStore.deleteCurrentPlayerAccount;
+  toast.success("Spieler erfolgreich gelöscht");
   await router.push("/");
 }
 </script>
@@ -52,7 +56,7 @@ async function deleteAccount() {
         <label
           class="block mb-2 text-sm font-medium text-gray-900"
           for="displayname"
-          >Anzeige Name</label
+          >Anzeigename</label
         >
         <input
           autocomplete="nickname"

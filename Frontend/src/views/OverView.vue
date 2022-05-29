@@ -15,6 +15,14 @@ import {
 import CreateGame, { CreateNewGameForm } from "@/components/CreateGame.vue";
 import { useAuthStore } from "@/store/auth-store";
 import { useMetaStore } from "@/store/meta-store";
+import { useToast } from "vue-toastification";
+import {
+  minTableNameLength,
+  maxTableNameLength,
+  minDisplayNameLength,
+  maxDisplayNameLength,
+} from "@/util/constants";
+const toast = useToast();
 
 const router = useRouter();
 const tableStore = useTableStore();
@@ -54,6 +62,24 @@ onMounted(async () => {
 
 async function createNewTable() {
   creatingTable.value = true;
+  if (
+    newTableName.value.length < minTableNameLength ||
+    newTableName.value.length > maxTableNameLength
+  ) {
+    toast.error(
+      `Tischname muss zwischen ${minTableNameLength} und ${maxTableNameLength} Zeichen sein`
+    );
+    creatingTable.value = false;
+    return;
+  }
+  const validateTeamPlayersSuccess = await validatePlayers(newGame);
+  if (!validateTeamPlayersSuccess) {
+    toast.error(
+      `Spieler Alias muss zwischen ${minDisplayNameLength} und ${maxDisplayNameLength} Zeichen sein`
+    );
+    creatingTable.value = false;
+    return;
+  }
   const newTableId = await tableStore.createTable(newTableName.value);
   const createGame: WebCreateGame = {
     team1Player1: newGame.team1Player1,
@@ -63,7 +89,22 @@ async function createNewTable() {
     tableId: newTableId,
   };
   await gameStore.createGame(createGame);
+  toast.success(`Tisch ${newTableName.value} wurde erfolgreich erstellt`);
   await router.push({ name: "table", params: { tableId: newTableId } });
+}
+
+async function validatePlayers(game: CreateNewGameForm): Promise<boolean> {
+  let success = true;
+  Object.values(game).forEach((item) => {
+    if (
+      !item.displayName ||
+      item.displayName.length < minDisplayNameLength ||
+      item.displayName.length > maxDisplayNameLength
+    ) {
+      success = false;
+    }
+  });
+  return success;
 }
 
 function updatePlayer(

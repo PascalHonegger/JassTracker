@@ -4,9 +4,11 @@ import { useRouter } from "vue-router";
 import { computed, onMounted, ref } from "vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
 import LoginRegisterLayout from "@/components/LoginRegisterLayout.vue";
+import { useToast } from "vue-toastification";
 
 const authStore = useAuthStore();
 const router = useRouter();
+const toast = useToast();
 
 const registerLoading = ref<boolean>(false);
 const registerFailed = ref<boolean>(false);
@@ -33,6 +35,7 @@ async function register() {
     password.value
   );
   if (registerSuccessful) {
+    toast.success("Spieler wurde erfolgreich registriert");
     await router.push("/overview");
   } else {
     registerLoading.value = false;

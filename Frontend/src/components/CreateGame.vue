@@ -38,7 +38,7 @@ type PlayerRef = WebCreateGameParticipation & { name: string | null };
 const availablePlayers = computed<PlayerRef[]>(() => [
   ...props.existingPlayers.map<PlayerRef>((p) => ({
     ...p,
-    name: playerNameLookup.value[p.playerId] ?? null,
+    name: p.playerId ? playerNameLookup.value[p.playerId] : null,
   })),
 ]);
 

@@ -6,6 +6,7 @@ import {
   WebGameParticipation,
   WebRound,
 } from "@/services/web-model";
+import { assertNonNullish } from "@/util/assert";
 
 export const useContractStore = defineStore("contract", {
   state: () => ({
@@ -35,9 +36,10 @@ export const useContractStore = defineStore("contract", {
     getCalculatedScore(state) {
       return (round: WebRound | Round) => {
         const contract = state.contracts.find((c) => c.id === round.contractId);
-        if (contract === undefined) {
-          throw new Error(`Contract with ID ${round.contractId} not found`);
-        }
+        assertNonNullish(
+          contract,
+          `Contract with ID ${round.contractId} not found`
+        );
         return contract.multiplier * (round.score ?? 0);
       };
     },

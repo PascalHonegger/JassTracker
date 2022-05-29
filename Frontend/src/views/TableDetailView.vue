@@ -16,12 +16,14 @@ import GameItem from "@/components/GameItem.vue";
 import GameList, { NamedGame } from "@/components/GameList.vue";
 import { dateCompare } from "@/util/dates";
 import { useMetaStore } from "@/store/meta-store";
+import { useToast } from "vue-toastification";
 
 const router = useRouter();
 const route = useRoute();
 const tableStore = useTableStore();
 const gameStore = useGameStore();
 const metaStore = useMetaStore();
+const toast = useToast();
 
 const { currentTable, currentTableId } = storeToRefs(tableStore);
 const { currentGame } = storeToRefs(gameStore);
@@ -99,7 +101,7 @@ async function setCurrentTableId(newId: string | string[] | undefined) {
 async function createNewGame() {
   const tableId = currentTable.value?.id;
   if (tableId == null) {
-    alert("Can't create a game without a table!");
+    toast.error("Kein Tisch gefunden, ohne kann kein Spiel erstellt werden!");
     return;
   }
   const createGame: WebCreateGame = {
@@ -109,6 +111,7 @@ async function createNewGame() {
   creatingGame.value = true;
   const createdId = await gameStore.createGame(createGame);
   gameStore.setCurrentGame(tableId, createdId);
+  toast.success("Neues Spiel erfolgreich erstellt");
   isModalVisible.value = false;
   creatingGame.value = false;
 }
