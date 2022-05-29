@@ -20,7 +20,7 @@ const newDisplayName = ref(authStore.displayName ?? "");
 async function update() {
   loading.value = true;
   await playerStore.updateDisplayName(newDisplayName.value);
-  toast.success("Anzeige Name erfolgreich aktuallisiert");
+  toast.success("Anzeigename erfolgreich aktuallisiert");
   loading.value = false;
 }
 
@@ -56,7 +56,7 @@ async function deleteAccount() {
         <label
           class="block mb-2 text-sm font-medium text-gray-900"
           for="displayname"
-          >Anzeige Name</label
+          >Anzeigename</label
         >
         <input
           autocomplete="nickname"
