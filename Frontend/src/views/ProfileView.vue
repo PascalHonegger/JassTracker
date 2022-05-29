@@ -27,6 +27,8 @@ async function updateDisplayName() {
   loadingDisplayName.value = false;
 }
 async function updatePassword() {
+  confirmOldPasswordFailed.value = false;
+  confirmConfirmationFailed.value = false;
   loadingNewPassword.value = true;
   const updatePasswordSuccessful = await playerStore.updatePassword(
     oldPassword.value,
@@ -38,6 +40,9 @@ async function updatePassword() {
   }
   if (newPassword.value != passwordConfirm.value) {
     confirmConfirmationFailed.value = true;
+  }
+  if (updatePasswordSuccessful) {
+    await router.push("/overview");
   }
 }
 
@@ -148,6 +153,10 @@ async function deleteAccount() {
           v-model="passwordConfirm"
         />
       </div>
+      <div v-if="confirmConfirmationFailed" class="text-red-600 mt-4">
+        Die Bestätigung vom Passwort stimmt nicht mit dem neuen Passwort
+        überein!
+      </div>
       <button
         type="submit"
         :disabled="loadingNewPassword"
@@ -155,13 +164,8 @@ async function deleteAccount() {
         class="btn btn-blue self-center"
       >
         Passwort Ändern
-
         <WaitSpinner v-if="loadingNewPassword" size="small"></WaitSpinner>
       </button>
-      <div v-if="confirmConfirmationFailed" class="text-red-600 mt-4">
-        Die Bestätigung vom Passwort stimmt nicht mit dem neuen Passwort
-        überein!
-      </div>
     </form>
     <div v-if="!isGuest" class="p-4">
       <button @click="deleteAccount" class="btn btn-blue">Konto löschen</button>
