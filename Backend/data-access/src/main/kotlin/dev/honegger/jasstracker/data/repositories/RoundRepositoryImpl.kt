@@ -1,10 +1,10 @@
 package dev.honegger.jasstracker.data.repositories
 
-import dev.honegger.jasstracker.domain.Round
 import dev.honegger.jasstracker.data.database.tables.Round.ROUND
 import dev.honegger.jasstracker.data.database.tables.records.RoundRecord
-import dev.honegger.jasstracker.domain.repositories.RoundRepository
 import dev.honegger.jasstracker.data.withContext
+import dev.honegger.jasstracker.domain.Round
+import dev.honegger.jasstracker.domain.repositories.RoundRepository
 import java.util.*
 
 class RoundRepositoryImpl : RoundRepository {
@@ -18,6 +18,10 @@ class RoundRepositoryImpl : RoundRepository {
     )
     override fun getRoundOrNull(id: UUID): Round? = withContext {
         selectFrom(ROUND).where(ROUND.ID.eq(id)).fetchOne()?.toRound()
+    }
+
+    override fun getAllRoundsByPlayer(playerId: UUID): List<Round> = withContext{
+        selectFrom(ROUND).where(ROUND.PLAYER_ID.eq(playerId)).fetch().map { it.toRound() }
     }
 
     override fun updateRound(updatedRound: Round): Unit = withContext {
