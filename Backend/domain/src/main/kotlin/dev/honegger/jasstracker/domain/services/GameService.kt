@@ -50,6 +50,13 @@ class GameServiceImpl(
         team2Player1: CreateGameParticipation,
         team2Player2: CreateGameParticipation,
     ): Game {
+        val playerIds = listOfNotNull(
+            team1Player1.playerId,
+            team1Player2.playerId,
+            team2Player1.playerId,
+            team2Player2.playerId
+        )
+        require(playerIds.size == playerIds.toSet().size) { "Players in a game must be unique" }
         val newGame = Game(
             id = UUID.randomUUID(),
             startTime = clock.now().toLocalDateTime(TimeZone.UTC),
@@ -57,7 +64,6 @@ class GameServiceImpl(
             team1 = Team(createParticipation(team1Player1), createParticipation(team1Player2)),
             team2 = Team(createParticipation(team2Player1), createParticipation(team2Player2)),
         )
-
         log.info { "Saving new game $newGame for table $tableId" }
         gameRepository.saveGame(newGame, tableId)
         return newGame

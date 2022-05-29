@@ -75,6 +75,16 @@ class GameServiceImplTest {
     }
 
     @Test
+    fun `createGame throws IllegalArgumentException if playerIds are not unique`() {
+        val duplicatePlayerId = UUID.randomUUID()
+        val team1Player1 = CreateGameParticipation(duplicatePlayerId, "T1P1")
+        val team1Player2 = CreateGameParticipation(duplicatePlayerId, "T1P2")
+        val team2Player1 = CreateGameParticipation(UUID.randomUUID(), "T2P1")
+        val team2Player2 = CreateGameParticipation(null, "T2P2")
+        assertThrows<IllegalArgumentException> { service.createGame(dummySession, UUID.randomUUID(), team1Player1, team1Player2, team2Player1, team2Player2) }
+    }
+
+    @Test
     fun `deleteGameById deletes game in repository`() {
         val dummyGame = createDummyGame()
         val dummyGameId = dummyGame.id
