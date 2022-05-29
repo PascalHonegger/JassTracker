@@ -66,13 +66,17 @@ async function createNewTable() {
     newTableName.value.length < minTableNameLength ||
     newTableName.value.length > maxTableNameLength
   ) {
-    toast.error("Tischname muss zwischen 2 und 30 Zeichen sein");
+    toast.error(
+      `Tischname muss zwischen ${minTableNameLength} und ${maxTableNameLength} Zeichen sein`
+    );
     creatingTable.value = false;
     return;
   }
   const validateTeamPlayersSuccess = await validatePlayers(newGame);
   if (!validateTeamPlayersSuccess) {
-    toast.error("Spieler benötigt einen Alias");
+    toast.error(
+      `Spieler Alias muss zwischen ${minDisplayNameLength} und ${maxDisplayNameLength} Zeichen sein`
+    );
     creatingTable.value = false;
     return;
   }
