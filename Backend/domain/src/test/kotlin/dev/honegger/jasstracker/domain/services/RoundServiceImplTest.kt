@@ -332,6 +332,41 @@ class RoundServiceImplTest {
     }
 
     @Test
+    fun `createRound throws if game is already completed`() {
+        val dummyGameId = UUID.randomUUID()
+        val p1 = dummySession.playerId
+        val p2 = UUID.randomUUID()
+        val p3 = UUID.randomUUID()
+        val p4 = UUID.randomUUID()
+        val contractId = UUID.randomUUID()
+        every { tableRepository.getTableByGameIdOrNull(dummyGameId) } returns Table(
+            id = UUID.randomUUID(),
+            name = "dummy",
+            ownerId = dummySession.playerId,
+            games = listOf(
+                Game(
+                    id = dummyGameId,
+                    startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+                    endTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+                    team1 = Team(GameParticipation(p1, "T1P1"), GameParticipation(p2, "T1P2")),
+                    team2 = Team(GameParticipation(p3, "T2P1"), GameParticipation(p4, "T2P2")),
+                    rounds = emptyList()
+                )
+            )
+        )
+
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.createRound(dummySession, 1, 100, dummyGameId, p2, contractId)
+        }
+        assertEquals("Cannot add round to completed game", thrown.message)
+
+        verify(exactly = 1) {
+            contractRepository.contractExists(contractId)
+            tableRepository.getTableByGameIdOrNull(dummyGameId)
+        }
+    }
+
+    @Test
     fun `deleteRoundById removes a created round`() {
         val dummyRound = Round(UUID.randomUUID(), 1, 157, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID())
         every {
@@ -373,7 +408,33 @@ class RoundServiceImplTest {
         val thrown = assertThrows<UnauthorizedException> {
             service.deleteRoundById(dummySession, dummyRound.id)
         }
-        assertEquals("Player can only delete rounds on owned table", thrown.message)
+        assertEquals("Player can only delete round on owned table", thrown.message)
+
+        verify(exactly = 1) {
+            roundRepository.getRoundOrNull(dummyRound.id)
+            tableRepository.getTableByGameIdOrNull(dummyRound.gameId)
+        }
+    }
+
+    @Test
+    fun `deleteRoundById throws if game is already complete`() {
+        val dummyRound = Round(UUID.randomUUID(), 1, 157, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID())
+        every {
+            roundRepository.getRoundOrNull(dummyRound.id)
+        } returns dummyRound
+
+        every {
+            tableRepository.getTableByGameIdOrNull(dummyRound.gameId)
+        } returns createDummyTable(dummyRound, dummySession.playerId, true)
+
+        every {
+            roundRepository.deleteRoundById(dummyRound.id)
+        } returns true
+
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.deleteRoundById(dummySession, dummyRound.id)
+        }
+        assertEquals("Player cannot delete round of completed game", thrown.message)
 
         verify(exactly = 1) {
             roundRepository.getRoundOrNull(dummyRound.id)
@@ -457,7 +518,7 @@ class RoundServiceImplTest {
         val thrown = assertThrows<UnauthorizedException> {
             service.updateRound(dummySession, updatedRound)
         }
-        assertEquals("Player can only update rounds on owned table", thrown.message)
+        assertEquals("Player can only update round on owned table", thrown.message)
 
         verify(exactly = 1) {
             roundRepository.getRoundOrNull(id)
@@ -465,14 +526,44 @@ class RoundServiceImplTest {
         }
     }
 
-    private fun createDummyTable(round: Round, ownerId: UUID) = Table(
+    @Test
+    fun `updateRound throws if game is already completed`() {
+        val id = UUID.randomUUID()
+        val gameId = UUID.randomUUID()
+        val oldRound = Round(id, 1, 80, gameId, UUID.randomUUID(), UUID.randomUUID())
+        val updatedRound = oldRound.copy(score = 95)
+
+        every {
+            roundRepository.getRoundOrNull(id)
+        } returns oldRound
+
+        every {
+            tableRepository.getTableByGameIdOrNull(gameId)
+        } returns createDummyTable(oldRound, dummySession.playerId, true)
+
+        every {
+            roundRepository.updateRound(updatedRound)
+        } just Runs
+
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.updateRound(dummySession, updatedRound)
+        }
+        assertEquals("Player cannot update round of completed game", thrown.message)
+
+        verify(exactly = 1) {
+            roundRepository.getRoundOrNull(id)
+            tableRepository.getTableByGameIdOrNull(gameId)
+        }
+    }
+
+    private fun createDummyTable(round: Round, ownerId: UUID, isGameCompleted: Boolean = false) = Table(
         id = UUID.randomUUID(),
         name = "dummy",
         ownerId = ownerId,
         listOf(Game(
             id = round.gameId,
             startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
-            endTime = null,
+            endTime = if (isGameCompleted) Clock.System.now().toLocalDateTime(TimeZone.UTC) else null,
             rounds = listOf(round),
             team1 = Team(GameParticipation(ownerId, "T1P1"), GameParticipation(round.playerId, "T1P2")),
             team2 = Team(GameParticipation(UUID.randomUUID(), "T2P1"), GameParticipation(UUID.randomUUID(), "T2P2"))

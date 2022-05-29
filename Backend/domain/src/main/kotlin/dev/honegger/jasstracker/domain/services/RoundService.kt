@@ -47,6 +47,7 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
         validateCurrentPlayer(table.ownerId, session) { "Only table owner can add new rounds to game" }
 
         val game = table.games.single { it.id == gameId }
+        require(game.endTime == null) { "Cannot add round to completed game" }
         val team = getTeamOfPlayer(game, playerId)
 
         require(game.rounds.none { it.number == number }) { "Round nr. $number was already played" }
@@ -79,19 +80,21 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
         require(updatedRound.score in 0..157) { "Score must be between 0 and 157" }
         val existingRound = roundRepository.getRoundOrNull(updatedRound.id)
         validateExists(existingRound) { "Player can only update a round which exists" }
-        validateOwner(session, existingRound) { "Player can only update rounds on owned table" }
+        validateTable(session, existingRound, "update")
         roundRepository.updateRound(existingRound.copy(score = updatedRound.score))
     }
 
     override fun deleteRoundById(session: PlayerSession, id: UUID): Boolean {
         val existingRound = roundRepository.getRoundOrNull(id) ?: return false
-        validateOwner(session, existingRound) { "Player can only delete rounds on owned table" }
+        validateTable(session, existingRound, "delete")
         return roundRepository.deleteRoundById(id)
     }
 
-    private fun validateOwner(session: PlayerSession, round: Round, lazyMessage: () -> String) {
+    private fun validateTable(session: PlayerSession, round: Round, action: String) {
         val table = tableRepository.getTableByGameIdOrNull(round.gameId)
         checkNotNull(table)
-        validateCurrentPlayer(table.ownerId, session, lazyMessage)
+        validateCurrentPlayer(table.ownerId, session) { "Player can only $action round on owned table" }
+        val game = table.games.single { it.id == round.gameId }
+        require(game.endTime == null) { "Player cannot $action round of completed game" }
     }
 }
