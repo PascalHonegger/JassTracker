@@ -91,7 +91,7 @@ async function deleteAccount() {
         v-if="!isGuest"
         class="btn btn-blue self-center"
       >
-        Anzeige Name Aktuallisieren
+        Anzeigename Aktuallisieren
 
         <WaitSpinner v-if="loadingDisplayName" size="small"></WaitSpinner>
       </button>
@@ -159,7 +159,7 @@ async function deleteAccount() {
         <WaitSpinner v-if="loadingNewPassword" size="small"></WaitSpinner>
       </button>
       <div v-if="confirmConfirmationFailed" class="text-red-600 mt-4">
-        Die Bestätigung vom Passwort ist stimmt nicht mit dem neuen Passwort
+        Die Bestätigung vom Passwort stimmt nicht mit dem neuen Passwort
         überein!
       </div>
     </form>
