@@ -76,7 +76,7 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
         session: PlayerSession,
         updatedRound: Round,
     ) {
-        check(updatedRound.score in 0..157) { "Score must be between 0 and 157" }
+        require(updatedRound.score in 0..157) { "Score must be between 0 and 157" }
         val existingRound = roundRepository.getRoundOrNull(updatedRound.id)
         validateExists(existingRound) { "Player can only update a round which exists" }
         validateOwner(session, existingRound) { "Player can only update rounds on owned table" }

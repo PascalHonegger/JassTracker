@@ -410,6 +410,32 @@ class RoundServiceImplTest {
     }
 
     @Test
+    fun `updateRound throws if score is below 0`() {
+        val id = UUID.randomUUID()
+        val gameId = UUID.randomUUID()
+        val oldRound = Round(id, 1, 80, gameId, UUID.randomUUID(), UUID.randomUUID())
+        val updatedRound = oldRound.copy(score = -1)
+
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.updateRound(dummySession, updatedRound)
+        }
+        assertEquals("Score must be between 0 and 157", thrown.message)
+    }
+
+    @Test
+    fun `updateRound throws if score is above 157`() {
+        val id = UUID.randomUUID()
+        val gameId = UUID.randomUUID()
+        val oldRound = Round(id, 1, 80, gameId, UUID.randomUUID(), UUID.randomUUID())
+        val updatedRound = oldRound.copy(score = 158)
+
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.updateRound(dummySession, updatedRound)
+        }
+        assertEquals("Score must be between 0 and 157", thrown.message)
+    }
+
+    @Test
     fun `updateRound throws if table is not owned`() {
         val id = UUID.randomUUID()
         val gameId = UUID.randomUUID()
