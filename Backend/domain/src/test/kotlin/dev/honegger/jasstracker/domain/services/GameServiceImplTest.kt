@@ -45,6 +45,9 @@ class GameServiceImplTest {
         val team1Player2 = CreateGameParticipation(null, "T1P2")
         val team2Player1 = CreateGameParticipation(null, "T2P1")
         val team2Player2 = CreateGameParticipation(null, "T2P2")
+
+        every { tableRepository.getTableOrNull(dummyTableId) } returns Table(dummyTableId, "Dummy Table", dummySession.playerId, emptyList())
+
         val created = service.createGame(
             dummySession, dummyTableId,
             team1Player1,
@@ -67,6 +70,7 @@ class GameServiceImplTest {
         assertEquals(GameParticipation(createdPlayer3.id, "T2P2"), created.team2.player2)
         assertEquals(dummyTableId, passedTableId.captured)
         verify(exactly = 1) {
+            tableRepository.getTableOrNull(dummyTableId)
             gameRepository.saveGame(any(), any())
             playerRepository.savePlayer(createdPlayer1)
             playerRepository.savePlayer(createdPlayer2)
@@ -93,6 +97,20 @@ class GameServiceImplTest {
         val team2Player2 = CreateGameParticipation(null, "T2P2")
         every { tableRepository.getTableOrNull(dummyTableId) } returns null
         assertThrows<NotFoundException> { service.createGame(dummySession, dummyTableId, team1Player1, team1Player2, team2Player1, team2Player2) }
+        verify(exactly = 1) {
+            tableRepository.getTableOrNull(dummyTableId)
+        }
+    }
+
+    @Test
+    fun `createGame throws UnauthorizedException if table is not owned by current player`() {
+        val dummyTableId = UUID.randomUUID()
+        val team1Player1 = CreateGameParticipation(UUID.randomUUID(), "T1P1")
+        val team1Player2 = CreateGameParticipation(null, "T1P2")
+        val team2Player1 = CreateGameParticipation(null, "T2P1")
+        val team2Player2 = CreateGameParticipation(null, "T2P2")
+        every { tableRepository.getTableOrNull(dummyTableId) } returns Table(dummyTableId, "Dummy Table", UUID.randomUUID(), emptyList())
+        assertThrows<UnauthorizedException> { service.createGame(dummySession, dummyTableId, team1Player1, team1Player2, team2Player1, team2Player2) }
         verify(exactly = 1) {
             tableRepository.getTableOrNull(dummyTableId)
         }
