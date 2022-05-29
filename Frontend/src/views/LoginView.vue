@@ -35,6 +35,11 @@ async function login() {
     loginFailed.value = true;
   }
 }
+async function loginAsGuest() {
+  loginAsGuestLoading.value = true;
+  await authStore.guestAccess();
+  await router.push("/overview");
+}
 </script>
 
 <template>
@@ -87,6 +92,17 @@ async function login() {
         </div>
       </form>
     </div>
+    <p>------ oder -----</p>
+    <button
+      type="button"
+      @click="loginAsGuest"
+      :disabled="loading"
+      class="btn btn-blue self-center my-8"
+    >
+      Als Gast spielen
+
+      <WaitSpinner v-if="loginAsGuestLoading" size="small"></WaitSpinner>
+    </button>
     <div class="mb-auto mx-1">
       <p>
         Neu beim JassTracker?
