@@ -16,7 +16,12 @@ import CreateGame, { CreateNewGameForm } from "@/components/CreateGame.vue";
 import { useAuthStore } from "@/store/auth-store";
 import { useMetaStore } from "@/store/meta-store";
 import { useToast } from "vue-toastification";
-import { minTableNameLength, maxTableNameLength } from "@/util/constants";
+import {
+  minTableNameLength,
+  maxTableNameLength,
+  minDisplayNameLength,
+  maxDisplayNameLength,
+} from "@/util/constants";
 const toast = useToast();
 
 const router = useRouter();
@@ -87,7 +92,11 @@ async function createNewTable() {
 async function validatePlayers(game: CreateNewGameForm): Promise<boolean> {
   let success = true;
   Object.values(game).forEach((item) => {
-    if (!item.displayName) {
+    if (
+      !item.displayName ||
+      item.displayName.length < minDisplayNameLength ||
+      item.displayName.length > maxDisplayNameLength
+    ) {
       success = false;
     }
   });
