@@ -34,4 +34,8 @@ class ContractRepositoryImpl : ContractRepository {
     override fun getContractOrNull(id: UUID): Contract? = withContext {
         selectFrom(CONTRACT).where(CONTRACT.ID.eq(id)).fetchOne()?.toContract()
     }
+
+    override fun contractExists(id: UUID): Boolean = withContext {
+        fetchExists(selectFrom(CONTRACT).where(CONTRACT.ID.eq(id)))
+    }
 }

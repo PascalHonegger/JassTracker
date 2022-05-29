@@ -1,7 +1,9 @@
 package dev.honegger.jasstracker.domain.services
 
+import dev.honegger.jasstracker.domain.Game
 import dev.honegger.jasstracker.domain.Round
 import dev.honegger.jasstracker.domain.PlayerSession
+import dev.honegger.jasstracker.domain.repositories.ContractRepository
 import dev.honegger.jasstracker.domain.repositories.RoundRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
 import dev.honegger.jasstracker.domain.util.validateCurrentPlayer
@@ -25,7 +27,7 @@ interface RoundService {
 
 private val log = KotlinLogging.logger { }
 
-class RoundServiceImpl(private val roundRepository: RoundRepository, private val tableRepository: TableRepository) :
+class RoundServiceImpl(private val roundRepository: RoundRepository, private val tableRepository: TableRepository, private val contractRepository: ContractRepository) :
     RoundService {
     override fun createRound(
         session: PlayerSession,
@@ -35,12 +37,20 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
         playerId: UUID,
         contractId: UUID,
     ): Round {
-        check(score in 0..157) { "Score must be between 0 and 157" }
+        require(score in 0..157) { "Score must be between 0 and 157" }
+        require(number in 1..20) { "Number must be between 1 and 20" }
 
-        // Santity checks:
-        // - contract is valid and not done by other team member
-        // - playerId is part of game
-        // - ...
+        require(contractRepository.contractExists(contractId)) { "Contract $contractId does not exist" }
+
+        val table = tableRepository.getTableByGameIdOrNull(gameId)
+        validateExists(table) { "Game $gameId does not exist" }
+        validateCurrentPlayer(table.ownerId, session) { "Only table owner can add new rounds to game" }
+
+        val game = table.games.single { it.id == gameId }
+        val team = getTeamOfPlayer(game, playerId)
+
+        require(game.rounds.none { it.number == number }) { "Round nr. $number was already played" }
+        require(game.rounds.none { it.playerId in team && it.contractId == contractId }) { "Contract $contractId was already played by team member" }
 
         val newRound = Round(
             id = UUID.randomUUID(),
@@ -51,11 +61,15 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
             contractId = contractId,
         )
 
-        // TODO verify round is part of game / table which is owned by current user
-
         log.info { "Saving new round $newRound" }
         roundRepository.saveRound(newRound)
         return newRound
+    }
+
+    private fun getTeamOfPlayer(game: Game, playerId: UUID) = when (playerId) {
+        in game.team1 -> game.team1
+        in game.team2 -> game.team2
+        else -> throw IllegalArgumentException("Player $playerId is not in game ${game.id}")
     }
 
     override fun updateRound(

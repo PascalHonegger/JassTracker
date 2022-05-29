@@ -1,6 +1,9 @@
 package dev.honegger.jasstracker.domain.services
 
 import dev.honegger.jasstracker.domain.*
+import dev.honegger.jasstracker.domain.exceptions.NotFoundException
+import dev.honegger.jasstracker.domain.exceptions.UnauthorizedException
+import dev.honegger.jasstracker.domain.repositories.ContractRepository
 import dev.honegger.jasstracker.domain.repositories.RoundRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
 import io.mockk.*
@@ -14,7 +17,8 @@ import kotlin.test.*
 class RoundServiceImplTest {
     private val roundRepository = mockk<RoundRepository>()
     private val tableRepository = mockk<TableRepository>()
-    private val service = RoundServiceImpl(roundRepository, tableRepository)
+    private val contractRepository = mockk<ContractRepository>()
+    private val service = RoundServiceImpl(roundRepository, tableRepository, contractRepository)
     private val dummySession = PlayerSession(UUID.randomUUID(), false, "dummy", "Dummy")
     private val passedRound = slot<Round>()
 
@@ -23,11 +27,12 @@ class RoundServiceImplTest {
         clearMocks(roundRepository, tableRepository)
         passedRound.clear()
         every { roundRepository.saveRound(capture(passedRound)) } just Runs
+        every { contractRepository.contractExists(any()) } returns true
     }
 
     @AfterTest
     fun teardown() {
-        confirmVerified(roundRepository, tableRepository)
+        confirmVerified(roundRepository, tableRepository, contractRepository)
     }
 
     @Test
@@ -35,20 +40,24 @@ class RoundServiceImplTest {
         val dummyNum = 1
         val dummyScore = 150
         val dummyGame = UUID.randomUUID()
-        val dummyPlayer = UUID.randomUUID()
+        val dummyPlayer = dummySession.playerId
         val dummyContract = UUID.randomUUID()
+        val dummyTable = UUID.randomUUID()
 
         every { tableRepository.getTableByGameIdOrNull(dummyGame) } returns Table(
-            id = UUID.randomUUID(),
+            id = dummyTable,
             name = "Foo",
-            ownerId = dummyPlayer,
+            ownerId = dummySession.playerId,
             games = listOf(
                 Game(
                     id = dummyGame,
                     startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
                     rounds = emptyList(),
-                    team1 = Team(GameParticipation(UUID.randomUUID(), "p1"), GameParticipation(UUID.randomUUID(), "p2")),
-                    team2 = Team(GameParticipation(UUID.randomUUID(), "p3"), GameParticipation(UUID.randomUUID(), "p4")),
+                    team1 = Team(GameParticipation(dummyPlayer, "p1"), GameParticipation(dummySession.playerId, "p2")),
+                    team2 = Team(
+                        GameParticipation(UUID.randomUUID(), "p3"),
+                        GameParticipation(UUID.randomUUID(), "p4")
+                    ),
                 )
             )
         )
@@ -64,36 +73,262 @@ class RoundServiceImplTest {
         assertEquals(dummyContract, created.contractId)
 
         verify(exactly = 1) {
+            contractRepository.contractExists(dummyContract)
+            tableRepository.getTableByGameIdOrNull(dummyGame)
             roundRepository.saveRound(any())
         }
     }
 
     @Test
     fun `createRound fails with score over 157`() {
-        val thrown = assertThrows<IllegalStateException> {
+        val thrown = assertThrows<IllegalArgumentException> {
             service.createRound(
                 session = dummySession,
-                number = 0,
+                number = 1,
                 score = 158,
                 gameId = UUID.randomUUID(),
                 playerId = UUID.randomUUID(),
-                contractId = UUID.randomUUID())
+                contractId = UUID.randomUUID()
+            )
         }
         assertEquals("Score must be between 0 and 157", thrown.message)
     }
 
     @Test
     fun `createRound fails with score below 0`() {
-        val thrown = assertThrows<IllegalStateException> {
+        val thrown = assertThrows<IllegalArgumentException> {
             service.createRound(
                 session = dummySession,
-                number = 0,
+                number = 1,
                 score = -1,
                 gameId = UUID.randomUUID(),
                 playerId = UUID.randomUUID(),
-                contractId = UUID.randomUUID())
+                contractId = UUID.randomUUID()
+            )
         }
         assertEquals("Score must be between 0 and 157", thrown.message)
+    }
+
+    @Test
+    fun `createRound fails with number below 1`() {
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.createRound(
+                dummySession,
+                number = 0,
+                score = 100,
+                gameId = UUID.randomUUID(),
+                playerId = UUID.randomUUID(),
+                contractId = UUID.randomUUID()
+            )
+        }
+        assertEquals("Number must be between 1 and 20", thrown.message)
+    }
+
+    @Test
+    fun `createRound fails with number above 20`() {
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.createRound(
+                dummySession,
+                number = 21,
+                score = 100,
+                gameId = UUID.randomUUID(),
+                playerId = UUID.randomUUID(),
+                contractId = UUID.randomUUID()
+            )
+        }
+        assertEquals("Number must be between 1 and 20", thrown.message)
+    }
+
+
+    @Test
+    fun `createRound throws if contract does not exist`() {
+        val dummyContractId = UUID.randomUUID()
+        every { contractRepository.contractExists(dummyContractId) } returns false
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.createRound(
+                dummySession,
+                number = 1,
+                score = 100,
+                gameId = UUID.randomUUID(),
+                playerId = UUID.randomUUID(),
+                contractId = dummyContractId
+            )
+        }
+        assertEquals("Contract $dummyContractId does not exist", thrown.message)
+        verify(exactly = 1) {
+            contractRepository.contractExists(dummyContractId)
+        }
+    }
+
+    @Test
+    fun `createRound throws if game does not exist`() {
+        val dummyGameId = UUID.randomUUID()
+        every { tableRepository.getTableByGameIdOrNull(dummyGameId) } returns null
+        val thrown = assertThrows<NotFoundException> {
+            service.createRound(
+                dummySession,
+                number = 1,
+                score = 100,
+                gameId = dummyGameId,
+                playerId = UUID.randomUUID(),
+                contractId = UUID.randomUUID()
+            )
+        }
+        assertEquals("Game $dummyGameId does not exist", thrown.message)
+        verify(exactly = 1) {
+            contractRepository.contractExists(any())
+            tableRepository.getTableByGameIdOrNull(dummyGameId)
+        }
+    }
+
+    @Test
+    fun `createRound throws if table is not owned`() {
+        val dummyGameId = UUID.randomUUID()
+        every { tableRepository.getTableByGameIdOrNull(dummyGameId) } returns Table(
+            id = UUID.randomUUID(),
+            name = "dummy",
+            ownerId = UUID.randomUUID(),
+            games = listOf(
+                Game(
+                    id = dummyGameId,
+                    startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+                    endTime = null,
+                    team1 = Team(GameParticipation(dummySession.playerId, "T1P1"), GameParticipation(UUID.randomUUID(), "T1P2")),
+                    team2 = Team(GameParticipation(UUID.randomUUID(), "T2P1"), GameParticipation(UUID.randomUUID(), "T2P2")),
+                    rounds = emptyList()
+                )
+            )
+        )
+        val thrown = assertThrows<UnauthorizedException> {
+            service.createRound(
+                dummySession,
+                number = 1,
+                score = 100,
+                gameId = dummyGameId,
+                playerId = UUID.randomUUID(),
+                contractId = UUID.randomUUID()
+            )
+        }
+        assertEquals("Only table owner can add new rounds to game", thrown.message)
+        verify(exactly = 1) {
+            contractRepository.contractExists(any())
+            tableRepository.getTableByGameIdOrNull(dummyGameId)
+        }
+    }
+
+    @Test
+    fun `createRound throws if player is not in game`() {
+        val dummyGameId = UUID.randomUUID()
+        val dummyPlayerId = UUID.randomUUID()
+        every { tableRepository.getTableByGameIdOrNull(dummyGameId) } returns Table(
+            id = UUID.randomUUID(),
+            name = "dummy",
+            ownerId = dummySession.playerId,
+            games = listOf(
+                Game(
+                    id = dummyGameId,
+                    startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+                    endTime = null,
+                    team1 = Team(GameParticipation(dummySession.playerId, "T1P1"), GameParticipation(UUID.randomUUID(), "T1P2")),
+                    team2 = Team(GameParticipation(UUID.randomUUID(), "T2P1"), GameParticipation(UUID.randomUUID(), "T2P2")),
+                    rounds = emptyList()
+                )
+            )
+        )
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.createRound(
+                dummySession,
+                number = 1,
+                score = 100,
+                gameId = dummyGameId,
+                playerId = dummyPlayerId,
+                contractId = UUID.randomUUID()
+            )
+        }
+        assertEquals("Player $dummyPlayerId is not in game $dummyGameId", thrown.message)
+        verify(exactly = 1) {
+            contractRepository.contractExists(any())
+            tableRepository.getTableByGameIdOrNull(dummyGameId)
+        }
+    }
+
+    @Test
+    fun `createRound throws if round number is duplicate`() {
+        val dummyGameId = UUID.randomUUID()
+        val p1 = dummySession.playerId
+        val p2 = UUID.randomUUID()
+        val p3 = UUID.randomUUID()
+        val p4 = UUID.randomUUID()
+        every { tableRepository.getTableByGameIdOrNull(dummyGameId) } returns Table(
+            id = UUID.randomUUID(),
+            name = "dummy",
+            ownerId = dummySession.playerId,
+            games = listOf(
+                Game(
+                    id = dummyGameId,
+                    startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+                    endTime = null,
+                    team1 = Team(GameParticipation(p1, "T1P1"), GameParticipation(p2, "T1P2")),
+                    team2 = Team(GameParticipation(p3, "T2P1"), GameParticipation(p4, "T2P2")),
+                    rounds = listOf(Round(id = UUID.randomUUID(), number = 1, score = 100, gameId = dummyGameId, playerId = p3, contractId = UUID.randomUUID()))
+                )
+            )
+        )
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.createRound(
+                dummySession,
+                number = 1,
+                score = 100,
+                gameId = dummyGameId,
+                playerId = p2,
+                contractId = UUID.randomUUID()
+            )
+        }
+        assertEquals("Round nr. 1 was already played", thrown.message)
+        verify(exactly = 1) {
+            contractRepository.contractExists(any())
+            tableRepository.getTableByGameIdOrNull(dummyGameId)
+        }
+    }
+
+    @Test
+    fun `createRound throws if contract was already played by team member`() {
+        val dummyGameId = UUID.randomUUID()
+        val p1 = dummySession.playerId
+        val p2 = UUID.randomUUID()
+        val p3 = UUID.randomUUID()
+        val p4 = UUID.randomUUID()
+        val contractId = UUID.randomUUID()
+        every { tableRepository.getTableByGameIdOrNull(dummyGameId) } returns Table(
+            id = UUID.randomUUID(),
+            name = "dummy",
+            ownerId = dummySession.playerId,
+            games = listOf(
+                Game(
+                    id = dummyGameId,
+                    startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+                    endTime = null,
+                    team1 = Team(GameParticipation(p1, "T1P1"), GameParticipation(p2, "T1P2")),
+                    team2 = Team(GameParticipation(p3, "T2P1"), GameParticipation(p4, "T2P2")),
+                    rounds = listOf(Round(id = UUID.randomUUID(), number = 1, score = 100, gameId = dummyGameId, playerId = p1, contractId = contractId))
+                )
+            )
+        )
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.createRound(
+                dummySession,
+                number = 2,
+                score = 100,
+                gameId = dummyGameId,
+                playerId = p2,
+                contractId = contractId
+            )
+        }
+        assertEquals("Contract $contractId was already played by team member", thrown.message)
+        verify(exactly = 1) {
+            contractRepository.contractExists(any())
+            tableRepository.getTableByGameIdOrNull(dummyGameId)
+        }
     }
 
     @Test
@@ -153,7 +388,7 @@ class RoundServiceImplTest {
 
         service.updateRound(dummySession, updatedRound)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             roundRepository.getRoundOrNull(id)
             roundRepository.updateRound(updatedRound)
         }
@@ -175,7 +410,7 @@ class RoundServiceImplTest {
 
         service.updateRound(dummySession, updatedRound)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             roundRepository.getRoundOrNull(id)
             roundRepository.updateRound(updatedRound)
         }

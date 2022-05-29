@@ -19,14 +19,14 @@ data class Game(
 data class Team(
     val player1: GameParticipation,
     val player2: GameParticipation,
-)
+) {
+    operator fun contains(playerId: UUID) = player1.playerId == playerId || player2.playerId == playerId
+}
 
 data class GameParticipation(
     val playerId: UUID,
     val displayName: String,
 )
-
-operator fun Team.contains(playerId: UUID): Boolean = player1.playerId == playerId || player2.playerId == playerId
 
 /**
  * Returns the players whose turn it is.

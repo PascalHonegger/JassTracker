@@ -46,7 +46,7 @@ fun Application.module() {
         val gameService = GameServiceImpl(gameRepository, tableRepository, playerRepository)
         val tableService = TableServiceImpl(tableRepository)
         val roundRepository = RoundRepositoryImpl()
-        val roundService = RoundServiceImpl(roundRepository, tableRepository)
+        val roundService = RoundServiceImpl(roundRepository, tableRepository, contractRepository)
         val contractService = ContractServiceImpl(contractRepository)
         val playerService = PlayerServiceImpl(playerRepository, passwordHashService, authTokenService)
         val statisticsService = StatisticsServiceImpl(roundRepository, tableRepository, contractRepository)
