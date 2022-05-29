@@ -57,6 +57,8 @@ class GameServiceImpl(
             team2Player2.playerId
         )
         require(playerIds.size == playerIds.toSet().size) { "Players in a game must be unique" }
+        val table = tableRepository.getTableOrNull(tableId)
+        validateExists(table) { "Table $tableId does not exist" }
         val newGame = Game(
             id = UUID.randomUUID(),
             startTime = clock.now().toLocalDateTime(TimeZone.UTC),

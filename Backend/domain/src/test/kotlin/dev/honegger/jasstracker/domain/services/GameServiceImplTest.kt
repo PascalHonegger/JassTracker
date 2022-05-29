@@ -85,6 +85,20 @@ class GameServiceImplTest {
     }
 
     @Test
+    fun `createGame throws NotFoundException if table does not exist`() {
+        val dummyTableId = UUID.randomUUID()
+        val team1Player1 = CreateGameParticipation(UUID.randomUUID(), "T1P1")
+        val team1Player2 = CreateGameParticipation(null, "T1P2")
+        val team2Player1 = CreateGameParticipation(null, "T2P1")
+        val team2Player2 = CreateGameParticipation(null, "T2P2")
+        every { tableRepository.getTableOrNull(dummyTableId) } returns null
+        assertThrows<NotFoundException> { service.createGame(dummySession, dummyTableId, team1Player1, team1Player2, team2Player1, team2Player2) }
+        verify(exactly = 1) {
+            tableRepository.getTableOrNull(dummyTableId)
+        }
+    }
+
+    @Test
     fun `deleteGameById deletes game in repository`() {
         val dummyGame = createDummyGame()
         val dummyGameId = dummyGame.id
