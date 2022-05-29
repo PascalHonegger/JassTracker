@@ -93,7 +93,7 @@ function getClass(round: Round): string {
             @update:model-value="(score) => handleInput(score, r)"
           />
           <span
-            v-if="r.score"
+            v-if="r.score != null"
             class="absolute pointer-events-none border-l border-dotted border-black w-1/2 right-0"
             >{{ contractStore.getCalculatedScore(r) }}</span
           >
