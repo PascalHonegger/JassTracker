@@ -66,3 +66,42 @@ export interface WebContract {
   multiplier: number;
   type: ContractType;
 }
+
+export interface WebTeamScores {
+  team1Score: number | null;
+  team2Score: number | null;
+}
+
+export interface WebGameScoreSummary {
+  gameId: string;
+  total: WebTeamScores;
+}
+
+export interface WebPlayerAverage {
+  playerId: string;
+  displayName: string;
+  average: number;
+  weightedAverage: number;
+}
+
+export interface WebGameStatistics {
+  playerAverages: Array<WebPlayerAverage>;
+  team1Average: number;
+  team2Average: number;
+  team1WeightedAverage: number;
+  team2WeightedAverage: number;
+  expectedScoresOverTime: Array<WebTeamScores>;
+}
+
+export interface WebTableStatistics {
+  playerAverages: Array<WebPlayerAverage>;
+  contractAverages: Record<string, number>;
+  scoresOverTime: Array<WebGameScoreSummary>;
+}
+
+export interface WebPlayerStatistics {
+  average: number;
+  total: number;
+  contractAverages: Record<string, number>;
+  scoreDistribution: Record<string, number>;
+}

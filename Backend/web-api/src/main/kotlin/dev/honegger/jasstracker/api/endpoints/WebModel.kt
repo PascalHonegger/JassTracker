@@ -1,7 +1,7 @@
 package dev.honegger.jasstracker.api.endpoints
 
-import dev.honegger.jasstracker.domain.*
 import dev.honegger.jasstracker.api.serializer.UUIDSerializer
+import dev.honegger.jasstracker.domain.*
 import dev.honegger.jasstracker.domain.services.AuthToken
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -90,7 +90,7 @@ data class WebCreateRound(
     @Serializable(with = UUIDSerializer::class)
     val playerId: UUID,
     @Serializable(with = UUIDSerializer::class)
-    val contractId: UUID
+    val contractId: UUID,
 )
 
 @Serializable
@@ -109,7 +109,7 @@ data class WebPlayer(
     val username: String?,
     val displayName: String?,
     val password: String?,
-    val isGuest: Boolean
+    val isGuest: Boolean,
 )
 
 @Serializable
@@ -135,6 +135,53 @@ data class DisplayNameRequest(
     val displayName: String,
 )
 
+@Serializable
+data class WebTeamScores(
+    val team1Score: Int?,
+    val team2Score: Int?,
+)
+
+@Serializable
+data class WebGameScoreSummary(
+    @Serializable(with = UUIDSerializer::class)
+    val gameId: UUID,
+    val total: WebTeamScores,
+)
+
+@Serializable
+data class WebPlayerAverage(
+    @Serializable(with = UUIDSerializer::class)
+    val playerId: UUID,
+    val displayName: String,
+    val average: Double,
+    val weightedAverage: Double,
+)
+
+@Serializable
+data class WebGameStatistics(
+    val playerAverages: List<WebPlayerAverage>,
+    val team1Average: Double,
+    val team2Average: Double,
+    val team1WeightedAverage: Double,
+    val team2WeightedAverage: Double,
+    val expectedScoresOverTime: List<WebTeamScores>,
+)
+
+@Serializable
+data class WebTableStatistics(
+    val playerAverages: List<WebPlayerAverage>,
+    val contractAverages: Map<@Serializable(with = UUIDSerializer::class) UUID, Double>,
+    val scoresOverTime: List<WebGameScoreSummary>,
+)
+
+@Serializable
+data class WebPlayerStatistics(
+    val average: Double,
+    val total: Int,
+    val contractAverages: Map<@Serializable(with = UUIDSerializer::class) UUID, Double>,
+    val scoreDistribution: Map<String, Int>,
+)
+
 fun WebTable.toTable() = Table(
     id = id,
     name = name,
@@ -158,6 +205,7 @@ fun WebGame.toGame() = Game(
     team1 = team1.toTeam(),
     team2 = team2.toTeam(),
 )
+
 fun Game.toWebGame() = WebGame(
     id = id,
     startTime = startTime.toInstant(TimeZone.UTC),
@@ -172,6 +220,7 @@ fun WebTeam.toTeam() = Team(
     player1 = player1.toGameParticipation(),
     player2 = player2.toGameParticipation(),
 )
+
 fun Team.toWebTeam() = WebTeam(
     player1 = player1.toWebGameParticipation(),
     player2 = player2.toWebGameParticipation(),
@@ -209,16 +258,7 @@ fun Round.toWebRound() = WebRound(
     contractId = contractId,
 )
 
-fun WebPlayer.toPlayer() = when {
-    isGuest -> GuestPlayer(id)
-    else -> RegisteredPlayer(
-        id = id,
-        username = checkNotNull(username),
-        displayName = checkNotNull(displayName),
-        password = checkNotNull(password),
-    )
-}
-fun Player.toWebPlayer() = when(this) {
+fun Player.toWebPlayer() = when (this) {
     is GuestPlayer -> WebPlayer(
         id = id,
         username = null,
@@ -234,3 +274,34 @@ fun Player.toWebPlayer() = when(this) {
         isGuest = false,
     )
 }
+
+private fun PlayerAverage.toWebPlayerAverage() = WebPlayerAverage(
+    playerId = participation.playerId,
+    displayName = participation.displayName,
+    average = average.average,
+    weightedAverage = weightedAverage.average,
+)
+
+fun TeamScores.toWebTeamScores() = WebTeamScores(team1?.score, team2?.score)
+
+fun GameStatistics.toWebGameStatistics() = WebGameStatistics(
+    playerAverages = playerAverages.map { it.toWebPlayerAverage() },
+    team1Average = teamAverages.team1.average,
+    team2Average = teamAverages.team2.average,
+    team1WeightedAverage = weightedTeamAverages.team1.average,
+    team2WeightedAverage = weightedTeamAverages.team2.average,
+    expectedScoresOverTime = expectedScoresOverTime.map { it.toWebTeamScores() },
+)
+
+fun PlayerStatistics.toWebPlayerStatistics() = WebPlayerStatistics(
+    average = average.average,
+    total = total.score,
+    contractAverages = contractAverages.mapValues { it.value.average },
+    scoreDistribution = scoreDistribution.asIterable().associate { it.key.score.toString() to it.value },
+)
+
+fun TableStatistics.toWebTableStatistics() = WebTableStatistics(
+    playerAverages = playerAverages.map { it.toWebPlayerAverage() },
+    contractAverages = contractAverages.mapValues { it.value.average },
+    scoresOverTime = scoresOverTime.map { WebGameScoreSummary(it.gameId, it.total.toWebTeamScores()) }
+)

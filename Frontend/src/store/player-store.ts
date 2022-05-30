@@ -22,7 +22,7 @@ export const usePlayerStore = defineStore("player", {
         );
         authStore.setToken(token);
       } catch (e) {
-        toast.error("Es gab ein Problem mit der Aktuallisierung des Spielers");
+        toast.error("Es gab ein Problem mit der Aktualisierung des Spielers");
       }
     },
     async deleteCurrentPlayerAccount() {

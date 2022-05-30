@@ -1,19 +1,19 @@
 package dev.honegger.jasstracker.bootstrap
 
+import dev.honegger.jasstracker.api.endpoints.*
+import dev.honegger.jasstracker.bootstrap.plugins.configureAuthentication
 import dev.honegger.jasstracker.bootstrap.plugins.configureHTTP
 import dev.honegger.jasstracker.bootstrap.plugins.configureStaticRouting
 import dev.honegger.jasstracker.bootstrap.plugins.initializeDatabase
 import dev.honegger.jasstracker.data.repositories.*
 import dev.honegger.jasstracker.domain.services.*
-import dev.honegger.jasstracker.api.endpoints.*
-import dev.honegger.jasstracker.bootstrap.plugins.configureAuthentication
 import dev.honegger.jasstracker.security.Argon2HashConfig
 import dev.honegger.jasstracker.security.Argon2PasswordHashService
 import dev.honegger.jasstracker.security.JwtConfig
 import dev.honegger.jasstracker.security.JwtTokenService
 import io.ktor.server.application.*
-import io.ktor.server.routing.*
 import io.ktor.server.auth.*
+import io.ktor.server.routing.*
 import kotlin.time.Duration
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -49,6 +49,7 @@ fun Application.module() {
         val roundService = RoundServiceImpl(roundRepository, tableRepository)
         val contractService = ContractServiceImpl(contractRepository)
         val playerService = PlayerServiceImpl(playerRepository, passwordHashService, authTokenService)
+        val statisticsService = StatisticsServiceImpl(roundRepository, tableRepository, contractRepository)
 
         configureAuthentication(authTokenService)
         initializeDatabase()
@@ -65,6 +66,7 @@ fun Application.module() {
                     configureContractEndpoints(contractService)
                     configurePlayerEndpoints(playerService)
                     configureRoundEndpoints(roundService)
+                    configureStatisticsEndpoint(statisticsService)
                 }
             }
         }

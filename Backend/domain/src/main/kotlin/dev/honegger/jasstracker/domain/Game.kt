@@ -1,7 +1,7 @@
 package dev.honegger.jasstracker.domain
 
 import kotlinx.datetime.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 data class Game(
     val id: UUID,
@@ -10,7 +10,11 @@ data class Game(
     val rounds: List<Round>,
     val team1: Team,
     val team2: Team,
-)
+) {
+    companion object {
+        const val totalRounds = 20
+    }
+}
 
 data class Team(
     val player1: GameParticipation,
@@ -32,8 +36,8 @@ operator fun Team.contains(playerId: UUID): Boolean = player1.playerId == player
  */
 val Game.currentPlayer
     get(): GameParticipation = when (val playedRounds = rounds.size) {
-        0, 20 -> team1.player1
-        in 1..19 -> when {
+        0, Game.totalRounds -> team1.player1
+        in 1 until Game.totalRounds -> when {
             // Team 1 has played their 10 rounds, switch between the two remaining players from team 2
             rounds.count { it.playerId in team1 } == 10 -> when (playedRounds % 2) {
                 1 -> team2.player1
@@ -55,5 +59,5 @@ val Game.currentPlayer
                 else -> error("Number % 4 must be between 0, 1, 2 or 3")
             }
         }
-        else -> error("Game must have between 0 and 20 rounds, but game $id has ${rounds.size} rounds")
+        else -> error("Game must have between 0 and ${Game.totalRounds} rounds, but game $id has ${rounds.size} rounds")
     }

@@ -8,6 +8,7 @@ import ModalDialog from "@/components/ModalDialog.vue";
 import GameItem from "@/components/GameItem.vue";
 import { useMetaStore } from "@/store/meta-store";
 import { useToast } from "vue-toastification";
+import GameStatistics from "@/components/GameStatistics.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -94,6 +95,7 @@ function backToTable() {
       Spiel Löschen
     </button>
     <GameItem v-if="currentGame" :game="currentGame" />
+    <GameStatistics v-if="currentGame" :game="currentGame" />
     <ModalDialog
       class="delete-game-modal"
       v-if="isModalVisible"

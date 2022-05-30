@@ -37,7 +37,7 @@ export const useRoundStore = defineStore("round", {
         await updateRound(round.id, round);
         await this.handleRoundCreateOrUpdate(round);
       } catch (e) {
-        toast.error("Es gab ein Problem mit der Aktuallisierung der Runde");
+        toast.error("Es gab ein Problem mit der Aktualisierung der Runde");
       }
     },
     async handleRoundCreateOrUpdate(round: WebRound) {
