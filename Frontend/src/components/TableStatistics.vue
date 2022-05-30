@@ -7,6 +7,7 @@ import { Bar, Chart, Grid, Tooltip } from "vue3-charts";
 import { ChartAxis } from "vue3-charts/dist/types";
 import StatisticsContainer from "@/components/StatisticsContainer.vue";
 import { useContractStore } from "@/store/contract-store";
+import { maxGamePoints, sumMultipliers } from "@/util/constants";
 
 const statisticsStore = useStatisticsStore();
 const contractStore = useContractStore();
@@ -80,7 +81,7 @@ const scoreAxis = computed<ChartAxis>(() => ({
     type: "band",
   },
   secondary: {
-    domain: [0, 157 * 55],
+    domain: [0, maxGamePoints * sumMultipliers],
     type: "linear",
   },
 }));
@@ -90,7 +91,7 @@ const averageAxis = computed<ChartAxis>(() => ({
     type: "band",
   },
   secondary: {
-    domain: [0, 157],
+    domain: [0, maxGamePoints],
     type: "linear",
   },
 }));

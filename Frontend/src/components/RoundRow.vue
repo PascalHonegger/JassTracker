@@ -8,6 +8,7 @@ import { storeToRefs } from "pinia";
 import ContractIcon from "./ContractIcon.vue";
 import ScoreInput from "@/components/ScoreInput.vue";
 import { assertNonNullish } from "@/util/assert";
+import { maxGamePoints } from "@/util/constants";
 
 const roundStore = useRoundStore();
 const gameStore = useGameStore();
@@ -88,7 +89,7 @@ function getClass(round: Round): string {
             class="w-24 px-1"
             :class="getClass(r)"
             :disabled="r.type === 'locked' || readonly"
-            :max="157"
+            :max="maxGamePoints"
             v-model="r.score"
             @update:model-value="(score) => handleInput(score, r)"
           />
