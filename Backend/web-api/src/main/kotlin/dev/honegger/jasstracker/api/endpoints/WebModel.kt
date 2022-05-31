@@ -147,6 +147,13 @@ data class WebTeamScores(
 )
 
 @Serializable
+data class WebScoreDistributionItem(
+    val score: Int,
+    val height: Double,
+    val occurrences: Int,
+)
+
+@Serializable
 data class WebGameScoreSummary(
     @Serializable(with = UUIDSerializer::class)
     val gameId: UUID,
@@ -184,7 +191,7 @@ data class WebPlayerStatistics(
     val average: Double,
     val total: Int,
     val contractAverages: Map<@Serializable(with = UUIDSerializer::class) UUID, Double>,
-    val scoreDistribution: Map<String, Int>,
+    val scoreDistribution: List<WebScoreDistributionItem>,
 )
 
 fun WebTable.toTable() = Table(
@@ -289,6 +296,12 @@ private fun PlayerAverage.toWebPlayerAverage() = WebPlayerAverage(
 
 fun TeamScores.toWebTeamScores() = WebTeamScores(team1?.score, team2?.score)
 
+fun ScoreDistributionItem.toWebScoreDistributionItem() = WebScoreDistributionItem(
+    score = score.score,
+    height = height,
+    occurrences = occurrences,
+)
+
 fun GameStatistics.toWebGameStatistics() = WebGameStatistics(
     playerAverages = playerAverages.map { it.toWebPlayerAverage() },
     team1Average = teamAverages.team1.average,
@@ -302,7 +315,7 @@ fun PlayerStatistics.toWebPlayerStatistics() = WebPlayerStatistics(
     average = average.average,
     total = total.score,
     contractAverages = contractAverages.mapValues { it.value.average },
-    scoreDistribution = scoreDistribution.asIterable().associate { it.key.score.toString() to it.value },
+    scoreDistribution = scoreDistribution.map { it.toWebScoreDistributionItem() },
 )
 
 fun TableStatistics.toWebTableStatistics() = WebTableStatistics(

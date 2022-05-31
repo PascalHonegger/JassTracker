@@ -29,6 +29,12 @@ data class GameScoreSummary(
     val total: TeamScores,
 )
 
+data class ScoreDistributionItem(
+    val score: Score,
+    val height: Double,
+    val occurrences: Int,
+)
+
 data class GameStatistics(
     val playerAverages: List<PlayerAverage>,
     val teamAverages: TeamAverages,
@@ -46,5 +52,5 @@ data class PlayerStatistics(
     val average: Average,
     val total: Score,
     val contractAverages: Map<UUID, Average>,
-    val scoreDistribution: Map<Score, Int>,
+    val scoreDistribution: List<ScoreDistributionItem>,
 )

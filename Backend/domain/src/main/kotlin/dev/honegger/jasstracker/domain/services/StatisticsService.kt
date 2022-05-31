@@ -122,9 +122,43 @@ class StatisticsServiceImpl(
         )
     }
 
-    private fun getScoreDistribution(rounds: List<Round>) = rounds
-        .groupingBy { Score(it.score) }
-        .eachCount()
+    private val spread = 6
+    private fun getScoreDistribution(rounds: List<Round>): List<ScoreDistributionItem> {
+        if (rounds.isEmpty())
+            return emptyList()
+
+        val heights = DoubleArray(157 + 1)
+        val occurrences = IntArray(157 + 1)
+        rounds.forEach { round ->
+            var addedHeight = 1.0
+            val centerIndex = round.score
+            heights[centerIndex] += addedHeight
+            for(offset in 1..spread) {
+                addedHeight /= 2.0
+                val leftIndex = centerIndex - offset
+                val rightIndex = centerIndex + offset
+                if (leftIndex in heights.indices) {
+                    heights[leftIndex] += addedHeight
+                }
+                if (rightIndex in heights.indices) {
+                    heights[rightIndex] += addedHeight
+                }
+            }
+
+            occurrences[round.score]++
+        }
+        val maxOccurrence = occurrences.maxOf { it }.toDouble()
+        val maxHeight = heights.maxOf { it }
+
+        return (0..157).map {
+            ScoreDistributionItem(
+                score = Score(it),
+                // Scale height to max occurrence
+                height = maxOccurrence * heights[it] / maxHeight,
+                occurrences = occurrences[it]
+            )
+        }
+    }
 
     private fun getContractAverages(rounds: List<Round>) = rounds
         .groupBy { it.contractId }

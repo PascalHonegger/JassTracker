@@ -204,7 +204,7 @@ class StatisticsServiceImplTest {
             assertEquals(0.0, playerStatistics.average.average, absoluteTolerance = 0.001)
             assertEquals(0, playerStatistics.total.score)
             assertEquals(emptyMap(), playerStatistics.contractAverages)
-            assertEquals(emptyMap(), playerStatistics.scoreDistribution)
+            assertEquals(emptyList(), playerStatistics.scoreDistribution)
 
             verify(exactly = 1) {
                 roundRepository.getAllRoundsByPlayer(any())
@@ -234,7 +234,18 @@ class StatisticsServiceImplTest {
                 actual = annaStatistics.contractAverages[contracts.single { it.multiplier == 1 }.id]!!.average,
                 absoluteTolerance = 0.001
             )
-            assertEquals(mapOf(Score(100) to 1, Score(25) to 1, Score(50) to 2), annaStatistics.scoreDistribution)
+            assertEquals(
+                ScoreDistributionItem(score = Score(0), height = 0.0, occurrences = 0),
+                annaStatistics.scoreDistribution[0]
+            )
+            assertEquals(
+                ScoreDistributionItem(score = Score(50), height = 2.0, occurrences = 2),
+                annaStatistics.scoreDistribution[50]
+            )
+            assertEquals(
+                ScoreDistributionItem(score = Score(100), height = 1.0, occurrences = 1),
+                annaStatistics.scoreDistribution[100]
+            )
 
             verify(exactly = 1) {
                 roundRepository.getAllRoundsByPlayer(any())

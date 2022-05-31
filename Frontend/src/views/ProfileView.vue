@@ -62,8 +62,8 @@ label {
 </style>
 
 <template>
-  <div class="container mx-auto text-center flex flex-row py-8">
-    <div class="w-1/2">
+  <div class="container mx-auto text-center flex flex-col gap-4 py-8">
+    <div class="container flex flex-col md:flex-row md:justify-around gap-4">
       <form @submit.prevent="updateDisplayName" autocomplete="on">
         <div class="mb-6 flex flex-col">
           <label for="username">Benutzername</label>
@@ -100,8 +100,8 @@ label {
           <WaitSpinner v-if="loadingDisplayName" size="small"></WaitSpinner>
         </button>
       </form>
-      <form @submit.prevent="updatePassword" autocomplete="on" class="pt-4">
-        <div class="mb-6 flex flex-col" v-if="!isGuest">
+      <form @submit.prevent="updatePassword" v-if="!isGuest" autocomplete="on">
+        <div class="mb-6 flex flex-col">
           <label for="old-password">Altes Passwort</label>
           <input
             autocomplete="old-password"
@@ -116,7 +116,7 @@ label {
         <div v-if="confirmOldPasswordFailed" class="text-red-600 mt-4">
           Das alte Passwort ist falsch!
         </div>
-        <div class="mb-6 flex flex-col" v-if="!isGuest">
+        <div class="mb-6 flex flex-col">
           <label for="new-password">Neues Passwort</label>
           <input
             autocomplete="new-password"
@@ -128,7 +128,7 @@ label {
             v-model="newPassword"
           />
         </div>
-        <div class="mb-6 flex flex-col" v-if="!isGuest">
+        <div class="mb-6 flex flex-col">
           <label for="password-confirm">Neues Passwort Bestätigen</label>
           <input
             autocomplete="new-password"
@@ -147,19 +147,16 @@ label {
         <button
           type="submit"
           :disabled="loadingNewPassword"
-          v-if="!isGuest"
           class="btn btn-blue self-center"
         >
           Passwort Ändern
           <WaitSpinner v-if="loadingNewPassword" size="small"></WaitSpinner>
         </button>
       </form>
-      <div v-if="!isGuest" class="p-4">
-        <button @click="deleteAccount" class="btn btn-blue">
-          Konto löschen
-        </button>
-      </div>
     </div>
-    <div class="w-1/2"><PlayerStatistics /></div>
+    <div v-if="!isGuest">
+      <button @click="deleteAccount" class="btn btn-red">Konto löschen</button>
+    </div>
+    <PlayerStatistics />
   </div>
 </template>
