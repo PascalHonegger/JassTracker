@@ -23,7 +23,7 @@ const confirmOldPasswordFailed = ref<boolean>(false);
 async function updateDisplayName() {
   loadingDisplayName.value = true;
   await playerStore.updateDisplayName(newDisplayName.value);
-  toast.success("Anzeigename erfolgreich aktuallisiert");
+  toast.success("Anzeigename erfolgreich aktualisiert");
   loadingDisplayName.value = false;
 }
 async function updatePassword() {
@@ -95,7 +95,7 @@ async function deleteAccount() {
         v-if="!isGuest"
         class="btn btn-blue self-center"
       >
-        Anzeigename Aktuallisieren
+        Anzeigename Aktualisieren
 
         <WaitSpinner v-if="loadingDisplayName" size="small"></WaitSpinner>
       </button>

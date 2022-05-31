@@ -32,10 +32,7 @@ export const usePlayerStore = defineStore("player", {
     ): Promise<boolean> {
       const authStore = useAuthStore();
       try {
-        if (authStore.playerId === null) {
-          alert("Player should have an ID");
-          return false;
-        }
+        assertNonNullish(authStore.playerId, "PlayerId not defined");
         const { token } = await updatePlayerPassword(
           authStore.playerId,
           oldPassword,
