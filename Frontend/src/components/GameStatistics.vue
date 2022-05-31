@@ -181,6 +181,18 @@ const averageAxis = computed<ChartAxis>(() => ({
           :hide-dot="true"
         />
       </template>
+
+      <template #widgets>
+        <Tooltip
+          borderColor="#48CAE4"
+          :config="{
+            team1: { color: 'orange', label: 'Team 1' },
+            team2: { color: 'blue', label: 'Team 2' },
+            round: { label: 'Runde' },
+            diff: { color: 'red', label: 'Punktunterschied' },
+          }"
+        />
+      </template>
     </Chart>
 
     <h2 class="text-xl font-normal leading-normal">
