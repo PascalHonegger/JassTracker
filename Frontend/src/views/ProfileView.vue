@@ -54,15 +54,17 @@ async function deleteAccount() {
 }
 </script>
 
+<style lang="scss">
+label {
+  @apply block mb-2 text-sm font-medium text-gray-900;
+}
+</style>
+
 <template>
   <div class="container mx-auto text-center flex flex-col">
     <form @submit.prevent="updateDisplayName" autocomplete="on" class="pt-4">
       <div class="mb-6 flex flex-col">
-        <label
-          class="block mb-2 text-sm font-medium text-gray-900"
-          for="username"
-          >Benutzername</label
-        >
+        <label for="username">Benutzername</label>
         <input
           autocomplete="username"
           class="box-input"
@@ -74,11 +76,7 @@ async function deleteAccount() {
         />
       </div>
       <div class="mb-6 flex flex-col">
-        <label
-          class="block mb-2 text-sm font-medium text-gray-900"
-          for="displayname"
-          >Anzeigename</label
-        >
+        <label for="displayname">Anzeigename</label>
         <input
           autocomplete="nickname"
           class="box-input"
@@ -102,11 +100,7 @@ async function deleteAccount() {
     </form>
     <form @submit.prevent="updatePassword" autocomplete="on" class="pt-4">
       <div class="mb-6 flex flex-col" v-if="!isGuest">
-        <label
-          class="block mb-2 text-sm font-medium text-gray-900"
-          for="old-password"
-          >Altes Passwort</label
-        >
+        <label for="old-password">Altes Passwort</label>
         <input
           autocomplete="old-password"
           class="box-input"
@@ -121,11 +115,7 @@ async function deleteAccount() {
         Das alte Passwort ist falsch!
       </div>
       <div class="mb-6 flex flex-col" v-if="!isGuest">
-        <label
-          class="block mb-2 text-sm font-medium text-gray-900"
-          for="new-password"
-          >Neues Passwort</label
-        >
+        <label for="new-password">Neues Passwort</label>
         <input
           autocomplete="new-password"
           class="box-input"
@@ -137,11 +127,7 @@ async function deleteAccount() {
         />
       </div>
       <div class="mb-6 flex flex-col" v-if="!isGuest">
-        <label
-          class="block mb-2 text-sm font-medium text-gray-900"
-          for="password-confirm"
-          >Neues Passwort Bestätigen</label
-        >
+        <label for="password-confirm">Neues Passwort Bestätigen</label>
         <input
           autocomplete="new-password"
           class="box-input"
