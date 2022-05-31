@@ -9,7 +9,7 @@ const emit = defineEmits<{
 const input = ref<HTMLInputElement>();
 const enteredScore = ref(props.modelValue?.toString() ?? "");
 const score = computed(() =>
-  enteredScore.value === "" ? undefined : parseInt(enteredScore.value)
+  enteredScore.value === "" ? undefined : parseInt(enteredScore.value, 10)
 );
 const inRange = computed(() => Math.abs(score.value ?? 0) <= props.max);
 
@@ -26,7 +26,7 @@ function handleKeypress(event: KeyboardEvent) {
 function handleChange() {
   if (inRange.value) {
     let { value } = score;
-    if (value != undefined && value < 0) {
+    if (value !== undefined && (value < 0 || Object.is(value, -0))) {
       value = props.max + value;
       enteredScore.value = value.toString();
     }

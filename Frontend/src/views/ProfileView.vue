@@ -48,7 +48,7 @@ async function updatePassword() {
 const { isGuest } = storeToRefs(authStore);
 
 async function deleteAccount() {
-  await playerStore.deleteCurrentPlayerAccount;
+  await playerStore.deleteCurrentPlayerAccount();
   toast.success("Spieler erfolgreich gelöscht");
   await router.push("/");
 }

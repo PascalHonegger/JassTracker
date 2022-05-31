@@ -13,7 +13,7 @@ const statisticsStore = useStatisticsStore();
 const contractStore = useContractStore();
 
 const props = defineProps<{ table: Table }>();
-const tableStatistics = ref<WebTableStatistics | null>(null);
+const tableStatistics = ref<WebTableStatistics>();
 const isLoading = ref(false);
 
 onMounted(async () => {
@@ -43,30 +43,28 @@ const scoreOverGames = computed(
 );
 
 const playerAverages = computed(() => {
-  if (tableStatistics.value == null) {
-    return [];
-  }
-  return tableStatistics.value.playerAverages.map((p) => ({
-    label: p.displayName,
-    average: p.average,
-    weightedAverage: p.weightedAverage,
-  }));
+  return tableStatistics.value === undefined
+    ? []
+    : tableStatistics.value.playerAverages.map((p) => ({
+        label: p.displayName,
+        average: p.average,
+        weightedAverage: p.weightedAverage,
+      }));
 });
 
 const contractAverages = computed(() => {
-  if (tableStatistics.value == null) {
-    return [];
-  }
-  return Object.entries(tableStatistics.value.contractAverages)
-    .map(([contractId, average]) => ({
-      contract: contractStore.getContract(contractId),
-      average: average ?? undefined,
-    }))
-    .sort((a, b) => a.contract.multiplier - b.contract.multiplier)
-    .map(({ contract, average }) => ({
-      contract: `${contract.multiplier}x ${contract.name}`,
-      average,
-    }));
+  return tableStatistics.value === undefined
+    ? []
+    : Object.entries(tableStatistics.value.contractAverages)
+        .map(([contractId, average]) => ({
+          contract: contractStore.getContract(contractId),
+          average: average ?? undefined,
+        }))
+        .sort((a, b) => a.contract.multiplier - b.contract.multiplier)
+        .map(({ contract, average }) => ({
+          contract: `${contract.multiplier}x ${contract.name}`,
+          average,
+        }));
 });
 
 const margin = ref({

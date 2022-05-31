@@ -94,8 +94,10 @@ function backToTable() {
     <button class="btn btn-blue mt-2 ml-2" @click="showModal">
       Spiel Löschen
     </button>
-    <GameItem v-if="currentGame" :game="currentGame" />
-    <GameStatistics v-if="currentGame" :game="currentGame" />
+    <template v-if="currentGame">
+      <GameItem :game="currentGame" />
+      <GameStatistics :game="currentGame" />
+    </template>
     <ModalDialog
       class="delete-game-modal"
       v-if="isModalVisible"

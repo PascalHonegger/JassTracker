@@ -23,9 +23,9 @@ const total = computed(() => {
     [team2.player1.playerId]: 0,
     [team2.player2.playerId]: 0,
   };
-  rounds.forEach((r) => {
+  for (const r of rounds) {
     tempTotal[r.playerId] += contractStore.getCalculatedScore(r);
-  });
+  }
   return tempTotal;
 });
 
@@ -55,7 +55,8 @@ const teams = computed(() => [props.game.team1, props.game.team2]);
             :key="teamNumber"
             colspan="2"
             scope="colgroup"
-            class="border-x-2 border-slate-300 text-xl"
+            class="border-l-2 border-slate-300 text-xl"
+            :class="{ 'border-r-2': teamNumber === 1 }"
           >
             Team {{ teamNumber }}
           </th>
