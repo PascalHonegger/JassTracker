@@ -139,19 +139,21 @@ function backToOverview() {
 </script>
 <template>
   <div class="container mx-auto p-4" v-if="currentTable">
-    <button @click="backToOverview" class="btn btn-blue mt-2">Zurück</button>
-    <button @click="openCreateGameDialog" class="btn btn-blue ml-2 mt-2">
-      Neues Spiel erstellen
-    </button>
-    <RouterLink
-      v-if="currentGame"
-      class="btn btn-blue ml-2 mt-2"
-      :to="{
-        name: 'game',
-        params: { tableId: route.params.tableId, gameId: currentGame.id },
-      }"
-      >Detaillierte Auswertung
-    </RouterLink>
+    <div class="flex flex-row items-stretch mt-2">
+      <button @click="backToOverview" class="btn btn-blue">Zurück</button>
+      <button @click="openCreateGameDialog" class="btn btn-blue ml-2">
+        Neues Spiel erstellen
+      </button>
+      <RouterLink
+        v-if="currentGame"
+        class="btn btn-blue ml-2"
+        :to="{
+          name: 'game',
+          params: { tableId: route.params.tableId, gameId: currentGame.id },
+        }"
+        >Detaillierte Auswertung
+      </RouterLink>
+    </div>
     <GameItem v-if="currentGame" :game="currentGame" />
     <p v-else>Momentan läuft kein Spiel</p>
 
