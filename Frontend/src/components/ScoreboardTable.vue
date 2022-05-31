@@ -55,7 +55,8 @@ const teams = computed(() => [props.game.team1, props.game.team2]);
             :key="teamNumber"
             colspan="2"
             scope="colgroup"
-            class="border-x-2 border-slate-300 text-xl"
+            class="border-l-2 border-slate-300 text-xl"
+            :class="{ 'border-r-2': teamNumber === 1 }"
           >
             Team {{ teamNumber }}
           </th>
