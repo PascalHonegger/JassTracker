@@ -11,7 +11,7 @@ import { maxGamePoints } from "@/util/constants";
 const statisticsStore = useStatisticsStore();
 
 const props = defineProps<{ game: Game }>();
-const gameStatistics = ref<WebGameStatistics | null>(null);
+const gameStatistics = ref<WebGameStatistics>();
 const isLoading = ref(false);
 
 const axisPadding = 200;
@@ -44,26 +44,25 @@ const scoreOverRound = computed(
 );
 
 const averages = computed(() => {
-  if (gameStatistics.value == null) {
-    return [];
-  }
-  return [
-    {
-      label: "Team 1",
-      average: gameStatistics.value.team1Average,
-      weightedAverage: gameStatistics.value.team1WeightedAverage,
-    },
-    {
-      label: "Team 2",
-      average: gameStatistics.value.team2Average,
-      weightedAverage: gameStatistics.value.team2WeightedAverage,
-    },
-    ...gameStatistics.value.playerAverages.map((p) => ({
-      label: p.displayName,
-      average: p.average,
-      weightedAverage: p.weightedAverage,
-    })),
-  ];
+  return gameStatistics.value === undefined
+    ? []
+    : [
+        {
+          label: "Team 1",
+          average: gameStatistics.value.team1Average,
+          weightedAverage: gameStatistics.value.team1WeightedAverage,
+        },
+        {
+          label: "Team 2",
+          average: gameStatistics.value.team2Average,
+          weightedAverage: gameStatistics.value.team2WeightedAverage,
+        },
+        ...gameStatistics.value.playerAverages.map((p) => ({
+          label: p.displayName,
+          average: p.average,
+          weightedAverage: p.weightedAverage,
+        })),
+      ];
 });
 
 const scoreOverRoundBoundaries = computed<[number, number]>(() => {

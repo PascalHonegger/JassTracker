@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useTableStore } from "@/store/table-store";
 import { useGameStore } from "@/store/game-store";
@@ -83,6 +83,11 @@ watch(
 
 onMounted(async () => {
   await setCurrentTableId(route.params.tableId);
+});
+
+onUnmounted(() => {
+  gameStore.setCurrentGame(tableStore.currentTableId, "");
+  tableStore.setCurrentTable("");
 });
 
 async function setCurrentTableId(newId: string | string[] | undefined) {
