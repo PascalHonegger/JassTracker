@@ -9,6 +9,7 @@ import {
   registerPlayer,
 } from "@/services/auth-service";
 import { clearToken, setToken } from "@/services/requests";
+import { usePlayerStore } from "@/store/player-store";
 
 interface JwtToken {
   // JWT Default
@@ -140,6 +141,7 @@ export const useAuthStore = defineStore("auth", {
       useGameStore().$reset();
       useTableStore().$reset();
       useRoundStore().$reset();
+      usePlayerStore().$reset();
     },
   },
 });

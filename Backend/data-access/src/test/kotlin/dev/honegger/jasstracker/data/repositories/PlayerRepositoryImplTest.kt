@@ -61,6 +61,22 @@ class PlayerRepositoryImplTest : RepositoryTest() {
     }
 
     @Test
+    fun `updatePlayerPassword updates player password`() {
+        val newPlayer = RegisteredPlayer(
+            id = UUID.randomUUID(),
+            username = "dummy",
+            displayName = "Dummy",
+            password = "password",
+        )
+        repo.savePlayer(newPlayer)
+        val updatedPlayer = newPlayer.copy(password = "newPassword")
+        repo.updatePlayer(updatedPlayer)
+        val player = repo.getPlayerOrNull(updatedPlayer.id)
+        assertIs<RegisteredPlayer>(player)
+        assertEquals("newPassword", player.password)
+    }
+
+    @Test
     fun `updatePlayer with GuestPlayer makes registered player to guest`() {
         val id = UUID.randomUUID()
         val registered = RegisteredPlayer(

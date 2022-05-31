@@ -148,9 +148,32 @@ class PlayerServiceImplTest {
         val guest = player.captured
         assertIs<GuestPlayer>(guest)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             playerRepository.savePlayer(guest)
             authTokenService.createToken(guest)
+        }
+    }
+
+    @Test
+    fun `updatePlayerPassword with wrong oldPassword returns null`() {
+        val id = UUID.randomUUID()
+        val username = "dummy"
+        val password = "Password"
+        val wrongPassword = "Password_hash"
+        val newPassword = "newPassword"
+        val playerToUpdatePassword = RegisteredPlayer(id, username, "Dummy", wrongPassword)
+
+        every { playerRepository.getPlayerOrNull(id) } returns playerToUpdatePassword
+        every { passwordHashService.verifyPassword(wrongPassword, password) } returns false
+
+        val session = PlayerSession(id, false, username, "Dummy")
+        val token = service.updatePlayerPassword(session, password, newPassword)
+
+        assertNull(token)
+
+        verify(exactly = 1) {
+            playerRepository.getPlayerOrNull(id)
+            passwordHashService.verifyPassword(wrongPassword, password)
         }
     }
 
@@ -168,7 +191,7 @@ class PlayerServiceImplTest {
 
         assertEquals(GuestPlayer(id), player.captured)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             playerRepository.getPlayerOrNull(id)
             playerRepository.updatePlayer(GuestPlayer(id))
         }
