@@ -23,9 +23,9 @@ const total = computed(() => {
     [team2.player1.playerId]: 0,
     [team2.player2.playerId]: 0,
   };
-  rounds.forEach((r) => {
+  for (const r of rounds) {
     tempTotal[r.playerId] += contractStore.getCalculatedScore(r);
-  });
+  }
   return tempTotal;
 });
 

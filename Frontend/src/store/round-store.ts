@@ -35,6 +35,11 @@ export const useRoundStore = defineStore("round", {
       );
       try {
         await updateRound(round.id, round);
+        this.removeRoundFromCurrentGame(
+          round.id,
+          round.playerId,
+          round.contractId
+        );
         await this.handleRoundCreateOrUpdate(round);
       } catch (e) {
         toast.error("Es gab ein Problem mit der Aktualisierung der Runde");
