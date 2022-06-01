@@ -60,7 +60,8 @@ data class WebCreateGameParticipation(
 
 @Serializable
 data class WebCreateGame(
-    val tableId: String,
+    @Serializable(with = UUIDSerializer::class)
+    val tableId: UUID,
     val team1Player1: WebCreateGameParticipation,
     val team1Player2: WebCreateGameParticipation,
     val team2Player1: WebCreateGameParticipation,

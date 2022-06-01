@@ -37,7 +37,7 @@ fun Route.configureGameEndpoints(
 
             val createdGame = gameService.createGame(
                 call.playerSession(),
-                newGame.tableId.toUUID(),
+                newGame.tableId,
                 CreateGameParticipation(newGame.team1Player1),
                 CreateGameParticipation(newGame.team1Player2),
                 CreateGameParticipation(newGame.team2Player1),
