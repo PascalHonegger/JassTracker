@@ -91,7 +91,7 @@ class RoundServiceImplTest {
                 contractId = UUID.randomUUID()
             )
         }
-        assertEquals("Score must be between 0 and 157", thrown.message)
+        assertEquals("Score must be between 0..157", thrown.message)
     }
 
     @Test
@@ -106,7 +106,7 @@ class RoundServiceImplTest {
                 contractId = UUID.randomUUID()
             )
         }
-        assertEquals("Score must be between 0 and 157", thrown.message)
+        assertEquals("Score must be between 0..157", thrown.message)
     }
 
     @Test
@@ -121,7 +121,7 @@ class RoundServiceImplTest {
                 contractId = UUID.randomUUID()
             )
         }
-        assertEquals("Number must be between 1 and 20", thrown.message)
+        assertEquals("Number must be between 1..20", thrown.message)
     }
 
     @Test
@@ -136,7 +136,7 @@ class RoundServiceImplTest {
                 contractId = UUID.randomUUID()
             )
         }
-        assertEquals("Number must be between 1 and 20", thrown.message)
+        assertEquals("Number must be between 1..20", thrown.message)
     }
 
 
@@ -480,7 +480,7 @@ class RoundServiceImplTest {
         val thrown = assertThrows<IllegalArgumentException> {
             service.updateRound(dummySession, updatedRound)
         }
-        assertEquals("Score must be between 0 and 157", thrown.message)
+        assertEquals("Score must be between 0..157", thrown.message)
     }
 
     @Test
@@ -493,7 +493,7 @@ class RoundServiceImplTest {
         val thrown = assertThrows<IllegalArgumentException> {
             service.updateRound(dummySession, updatedRound)
         }
-        assertEquals("Score must be between 0 and 157", thrown.message)
+        assertEquals("Score must be between 0..157", thrown.message)
     }
 
     @Test

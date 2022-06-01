@@ -4,6 +4,7 @@ import dev.honegger.jasstracker.domain.*
 import dev.honegger.jasstracker.domain.repositories.ContractRepository
 import dev.honegger.jasstracker.domain.repositories.RoundRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
+import dev.honegger.jasstracker.domain.util.scoreRange
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -127,8 +128,9 @@ class StatisticsServiceImpl(
         if (rounds.isEmpty())
             return emptyList()
 
-        val heights = DoubleArray(157 + 1)
-        val occurrences = IntArray(157 + 1)
+        val numberOfPossibleScores = scoreRange.last + 1
+        val heights = DoubleArray(numberOfPossibleScores)
+        val occurrences = IntArray(numberOfPossibleScores)
         rounds.forEach { round ->
             var addedHeight = 1.0
             val centerIndex = round.score

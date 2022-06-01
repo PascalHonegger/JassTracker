@@ -4,6 +4,7 @@ import dev.honegger.jasstracker.domain.*
 import dev.honegger.jasstracker.domain.repositories.GameRepository
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
+import dev.honegger.jasstracker.domain.util.displayNameLengthRange
 import dev.honegger.jasstracker.domain.util.validateCurrentPlayer
 import dev.honegger.jasstracker.domain.util.validateExists
 import kotlinx.datetime.Clock
@@ -101,7 +102,7 @@ class GameServiceImpl(
     }
 
     private fun createParticipation(createGameParticipation: CreateGameParticipation): GameParticipation {
-        require(createGameParticipation.displayName.length in 2..30) { "Name must be between 2 and 30 characters" }
+        require(createGameParticipation.displayName.length in displayNameLengthRange) { "Name must be between $displayNameLengthRange characters" }
         if (createGameParticipation.playerId != null) {
             return GameParticipation(createGameParticipation.playerId, createGameParticipation.displayName)
         }

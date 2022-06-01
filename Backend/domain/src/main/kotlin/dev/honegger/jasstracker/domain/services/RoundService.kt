@@ -6,8 +6,7 @@ import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.repositories.ContractRepository
 import dev.honegger.jasstracker.domain.repositories.RoundRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
-import dev.honegger.jasstracker.domain.util.validateCurrentPlayer
-import dev.honegger.jasstracker.domain.util.validateExists
+import dev.honegger.jasstracker.domain.util.*
 
 import mu.KotlinLogging
 import java.util.*
@@ -29,6 +28,8 @@ private val log = KotlinLogging.logger { }
 
 class RoundServiceImpl(private val roundRepository: RoundRepository, private val tableRepository: TableRepository, private val contractRepository: ContractRepository) :
     RoundService {
+    private fun validateScore(score: Int): Unit = require(score in scoreRange) { "Score must be between $scoreRange" }
+
     override fun createRound(
         session: PlayerSession,
         number: Int,
@@ -37,8 +38,8 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
         playerId: UUID,
         contractId: UUID,
     ): Round {
-        require(score in 0..157) { "Score must be between 0 and 157" }
-        require(number in 1..20) { "Number must be between 1 and 20" }
+        validateScore(score)
+        require(number in roundNumberRange) { "Number must be between $roundNumberRange" }
 
         require(contractRepository.contractExists(contractId)) { "Contract $contractId does not exist" }
 
@@ -77,7 +78,7 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
         session: PlayerSession,
         updatedRound: Round,
     ) {
-        require(updatedRound.score in 0..157) { "Score must be between 0 and 157" }
+        validateScore(updatedRound.score)
         val existingRound = roundRepository.getRoundOrNull(updatedRound.id)
         validateExists(existingRound) { "Player can only update a round which exists" }
         validateTable(session, existingRound, "update")

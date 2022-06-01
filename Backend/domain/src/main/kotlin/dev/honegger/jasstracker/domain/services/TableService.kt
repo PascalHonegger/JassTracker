@@ -3,6 +3,7 @@ package dev.honegger.jasstracker.domain.services
 import dev.honegger.jasstracker.domain.Table
 import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.repositories.TableRepository
+import dev.honegger.jasstracker.domain.util.tableNameLengthRange
 import dev.honegger.jasstracker.domain.util.validateCurrentPlayer
 import dev.honegger.jasstracker.domain.util.validateExists
 
@@ -20,7 +21,7 @@ interface TableService {
 private val log = KotlinLogging.logger { }
 
 class TableServiceImpl(private val tableRepository: TableRepository) : TableService {
-    private fun validateTableName(name: String) = require(name.length in 2..30) { "Name must be between 2 and 30 characters" }
+    private fun validateTableName(name: String) = require(name.length in tableNameLengthRange) { "Name must be between $tableNameLengthRange characters" }
 
     override fun createTable(
         session: PlayerSession,
