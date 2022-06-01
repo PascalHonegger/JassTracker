@@ -6,7 +6,7 @@ import { Bar, Area, Marker, Chart, Line, Grid, Tooltip } from "vue3-charts";
 import { ChartAxis } from "vue3-charts/dist/types";
 import StatisticsContainer from "@/components/StatisticsContainer.vue";
 import { useContractStore } from "@/store/contract-store";
-import { maxGamePoints } from "@/util/constants";
+import { maxScore } from "@/util/constants";
 import { useAuthStore } from "@/store/auth-store";
 import { assertNonNullish } from "@/util/assert";
 
@@ -65,12 +65,12 @@ const margin = ref({
 
 const scoreAxis = computed<ChartAxis>(() => ({
   primary: {
-    domain: [0, maxGamePoints],
+    domain: [0, maxScore],
     // domain: ["dataMin", "dataMax"],
     type: "band",
     format: (w) => {
       const number = parseInt(w, 10);
-      if (number === 0 || number === maxGamePoints) {
+      if (number === 0 || number === maxScore) {
         return w;
       }
       if (w.toString().endsWith("0")) {
@@ -91,7 +91,7 @@ const averageAxis = computed<ChartAxis>(() => ({
     type: "band",
   },
   secondary: {
-    domain: [0, maxGamePoints],
+    domain: [0, maxScore],
     type: "linear",
   },
 }));

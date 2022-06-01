@@ -6,7 +6,7 @@ import { WebGameStatistics } from "@/services/web-model";
 import { Bar, Chart, Grid, Line, Marker, Tooltip } from "vue3-charts";
 import { ChartAxis } from "vue3-charts/dist/types";
 import StatisticsContainer from "@/components/StatisticsContainer.vue";
-import { maxGamePoints } from "@/util/constants";
+import { maxScore } from "@/util/constants";
 
 const statisticsStore = useStatisticsStore();
 
@@ -107,7 +107,7 @@ const averageAxis = computed<ChartAxis>(() => ({
     type: "band",
   },
   secondary: {
-    domain: [0, maxGamePoints],
+    domain: [0, maxScore],
     type: "linear",
   },
 }));
