@@ -8,11 +8,10 @@ import dev.honegger.jasstracker.domain.util.validateExists
 
 import mu.KotlinLogging
 import java.util.*
-import kotlin.collections.HashMap
 
 interface TableService {
     fun createTable(session: PlayerSession, name: String): Table
-    fun getTableOrNull(session: PlayerSession, id: UUID): Table?
+    fun getTable(session: PlayerSession, id: UUID): Table
     fun getTables(session: PlayerSession): List<Table>
     fun updateTable(session: PlayerSession, updatedTable: Table)
     fun deleteTableById(session: PlayerSession, id: UUID)
@@ -40,12 +39,14 @@ class TableServiceImpl(private val tableRepository: TableRepository) : TableServ
         return newTable
     }
 
-    override fun getTableOrNull(
+    override fun getTable(
         session: PlayerSession,
         id: UUID,
-    ): Table? {
+    ): Table {
         // Users can load any table they know the ID of
-        return tableRepository.getTableOrNull(id)
+        val table = tableRepository.getTableOrNull(id)
+        validateExists(table) { "Table $id not found" }
+        return table
     }
 
     override fun getTables(

@@ -1,7 +1,6 @@
 package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.api.util.playerSession
-import dev.honegger.jasstracker.api.util.respondNullable
 import dev.honegger.jasstracker.domain.services.PlayerService
 import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.http.*
@@ -17,8 +16,8 @@ fun Route.configurePlayerEndpoints(
         get("/{id}") {
             val id = call.parameters["id"]
             checkNotNull(id)
-            val player = playerService.getPlayerOrNull(call.playerSession(), id.toUUID())
-            call.respondNullable(player?.toWebPlayer())
+            val player = playerService.getPlayer(call.playerSession(), id.toUUID())
+            call.respond(player.toWebPlayer())
         }
         put("/{id}/displayName") {
             val id = call.parameters["id"]

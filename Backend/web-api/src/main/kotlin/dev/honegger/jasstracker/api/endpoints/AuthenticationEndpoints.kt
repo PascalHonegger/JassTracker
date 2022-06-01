@@ -1,8 +1,6 @@
 package dev.honegger.jasstracker.api.endpoints
 
-import dev.honegger.jasstracker.api.util.respondNullable
 import dev.honegger.jasstracker.domain.services.PlayerService
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.request.*
@@ -14,7 +12,7 @@ fun Route.configureAuthenticationEndpoints(
     post("/login") {
         val login = call.receive<WebLogin>()
         val token = playerService.authenticatePlayer(login.username, login.password)
-        call.respondNullable(token?.toTokenResponse(), nullStatusCode = HttpStatusCode.BadRequest)
+        call.respond(token.toTokenResponse())
     }
 
     post("/register") {

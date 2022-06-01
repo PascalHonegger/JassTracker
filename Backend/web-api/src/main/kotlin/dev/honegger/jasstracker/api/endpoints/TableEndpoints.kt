@@ -1,7 +1,6 @@
 package dev.honegger.jasstracker.api.endpoints
 
 import dev.honegger.jasstracker.api.util.playerSession
-import dev.honegger.jasstracker.api.util.respondNullable
 import dev.honegger.jasstracker.domain.services.TableService
 import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.http.*
@@ -21,8 +20,8 @@ fun Route.configureTableEndpoints(
         get("/{id}") {
             val id = call.parameters["id"]
             checkNotNull(id)
-            val table = tableService.getTableOrNull(call.playerSession(), id.toUUID())
-            call.respondNullable(table?.toWebTable())
+            val table = tableService.getTable(call.playerSession(), id.toUUID())
+            call.respond(table.toWebTable())
         }
         post {
             val newTable = call.receive<WebCreateTable>()

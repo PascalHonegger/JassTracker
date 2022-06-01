@@ -6,6 +6,7 @@ import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.RegisteredPlayer
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
 import io.mockk.*
+import org.junit.jupiter.api.assertThrows
 import java.util.*
 import kotlin.test.*
 
@@ -63,7 +64,7 @@ class PlayerServiceImplTest {
     }
 
     @Test
-    fun `authenticatePlayer with wrong password returns null`() {
+    fun `authenticatePlayer with wrong password throws IllegalArgumentException`() {
         val displayName = "George"
         val username = "george"
         val password = "MyNameIsGeorge"
@@ -77,12 +78,13 @@ class PlayerServiceImplTest {
         )
         every { passwordHashService.verifyPassword(hashedPassword, password) } returns false
 
-        val token = service.authenticatePlayer(
-            username,
-            password,
-        )
+        assertThrows<IllegalArgumentException> {
+            service.authenticatePlayer(
+                username,
+                password,
+            )
+        }
 
-        assertNull(token)
         verify(exactly = 1) {
             playerRepository.findPlayerByUsername(username)
             passwordHashService.verifyPassword(hashedPassword, password)
@@ -90,18 +92,19 @@ class PlayerServiceImplTest {
     }
 
     @Test
-    fun `authenticatePlayer with wrong username returns null`() {
+    fun `authenticatePlayer with wrong username throws IllegalArgumentException`() {
         val username = "george"
         val password = "MyNameIsGeorge"
 
         every { playerRepository.findPlayerByUsername(username) } returns null
 
-        val token = service.authenticatePlayer(
-            username,
-            password,
-        )
+        assertThrows<IllegalArgumentException> {
+            service.authenticatePlayer(
+                username,
+                password,
+            )
+        }
 
-        assertNull(token)
         verify(exactly = 1) {
             playerRepository.findPlayerByUsername(username)
         }

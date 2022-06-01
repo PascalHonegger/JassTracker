@@ -4,7 +4,6 @@ import dev.honegger.jasstracker.domain.GuestPlayer
 import dev.honegger.jasstracker.domain.RegisteredPlayer
 import dev.honegger.jasstracker.domain.services.AuthToken
 import dev.honegger.jasstracker.domain.services.PlayerService
-import dev.honegger.jasstracker.domain.util.toUUID
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -23,7 +22,6 @@ class PlayerEndpointsTest {
     @BeforeTest
     fun setup() {
         clearMocks(service)
-        every { service.getPlayerOrNull(any(), any()) } returns null
     }
 
     @AfterTest
@@ -53,7 +51,7 @@ class PlayerEndpointsTest {
             password = "max-security",
         )
         every {
-            service.getPlayerOrNull(
+            service.getPlayer(
                 any(),
                 dummyId
             )
@@ -63,7 +61,7 @@ class PlayerEndpointsTest {
             assertEquals("""{"id":"$dummyId","username":"bar","displayName":"foo","password":null,"isGuest":false}""",
                 bodyAsText())
         }
-        verify(exactly = 1) { service.getPlayerOrNull(any(), dummyId) }
+        verify(exactly = 1) { service.getPlayer(any(), dummyId) }
     }
 
     @Test
@@ -74,7 +72,7 @@ class PlayerEndpointsTest {
             id = guestId,
         )
         every {
-            service.getPlayerOrNull(
+            service.getPlayer(
                 any(),
                 guestId
             )
@@ -84,16 +82,7 @@ class PlayerEndpointsTest {
             assertEquals("""{"id":"$guestId","username":null,"displayName":null,"password":null,"isGuest":true}""",
                 bodyAsText())
         }
-        verify(exactly = 1) { service.getPlayerOrNull(any(), guestId) }
-    }
-
-    @Test
-    fun `get player returns 404 if not found`() = testApplication {
-        val client = setup()
-        client.get("/players/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
-            assertEquals(HttpStatusCode.NotFound, status)
-        }
-        verify(exactly = 1) { service.getPlayerOrNull(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
+        verify(exactly = 1) { service.getPlayer(any(), guestId) }
     }
 
     @Test

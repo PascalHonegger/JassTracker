@@ -55,7 +55,7 @@ class TableEndpointsTest {
             games = emptyList()
         )
         every {
-            service.getTableOrNull(
+            service.getTable(
                 any(),
                 id
             )
@@ -65,7 +65,7 @@ class TableEndpointsTest {
             assertEquals("""{"id":"$id","name":"dummy","ownerId":"$ownerId","gameIds":[],"latestGame":null}""",
                 bodyAsText())
         }
-        verify(exactly = 1) { service.getTableOrNull(any(), id) }
+        verify(exactly = 1) { service.getTable(any(), id) }
     }
 
     @Test
@@ -143,17 +143,6 @@ class TableEndpointsTest {
     }
 
     @Test
-    fun `get table returns 404 if not found`() = testApplication {
-        val client = setup()
-        every { service.getTableOrNull(any(), any()) } returns null
-
-        client.get("/tables/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
-            assertEquals(HttpStatusCode.NotFound, status)
-        }
-        verify(exactly = 1) { service.getTableOrNull(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
-    }
-
-    @Test
     fun `delete table returns 204 if deleted`() = testApplication {
         val client = setup()
         every { service.deleteTableById(any(), any()) } just Runs
@@ -215,7 +204,7 @@ class TableEndpointsTest {
         )
 
         every {
-            service.getTableOrNull(any(), tableId)
+            service.getTable(any(), tableId)
         } returns dummyTable
 
         client.get("/tables/$tableId").apply {
@@ -245,6 +234,6 @@ class TableEndpointsTest {
                 bodyAsText()
             )
         }
-        verify(exactly = 1) { service.getTableOrNull(any(), tableId) }
+        verify(exactly = 1) { service.getTable(any(), tableId) }
     }
 }

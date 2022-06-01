@@ -78,21 +78,6 @@ class AuthenticationEndpointsTest {
     }
 
     @Test
-    fun `login returns BadRequest if player is null`() = testApplication {
-        val client = setup()
-        every { playerService.authenticatePlayer(any(), any()) } returns null
-        client.post("/login") {
-            contentType(ContentType.Application.Json)
-            setBody(WebLogin("username", "password"))
-        }.apply {
-            assertEquals(HttpStatusCode.BadRequest, status)
-        }
-        verify(exactly = 1) {
-            playerService.authenticatePlayer("username", "password")
-        }
-    }
-
-    @Test
     fun `guestAccess returns guestToken`() = testApplication {
         val client = setup()
         every { playerService.registerGuestPlayer() } returns AuthToken("dummyToken")

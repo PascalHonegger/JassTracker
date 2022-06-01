@@ -18,8 +18,8 @@ interface PlayerService {
     ): AuthToken
 
     fun registerGuestPlayer(): AuthToken
-    fun authenticatePlayer(username: String, password: String): AuthToken?
-    fun getPlayerOrNull(session: PlayerSession, id: UUID): Player?
+    fun authenticatePlayer(username: String, password: String): AuthToken
+    fun getPlayer(session: PlayerSession, id: UUID): Player
     fun updatePlayerDisplayName(session: PlayerSession, updatedDisplayName: String): AuthToken
     fun updatePlayerPassword(session: PlayerSession, oldPassword: String, newPassword: String): AuthToken?
     fun deletePlayer(session: PlayerSession, playerId: UUID)
@@ -59,22 +59,24 @@ class PlayerServiceImpl(
         return authTokenService.createToken(newPlayer)
     }
 
-    override fun authenticatePlayer(username: String, password: String): AuthToken? {
+    override fun authenticatePlayer(username: String, password: String): AuthToken {
         val player = playerRepository.findPlayerByUsername(username)
         if (player == null || !passwordHashService.verifyPassword(
                 hash = player.password,
                 password = password
             )
-        ) return null
+        ) throw IllegalArgumentException("Incorrect password supplied")
         return authTokenService.createToken(player)
     }
 
-    override fun getPlayerOrNull(
+    override fun getPlayer(
         session: PlayerSession,
         id: UUID,
-    ): Player? {
+    ): Player {
         // Users can load any player they know the ID of
-        return playerRepository.getPlayerOrNull(id)
+        val player = playerRepository.getPlayerOrNull(id)
+        validateExists(player) { "Player $id not found" }
+        return player
     }
 
     private fun updatePlayer(
