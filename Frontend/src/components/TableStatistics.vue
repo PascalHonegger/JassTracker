@@ -155,10 +155,11 @@ const averageAxis = computed<ChartAxis>(() => ({
           borderColor="#48CAE4"
           :config="{
             label: { hide: true },
-            average: { color: '#0096c7', label: 'Mittelwert' },
+            average: { color: '#0096c7', label: 'Mittelwert', format: ',.1f' },
             weightedAverage: {
               color: '#48cae4',
               label: 'Gewichteter Mittelwert',
+              format: ',.1f',
             },
           }"
         />
@@ -188,7 +189,7 @@ const averageAxis = computed<ChartAxis>(() => ({
           borderColor="#48CAE4"
           :config="{
             contract: { label: 'Trumpf' },
-            average: { color: '#0096c7', label: 'Mittelwert' },
+            average: { color: '#0096c7', label: 'Mittelwert', format: ',.1f' },
           }"
         />
       </template>
