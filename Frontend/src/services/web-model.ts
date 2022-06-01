@@ -99,9 +99,15 @@ export interface WebTableStatistics {
   scoresOverTime: Array<WebGameScoreSummary>;
 }
 
+interface WebScoreDistributionItem {
+  score: number;
+  height: number;
+  occurrences: number;
+}
+
 export interface WebPlayerStatistics {
   average: number;
   total: number;
   contractAverages: Record<string, number>;
-  scoreDistribution: Record<string, number>;
+  scoreDistribution: Array<WebScoreDistributionItem>;
 }

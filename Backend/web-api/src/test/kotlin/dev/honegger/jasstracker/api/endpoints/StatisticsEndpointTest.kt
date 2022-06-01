@@ -83,7 +83,7 @@ class StatisticsEndpointTest {
             average = Average(105.9),
             total = Score(4206),
             contractAverages = mapOf(contractId to Average(42.0)),
-            scoreDistribution = mapOf(Score(42) to 2)
+            scoreDistribution = listOf(ScoreDistributionItem(Score(42), 2.0, 2))
         )
 
         client.get("/statistics/player/$playerId").apply {
@@ -93,7 +93,7 @@ class StatisticsEndpointTest {
                     |"average":105.9,
                     |"total":4206,
                     |"contractAverages":{"$contractId":42.0},
-                    |"scoreDistribution":{"42":2}
+                    |"scoreDistribution":[{"score":42,"height":2.0,"occurrences":2}]
                 |}""".trimMargin().replace("\n", ""), bodyAsText()
             )
         }
