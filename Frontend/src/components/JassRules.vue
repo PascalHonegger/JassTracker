@@ -8,7 +8,7 @@ h3 {
 </style>
 <template>
   <div class="container mx-auto text-center">
-    <help-tabs class="flex border-b border-black mt-4">
+    <HelpTabs class="flex border-b border-black mt-4">
       <RouterLink
         class="text-blue-600 inline-block py-2 px-4 hover:text-blue-800 font-semibold"
         to="/help/jassTrackerHelp"
@@ -33,7 +33,7 @@ h3 {
           Der Coiffeur ist ein Partnerjass, bei dem jeweils die beiden
           gegenüberliegenden Spieler ein Team bilden.
           <br />
-          Es geht darum, sämtliche Trumpfarten einmal zuspielen und dabei
+          Es geht darum, sämtliche Trumpfarten einmal zu spielen und dabei
           möglichst viele Punkte zu erzielen. Es werden jeweils nur die Punkte
           des ansagenden Teams geschrieben.
           <br />
@@ -104,11 +104,11 @@ h3 {
         <p>
           Wer keine Karte der ausgespielten Farbe hat, darf irgendeine Karte
           spielen (Untertrumpfen ist nur erlaubt, wenn man nur noch Trumpfkarten
-          besitzen).
+          besitzt).
         </p>
         <h3>Regel 3</h3>
         <p>
-          Es darf jederzeit einen Trumpf gespielt werden anstatt Farbe zu
+          Es darf jederzeit ein Trumpf gespielt werden, anstatt Farbe zu
           bekennen.
         </p>
         <h3>Regel 4</h3>
@@ -116,7 +116,7 @@ h3 {
           Wurde die Trumpffarbe ausgespielt, dann muss ebenfalls eine
           Trumpfkarte gespielt werden. Wer neben dem Trumpf-Bauer/Trumpf-Under
           keine andere Trumpfkarte mehr besitzt, darf statt des
-          Trumpf-Bauer/Trumpf-Under auch jede andere Karte spielen.
+          Trumpf-Bauers/Trumpf-Unders auch jede andere Karte spielen.
         </p>
       </div>
     </div>
