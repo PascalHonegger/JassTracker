@@ -21,7 +21,7 @@ interface PlayerService {
     fun authenticatePlayer(username: String, password: String): AuthToken
     fun getPlayer(session: PlayerSession, id: UUID): Player
     fun updatePlayerDisplayName(session: PlayerSession, updatedDisplayName: String): AuthToken
-    fun updatePlayerPassword(session: PlayerSession, oldPassword: String, newPassword: String): AuthToken?
+    fun updatePlayerPassword(session: PlayerSession, oldPassword: String, newPassword: String): AuthToken
     fun deletePlayer(session: PlayerSession, playerId: UUID)
 }
 
@@ -61,11 +61,12 @@ class PlayerServiceImpl(
 
     override fun authenticatePlayer(username: String, password: String): AuthToken {
         val player = playerRepository.findPlayerByUsername(username)
-        if (player == null || !passwordHashService.verifyPassword(
+        require(
+            player != null && passwordHashService.verifyPassword(
                 hash = player.password,
                 password = password
             )
-        ) throw IllegalArgumentException("Incorrect password supplied")
+        ) { "Incorrect password or username supplied" }
         return authTokenService.createToken(player)
     }
 
@@ -93,26 +94,23 @@ class PlayerServiceImpl(
         session: PlayerSession,
         updatedDisplayName: String,
     ): AuthToken {
-        val existingPlayer =
-            playerRepository.getPlayerOrNull(session.playerId)
-        checkNotNull(existingPlayer)
-        check(existingPlayer is RegisteredPlayer)
-        // User can only update themselves
-        check(existingPlayer.id == session.playerId)
+        val existingPlayer = playerRepository.getPlayerOrNull(session.playerId)
+        require(existingPlayer is RegisteredPlayer) { "GuestPlayer cannot have display name" }
 
         val updatedPlayer = existingPlayer.copy(displayName = updatedDisplayName)
 
         return updatePlayer(session, updatedPlayer)
     }
 
-    override fun updatePlayerPassword(session: PlayerSession, oldPassword: String, newPassword: String): AuthToken? {
+    override fun updatePlayerPassword(session: PlayerSession, oldPassword: String, newPassword: String): AuthToken {
         val existingPlayer = playerRepository.getPlayerOrNull(session.playerId)
-        check(existingPlayer is RegisteredPlayer)
-        if (!passwordHashService.verifyPassword(
+        require(existingPlayer is RegisteredPlayer) { "GuestPlayer cannot have password" }
+        require(
+            passwordHashService.verifyPassword(
                 hash = existingPlayer.password,
                 password = oldPassword
             )
-        ) return null
+        ) { "Incorrect Password supplied" }
         val updatedPlayer = existingPlayer.copy(password = passwordHashService.hashPassword(newPassword))
         return updatePlayer(session, updatedPlayer)
     }
@@ -120,7 +118,6 @@ class PlayerServiceImpl(
     override fun deletePlayer(session: PlayerSession, playerId: UUID) {
         val existingPlayer = playerRepository.getPlayerOrNull(playerId)
         validateExists(existingPlayer) { "Player $playerId was not found" }
-        // check(existingPlayer is RegisteredPlayer) { "Cannot delete guest player" }
         validateCurrentPlayer(existingPlayer.id, session) { "Can only delete current user" }
 
         val updatedPlayer = GuestPlayer(existingPlayer.id)

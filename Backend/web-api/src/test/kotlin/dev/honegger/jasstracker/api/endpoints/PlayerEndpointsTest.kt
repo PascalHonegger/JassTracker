@@ -150,24 +150,4 @@ class PlayerEndpointsTest {
             service.updatePlayerPassword(any(), "thisIsOld", "thisIsNew")
         }
     }
-
-    @Test
-    fun `updatePassword returns Bad Request when oldPassword incorrect`() = testApplication {
-        val client = setup()
-        val dummyId = UUID.randomUUID()
-        every {
-            service.updatePlayerPassword(any(), "thisIsWrong", "thisIsNew")
-        } returns null
-
-        client.put("/players/$dummyId/password") {
-            contentType(ContentType.Application.Json)
-            setBody(PasswordChangeRequest("thisIsWrong", "thisIsNew"))
-        }.apply {
-            assertEquals(HttpStatusCode.BadRequest, status)
-        }
-
-        verify(exactly = 1) {
-            service.updatePlayerPassword(any(), "thisIsWrong", "thisIsNew")
-        }
-    }
 }
