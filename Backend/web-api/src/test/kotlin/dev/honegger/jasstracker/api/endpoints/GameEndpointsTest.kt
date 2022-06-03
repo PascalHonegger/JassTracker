@@ -70,7 +70,7 @@ class GameEndpointsTest {
             team2 = Team(GameParticipation(p3Id, "p3"), GameParticipation(p4Id, "p4")),
         )
         every {
-            service.getGameOrNull(
+            service.getGame(
                 any(),
                 dummyId
             )
@@ -88,38 +88,16 @@ class GameEndpointsTest {
                     |"currentPlayer":{"playerId":"$p1Id","displayName":"p1"}
                 |}""".trimMargin().replace("\n", ""), bodyAsText())
         }
-        verify(exactly = 1) { service.getGameOrNull(any(), dummyId) }
+        verify(exactly = 1) { service.getGame(any(), dummyId) }
     }
 
     @Test
-    fun `get game returns 404 if not found`() = testApplication {
+    fun `delete game returns 204 if deleted`() = testApplication {
         val client = setup()
-        every { service.getGameOrNull(any(), any()) } returns null
-
-        client.get("/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
-            assertEquals(HttpStatusCode.NotFound, status)
-        }
-        verify(exactly = 1) { service.getGameOrNull(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
-    }
-
-    @Test
-    fun `delete game returns 404 if not found`() = testApplication {
-        val client = setup()
-        every { service.deleteGameById(any(), any()) } returns false
+        every { service.deleteGameById(any(), any()) } just Runs
 
         client.delete("/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
-            assertEquals(HttpStatusCode.NotFound, status)
-        }
-        verify(exactly = 1) { service.deleteGameById(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
-    }
-
-    @Test
-    fun `delete game returns 200 if deleted`() = testApplication {
-        val client = setup()
-        every { service.deleteGameById(any(), any()) } returns true
-
-        client.delete("/games/3de81ab0-792e-43b0-838b-acad78f29ba6").apply {
-            assertEquals(HttpStatusCode.OK, status)
+            assertEquals(HttpStatusCode.NoContent, status)
         }
         verify(exactly = 1) { service.deleteGameById(any(), "3de81ab0-792e-43b0-838b-acad78f29ba6".toUUID()) }
     }
@@ -140,7 +118,7 @@ class GameEndpointsTest {
             team2 = Team(GameParticipation(p3Id, "p3"), GameParticipation(p4Id, "p4")),
         )
         every {
-            service.getGameOrNull(
+            service.getGame(
                 any(),
                 dummyId
             )
@@ -150,7 +128,7 @@ class GameEndpointsTest {
             assertEquals(
                 """{"playerId":"$p1Id","displayName":"p1"}""", bodyAsText())
         }
-        verify(exactly = 1) { service.getGameOrNull(any(), dummyId) }
+        verify(exactly = 1) { service.getGame(any(), dummyId) }
     }
 
     @Test
@@ -187,7 +165,7 @@ class GameEndpointsTest {
             team2 = Team(GameParticipation(p3Id, "p3"), GameParticipation(p4Id, "p4")),
         )
         every {
-            service.getGameOrNull(
+            service.getGame(
                 any(),
                 dummyId
             )
@@ -197,6 +175,6 @@ class GameEndpointsTest {
             assertEquals(
                 """{"playerId":"$p2Id","displayName":"p2"}""", bodyAsText())
         }
-        verify(exactly = 1) { service.getGameOrNull(any(), dummyId) }
+        verify(exactly = 1) { service.getGame(any(), dummyId) }
     }
 }

@@ -56,34 +56,7 @@ class TableServiceImplTest {
             repository.deleteTableById(created.id)
         } returns true
 
-        val deleted = service.deleteTableById(dummySession, created.id)
-        assertTrue { deleted }
-        verify(exactly = 1) {
-            repository.deleteTableById(created.id)
-            repository.getTableOrNull(created.id)
-        }
-    }
-
-    @Test
-    @Disabled
-    fun `deleteTableById removes a table, table can't be found afterwards anymore`() {
-        val dummyName = "Some Table"
-        val created = service.createTable(dummySession, dummyName)
-
-        every {
-            repository.getTableOrNull(created.id)
-        } returns created
-
-        every {
-            repository.deleteTableById(created.id)
-        } returns true
-
-        val deleted = service.deleteTableById(dummySession, created.id)
-        val tableShouldBeNull = service.getTableOrNull(dummySession, created.id)
-
-        assertTrue { deleted }
-        assertNull(tableShouldBeNull)
-
+        service.deleteTableById(dummySession, created.id)
         verify(exactly = 1) {
             repository.deleteTableById(created.id)
             repository.getTableOrNull(created.id)

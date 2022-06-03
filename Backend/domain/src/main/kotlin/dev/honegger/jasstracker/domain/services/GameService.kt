@@ -3,6 +3,10 @@ package dev.honegger.jasstracker.domain.services
 import dev.honegger.jasstracker.domain.*
 import dev.honegger.jasstracker.domain.repositories.GameRepository
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
+import dev.honegger.jasstracker.domain.repositories.TableRepository
+import dev.honegger.jasstracker.domain.util.displayNameLengthRange
+import dev.honegger.jasstracker.domain.util.validateCurrentPlayer
+import dev.honegger.jasstracker.domain.util.validateExists
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -18,10 +22,11 @@ interface GameService {
         team2Player1: CreateGameParticipation,
         team2Player2: CreateGameParticipation,
     ): Game
-    fun getGameOrNull(session: PlayerSession, id: UUID): Game?
+
+    fun getGame(session: PlayerSession, id: UUID): Game
     fun getAllGames(session: PlayerSession): List<Game>
     fun updateGame(session: PlayerSession, updatedGame: Game)
-    fun deleteGameById(session: PlayerSession, id: UUID): Boolean
+    fun deleteGameById(session: PlayerSession, id: UUID)
 }
 
 data class CreateGameParticipation(
@@ -31,7 +36,12 @@ data class CreateGameParticipation(
 
 private val log = KotlinLogging.logger { }
 
-class GameServiceImpl(private val gameRepository: GameRepository, private val playerRepository: PlayerRepository, private val clock: Clock = Clock.System) :
+class GameServiceImpl(
+    private val gameRepository: GameRepository,
+    private val tableRepository: TableRepository,
+    private val playerRepository: PlayerRepository,
+    private val clock: Clock = Clock.System,
+) :
     GameService {
     override fun createGame(
         session: PlayerSession,
@@ -41,6 +51,16 @@ class GameServiceImpl(private val gameRepository: GameRepository, private val pl
         team2Player1: CreateGameParticipation,
         team2Player2: CreateGameParticipation,
     ): Game {
+        val playerIds = listOfNotNull(
+            team1Player1.playerId,
+            team1Player2.playerId,
+            team2Player1.playerId,
+            team2Player2.playerId
+        )
+        require(playerIds.size == playerIds.distinct().size) { "Players in a game must be unique" }
+        val table = tableRepository.getTableOrNull(tableId)
+        validateExists(table) { "Table $tableId does not exist" }
+        validateCurrentPlayer(table.ownerId, session) { "Only table owner can create games" }
         val newGame = Game(
             id = UUID.randomUUID(),
             startTime = clock.now().toLocalDateTime(TimeZone.UTC),
@@ -48,18 +68,19 @@ class GameServiceImpl(private val gameRepository: GameRepository, private val pl
             team1 = Team(createParticipation(team1Player1), createParticipation(team1Player2)),
             team2 = Team(createParticipation(team2Player1), createParticipation(team2Player2)),
         )
-
         log.info { "Saving new game $newGame for table $tableId" }
         gameRepository.saveGame(newGame, tableId)
         return newGame
     }
 
-    override fun getGameOrNull(
+    override fun getGame(
         session: PlayerSession,
         id: UUID,
-    ): Game? {
+    ): Game {
         // Users can load any scoreboard they know the ID of
-        return gameRepository.getGameOrNull(id)
+        val game = gameRepository.getGameOrNull(id)
+        validateExists(game) { "Game $id was not found" }
+        return game
     }
 
     override fun getAllGames(session: PlayerSession): List<Game> {
@@ -71,15 +92,17 @@ class GameServiceImpl(private val gameRepository: GameRepository, private val pl
         session: PlayerSession,
         updatedGame: Game,
     ) {
-        val existingGame =
-            gameRepository.getGameOrNull(updatedGame.id)
-        // User can only update a scoreboard which exists and is owned by himself
-        checkNotNull(existingGame)
-        check(updatedGame.endTime == null || updatedGame.endTime >= updatedGame.startTime)
+        val existingGame = gameRepository.getGameOrNull(updatedGame.id)
+        validateExists(existingGame) { "Game ${updatedGame.id} was not found and cannot be updated" }
+        val table = tableRepository.getTableByGameIdOrNull(existingGame.id)
+        checkNotNull(table)
+        validateCurrentPlayer(table.ownerId, session) { "Only table owner can update games" }
+        require(updatedGame.endTime == null || updatedGame.endTime >= updatedGame.startTime)
         gameRepository.updateGame(existingGame.copy(endTime = updatedGame.endTime))
     }
 
     private fun createParticipation(createGameParticipation: CreateGameParticipation): GameParticipation {
+        require(createGameParticipation.displayName.length in displayNameLengthRange) { "Name must be between $displayNameLengthRange characters" }
         if (createGameParticipation.playerId != null) {
             return GameParticipation(createGameParticipation.playerId, createGameParticipation.displayName)
         }
@@ -91,10 +114,13 @@ class GameServiceImpl(private val gameRepository: GameRepository, private val pl
         return GameParticipation(newGuest.id, createGameParticipation.displayName)
     }
 
-    override fun deleteGameById(session: PlayerSession, id: UUID): Boolean {
-        val existingGame =
-            gameRepository.getGameOrNull(id)
-        checkNotNull(existingGame)
-        return gameRepository.deleteGameById(id)
+    override fun deleteGameById(session: PlayerSession, id: UUID) {
+        val table = tableRepository.getTableByGameIdOrNull(id)
+        validateExists(table) { "Table for game $id does not exist" }
+        validateCurrentPlayer(table.ownerId, session) { "Only table owner can delete games" }
+        val wasDeleted = gameRepository.deleteGameById(id)
+        if (!wasDeleted) {
+            log.warn { "Delete game $id did not result in DB update" }
+        }
     }
 }

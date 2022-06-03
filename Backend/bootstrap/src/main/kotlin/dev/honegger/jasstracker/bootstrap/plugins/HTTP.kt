@@ -1,5 +1,6 @@
 package dev.honegger.jasstracker.bootstrap.plugins
 
+import dev.honegger.jasstracker.api.util.configureExceptionStatusCodes
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -7,9 +8,12 @@ import io.ktor.server.plugins.autohead.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
+import mu.KotlinLogging
 
 fun Application.configureHTTP() {
+    val log = KotlinLogging.logger {  }
     if (environment.developmentMode) {
         install(CORS) {
             allowHeader(HttpHeaders.ContentType)
@@ -40,5 +44,11 @@ fun Application.configureHTTP() {
         }
 
         // Configure MDC to include cool info like sessionId
+    }
+
+    install(StatusPages) {
+        configureExceptionStatusCodes {_, cause ->
+            log.error(cause) { null }
+        }
     }
 }

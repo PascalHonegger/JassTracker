@@ -9,6 +9,7 @@ dependencies {
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.server.auth.jwt)
+    implementation(libs.ktor.server.status.pages)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.logback)
     implementation(libs.java.jwt)

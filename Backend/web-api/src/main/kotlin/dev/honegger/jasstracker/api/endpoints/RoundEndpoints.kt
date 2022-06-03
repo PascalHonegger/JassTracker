@@ -30,7 +30,7 @@ fun Route.configureRoundEndpoints(
             checkNotNull(id)
             val updatedRound = call.receive<WebRound>().toRound()
             roundService.updateRound(call.playerSession(), updatedRound)
-            call.respond(HttpStatusCode.OK)
+            call.respond(HttpStatusCode.NoContent)
         }
         delete("/{id}") {
             val id = call.parameters["id"]

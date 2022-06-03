@@ -9,19 +9,20 @@ dependencyResolutionManagement {
     versionCatalogs {
         val kotlin = "1.6.21"
         val mockk = "1.12.4"
-        val ktor = "2.0.1"
+        val ktor = "2.0.2"
         val logback = "1.2.11"
         val shadow = "7.1.2"
-        val kotlinxDatetime = "0.3.2"
-        val kotlinLogging = "2.1.21"
-        val flyway = "8.5.10"
-        val postgresql = "42.3.5"
+        val kotlinxDatetime = "0.3.3"
+        val kotlinLogging = "2.1.23"
+        val flyway = "8.5.12"
+        val postgresql = "42.3.6"
         val jooq = "3.16.5"
         val jooqPlugin = "7.1.1"
         val kover = "0.5.1"
-        val testcontainers = "1.17.1"
+        val testcontainers = "1.17.2"
         val javaJwt = "3.19.2"
         val argon2 = "2.11"
+        val versions = "0.42.0"
 
         create("libs") {
             library("ktor-server-core", "io.ktor", "ktor-server-core-jvm").version(ktor)
@@ -35,6 +36,7 @@ dependencyResolutionManagement {
             library("ktor-client-content-negotiation", "io.ktor", "ktor-client-content-negotiation").version(ktor)
             library("ktor-server-auth", "io.ktor", "ktor-server-auth").version(ktor)
             library("ktor-server-auth-jwt", "io.ktor", "ktor-server-auth-jwt").version(ktor)
+            library("ktor-server-status-pages", "io.ktor", "ktor-server-status-pages").version(ktor)
             library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime-jvm").version(kotlinxDatetime)
             library("logback", "ch.qos.logback", "logback-classic").version(logback)
             library("kotlin-logging", "io.github.microutils", "kotlin-logging-jvm").version(kotlinLogging)
@@ -52,6 +54,7 @@ dependencyResolutionManagement {
             plugin("shadow", "com.github.johnrengelman.shadow").version(shadow)
             plugin("jooq", "nu.studer.jooq").version(jooqPlugin)
             plugin("kover", "org.jetbrains.kotlinx.kover").version(kover)
+            plugin("versions", "com.github.ben-manes.versions").version(versions)
         }
         create("testLibs") {
             library("kotlin-test", "org.jetbrains.kotlin", "kotlin-test-junit5").version(kotlin)

@@ -4,8 +4,10 @@ import dev.honegger.jasstracker.domain.GuestPlayer
 import dev.honegger.jasstracker.domain.Player
 import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.RegisteredPlayer
+import dev.honegger.jasstracker.domain.exceptions.NotFoundException
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
 import io.mockk.*
+import org.junit.jupiter.api.assertThrows
 import java.util.*
 import kotlin.test.*
 
@@ -16,6 +18,7 @@ class PlayerServiceImplTest {
     private val player = slot<Player>()
     private val dummyToken = AuthToken("dummyToken")
     private val service = PlayerServiceImpl(playerRepository, passwordHashService, authTokenService)
+    private val dummySession = PlayerSession(UUID.randomUUID(), false, "dummy", "dummy")
 
     @BeforeTest
     fun setup() {
@@ -26,6 +29,29 @@ class PlayerServiceImplTest {
     @AfterTest
     fun teardown() {
         confirmVerified(playerRepository, passwordHashService, authTokenService)
+    }
+
+    @Test
+    fun `getPlayer returns player from repository`() {
+        val playerId = UUID.randomUUID()
+        every { playerRepository.getPlayerOrNull(playerId) } returns GuestPlayer(playerId)
+        val player = service.getPlayer(dummySession, playerId)
+        assertEquals(GuestPlayer(playerId), player)
+        verify(exactly = 1) {
+            playerRepository.getPlayerOrNull(playerId)
+        }
+    }
+
+    @Test
+    fun `getPlayer throws NotFoundException if not found`() {
+        val playerId = UUID.randomUUID()
+        every { playerRepository.getPlayerOrNull(playerId) } returns null
+        assertThrows<NotFoundException> {
+            service.getPlayer(dummySession, playerId)
+        }
+        verify(exactly = 1) {
+            playerRepository.getPlayerOrNull(playerId)
+        }
     }
 
     @Test
@@ -63,7 +89,7 @@ class PlayerServiceImplTest {
     }
 
     @Test
-    fun `authenticatePlayer with wrong password returns null`() {
+    fun `authenticatePlayer with wrong password throws IllegalArgumentException`() {
         val displayName = "George"
         val username = "george"
         val password = "MyNameIsGeorge"
@@ -77,12 +103,13 @@ class PlayerServiceImplTest {
         )
         every { passwordHashService.verifyPassword(hashedPassword, password) } returns false
 
-        val token = service.authenticatePlayer(
-            username,
-            password,
-        )
+        assertThrows<IllegalArgumentException> {
+            service.authenticatePlayer(
+                username,
+                password,
+            )
+        }
 
-        assertNull(token)
         verify(exactly = 1) {
             playerRepository.findPlayerByUsername(username)
             passwordHashService.verifyPassword(hashedPassword, password)
@@ -90,18 +117,19 @@ class PlayerServiceImplTest {
     }
 
     @Test
-    fun `authenticatePlayer with wrong username returns null`() {
+    fun `authenticatePlayer with wrong username throws IllegalArgumentException`() {
         val username = "george"
         val password = "MyNameIsGeorge"
 
         every { playerRepository.findPlayerByUsername(username) } returns null
 
-        val token = service.authenticatePlayer(
-            username,
-            password,
-        )
+        assertThrows<IllegalArgumentException> {
+            service.authenticatePlayer(
+                username,
+                password,
+            )
+        }
 
-        assertNull(token)
         verify(exactly = 1) {
             playerRepository.findPlayerByUsername(username)
         }
@@ -155,7 +183,91 @@ class PlayerServiceImplTest {
     }
 
     @Test
-    fun `updatePlayerPassword with wrong oldPassword returns null`() {
+    fun `updatePlayerDisplayName updates player displayName`() {
+        val player = RegisteredPlayer(dummySession.playerId, dummySession.username!!, dummySession.displayName!!, "Password_hash")
+        val updatedDisplayName = "newDummy"
+        val updatedPlayer = player.copy(displayName = updatedDisplayName)
+
+        every { playerRepository.getPlayerOrNull(player.id) } returns player
+        every { playerRepository.updatePlayer(any()) } just Runs
+        every { authTokenService.createToken(updatedPlayer) } returns dummyToken
+
+        val token = service.updatePlayerDisplayName(dummySession, updatedDisplayName)
+        assertEquals(dummyToken, token)
+
+        verify(exactly = 1) {
+            playerRepository.getPlayerOrNull(player.id)
+            playerRepository.updatePlayer(updatedPlayer)
+            authTokenService.createToken(updatedPlayer)
+        }
+    }
+
+    @Test
+    fun `updatePlayerDisplayName throws IllegalArgumentException if logged in player is guest`() {
+        val playerId = UUID.randomUUID()
+        val guestSession = PlayerSession(playerId, true, null, null)
+        val updatedDisplayName = "newDummy"
+
+        every { playerRepository.getPlayerOrNull(playerId) } returns GuestPlayer(playerId)
+
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.updatePlayerDisplayName(guestSession, updatedDisplayName)
+        }
+        assertEquals("GuestPlayer cannot have display name", thrown.message)
+
+        verify(exactly = 1) {
+            playerRepository.getPlayerOrNull(playerId)
+        }
+    }
+
+    @Test
+    fun `updatePlayerPassword updates Player password`() {
+        val oldPassword = "Password"
+        val oldPasswordHash = "${oldPassword}_hash"
+        val newPassword = "newPassword"
+        val newPasswordHash = "${newPassword}_hash"
+        val player = RegisteredPlayer(dummySession.playerId, "dummy", "", oldPasswordHash)
+        val updatedPlayer = player.copy(password = newPasswordHash)
+
+        every { playerRepository.getPlayerOrNull(dummySession.playerId) } returns player
+        every { passwordHashService.verifyPassword(oldPasswordHash, oldPassword) } returns true
+        every { passwordHashService.hashPassword(newPassword) } returns newPasswordHash
+        every { playerRepository.updatePlayer(any()) } just Runs
+        every { authTokenService.createToken(updatedPlayer) } returns dummyToken
+
+        val token = service.updatePlayerPassword(dummySession, oldPassword, newPassword)
+        assertEquals(dummyToken, token)
+
+        verify (exactly = 1) {
+            playerRepository.getPlayerOrNull(dummySession.playerId)
+            passwordHashService.verifyPassword(oldPasswordHash, oldPassword)
+            passwordHashService.hashPassword(newPassword)
+            authTokenService.createToken(updatedPlayer)
+            playerRepository.updatePlayer(updatedPlayer)
+        }
+    }
+
+    @Test
+    fun `updatePlayerPassword throws IllegalArgumentException if logged in player is guest`() {
+        val oldPassword = "Password"
+        val newPassword = "newPassword"
+        val playerId = UUID.randomUUID()
+        val guestSession = PlayerSession(playerId, true, null, null)
+
+        every { playerRepository.getPlayerOrNull(playerId) } returns GuestPlayer(playerId)
+
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.updatePlayerPassword(guestSession, oldPassword, newPassword)
+        }
+        assertEquals("GuestPlayer cannot have password", thrown.message)
+
+        verify (exactly = 1) {
+            playerRepository.getPlayerOrNull(playerId)
+        }
+    }
+
+    @Test
+    fun `updatePlayerPassword with wrong oldPassword throws IllegalArgumentException`() {
         val id = UUID.randomUUID()
         val username = "dummy"
         val password = "Password"
@@ -167,9 +279,10 @@ class PlayerServiceImplTest {
         every { passwordHashService.verifyPassword(wrongPassword, password) } returns false
 
         val session = PlayerSession(id, false, username, "Dummy")
-        val token = service.updatePlayerPassword(session, password, newPassword)
-
-        assertNull(token)
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.updatePlayerPassword(session, password, newPassword)
+        }
+        assertEquals("Incorrect Password supplied", thrown.message)
 
         verify(exactly = 1) {
             playerRepository.getPlayerOrNull(id)
@@ -187,7 +300,7 @@ class PlayerServiceImplTest {
 
         val session = PlayerSession(id, false, "marcel", "Marcel")
 
-        service.deletePlayer(session, playerToDelete)
+        service.deletePlayer(session, id)
 
         assertEquals(GuestPlayer(id), player.captured)
 

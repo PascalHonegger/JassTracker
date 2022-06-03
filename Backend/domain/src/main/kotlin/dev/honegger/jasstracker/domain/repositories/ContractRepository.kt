@@ -6,4 +6,5 @@ import java.util.*
 interface ContractRepository {
     fun getContracts(): List<Contract>
     fun getContractOrNull(id: UUID): Contract?
+    fun contractExists(id: UUID): Boolean
 }

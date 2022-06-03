@@ -3,27 +3,31 @@ package dev.honegger.jasstracker.domain.services
 import dev.honegger.jasstracker.domain.Table
 import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.repositories.TableRepository
+import dev.honegger.jasstracker.domain.util.tableNameLengthRange
+import dev.honegger.jasstracker.domain.util.validateCurrentPlayer
+import dev.honegger.jasstracker.domain.util.validateExists
 
 import mu.KotlinLogging
 import java.util.*
 
 interface TableService {
     fun createTable(session: PlayerSession, name: String): Table
-    fun getTableOrNull(session: PlayerSession, id: UUID): Table?
+    fun getTable(session: PlayerSession, id: UUID): Table
     fun getTables(session: PlayerSession): List<Table>
     fun updateTable(session: PlayerSession, updatedTable: Table)
-    fun deleteTableById(session: PlayerSession, id: UUID): Boolean
+    fun deleteTableById(session: PlayerSession, id: UUID)
 }
 
 private val log = KotlinLogging.logger { }
 
-class TableServiceImpl(private val tableRepository: TableRepository) :
-    TableService {
+class TableServiceImpl(private val tableRepository: TableRepository) : TableService {
+    private fun validateTableName(name: String) = require(name.length in tableNameLengthRange) { "Name must be between $tableNameLengthRange characters" }
+
     override fun createTable(
         session: PlayerSession,
         name: String,
     ): Table {
-        check(name.length in 2..30) { "Name must be between 2 and 30 characters" }
+        validateTableName(name)
         val newTable = Table(
             id = UUID.randomUUID(),
             name = name,
@@ -36,12 +40,14 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
         return newTable
     }
 
-    override fun getTableOrNull(
+    override fun getTable(
         session: PlayerSession,
         id: UUID,
-    ): Table? {
+    ): Table {
         // Users can load any table they know the ID of
-        return tableRepository.getTableOrNull(id)
+        val table = tableRepository.getTableOrNull(id)
+        validateExists(table) { "Table $id not found" }
+        return table
     }
 
     override fun getTables(
@@ -55,19 +61,20 @@ class TableServiceImpl(private val tableRepository: TableRepository) :
         session: PlayerSession,
         updatedTable: Table,
     ) {
-        val existingTable =
-            tableRepository.getTableOrNull(updatedTable.id)
-        // User can only update a table which exists and is owned by himself
-        checkNotNull(existingTable)
-        check(updatedTable.ownerId == session.playerId)
-        tableRepository.saveTable(existingTable.copy(name = updatedTable.name))
+        val existingTable = tableRepository.getTableOrNull(updatedTable.id)
+        validateExists(existingTable) { "Player can only update a table which exists and is owned by himself" }
+        validateCurrentPlayer(updatedTable.ownerId, session) { "Player can only update hiw own table" }
+        validateTableName(updatedTable.name)
+        tableRepository.updateTable(existingTable.copy(name = updatedTable.name))
     }
 
-    override fun deleteTableById(session: PlayerSession, id: UUID): Boolean {
-        val existingTable =
-            tableRepository.getTableOrNull(id)
-        checkNotNull(existingTable)
-        check(existingTable.ownerId == session.playerId)
-        return tableRepository.deleteTableById(id)
+    override fun deleteTableById(session: PlayerSession, id: UUID) {
+        val existingTable = tableRepository.getTableOrNull(id)
+        validateExists(existingTable) { "Table $id does not exist" }
+        validateCurrentPlayer(existingTable.ownerId, session) { "Only table owner can delete table" }
+        val wasDeleted = tableRepository.deleteTableById(id)
+        if (!wasDeleted) {
+            log.warn { "Delete table $id did not result in DB update" }
+        }
     }
 }

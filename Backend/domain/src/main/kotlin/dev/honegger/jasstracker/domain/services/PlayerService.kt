@@ -5,6 +5,8 @@ import dev.honegger.jasstracker.domain.Player
 import dev.honegger.jasstracker.domain.RegisteredPlayer
 import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
+import dev.honegger.jasstracker.domain.util.validateCurrentPlayer
+import dev.honegger.jasstracker.domain.util.validateExists
 import mu.KotlinLogging
 import java.util.*
 
@@ -16,11 +18,11 @@ interface PlayerService {
     ): AuthToken
 
     fun registerGuestPlayer(): AuthToken
-    fun authenticatePlayer(username: String, password: String): AuthToken?
-    fun getPlayerOrNull(session: PlayerSession, id: UUID): Player?
+    fun authenticatePlayer(username: String, password: String): AuthToken
+    fun getPlayer(session: PlayerSession, id: UUID): Player
     fun updatePlayerDisplayName(session: PlayerSession, updatedDisplayName: String): AuthToken
-    fun updatePlayerPassword(session: PlayerSession, oldPassword: String, newPassword: String): AuthToken?
-    fun deletePlayer(session: PlayerSession, playerToDelete: RegisteredPlayer)
+    fun updatePlayerPassword(session: PlayerSession, oldPassword: String, newPassword: String): AuthToken
+    fun deletePlayer(session: PlayerSession, playerId: UUID)
 }
 
 private val log = KotlinLogging.logger { }
@@ -57,22 +59,25 @@ class PlayerServiceImpl(
         return authTokenService.createToken(newPlayer)
     }
 
-    override fun authenticatePlayer(username: String, password: String): AuthToken? {
+    override fun authenticatePlayer(username: String, password: String): AuthToken {
         val player = playerRepository.findPlayerByUsername(username)
-        if (player == null || !passwordHashService.verifyPassword(
+        require(
+            player != null && passwordHashService.verifyPassword(
                 hash = player.password,
                 password = password
             )
-        ) return null
+        ) { "Incorrect password or username supplied" }
         return authTokenService.createToken(player)
     }
 
-    override fun getPlayerOrNull(
+    override fun getPlayer(
         session: PlayerSession,
         id: UUID,
-    ): Player? {
+    ): Player {
         // Users can load any player they know the ID of
-        return playerRepository.getPlayerOrNull(id)
+        val player = playerRepository.getPlayerOrNull(id)
+        validateExists(player) { "Player $id not found" }
+        return player
     }
 
     private fun updatePlayer(
@@ -89,35 +94,31 @@ class PlayerServiceImpl(
         session: PlayerSession,
         updatedDisplayName: String,
     ): AuthToken {
-        val existingPlayer =
-            playerRepository.getPlayerOrNull(session.playerId)
-        checkNotNull(existingPlayer)
-        check(existingPlayer is RegisteredPlayer)
-        // User can only update themselves
-        check(existingPlayer.id == session.playerId)
+        val existingPlayer = playerRepository.getPlayerOrNull(session.playerId)
+        require(existingPlayer is RegisteredPlayer) { "GuestPlayer cannot have display name" }
 
         val updatedPlayer = existingPlayer.copy(displayName = updatedDisplayName)
 
         return updatePlayer(session, updatedPlayer)
     }
 
-    override fun updatePlayerPassword(session: PlayerSession, oldPassword: String, newPassword: String): AuthToken? {
+    override fun updatePlayerPassword(session: PlayerSession, oldPassword: String, newPassword: String): AuthToken {
         val existingPlayer = playerRepository.getPlayerOrNull(session.playerId)
-        check(existingPlayer is RegisteredPlayer)
-        if (!passwordHashService.verifyPassword(
+        require(existingPlayer is RegisteredPlayer) { "GuestPlayer cannot have password" }
+        require(
+            passwordHashService.verifyPassword(
                 hash = existingPlayer.password,
                 password = oldPassword
             )
-        ) return null
+        ) { "Incorrect Password supplied" }
         val updatedPlayer = existingPlayer.copy(password = passwordHashService.hashPassword(newPassword))
         return updatePlayer(session, updatedPlayer)
     }
 
-    override fun deletePlayer(session: PlayerSession, playerToDelete: RegisteredPlayer) {
-        val existingPlayer = playerRepository.getPlayerOrNull(playerToDelete.id)
-        checkNotNull(existingPlayer)
-        check(existingPlayer is RegisteredPlayer)
-        check(existingPlayer.id == session.playerId)
+    override fun deletePlayer(session: PlayerSession, playerId: UUID) {
+        val existingPlayer = playerRepository.getPlayerOrNull(playerId)
+        validateExists(existingPlayer) { "Player $playerId was not found" }
+        validateCurrentPlayer(existingPlayer.id, session) { "Can only delete current user" }
 
         val updatedPlayer = GuestPlayer(existingPlayer.id)
         playerRepository.updatePlayer(updatedPlayer)

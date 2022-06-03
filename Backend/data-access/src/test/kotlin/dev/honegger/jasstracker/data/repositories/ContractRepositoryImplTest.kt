@@ -3,8 +3,11 @@ package dev.honegger.jasstracker.data.repositories
 import dev.honegger.jasstracker.domain.Contract
 import dev.honegger.jasstracker.domain.ContractType
 import dev.honegger.jasstracker.domain.util.toUUID
+import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class ContractRepositoryImplTest : RepositoryTest() {
     private val repo = ContractRepositoryImpl()
@@ -31,5 +34,16 @@ class ContractRepositoryImplTest : RepositoryTest() {
             Contract("345bde8f-a316-4952-b021-7cbe7ad62306".toUUID(), "Guschti", 10, ContractType.Guschti),
         )
         assertEquals(expected, repo.getContracts())
+    }
+
+    @Test
+    fun `contractExists returns true if contract exists`() {
+        val id = "58bae0f8-8c59-4a40-aa2d-9c6a489366b3".toUUID()
+        assertTrue(repo.contractExists(id))
+    }
+
+    @Test
+    fun `contractExists returns false if contract does not exist`() {
+        assertFalse(repo.contractExists(UUID.randomUUID()))
     }
 }
