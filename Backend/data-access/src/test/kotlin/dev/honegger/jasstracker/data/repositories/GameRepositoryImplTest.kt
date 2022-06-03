@@ -186,11 +186,6 @@ class GameRepositoryImplTest : RepositoryTest() {
     }
 
     @Test
-    fun `getAllGames returns all games`() {
-        assertEquals(setOf(game1, game2), repo.getAllGames().toSet())
-    }
-
-    @Test
     fun `getAllGamesOfTable returns games`() {
         val tableId = "de940c47-9881-4e95-bc3d-6014ad1902e1".toUUID()
         assertEquals(listOf(game2), repo.getAllGamesOfTable(tableId))

@@ -24,7 +24,6 @@ interface GameService {
     ): Game
 
     fun getGame(session: PlayerSession, id: UUID): Game
-    fun getAllGames(session: PlayerSession): List<Game>
     fun updateGame(session: PlayerSession, updatedGame: Game)
     fun deleteGameById(session: PlayerSession, id: UUID)
 }
@@ -81,11 +80,6 @@ class GameServiceImpl(
         val game = gameRepository.getGameOrNull(id)
         validateExists(game) { "Game $id was not found" }
         return game
-    }
-
-    override fun getAllGames(session: PlayerSession): List<Game> {
-        // Users can load all games, will be restricted in the future
-        return gameRepository.getAllGames()
     }
 
     override fun updateGame(
