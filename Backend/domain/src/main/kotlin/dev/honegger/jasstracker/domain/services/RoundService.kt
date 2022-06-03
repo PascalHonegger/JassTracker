@@ -51,7 +51,8 @@ class RoundServiceImpl(private val roundRepository: RoundRepository, private val
         require(game.endTime == null) { "Cannot add round to completed game" }
         val team = getTeamOfPlayer(game, playerId)
 
-        require(game.rounds.none { it.number == number }) { "Round nr. $number was already played" }
+        val expectedRoundNumber = (game.rounds.maxOfOrNull { it.number } ?: 0) + 1
+        require(number == expectedRoundNumber) { "Expected round number $expectedRoundNumber but got $number" }
         require(game.rounds.none { it.playerId in team && it.contractId == contractId }) { "Contract $contractId was already played by team member" }
 
         val newRound = Round(

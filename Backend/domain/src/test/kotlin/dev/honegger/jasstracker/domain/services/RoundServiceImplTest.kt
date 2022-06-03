@@ -284,7 +284,46 @@ class RoundServiceImplTest {
                 contractId = UUID.randomUUID()
             )
         }
-        assertEquals("Round nr. 1 was already played", thrown.message)
+        assertEquals("Expected round number 2 but got 1", thrown.message)
+        verify(exactly = 1) {
+            contractRepository.contractExists(any())
+            tableRepository.getTableByGameIdOrNull(dummyGameId)
+        }
+    }
+
+    @Test
+    fun `createRound throws if round number is unexpected`() {
+        val dummyGameId = UUID.randomUUID()
+        val p1 = dummySession.playerId
+        val p2 = UUID.randomUUID()
+        val p3 = UUID.randomUUID()
+        val p4 = UUID.randomUUID()
+        every { tableRepository.getTableByGameIdOrNull(dummyGameId) } returns Table(
+            id = UUID.randomUUID(),
+            name = "dummy",
+            ownerId = dummySession.playerId,
+            games = listOf(
+                Game(
+                    id = dummyGameId,
+                    startTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+                    endTime = null,
+                    team1 = Team(GameParticipation(p1, "T1P1"), GameParticipation(p2, "T1P2")),
+                    team2 = Team(GameParticipation(p3, "T2P1"), GameParticipation(p4, "T2P2")),
+                    rounds = emptyList()
+                )
+            )
+        )
+        val thrown = assertThrows<IllegalArgumentException> {
+            service.createRound(
+                dummySession,
+                number = 2,
+                score = 100,
+                gameId = dummyGameId,
+                playerId = p2,
+                contractId = UUID.randomUUID()
+            )
+        }
+        assertEquals("Expected round number 1 but got 2", thrown.message)
         verify(exactly = 1) {
             contractRepository.contractExists(any())
             tableRepository.getTableByGameIdOrNull(dummyGameId)
