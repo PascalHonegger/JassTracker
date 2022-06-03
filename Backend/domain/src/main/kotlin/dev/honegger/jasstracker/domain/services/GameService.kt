@@ -57,7 +57,7 @@ class GameServiceImpl(
             team2Player1.playerId,
             team2Player2.playerId
         )
-        require(playerIds.size == playerIds.toSet().size) { "Players in a game must be unique" }
+        require(playerIds.size == playerIds.distinct().size) { "Players in a game must be unique" }
         val table = tableRepository.getTableOrNull(tableId)
         validateExists(table) { "Table $tableId does not exist" }
         validateCurrentPlayer(table.ownerId, session) { "Only table owner can create games" }
