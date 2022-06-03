@@ -45,17 +45,6 @@ class GameEndpointsTest {
     }
 
     @Test
-    fun `get games finds empty list`() = testApplication {
-        val client = setup()
-        every { service.getAllGames(any()) } returns emptyList()
-        client.get("/games").apply {
-            assertEquals(HttpStatusCode.OK, status)
-            assertEquals("[]", bodyAsText())
-        }
-        verify(exactly = 1) { service.getAllGames(any()) }
-    }
-
-    @Test
     fun `get game finds dummy game`() = testApplication {
         val client = setup()
         val dummyId = UUID.randomUUID()

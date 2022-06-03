@@ -5,10 +5,6 @@ import {
   WebGameParticipation,
 } from "@/services/web-model";
 
-export async function getGames(tableId: string) {
-  return api.get<WebGame[]>(`games/${tableId}`);
-}
-
 export async function getGame(gameId: string) {
   return api.get<WebGame>(`games/${gameId}`);
 }

@@ -14,10 +14,6 @@ fun Route.configureGameEndpoints(
     gameService: GameService,
 ) {
     route("/games") {
-        get {
-            val games = gameService.getAllGames(call.playerSession())
-            call.respond(games.map { it.toWebGame() })
-        }
         get("/{id}") {
             val id = call.parameters["id"]
             checkNotNull(id)

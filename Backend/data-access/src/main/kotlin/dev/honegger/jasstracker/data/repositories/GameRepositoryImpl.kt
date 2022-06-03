@@ -18,10 +18,6 @@ import java.util.*
 
 class GameRepositoryImpl : GameRepository {
 
-    override fun getAllGames(): List<Game> = withContext {
-        toDomainObjects(selectFrom(GAME).fetch())
-    }
-
     override fun getAllGamesOfTable(tableId: UUID): List<Game> = withContext {
         toDomainObjects(
             selectFrom(GAME)
