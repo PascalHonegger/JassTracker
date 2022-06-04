@@ -96,7 +96,7 @@ h2 {
       <div class="text-left flex-wrap">
         <img
           class="float-left object-scale-down max-w-[40%] pr-4 pb-4"
-          src="../assets/helpcenter/scoreBoard.webp"
+          src="../assets/helpcenter/scoreboard.webp"
           alt="Spiel Übersicht"
         />
         <p>
