@@ -125,6 +125,37 @@ class RoundRepositoryImplTest : RepositoryTest() {
     }
 
     @Test
+    fun `deleteRound does not update round numbers of other games`() {
+        val game = createEmptyGame()
+        val otherGame = createEmptyGame()
+        val round = Round(
+            UUID.randomUUID(),
+            1,
+            120,
+            game.id,
+            game.team1.player1.playerId,
+            "58bae0f8-8c59-4a40-aa2d-9c6a489366b3".toUUID()
+        )
+        val otherRound = round.copy(id = UUID.randomUUID(), gameId = otherGame.id)
+        val round2 = Round(
+            UUID.randomUUID(),
+            2,
+            120,
+            game.id,
+            game.team1.player2.playerId,
+            "58bae0f8-8c59-4a40-aa2d-9c6a489366b3".toUUID()
+        )
+        val otherRound2 = round2.copy(id = UUID.randomUUID(), gameId = otherGame.id)
+        repo.saveRound(round)
+        repo.saveRound(round2)
+        repo.saveRound(otherRound)
+        repo.saveRound(otherRound2)
+        repo.deleteRoundById(round.id)
+        val loadedRound = repo.getRoundOrNull(otherRound2.id)
+        assertEquals(otherRound2, loadedRound)
+    }
+
+    @Test
     fun `deleteRound removes round`() {
         val game = createEmptyGame()
         val round = Round(
