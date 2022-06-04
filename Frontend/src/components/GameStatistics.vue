@@ -38,7 +38,7 @@ const scoreOverRound = computed(
       team2: scores.team2Score ?? undefined,
       diff:
         scores.team1Score != null && scores.team2Score != null
-          ? scores.team2Score - scores.team1Score
+          ? scores.team1Score - scores.team2Score
           : undefined,
     })) ?? []
 );
