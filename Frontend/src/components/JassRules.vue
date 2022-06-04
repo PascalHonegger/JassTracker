@@ -19,7 +19,7 @@ h3 {
       >
         Jass Regeln
       </div>
-    </help-tabs>
+    </HelpTabs>
     <h1 class="text-5xl font-normal leading-normal mt-4">Jass Regeln</h1>
     <h2 class="text-4xl font-normal leading-normal mt-4">Spielablauf</h2>
     <div class="flex py-2">

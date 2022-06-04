@@ -9,7 +9,7 @@ h2 {
 </style>
 <template>
   <div class="container mx-auto text-center">
-    <help-tabs class="flex border-b border-black mt-4">
+    <HelpTabs class="flex border-b border-black mt-4">
       <div
         class="-mb-px mr-1 border-black inline-block bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 font-semibold"
       >
@@ -20,7 +20,7 @@ h2 {
         to="/help/jassRules"
         >Jass Regeln</RouterLink
       >
-    </help-tabs>
+    </HelpTabs>
     <h1 class="text-5xl font-normal leading-normal mt-4">
       JassTracker Bedienung
     </h1>
@@ -41,13 +41,13 @@ h2 {
           <RouterLink to="/register" class="underline text-blue-600"
             >Registrieren</RouterLink
           >
-          . Danach kann man sich mit den Benutzerinformationen einloggen und
-          den JassTracker im vollen Umfang verwenden.
+          . Danach kann man sich mit den Benutzerinformationen einloggen und den
+          JassTracker im vollen Umfang verwenden.
           <br />
           Wenn man sich keinen Account erstellen möchte, oder den JassTracker
           mal ausprobieren möchte, kann man sich als "Gast" anmelden. Man kann
-          alle Funktionalitäten der Applikation ausprobieren und sehen, ob
-          man einen Account erstellen möchte.
+          alle Funktionalitäten der Applikation ausprobieren und sehen, ob man
+          einen Account erstellen möchte.
         </p>
       </div>
     </div>
@@ -80,11 +80,11 @@ h2 {
           alt="Tisch Erstellen"
         />
         <p>
-          Beim Erstellen eines Tisches kann man via Drag-and-Drop Spieler auf die
-          einzelnen Plätze ziehen. Dabei ist angedacht, dass das Feld mit ihrem
-          Anzeigenamen an ihren Platz am Tisch gezogen wird und die restlichen
-          Plätze mit dem "Neuer Spieler"-Feld um einen Alias ergänzt werden.
-          Später wenn man einen neues Spiel erstellt (wie im Screenshot
+          Beim Erstellen eines Tisches kann man via Drag-and-Drop Spieler auf
+          die einzelnen Plätze ziehen. Dabei ist angedacht, dass das Feld mit
+          ihrem Anzeigenamen an ihren Platz am Tisch gezogen wird und die
+          restlichen Plätze mit dem "Neuer Spieler"-Feld um einen Alias ergänzt
+          werden. Später wenn man einen neues Spiel erstellt (wie im Screenshot
           angezeigt), kann man eine Platzänderung via Drag-and-Drop vornehmen,
           oder via dem "Neuer Spieler"-Feld einen neuen Teilnehmer am Tisch
           hinterlegen.
@@ -103,12 +103,12 @@ h2 {
           Spiele sind immer in einem Tisch enthalten. Bei der Erstellung eines
           Tisches wird automatisch das erste Spiel erstellt.
           <br />
-          Spiele können mit "Spiel abschliessen", entweder frühzeitig oder sobald
-          alle Möglichkeiten gespielt wurden, abgeschlossen werden.
+          Spiele können mit "Spiel abschliessen", entweder frühzeitig oder
+          sobald alle Möglichkeiten gespielt wurden, abgeschlossen werden.
           <br />
-          Ein neues Spiel kann via "Neues Spiel erstellen" eröffnet werden.
-          Auf Wunsch kann man die Teams neu bilden.
-          erhält die Option, die Teams neu zu bilden bei Wunsch.
+          Ein neues Spiel kann via "Neues Spiel erstellen" eröffnet werden. Auf
+          Wunsch kann man die Teams neu bilden. erhält die Option, die Teams neu
+          zu bilden bei Wunsch.
           <br />
           Beim Klick auf ein Spiel in der unteren Box Ansicht, kommt man auf die
           Detailseite, wo man die Möglichkeit hat, ein Spiel zu löschen. Nur
@@ -151,9 +151,9 @@ h2 {
           pro Spieler und die durchschnittliche Punktezahl pro Trumpf.
           <br />
           Mit einem klick auf die Detaillierte Auswertung, sieht man Statistiken
-          zum ausgewählten Spiel.
-          Punktzahlen pro Runden, der Punkteunterschied zwischen Team 1 und Team
-          2 (dargestellt im Bild Rechts) und die durchschnittlichen Punktzahlen.
+          zum ausgewählten Spiel. Punktzahlen pro Runden, der Punkteunterschied
+          zwischen Team 1 und Team 2 (dargestellt im Bild Rechts) und die
+          durchschnittlichen Punktzahlen.
         </p>
       </div>
     </div>
