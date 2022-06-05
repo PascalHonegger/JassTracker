@@ -87,6 +87,45 @@ If you wanted to create a fat desktop client for the JassTracker, you would be a
 
 \includegraphics[width=0.9\textwidth]{resources/diagrams/c4-3-component}
 
+\section{Tools \& Frameworks}
+
+In general, our technologies were chosen with simplicity and maintainability in mind.
+We wanted a tech-stack which was relatively easy to learn, while still allowing for clean and extensible architecture.
+This overview does not aim to provide details into each technology, but a one-sentence summary on why it was chosen.
+
+\subsection*{Frontend}
+
+\begin{compactitem}
+    \item \textbf{vue} is a simple frontend framework which meets our requirements
+    \item \textbf{mande} is a basic wrapper around fetch, which reduces boilerplate
+    \item \textbf{pinia} is the new standard state management solution from Vue.js
+    \item \textbf{vue-draggable-next} implements the drag-and-drop functionality we needed
+    \item \textbf{vue-toastification} has beautiful toast messages with a Vue.js 3 compatible API
+    \item \textbf{vue3-charts} provides a very simple Vue.js 3 API for all the charts we need
+    \item \textbf{eslint} is the state-of-the-art linter for TypeScript and JavaScript
+    \item \textbf{sass} is a powerful css preprocessor which allows us to re-use styles effectively
+    \item \textbf{prettier} is an opinionated formatter which integrates with ESlint and IntelliJ
+    \item \textbf{tailwindcss} provides a modern way of designing web-apps by applying utility classes instead of writing custom CSS rules
+    \item \textbf{typescript} allows for strict typing to detect a number of errors at compile-time
+\end{compactitem}
+
+\subsection*{Backend}
+
+\begin{compactitem}
+    \item \textbf{Kotlin} is a modern programming language with many productivity benefits over Java
+    \item \textbf{Ktor} is a simple and fun server framework, which is easy to understand and work with
+    \item \textbf{Kotlinx-Serialization} is the official serialization solution from Kotlin and provides great performance
+    \item \textbf{Kotlinx-Datetime} provides a plattform-independent API similar to java.time
+    \item \textbf{Argon2} won the Password Hashing Competition (PHC) and is used to hash player passwords
+    \item \textbf{jOOQ} is a SQL wrapper for the JVM, which is simple to use if you already know SQL
+    \item \textbf{Java-JWT} is used by Ktor when using JWT tokens, which are an industry standard for representing security claims
+    \item \textbf{Flyway} is a database migration tool with a simple setup and SQL-based migrations
+    \item \textbf{shadow} is used to build a fat JAR for use within docker containers
+    \item \textbf{Kotlin-Test} provides test annotations and utilities with great Kotlin integration
+    \item \textbf{Ktor-Server-Tests} is the testing counterpart to Ktor, allowing us to write
+    \item \textbf{Mockk} is the most popular Kotlin mocking framework
+    \item \textbf{Testcontainers} allow us to run integrations tests against a real Postgres database
+\end{compactitem}
 
 \section{Code}
 It is best to illustrate how these components work together by an example.
