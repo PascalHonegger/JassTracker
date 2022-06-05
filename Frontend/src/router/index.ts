@@ -20,10 +20,32 @@ const routes: Array<RouteRecordRaw> = [
     component: RegisterView,
   },
   {
-    path: "/help",
-    name: "help",
+    path: "/help/jassTrackerHelp",
+    name: "jassTrackerHelp",
     component: () =>
-      import(/* webpackChunkName: "help" */ "../views/HelpView.vue"),
+      import(
+        /* webpackChunkName: "help" */ "../components/JassTrackerHelp.vue"
+      ),
+  },
+  {
+    path: "/help/jassRules",
+    name: "jassRules",
+    component: () =>
+      import(/* webpackChunkName: "help" */ "../components/JassRules.vue"),
+  },
+  {
+    path: "/help/jassTrackerHelp",
+    name: "jassTrackerHelp",
+    component: () =>
+      import(
+        /* webpackChunkName: "help" */ "../components/JassTrackerHelp.vue"
+      ),
+  },
+  {
+    path: "/help/jassRules",
+    name: "jassRules",
+    component: () =>
+      import(/* webpackChunkName: "help" */ "../components/JassRules.vue"),
   },
   {
     path: "/overview",
