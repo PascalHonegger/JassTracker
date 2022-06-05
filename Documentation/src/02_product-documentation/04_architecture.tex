@@ -70,7 +70,7 @@ Password hashing and JWT configuration is done within this module to abstract an
 If anything cryptography-related wasn't correct, this would be the place to fix it.
 
 \subsubsection*{Web API}
-The web API module provides the JassTracker services over a REST API.
+The web API module provides the JassTracker services over a REST API\@.
 All framework specific code for handling a request, like loading URL parameters or reading headers, is done here.
 
 \subsubsection*{Data Access}
@@ -97,7 +97,7 @@ If the endpoint is authenticated, the current user will be read from the provide
 Once in the domain module, business logic happens, other services are called etc.
 For example, for a login you'll have to load the player by username from the repository.
 The domain doesn't know or care about the exact way a player is found, but it expects a domain player to be returned.
-Therefore the repository implementation within the data-access module has to map the database records to the correct domain object.
+Therefore, the repository implementation within the data-access module has to map the database records to the correct domain object.
 
 Once the domain code has decided that the login is valid, a JWT token is created by calling a AuthTokenService.
 This service resides within the security module, but the domain doesn't know that.
@@ -105,7 +105,7 @@ Thanks to Dependency Injection, the business logic stays completely isolated fro
 
 The token created by the domain is finally returned to the web API, which will ensure the token is returned in a valid JSON to the caller.
 If the login had failed, the domain would've return null instead of a valid token.
-In that case the web API can decide on how to handle an invalid login, for example by returning a HTTP 400 response.
+In that case the web API can decide on how to handle an invalid login, for example by returning an HTTP 400 response.
 
 \includegraphics[width=\textwidth]{resources/diagrams/login-sequence}
 
