@@ -13,11 +13,11 @@
 \begin{itemize}
     \item Acceptance criteria / issue of user story is met
     \item Code follows best practices and guidelines
-    \item No TODOs without a issue number are allowed
+    \item No TODOs without an issue number are allowed
     \item Project builds without errors or warnings
     \item Tests are written and all tests are passing
     \item Peer Code Review performed
-    \item Project deployed on the test environment identical to production platform
+    \item Project deployed on the test environment identical to the production platform
     \item Documentation updated
     \item Associated with epic and release
     \item Hours worked on are logged correctly
@@ -76,7 +76,7 @@
     \item Automated
 \end{itemize}
 
-\subsection{Usability Tests (See Chapter~\ref{sec:uxTesting})}
+\subsection{Usability Tests (See Chapter~\ref{ch:uxtesting})}
 \begin{itemize}
     \item Project will be given to multiple people for testing (hallway testing)
     \item Testers should be able to use website without having to ask any questions
@@ -111,7 +111,7 @@ We have chosen to integrate the following code quality tools to ensure proper ac
 To ensure the integrity of our code we have integrated Qodana into our CI pipeline.
 We decided to use Qodana instead of Sonar to avoid the problem of self-hosting.
 Other reasons we decided Qodana was a reasonable choice are the easy integration into our CI pipeline and IntelliJ and also qodana works well with all our other used technologies.
-For our Backend we have the Qodana JVM linter, which statically analyzes our Backend (Kotlin \& Java) code.
+For our Backend, we have the Qodana JVM linter, which statically analyzes our Backend (Kotlin \& Java) code.
 Concretely, code smells, potential bugs, dead code and general improvements in the overall code structure are reported.
 For our Frontend (Vue \& TypeScript), we use Qodana JS, which is based on Webstorm's linters.
 
@@ -123,6 +123,6 @@ Failing sections of the Lighthouse report indicate where improvements should be 
 
 \subsection{Kover}
 To be able to test our Test-Coverage of 80\% we integrated \href{https://github.com/Kotlin/kotlinx-kover}{Kover}.
-Because Kover is a Gradle plugin for native Kotlin code coverage, it encouraged us to use it based on it's easy setup.
-It's important to note that Kover is still in it's incubator phase, however multiple reviews have shown promising results, which is why we decided it was fitting for our Kotlin setup.
+Because Kover is a Gradle plugin for native Kotlin code coverage, it encouraged us to use it based on its easy setup.
+It's important to note that Kover is still in its incubator phase, however multiple reviews have shown promising results, which is why we decided it was fitting for our Kotlin setup.
 We have integrated a job in our CI pipeline that fails if the code coverage doesn't reach our specified minimum and provides a Kover Code Coverage Report, showing where the coverage needs to be improved.
