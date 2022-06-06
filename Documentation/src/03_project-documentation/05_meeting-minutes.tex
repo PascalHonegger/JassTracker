@@ -541,6 +541,63 @@ Everything is close to perfect!
     \item Manage the deadlines better and stick to them, when you start with a ticket, make sure to ask any open questions
 \end{itemize}
 
+\section{Review Meeting 5, 23.05.2022}
+
+\subsection{Feedback}
+Still great progress with some minor hiccups.
+
+\begin{itemize}
+    \item Fortlaufende Aktualisierung der Roadmap aufgrund Fortschritt \textrightarrow sehr gut!
+    \item Ca. 10\% unter SOLL (noch OK), aber noch hoher Range bei Personen [75h bis 115h]
+    \begin{itemize}
+        \item Input: Versuchen, bis Ende eine gleichmässigere Verteilung zu erreichen
+    \end{itemize}
+    \item Feedbacks aus R4 integriert
+    \item Standard-Aufbau (Frontend, Backend + DB), aber absolut angemessen für das Problem
+    \item Moderne, angemessene Technologien in allen Containern
+    \item Frage: sind alle 17 NFR wirklich erfüllt? \textrightarrow Team: ja, sind erfüllt. \textrightarrow Sehr gut!
+    \item Umsetzung gemäss Priorität in Roadmap, Erweiterung sollte problemlos möglich sein
+    \item 4.4: 1 Host mit mehreren Docker-Containern + Reverse Proxy \textrightarrow sehr gut
+    \item Saubere logische Trennungen in Front- und Backend (nach Fachlichkeit und Technologie)
+    \item Schöner Clean Architektur-Ansatz im Backend inkl. Dependency Injection
+    \item BE: Persistenz mit Repository-Pattern; Domain im Zentrum der Clean Architecture
+    \item BE: Dependency Injection \& Repository-Pattern
+    \item Reverse Proxy + Docker Container sollten horizontale Skalierung erlauben
+    \item Verschiedene Funktionen nach selbem Muster erfolgreich umgesetzt, sehr gut
+    \item Allgemein: schlank und gut verständlich. Soweit ich beurteilen kann: auch korrekt.
+    \item High-Level Strukturen im Grossen und Ganzen konsistent, z.T.\ kleine Abweichungen
+    \begin{itemize}
+        \item FE: Domain Typen in types.ts; Wie passen die Domain-Elemente zur Grafik in 4.3?
+        \item FE: Util-Folder; Wie passt der zur Grafik in 4.3?
+    \end{itemize}
+    \item D2 Domain Model mit leichten Abweichungen zwischen Code und Doku
+    \begin{itemize}
+        \item Beispiel 1: GameParticipation.playerName vs. displayName
+        \item Beispiel 2: Subtypen von Round (PlayedRound, OpenRound, \ldots)
+    \end{itemize}
+    \item Adaptiertes und erweitertes C4-Modell
+    \item Verschiedene statische Diagramme aus C4, zusätzlich Sequenzdiagramm für BE in 4.4
+    \item Tipp: Deployment in 4.5 um verwendete URLs und Ports ergänzen
+    \begin{itemize}
+        \item Beispiel: https://jasstracker-test.honegger.dev / Port 80
+    \end{itemize}
+    \item Einige sehr gute Erläuterungen, z.B. SPA vs. server-side Rendering \& Clean Architecture
+    \item ABER: Verschiedene, aus eurer Sicht vermutlich "banale", Designentscheidungen fehlen
+    \begin{itemize}
+        \item FE: Warum Vue? Pinia? Mande?
+        \item BE: Warum Kotlin? Ktor? Argon2? jOOQ? Flyway? - DB: Warum PostgreSQL?
+    \end{itemize}
+    \item Live Demo \textrightarrow sieht sehr gut aus! :-)
+\end{itemize}
+
+\subsection{Actions}
+
+\begin{itemize}
+    \item Add urls to deployment section
+    \item Make sure Pascal doesn't work too much
+    \item Document dependencies
+\end{itemize}
+
 \section{Project Meeting - Retro 31.05.2022}
 
 \subsection{Goals}
