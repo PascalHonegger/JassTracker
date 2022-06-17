@@ -1,0 +1,44 @@
+name: JassTracker Frontend
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*.*.*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 17
+          cache: npm
+          cache-dependency-path: Frontend/package-lock.json
+      - run: npm ci
+        working-directory: Frontend
+      - run: npm run lint
+        working-directory: Frontend
+
+  qodana-js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 17
+          cache: npm
+          cache-dependency-path: Frontend/package-lock.json
+      - run: npm ci
+        working-directory: Frontend
+      - name: 'Qodana JS Scan'
+        uses: JetBrains/qodana-action@v5.1.0
+        with:
+          args: '-i,Frontend,--linter,jetbrains/qodana-js'
+          artifact-name: 'qodana-js-report'
+          cache-dir: ${{ runner.temp }}/qodana-js/caches

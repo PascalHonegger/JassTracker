@@ -12,10 +12,5 @@ yarn-error.log*
 # Dependency directories
 Frontend/node_modules/
 
-# Build directories
-build/
-Backend/build/
-Frontend/dist/
-
 # Documentation
 Documentation/

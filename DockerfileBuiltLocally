@@ -1,0 +1,5 @@
+FROM openjdk:18
+EXPOSE 8080:8080
+RUN mkdir /app
+COPY ./Backend/bootstrap/build/libs/*.jar /app/jasstracker.jar
+ENTRYPOINT ["java","-jar","/app/jasstracker.jar"]
