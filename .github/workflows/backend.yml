@@ -1,0 +1,47 @@
+name: JassTracker Backend
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*.*.*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 18
+          cache: gradle
+      - name: Verify
+        run: ./gradlew check koverMergedHtmlReport koverMergedVerify
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-report
+          path: build/reports/kover/html/
+
+  qodana-jvm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 18
+          cache: gradle
+      - name: Build
+        run: ./gradlew assemble
+      - name: 'Qodana JVM Scan'
+        uses: JetBrains/qodana-action@v5.1.0
+        with:
+          args: '--linter,jetbrains/qodana-jvm'
+          artifact-name: 'qodana-jvm-report'
+          cache-dir: ${{ runner.temp }}/qodana-jvm/caches

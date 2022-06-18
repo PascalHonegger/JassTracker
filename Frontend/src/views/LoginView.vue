@@ -54,7 +54,7 @@ async function loginAsGuest() {
           >
           <input
             autocomplete="username"
-            class="box-input"
+            class="box-input w-full"
             id="username"
             name="username"
             type="text"
@@ -70,7 +70,7 @@ async function loginAsGuest() {
           >
           <input
             autocomplete="current-password"
-            class="box-input"
+            class="box-input w-full"
             id="password"
             name="password"
             type="password"

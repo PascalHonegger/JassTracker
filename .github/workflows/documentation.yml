@@ -1,0 +1,27 @@
+name: JassTracker Documentation
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*.*.*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+    container:
+      image: texlive/texlive:latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Make LaTeX
+        working-directory: ./Documentation
+        run: make doc
+      - name: Archive built LaTeX documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: documentation
+          path: Documentation/out/*.pdf

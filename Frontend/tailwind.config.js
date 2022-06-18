@@ -7,7 +7,7 @@ module.exports = {
   content: ["./public/**/*.html", "./src/**/*.vue"],
   theme: {
     fontFamily: {
-      sans: ["Inter", ...defaultTheme.fontFamily.sans],
+      sans: ["Inter", ...defaultTheme.fontFamily["sans"]],
     },
     extend: {
       screens: {

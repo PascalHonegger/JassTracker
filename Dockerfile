@@ -1,4 +1,4 @@
-FROM node:17-alpine AS buildFrontend
+FROM node:18-alpine AS buildFrontend
 COPY ./Frontend /home/node/src
 WORKDIR /home/node/src
 RUN npm ci

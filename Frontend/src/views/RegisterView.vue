@@ -56,7 +56,7 @@ async function register() {
           >
           <input
             autocomplete="username"
-            class="box-input"
+            class="box-input w-full"
             id="username"
             name="username"
             type="text"
@@ -72,7 +72,7 @@ async function register() {
           >
           <input
             autocomplete="nickname"
-            class="box-input"
+            class="box-input w-full"
             id="nickname"
             name="nickname"
             type="text"
@@ -88,7 +88,7 @@ async function register() {
           >
           <input
             autocomplete="new-password"
-            class="box-input"
+            class="box-input w-full"
             id="password"
             name="password"
             type="password"
