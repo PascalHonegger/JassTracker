@@ -4,6 +4,7 @@ module.exports = defineConfig({
   devServer: {
     port: 9090,
   },
+  outputDir: "../Backend/bootstrap/src/main/resources/static",
   chainWebpack: (config) =>
     config.plugin("feature-flags").use(require("webpack").DefinePlugin, [
       {
