@@ -1,4 +1,14 @@
 # JassTracker
+[![JassTracker Backend](https://github.com/PascalHonegger/JassTracker/actions/workflows/backend.yml/badge.svg)](https://github.com/PascalHonegger/JassTracker/actions/workflows/backend.yml)
+[![JassTracker Frontend](https://github.com/PascalHonegger/JassTracker/actions/workflows/frontend.yml/badge.svg)](https://github.com/PascalHonegger/JassTracker/actions/workflows/frontend.yml)
+[![JassTracker Documentation](https://github.com/PascalHonegger/JassTracker/actions/workflows/documentation.yml/badge.svg)](https://github.com/PascalHonegger/JassTracker/actions/workflows/documentation.yml)
+[![JassTracker Operations](https://github.com/PascalHonegger/JassTracker/actions/workflows/operations.yml/badge.svg)](https://github.com/PascalHonegger/JassTracker/actions/workflows/operations.yml)
+
+## Screenshots
+![Jasstisch erstellen](Documentation/src/resources/screenshots/table-creation.png)
+![Jasstisch erstellen](Documentation/src/resources/screenshots/tables.png)
+![Jasstisch erstellen](Documentation/src/resources/screenshots/scoreboard.png)
+![Jasstisch erstellen](Documentation/src/resources/screenshots/statistics.png)
 
 ## Development
 
