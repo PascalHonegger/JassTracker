@@ -40,7 +40,7 @@
     "pre-commit": "lint-staged"
   },
   "engines": {
-    "node": "17",
+    "node": "18",
     "npm": "8"
   }
 }
