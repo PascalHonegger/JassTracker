@@ -37,7 +37,7 @@ jobs:
       - run: npm ci
         working-directory: Frontend
       - name: 'Qodana JS Scan'
-        uses: JetBrains/qodana-action@v5.1.0
+        uses: JetBrains/qodana-action@v2022.2.1
         with:
           args: '-i,Frontend,--linter,jetbrains/qodana-js'
           artifact-name: 'qodana-js-report'
