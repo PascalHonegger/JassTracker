@@ -18,38 +18,45 @@ allprojects {
     group = "dev.honegger"
     version = "0.0.1"
 
+    apply(plugin = "kover")
+
     repositories {
         mavenCentral()
     }
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "18"
+            jvmTarget = "19"
         }
 
         val javaLauncher = project.extensions.getByType<JavaToolchainService>().launcherFor {
-            languageVersion.set(JavaLanguageVersion.of("18"))
+            languageVersion.set(JavaLanguageVersion.of("19"))
         }
         kotlinJavaToolchain.toolchain.use(javaLauncher)
     }
 }
 
-val koverExcludes = listOf("dev.honegger.jasstracker.data.database.*", "dev.honegger.jasstracker.bootstrap.*")
-tasks.koverMergedHtmlReport {
-    isEnabled = true
-    excludes = koverExcludes
-}
+koverMerged {
+    enable()
+    htmlReport {
 
-tasks.koverMergedXmlReport {
-    isEnabled = false
-}
+    }
+    xmlReport {
 
-tasks.koverMergedVerify {
-    excludes = koverExcludes
-    rule {
-        name = "Minimal line coverage rate in percent"
-        bound {
-            minValue = 90
+    }
+    verify {
+        rule {
+            name = "Minimal line coverage rate in percent"
+            bound {
+                minValue = 90
+            }
+        }
+    }
+
+    filters {
+        classes {
+            excludes.add("dev.honegger.jasstracker.data.database.*")
+            excludes.add("dev.honegger.jasstracker.bootstrap.*")
         }
     }
 }

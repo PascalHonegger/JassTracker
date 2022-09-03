@@ -18,10 +18,10 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: temurin
-          java-version: 18
+          java-version: 19
           cache: gradle
       - name: Verify
-        run: ./gradlew check koverMergedHtmlReport koverMergedVerify
+        run: ./gradlew --no-daemon check koverMergedHtmlReport koverMergedVerify
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
         with:
@@ -35,12 +35,12 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: temurin
-          java-version: 18
+          java-version: 19
           cache: gradle
       - name: Build
-        run: ./gradlew assemble
+        run: ./gradlew --no-daemon assemble
       - name: 'Qodana JVM Scan'
-        uses: JetBrains/qodana-action@v2022.2.1
+        uses: JetBrains/qodana-action@v2022.3.4
         with:
           args: '--linter,jetbrains/qodana-jvm'
           artifact-name: 'qodana-jvm-report'
