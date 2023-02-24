@@ -46,7 +46,7 @@ const newGame = reactive<CreateNewGameForm>({
 
 const currentGamePlayers = computed(() => {
   const game = currentGame.value;
-  if (game == null) {
+  if (!game) {
     return [newPlayer];
   }
   return [

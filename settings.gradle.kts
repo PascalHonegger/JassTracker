@@ -7,22 +7,22 @@ include("Backend:security")
 
 dependencyResolutionManagement {
     versionCatalogs {
-        val kotlin = "1.6.21"
-        val mockk = "1.12.4"
-        val ktor = "2.0.3"
-        val logback = "1.2.11"
+        val kotlin = "1.8.10"
+        val mockk = "1.13.4"
+        val ktor = "2.2.3"
+        val logback = "1.4.5"
         val shadow = "7.1.2"
         val kotlinxDatetime = "0.4.0"
-        val kotlinLogging = "2.1.23"
-        val flyway = "9.1.3"
-        val postgresql = "42.4.0"
+        val kotlinLogging = "3.0.3"
+        val flyway = "9.15.0"
+        val postgresql = "42.5.4"
         val jooq = "3.16.5"
-        val jooqPlugin = "7.1.1"
-        val kover = "0.5.1"
-        val testcontainers = "1.17.3"
-        val javaJwt = "3.19.2"
+        val jooqPlugin = "8.1"
+        val kover = "0.6.0"
+        val testcontainers = "1.17.6"
+        val javaJwt = "3.19.3"
         val argon2 = "2.11"
-        val versions = "0.42.0"
+        val versions = "0.45.0"
 
         create("libs") {
             library("ktor-server-core", "io.ktor", "ktor-server-core-jvm").version(ktor)
