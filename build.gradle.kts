@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 buildscript {
     repositories {
         mavenCentral()
@@ -24,15 +22,20 @@ allprojects {
         mavenCentral()
     }
 
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = "19"
-        }
-
-        val javaLauncher = project.extensions.getByType<JavaToolchainService>().launcherFor {
+    tasks.withType<JavaCompile>().configureEach {
+        val service = project.extensions.getByType<JavaToolchainService>()
+        val customProvider = service.compilerFor {
             languageVersion.set(JavaLanguageVersion.of("19"))
         }
-        kotlinJavaToolchain.toolchain.use(javaLauncher)
+        javaCompiler.set(customProvider)
+    }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain>().configureEach {
+        val service = project.extensions.getByType<JavaToolchainService>()
+        val customLauncher = service.launcherFor {
+            languageVersion.set(JavaLanguageVersion.of("19"))
+        }
+        kotlinJavaToolchain.toolchain.use(customLauncher)
     }
 }
 
