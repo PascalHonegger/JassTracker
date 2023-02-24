@@ -53,14 +53,6 @@
 % Note: The changes within `\instructions` are not visible in latexdiff when they are typeset in this way
 % \newcommand{\instructions}[1]{ { \color{blue} #1 } }
 
-% Get a git version description roughly using the idea in  
-% https://blog.wxm.be/2013/08/20/automated-git-commit-number-in-latex.html
-% Note that the file that is included needs to be generated before the document is built.
-% Refer to the makefile for further details.
-\IfFileExists{../gitDescription.tmp}
-{\newcommand{\gitDescription}{\input{../gitDescription.tmp}}}
-{\newcommand{\gitDescription}{Not available}}
-
 % Note: Importing hyperref must be done towards the end since it
 % redefines many macros
 %
