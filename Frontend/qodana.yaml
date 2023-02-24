@@ -1,6 +1,10 @@
-version: 1.0
-failThreshold: 10
+version: "1.0"
+linter: jetbrains/qodana-js:2022.3-eap
 profile:
   name: qodana.recommended
+failThreshold: 10
 exclude:
   - name: JSLastCommaInObjectLiteral
+  - name: JSUnresolvedVariable
+include:
+  - name: CheckDependencyLicenses
