@@ -9,7 +9,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         val kotlin = "1.9.10"
         val mockk = "1.13.7"
-        val ktor = "2.2.3"
+        val ktor = "2.3.4"
         val logback = "1.4.5"
         val shadow = "7.1.2"
         val kotlinxDatetime = "0.4.0"
@@ -20,7 +20,7 @@ dependencyResolutionManagement {
         val jooqPlugin = "8.1"
         val kover = "0.7.3"
         val testcontainers = "1.19.0"
-        val javaJwt = "3.19.3"
+        val javaJwt = "4.4.0" // Equal to java-jwt-version from https://github.com/ktorio/ktor/blob/main/gradle/libs.versions.toml
         val argon2 = "2.11"
         val versions = "0.48.0"
 
