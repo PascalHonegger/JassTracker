@@ -19,7 +19,7 @@ dependencyResolutionManagement {
         val jooq = "3.16.5"
         val jooqPlugin = "8.1"
         val kover = "0.7.3"
-        val testcontainers = "1.17.6"
+        val testcontainers = "1.19.0"
         val javaJwt = "3.19.3"
         val argon2 = "2.11"
         val versions = "0.48.0"
