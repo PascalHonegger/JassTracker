@@ -9,6 +9,7 @@ kotlin {
 
 dependencies {
     implementation(libs.kotlin.logging)
+    implementation(libs.slf4j)
     implementation(libs.kotlinx.datetime)
     testImplementation(testLibs.kotlin.test)
     testImplementation(testLibs.mockk)

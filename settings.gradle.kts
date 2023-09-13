@@ -13,7 +13,7 @@ dependencyResolutionManagement {
         val logback = "1.4.11"
         val shadow = "8.1.1"
         val kotlinxDatetime = "0.4.1"
-        val kotlinLogging = "3.0.3"
+        val kotlinLogging = "5.1.0"
         val flyway = "9.22.1"
         val postgresql = "42.6.0"
         val jooq = "3.18.4"
@@ -21,6 +21,7 @@ dependencyResolutionManagement {
         val kover = "0.7.3"
         val testcontainers = "1.19.0"
         val javaJwt = "4.4.0" // Equal to java-jwt-version from https://github.com/ktorio/ktor/blob/main/gradle/libs.versions.toml
+        val slf4j = "2.0.9"
         val argon2 = "2.11"
         val versions = "0.48.0"
 
@@ -39,7 +40,8 @@ dependencyResolutionManagement {
             library("ktor-server-status-pages", "io.ktor", "ktor-server-status-pages").version(ktor)
             library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime-jvm").version(kotlinxDatetime)
             library("logback", "ch.qos.logback", "logback-classic").version(logback)
-            library("kotlin-logging", "io.github.microutils", "kotlin-logging-jvm").version(kotlinLogging)
+            library("slf4j", "org.slf4j", "slf4j-simple").version(slf4j)
+            library("kotlin-logging", "io.github.oshai", "kotlin-logging-jvm").version(kotlinLogging)
             library("flyway", "org.flywaydb", "flyway-core").version(flyway)
             library("postgresql", "org.postgresql", "postgresql").version(postgresql)
             library("jooq", "org.jooq", "jooq").version(jooq)

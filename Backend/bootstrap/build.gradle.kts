@@ -35,6 +35,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.logback)
     implementation(libs.kotlin.logging)
+    implementation(libs.slf4j)
     implementation(libs.java.jwt)
 }
 

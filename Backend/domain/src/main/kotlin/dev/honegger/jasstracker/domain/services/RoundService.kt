@@ -8,7 +8,7 @@ import dev.honegger.jasstracker.domain.repositories.RoundRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
 import dev.honegger.jasstracker.domain.util.*
 
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import java.util.*
 
 interface RoundService {
