@@ -4,7 +4,6 @@ buildscript {
     }
 }
 
-@Suppress("DSL_SCOPE_VIOLATION") // see https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
@@ -20,22 +19,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-    }
-
-    tasks.withType<JavaCompile>().configureEach {
-        val service = project.extensions.getByType<JavaToolchainService>()
-        val customProvider = service.compilerFor {
-            languageVersion.set(JavaLanguageVersion.of("20"))
-        }
-        javaCompiler.set(customProvider)
-    }
-
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain>().configureEach {
-        val service = project.extensions.getByType<JavaToolchainService>()
-        val customLauncher = service.launcherFor {
-            languageVersion.set(JavaLanguageVersion.of("20"))
-        }
-        kotlinJavaToolchain.toolchain.use(customLauncher)
     }
 }
 

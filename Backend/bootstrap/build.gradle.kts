@@ -1,4 +1,3 @@
-@Suppress("DSL_SCOPE_VIOLATION") // see https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
     application
     alias(libs.plugins.kotlin.jvm)
@@ -10,6 +9,10 @@ application {
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+}
+
+kotlin {
+    jvmToolchain(20)
 }
 
 dependencies {
