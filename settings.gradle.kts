@@ -12,7 +12,7 @@ dependencyResolutionManagement {
         val ktor = "2.3.4"
         val logback = "1.4.5"
         val shadow = "7.1.2"
-        val kotlinxDatetime = "0.4.0"
+        val kotlinxDatetime = "0.4.1"
         val kotlinLogging = "3.0.3"
         val flyway = "9.15.0"
         val postgresql = "42.5.4"
