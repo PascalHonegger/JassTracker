@@ -22,7 +22,7 @@ dependencyResolutionManagement {
         val testcontainers = "1.17.6"
         val javaJwt = "3.19.3"
         val argon2 = "2.11"
-        val versions = "0.45.0"
+        val versions = "0.48.0"
 
         create("libs") {
             library("ktor-server-core", "io.ktor", "ktor-server-core-jvm").version(ktor)
