@@ -1,9 +1,9 @@
 rootProject.name = "JassTracker"
-include("Backend:bootstrap")
-include("Backend:data-access")
-include("Backend:domain")
-include("Backend:web-api")
-include("Backend:security")
+include(":Backend:bootstrap")
+include(":Backend:data-access")
+include(":Backend:domain")
+include(":Backend:web-api")
+include(":Backend:security")
 
 dependencyResolutionManagement {
     versionCatalogs {
@@ -18,7 +18,7 @@ dependencyResolutionManagement {
         val postgresql = "42.5.4"
         val jooq = "3.16.5"
         val jooqPlugin = "8.1"
-        val kover = "0.6.0"
+        val kover = "0.7.3"
         val testcontainers = "1.17.6"
         val javaJwt = "3.19.3"
         val argon2 = "2.11"

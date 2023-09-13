@@ -4,6 +4,7 @@ plugins {
     java
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.jooq)
+    alias(libs.plugins.kover)
 }
 
 kotlin {

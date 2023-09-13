@@ -2,6 +2,7 @@ plugins {
     application
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.shadow)
+    alias(libs.plugins.kover)
 }
 
 application {

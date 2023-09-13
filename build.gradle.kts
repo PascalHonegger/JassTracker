@@ -15,34 +15,32 @@ allprojects {
     group = "dev.honegger"
     version = "0.0.1"
 
-    apply(plugin = "kover")
-
     repositories {
         mavenCentral()
     }
 }
 
-koverMerged {
-    enable()
-    htmlReport {
+dependencies {
+    kover(project(":Backend:bootstrap"))
+    kover(project(":Backend:data-access"))
+    kover(project(":Backend:domain"))
+    kover(project(":Backend:web-api"))
+    kover(project(":Backend:security"))
+}
 
-    }
-    xmlReport {
-
-    }
-    verify {
-        rule {
-            name = "Minimal line coverage rate in percent"
-            bound {
-                minValue = 90
-            }
+koverReport {
+    filters {
+        excludes {
+            packages("dev.honegger.jasstracker.data.database", "dev.honegger.jasstracker.bootstrap.*")
         }
     }
-
-    filters {
-        classes {
-            excludes.add("dev.honegger.jasstracker.data.database.*")
-            excludes.add("dev.honegger.jasstracker.bootstrap.*")
+    defaults {
+        verify {
+            rule {
+                bound {
+                    minValue = 90
+                }
+            }
         }
     }
 }

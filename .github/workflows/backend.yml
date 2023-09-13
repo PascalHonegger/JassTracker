@@ -21,7 +21,7 @@ jobs:
           java-version: 20
           cache: gradle
       - name: Verify
-        run: ./gradlew --no-daemon check koverMergedHtmlReport koverMergedVerify
+        run: ./gradlew --no-daemon check koverHtmlReport koverVerify
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
         with:
