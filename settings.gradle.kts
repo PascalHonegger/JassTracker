@@ -11,7 +11,7 @@ dependencyResolutionManagement {
         val mockk = "1.13.7"
         val ktor = "2.3.4"
         val logback = "1.4.11"
-        val shadow = "7.1.2"
+        val shadow = "8.1.1"
         val kotlinxDatetime = "0.4.1"
         val kotlinLogging = "3.0.3"
         val flyway = "9.22.1"
