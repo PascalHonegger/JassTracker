@@ -217,5 +217,6 @@ public class ContractRecord extends UpdatableRecordImpl<ContractRecord> implemen
         setName(name);
         setMultiplier(multiplier);
         setType(type);
+        resetChangedOnNotNull();
     }
 }

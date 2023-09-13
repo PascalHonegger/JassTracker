@@ -16,8 +16,8 @@ dependencyResolutionManagement {
         val kotlinLogging = "3.0.3"
         val flyway = "9.15.0"
         val postgresql = "42.6.0"
-        val jooq = "3.16.5"
-        val jooqPlugin = "8.1"
+        val jooq = "3.18.4"
+        val jooqPlugin = "8.2.1"
         val kover = "0.7.3"
         val testcontainers = "1.19.0"
         val javaJwt = "4.4.0" // Equal to java-jwt-version from https://github.com/ktorio/ktor/blob/main/gradle/libs.versions.toml

@@ -11,13 +11,17 @@ import dev.honegger.jasstracker.data.database.tables.records.PlayerRecord;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function5;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row5;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -131,6 +135,11 @@ public class Player extends TableImpl<PlayerRecord> {
         return new Player(alias, this);
     }
 
+    @Override
+    public Player as(Table<?> alias) {
+        return new Player(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -147,6 +156,14 @@ public class Player extends TableImpl<PlayerRecord> {
         return new Player(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public Player rename(Table<?> name) {
+        return new Player(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row5 type methods
     // -------------------------------------------------------------------------
@@ -154,5 +171,20 @@ public class Player extends TableImpl<PlayerRecord> {
     @Override
     public Row5<UUID, String, String, String, Boolean> fieldsRow() {
         return (Row5) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function5<? super UUID, ? super String, ? super String, ? super String, ? super Boolean, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function5<? super UUID, ? super String, ? super String, ? super String, ? super Boolean, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }
