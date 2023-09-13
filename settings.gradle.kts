@@ -8,7 +8,7 @@ include(":Backend:security")
 dependencyResolutionManagement {
     versionCatalogs {
         val kotlin = "1.9.10"
-        val mockk = "1.13.4"
+        val mockk = "1.13.7"
         val ktor = "2.2.3"
         val logback = "1.4.5"
         val shadow = "7.1.2"
