@@ -15,7 +15,7 @@ dependencyResolutionManagement {
         val kotlinxDatetime = "0.4.1"
         val kotlinLogging = "3.0.3"
         val flyway = "9.15.0"
-        val postgresql = "42.5.4"
+        val postgresql = "42.6.0"
         val jooq = "3.16.5"
         val jooqPlugin = "8.1"
         val kover = "0.7.3"
