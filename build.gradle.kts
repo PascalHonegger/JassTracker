@@ -25,7 +25,7 @@ allprojects {
     tasks.withType<JavaCompile>().configureEach {
         val service = project.extensions.getByType<JavaToolchainService>()
         val customProvider = service.compilerFor {
-            languageVersion.set(JavaLanguageVersion.of("19"))
+            languageVersion.set(JavaLanguageVersion.of("20"))
         }
         javaCompiler.set(customProvider)
     }
@@ -33,7 +33,7 @@ allprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain>().configureEach {
         val service = project.extensions.getByType<JavaToolchainService>()
         val customLauncher = service.launcherFor {
-            languageVersion.set(JavaLanguageVersion.of("19"))
+            languageVersion.set(JavaLanguageVersion.of("20"))
         }
         kotlinJavaToolchain.toolchain.use(customLauncher)
     }
