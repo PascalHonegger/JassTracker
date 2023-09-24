@@ -20,15 +20,18 @@ jobs:
           distribution: temurin
           java-version: 20
           cache: gradle
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: npm
-          cache-dependency-path: Frontend/package-lock.json
-      - run: npm ci
+          cache: pnpm
+          cache-dependency-path: Frontend/pnpm-lock.yaml
+      - run: pnpm i --frozen-lockfile
         working-directory: Frontend
       - name: Build Frontend
-        run: npm run build
+        run: pnpm build
         working-directory: Frontend
       - name: Build Backend
         run: ./gradlew --no-daemon shadowJar

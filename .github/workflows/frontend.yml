@@ -15,26 +15,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: npm
-          cache-dependency-path: Frontend/package-lock.json
-      - run: npm ci
+          cache: pnpm
+          cache-dependency-path: Frontend/pnpm-lock.yaml
+      - run: pnpm i --frozen-lockfile
         working-directory: Frontend
-      - run: npm run lint
+      - run: pnpm lint
         working-directory: Frontend
 
   qodana-js:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: npm
-          cache-dependency-path: Frontend/package-lock.json
-      - run: npm ci
+          cache: pnpm
+          cache-dependency-path: Frontend/pnpm-lock.yaml
+      - run: pnpm i --frozen-lockfile
         working-directory: Frontend
       - name: 'Qodana JS Scan'
         uses: JetBrains/qodana-action@v2022.3.4

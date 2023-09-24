@@ -1,8 +1,9 @@
 FROM node:18-alpine AS buildFrontend
+RUN corepack enable
 COPY ./Frontend /home/node/src
 WORKDIR /home/node/src
-RUN npm ci
-RUN npm run build
+RUN pnpm i --frozen-lockfile
+RUN pnpm build
 
 FROM eclipse-temurin:20-jdk AS buildBackend
 COPY . /home/gradle/src
