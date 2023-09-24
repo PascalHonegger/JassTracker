@@ -1,23 +1,16 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
-module.exports = {
-  future: {
-    // removeDeprecatedGapUtilities: true,
-    // purgeLayersByDefault: true,
-  },
-  content: ["./public/**/*.html", "./src/**/*.vue"],
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', "./src/**/*.{vue,js,ts,jsx,tsx}",],
   theme: {
-    fontFamily: {
-      sans: ["Inter", ...defaultTheme.fontFamily["sans"]],
-    },
     extend: {
       screens: {
-        xl: { max: "1024px" },
-        "2xl": { max: "1024px" },
-      },
-    },
+        xl: { max: '1024px' },
+        '2xl': { max: '1024px' }
+      }
+    }
   },
   variants: {
-    cursor: ["hover"],
+    cursor: ['hover']
   },
-  plugins: [],
-};
+  plugins: []
+}

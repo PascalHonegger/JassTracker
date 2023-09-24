@@ -8,9 +8,9 @@ import LoginRegisterLayout from "@/components/LoginRegisterLayout.vue";
 const authStore = useAuthStore();
 const router = useRouter();
 
-const loginLoading = ref<boolean>(false);
-const loginFailed = ref<boolean>(false);
-const loginAsGuestLoading = ref<boolean>(false);
+const loginLoading = ref(false);
+const loginFailed = ref(false);
+const loginAsGuestLoading = ref(false);
 const loading = computed(() => loginLoading.value || loginAsGuestLoading.value);
 const username = ref("");
 const password = ref("");
@@ -24,10 +24,7 @@ onMounted(() => {
 async function login() {
   loginLoading.value = true;
   loginFailed.value = false;
-  const loginSuccessful = await authStore.loginPlayer(
-    username.value,
-    password.value
-  );
+  const loginSuccessful = await authStore.loginPlayer(username.value, password.value);
   if (loginSuccessful) {
     await router.push("/overview");
   } else {
@@ -47,9 +44,7 @@ async function loginAsGuest() {
     <div class="flex flex-col my-8 self-center w-48">
       <form @submit.prevent="login" autocomplete="on">
         <div class="mb-6">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900"
-            for="username"
+          <label class="block mb-2 text-sm font-medium text-gray-900" for="username"
             >Benutzername</label
           >
           <input
@@ -63,9 +58,7 @@ async function loginAsGuest() {
           />
         </div>
         <div class="mb-6">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900"
-            for="password"
+          <label class="block mb-2 text-sm font-medium text-gray-900" for="password"
             >Passwort</label
           >
           <input
@@ -78,11 +71,7 @@ async function loginAsGuest() {
             v-model="password"
           />
         </div>
-        <button
-          type="submit"
-          :disabled="loading"
-          class="btn btn-blue self-center"
-        >
+        <button type="submit" :disabled="loading" class="btn btn-blue self-center">
           Login
 
           <WaitSpinner v-if="loginLoading" size="small"></WaitSpinner>
@@ -106,9 +95,7 @@ async function loginAsGuest() {
     <div class="mb-auto mx-1">
       <p>
         Neu beim JassTracker?
-        <RouterLink to="/register" class="underline"
-          >Erstelle einen neuen Account!</RouterLink
-        >
+        <RouterLink to="/register" class="underline">Erstelle einen neuen Account!</RouterLink>
       </p>
     </div>
   </LoginRegisterLayout>

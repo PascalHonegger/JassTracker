@@ -22,12 +22,12 @@ const { currentGame } = storeToRefs(gameStore);
 
 watch(
   () => route.params.tableId,
-  async (newId) => await setCurrentTableId(newId)
+  async (newId) => await setCurrentTableId(newId),
 );
 
 watch(
   () => route.params.gameId,
-  async (newId) => await setCurrentGameId(newId)
+  async (newId) => await setCurrentGameId(newId),
 );
 
 onMounted(async () => {
@@ -52,7 +52,7 @@ async function deleteGame() {
   closeModal();
   backToTable();
 }
-function showModal(event: PointerEvent) {
+function showModal(event: MouseEvent) {
   event.preventDefault();
   isModalVisible.value = true;
 }
@@ -91,28 +91,18 @@ function backToTable() {
 <template>
   <div class="container mx-auto mb-3">
     <button class="btn btn-blue mt-2" @click="backToTable">Zurück</button>
-    <button class="btn btn-blue mt-2 ml-2" @click="showModal">
-      Spiel Löschen
-    </button>
+    <button class="btn btn-blue mt-2 ml-2" @click="showModal">Spiel Löschen</button>
     <template v-if="currentGame">
       <GameItem :game="currentGame" />
       <GameStatistics :game="currentGame" />
     </template>
-    <ModalDialog
-      class="delete-game-modal"
-      v-if="isModalVisible"
-      @close="closeModal"
-    >
+    <ModalDialog class="delete-game-modal" v-if="isModalVisible" @close="closeModal">
       <template v-slot:header>
         <p class="font-bold">Spiel löschen</p>
       </template>
-      <template v-slot:body>
-        Sind Sie sicher, dass Sie dieses Spiel löschen möchten?
-      </template>
+      <template v-slot:body> Sind Sie sicher, dass Sie dieses Spiel löschen möchten? </template>
       <template v-slot:footer>
-        <button type="button" class="btn btn-blue" @click="deleteGame">
-          Löschen
-        </button>
+        <button type="button" class="btn btn-blue" @click="deleteGame">Löschen</button>
       </template>
     </ModalDialog>
   </div>

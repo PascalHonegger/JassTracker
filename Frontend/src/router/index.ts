@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
+import type { RouteRecordRaw } from "vue-router";
 import LoginView from "../views/LoginView.vue";
 import RegisterView from "../views/RegisterView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
@@ -22,30 +23,22 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/help/jassTrackerHelp",
     name: "jassTrackerHelp",
-    component: () =>
-      import(
-        /* webpackChunkName: "help" */ "../components/JassTrackerHelp.vue"
-      ),
+    component: () => import("../components/JassTrackerHelp.vue"),
   },
   {
     path: "/help/jassRules",
     name: "jassRules",
-    component: () =>
-      import(/* webpackChunkName: "help" */ "../components/JassRules.vue"),
+    component: () => import("../components/JassRules.vue"),
   },
   {
     path: "/help/jassTrackerHelp",
     name: "jassTrackerHelp",
-    component: () =>
-      import(
-        /* webpackChunkName: "help" */ "../components/JassTrackerHelp.vue"
-      ),
+    component: () => import("../components/JassTrackerHelp.vue"),
   },
   {
     path: "/help/jassRules",
     name: "jassRules",
-    component: () =>
-      import(/* webpackChunkName: "help" */ "../components/JassRules.vue"),
+    component: () => import("../components/JassRules.vue"),
   },
   {
     path: "/overview",
@@ -53,8 +46,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       requiresAuth: true,
     },
-    component: () =>
-      import(/* webpackChunkName: "overview" */ "../views/OverView.vue"),
+    component: () => import("../views/OverView.vue"),
   },
   {
     path: "/profile",
@@ -62,8 +54,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       requiresAuth: true,
     },
-    component: () =>
-      import(/* webpackChunkName: "profile" */ "../views/ProfileView.vue"),
+    component: () => import("../views/ProfileView.vue"),
   },
   {
     path: "/table/:tableId",
@@ -71,8 +62,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       requiresAuth: true,
     },
-    component: () =>
-      import(/* webpackChunkName: "detail" */ "../views/TableDetailView.vue"),
+    component: () => import("../views/TableDetailView.vue"),
   },
   {
     path: "/table/:tableId/game/:gameId",
@@ -93,7 +83,7 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 });
 

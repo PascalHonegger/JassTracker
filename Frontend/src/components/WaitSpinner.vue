@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{ size: "small" | "medium" | "large" }>();
 </script>
-<style lang="scss">
+<style lang="postcss" scoped>
 .spinner-border {
   border: 0.25em solid;
   border-right-color: transparent;

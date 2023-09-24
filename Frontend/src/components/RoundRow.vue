@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Round, Row } from "@/types/types";
-import { WebCreateRound, WebRound } from "@/services/web-model";
+import type { WebCreateRound, WebRound } from "@/services/web-model";
 import { useRoundStore } from "@/store/round-store";
 import { useContractStore } from "@/store/contract-store";
 import { useGameStore } from "@/store/game-store";
@@ -17,19 +17,11 @@ const { currentGame } = storeToRefs(gameStore);
 const contractStore = useContractStore();
 
 async function handleInput(score: number | undefined, round: Round) {
-  assertNonNullish(
-    currentGame.value,
-    "undefined table or game, this should not happen"
-  );
+  assertNonNullish(currentGame.value, "undefined table or game, this should not happen");
   round.score = score ?? null;
   if (round.id) {
     if (score == null || isNaN(score)) {
-      await roundStore.removeRound(
-        round.id,
-        round.playerId,
-        round.contractId,
-        round.number
-      );
+      await roundStore.removeRound(round.id, round.playerId, round.contractId, round.number);
       return;
     }
     const updatedRound: WebRound = {
@@ -60,7 +52,7 @@ function getClass(round: Round): string {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="postcss" scoped>
 .played,
 .locked {
   background-color: lightgray;

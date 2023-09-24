@@ -2,7 +2,7 @@
   <configuration default="false" name="Postgres Dev" type="docker-deploy" factoryName="docker-image" server-name="Docker">
     <deployment type="docker-image">
       <settings>
-        <option name="imageTag" value="postgres:14-alpine" />
+        <option name="imageTag" value="postgres:16-alpine" />
         <option name="containerName" value="postgres" />
         <option name="envVars">
           <list>

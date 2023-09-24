@@ -1,9 +1,5 @@
 import { api } from "@/services/requests";
-import {
-  WebCreateGame,
-  WebGame,
-  WebGameParticipation,
-} from "@/services/web-model";
+import type { WebCreateGame, WebGame, WebGameParticipation } from "@/services/web-model";
 
 export async function getGame(gameId: string) {
   return api.get<WebGame>(`games/${gameId}`);

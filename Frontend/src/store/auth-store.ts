@@ -3,11 +3,7 @@ import { useContractStore } from "@/store/contract-store";
 import { useGameStore } from "@/store/game-store";
 import { useTableStore } from "@/store/table-store";
 import { useRoundStore } from "@/store/round-store";
-import {
-  loginGuestPlayer,
-  loginPlayer,
-  registerPlayer,
-} from "@/services/auth-service";
+import { loginGuestPlayer, loginPlayer, registerPlayer } from "@/services/auth-service";
 import { clearToken, setToken } from "@/services/requests";
 import { usePlayerStore } from "@/store/player-store";
 
@@ -39,7 +35,7 @@ function parseJwt(token: string): JwtToken | null {
       atob(base64)
         .split("")
         .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
+        .join(""),
     );
 
     return JSON.parse(jsonPayload);
@@ -62,8 +58,8 @@ export const useAuthStore = defineStore("auth", {
     displayName(state): string | null {
       return parseJwt(state.token)?.displayName ?? null;
     },
-    isGuest(state): boolean | null {
-      return parseJwt(state.token)?.isGuest ?? null;
+    isGuest(state): boolean | undefined {
+      return parseJwt(state.token)?.isGuest;
     },
     loggedIn(state): boolean {
       return parseJwt(state.token) != null;
@@ -85,7 +81,7 @@ export const useAuthStore = defineStore("auth", {
     async registerPlayer(
       username: string,
       displayName: string,
-      password: string
+      password: string,
     ): Promise<boolean> {
       try {
         const { token } = await registerPlayer(username, displayName, password);
@@ -105,14 +101,9 @@ export const useAuthStore = defineStore("auth", {
     async loadContracts() {
       // Load all available contracts once after login
       // These shouldn't change and loading them
-      // For each game seems excessive
+      // For each game seems excessive‡
       const contractStore = useContractStore();
-      try {
-        this.loading = true;
-        await contractStore.loadContracts();
-      } finally {
-        this.loading = false;
-      }
+      await contractStore.loadContracts();
     },
     setToken(token: string) {
       this.token = token;

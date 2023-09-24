@@ -2,15 +2,10 @@ import { defineStore } from "pinia";
 import { assertNonNullish } from "@/util/assert";
 
 import { useTableStore } from "@/store/table-store";
-import {
-  createGame,
-  deleteGameById,
-  getGame,
-  updateGame,
-} from "@/services/game-service";
+import { createGame, deleteGameById, getGame, updateGame } from "@/services/game-service";
 import { useContractStore } from "@/store/contract-store";
-import { Game, RoundType } from "@/types/types";
-import { WebCreateGame, WebGame } from "@/services/web-model";
+import type { Game } from "@/types/types";
+import type { WebCreateGame, WebGame } from "@/services/web-model";
 
 export const useGameStore = defineStore("game", {
   getters: {
@@ -77,40 +72,29 @@ export const useGameStore = defineStore("game", {
       ]);
 
       const getTeamMember = (playerId: string) => {
-        if (game.team1.player1.playerId === playerId)
-          return game.team1.player2.playerId;
-        if (game.team1.player2.playerId === playerId)
-          return game.team1.player1.playerId;
-        if (game.team2.player1.playerId === playerId)
-          return game.team2.player2.playerId;
-        if (game.team2.player2.playerId === playerId)
-          return game.team2.player1.playerId;
+        if (game.team1.player1.playerId === playerId) return game.team1.player2.playerId;
+        if (game.team1.player2.playerId === playerId) return game.team1.player1.playerId;
+        if (game.team2.player1.playerId === playerId) return game.team2.player2.playerId;
+        if (game.team2.player2.playerId === playerId) return game.team2.player1.playerId;
 
-        throw new Error(
-          "Couldn't match player to team, this should not happen"
-        );
+        throw new Error("Couldn't match player to team, this should not happen");
       };
 
       for (const webRound of game.rounds) {
         for (const row of rows) {
           for (const round of row.rounds) {
-            if (
-              webRound.contractId === round.contractId &&
-              webRound.playerId === round.playerId
-            ) {
-              round.type = RoundType.Played;
+            if (webRound.contractId === round.contractId && webRound.playerId === round.playerId) {
+              round.type = "played";
               round.score = webRound.score;
               round.id = webRound.id;
 
               const teamMember = getTeamMember(round.playerId);
-              const teamMemberRound = row.rounds.find(
-                (r) => r.playerId === teamMember
-              );
+              const teamMemberRound = row.rounds.find((r) => r.playerId === teamMember);
               assertNonNullish(
                 teamMemberRound,
-                "Couldn't match player id to player, this should not happen"
+                "Couldn't match player id to player, this should not happen",
               );
-              teamMemberRound.type = RoundType.Locked;
+              teamMemberRound.type = "locked";
             }
           }
         }

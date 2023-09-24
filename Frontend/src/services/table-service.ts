@@ -1,5 +1,5 @@
 import { api } from "@/services/requests";
-import { WebTable } from "@/services/web-model";
+import type { WebTable } from "@/services/web-model";
 
 export async function getTables() {
   return api.get<WebTable[]>("tables");

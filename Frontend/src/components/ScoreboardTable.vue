@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import RoundRow from "./RoundRow.vue";
-import { Game, GameParticipation, Team } from "@/types/types";
+import type { Game, GameParticipation, Team } from "@/types/types";
 import { computed } from "vue";
 import { useContractStore } from "@/store/contract-store";
 
@@ -10,8 +10,7 @@ const props = defineProps<{ game: Game }>();
 
 function isActive(participation: GameParticipation): boolean {
   return (
-    props.game.endTime === undefined &&
-    props.game.currentPlayer.playerId === participation.playerId
+    props.game.endTime === undefined && props.game.currentPlayer.playerId === participation.playerId
   );
 }
 
@@ -30,14 +29,12 @@ const total = computed(() => {
 });
 
 function getTeamTotal(team: Team): number {
-  return (
-    total.value[team.player1.playerId] + total.value[team.player2.playerId]
-  );
+  return total.value[team.player1.playerId] + total.value[team.player2.playerId];
 }
 
 const teams = computed(() => [props.game.team1, props.game.team2]);
 </script>
-<style scoped lang="scss">
+<style lang="postcss" scoped>
 .active {
   @apply bg-green-300;
 }
@@ -92,9 +89,7 @@ const teams = computed(() => [props.game.team1, props.game.team2]);
       </tbody>
       <tfoot>
         <tr class="border-t-2 border-slate-300 h-10 text-xl font-bold">
-          <th rowspan="2" scope="row" class="border-r-2 border-slate-300">
-            Total
-          </th>
+          <th rowspan="2" scope="row" class="border-r-2 border-slate-300">Total</th>
           <template v-for="(t, playerId) in total" :key="playerId">
             <td>{{ t }}</td>
           </template>

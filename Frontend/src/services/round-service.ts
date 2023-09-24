@@ -1,5 +1,5 @@
 import { api } from "@/services/requests";
-import { WebCreateRound, WebRound } from "@/services/web-model";
+import type { WebCreateRound, WebRound } from "@/services/web-model";
 
 export async function updateRound(id: string, round: WebRound) {
   return api.put<WebRound>(`rounds/${id}`, round);

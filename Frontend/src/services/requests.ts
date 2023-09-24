@@ -1,9 +1,7 @@
-import { mande, OptionsRaw } from "mande";
+import { mande } from "mande";
+import type { OptionsRaw } from "mande";
 
-const apiUrl =
-  process.env.NODE_ENV === "production"
-    ? "/api/"
-    : `//${window.location.hostname}:8080/api/`;
+const apiUrl = import.meta.env.PROD ? "/api/" : `//${window.location.hostname}:8080/api/`;
 
 const globalOptions: OptionsRaw = {
   responseAs: "json",

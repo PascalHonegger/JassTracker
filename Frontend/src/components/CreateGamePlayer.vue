@@ -21,7 +21,7 @@ const emit = defineEmits<{
         class="box-input w-full"
         required
         :value="displayName"
-        @input="emit('update:displayName', $event.target.value)"
+        @input="emit('update:displayName', ($event.target as HTMLInputElement).value)"
       />
     </div>
   </div>

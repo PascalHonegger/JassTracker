@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { Table } from "@/types/types";
+import type { Table } from "@/types/types";
 import { useStatisticsStore } from "@/store/statistics-store";
 import { computed, onMounted, ref, watch } from "vue";
-import { WebTableStatistics } from "@/services/web-model";
+import type { WebTableStatistics } from "@/services/web-model";
 import { Bar, Chart, Grid, Tooltip } from "vue3-charts";
-import { ChartAxis } from "vue3-charts/dist/types";
 import StatisticsContainer from "@/components/StatisticsContainer.vue";
 import { useContractStore } from "@/store/contract-store";
 import { maxScore, sumMultipliers } from "@/util/constants";
+import type { AxisConfig, Data } from "vue3-charts/src/types";
 
 const statisticsStore = useStatisticsStore();
 const contractStore = useContractStore();
@@ -25,9 +25,7 @@ watch(props.table, async () => await refresh());
 async function refresh() {
   isLoading.value = true;
   try {
-    tableStatistics.value = await statisticsStore.getTableStatistics(
-      props.table.id
-    );
+    tableStatistics.value = await statisticsStore.getTableStatistics(props.table.id);
   } finally {
     isLoading.value = false;
   }
@@ -39,7 +37,7 @@ const scoreOverGames = computed(
       game: index + 1,
       team1: scores.total.team1Score ?? undefined,
       team2: scores.total.team2Score ?? undefined,
-    })) ?? []
+    })) ?? [],
 );
 
 const playerAverages = computed(() => {
@@ -73,6 +71,13 @@ const margin = ref({
   right: 20,
   bottom: 0,
 });
+
+// Not exported by vue3-charts so we have to copy it here
+interface ChartAxis {
+  primary: AxisConfig;
+  secondary: AxisConfig;
+}
+
 const scoreAxis = computed<ChartAxis>(() => ({
   primary: {
     domain: ["dataMin", "dataMax"],
@@ -103,12 +108,12 @@ const averageAxis = computed<ChartAxis>(() => ({
     @refresh="refresh"
   >
     <h2 class="text-xl font-normal leading-normal">
-      Punktzahlen pro Spiel und Team (<span style="color: orange">Team 1</span>
-      vs <span style="color: blue">Team 2</span>)
+      Punktzahlen pro Spiel und Team (<span style="color: orange">Team 1</span> vs
+      <span style="color: blue">Team 2</span>)
     </h2>
     <Chart
       :size="{ width, height: 400 }"
-      :data="scoreOverGames"
+      :data="scoreOverGames as Data[]"
       :margin="margin"
       :direction="'horizontal'"
       :axis="scoreAxis"
@@ -131,9 +136,7 @@ const averageAxis = computed<ChartAxis>(() => ({
       </template>
     </Chart>
 
-    <h2 class="text-xl font-normal leading-normal">
-      Durchschnittliche Punktzahlen pro Spieler
-    </h2>
+    <h2 class="text-xl font-normal leading-normal">Durchschnittliche Punktzahlen pro Spieler</h2>
     <Chart
       :size="{ width, height: 300 }"
       :data="playerAverages"
@@ -144,10 +147,7 @@ const averageAxis = computed<ChartAxis>(() => ({
       <template #layers>
         <Grid />
         <Bar :dataKeys="['label', 'average']" :barStyle="{ fill: '#0096c7' }" />
-        <Bar
-          :dataKeys="['label', 'weightedAverage']"
-          :barStyle="{ fill: '#48cae4' }"
-        />
+        <Bar :dataKeys="['label', 'weightedAverage']" :barStyle="{ fill: '#48cae4' }" />
       </template>
 
       <template #widgets>
@@ -166,9 +166,7 @@ const averageAxis = computed<ChartAxis>(() => ({
       </template>
     </Chart>
 
-    <h2 class="text-xl font-normal leading-normal">
-      Durchschnittliche Punktzahlen pro Trumpf
-    </h2>
+    <h2 class="text-xl font-normal leading-normal">Durchschnittliche Punktzahlen pro Trumpf</h2>
     <Chart
       :size="{ width, height: 300 }"
       :data="contractAverages"
@@ -178,10 +176,7 @@ const averageAxis = computed<ChartAxis>(() => ({
     >
       <template #layers>
         <Grid />
-        <Bar
-          :dataKeys="['contract', 'average']"
-          :barStyle="{ fill: '#0096c7' }"
-        />
+        <Bar :dataKeys="['contract', 'average']" :barStyle="{ fill: '#0096c7' }" />
       </template>
 
       <template #widgets>

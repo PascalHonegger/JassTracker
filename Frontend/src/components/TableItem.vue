@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Table } from "@/types/types";
+import type { Game, Table } from "@/types/types";
 import GamePreview from "./GamePreview.vue";
 import Icon from "./IconSelector.vue";
 import { computed, ref } from "vue";
@@ -14,8 +14,8 @@ const props = defineProps<{ table: Table }>();
 
 const isModalVisible = ref(false);
 
-const latestGame = computed(
-  () => props.table.loadedGames[props.table.latestGameId]
+const latestGame = computed<Game | undefined>(
+  () => props.table.loadedGames[props.table.latestGameId],
 );
 
 async function deleteTable() {
@@ -25,7 +25,7 @@ async function deleteTable() {
   closeModal();
 }
 
-function showModal(event: MouseEvent) {
+function showModal(event: PointerEvent) {
   event.preventDefault();
   isModalVisible.value = true;
 }
@@ -42,12 +42,8 @@ function closeModal() {
   >
     <p class="font-bold">Dein Jasstisch</p>
     <p class="font-bold">{{ table.name }}</p>
-    <icon
-      @click="showModal"
-      icon="trash"
-      class="absolute top-2 right-2 z-10"
-    ></icon>
-    <GamePreview v-if="latestGame != null" :game="latestGame"></GamePreview>
+    <icon @click="showModal" icon="trash" class="absolute top-2 right-2 z-10"></icon>
+    <GamePreview v-if="latestGame !== undefined" :game="latestGame"></GamePreview>
   </RouterLink>
 
   <Modal class="delete-table-modal" v-show="isModalVisible" @close="closeModal">
@@ -55,13 +51,11 @@ function closeModal() {
       <p class="font-bold">Tisch löschen</p>
     </template>
     <template v-slot:body>
-      Sind Sie sicher, dass Sie den Tisch: {{ table.name }} und alle enthaltenen
-      Spiele Löschen möchten?
+      Sind Sie sicher, dass Sie den Tisch: {{ table.name }} und alle enthaltenen Spiele Löschen
+      möchten?
     </template>
     <template v-slot:footer>
-      <button type="button" class="btn btn-blue" @click="deleteTable">
-        Löschen
-      </button>
+      <button type="button" class="btn btn-blue" @click="deleteTable">Löschen</button>
     </template>
   </Modal>
 </template>

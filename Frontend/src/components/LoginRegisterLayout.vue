@@ -9,9 +9,7 @@
       />
     </div>
     <div class="login text-center flex flex-col h-full overflow-auto">
-      <h1 class="font-medium leading-tight text-5xl mb-2 text-blue-600 mt-auto">
-        JassTracker
-      </h1>
+      <h1 class="font-medium leading-tight text-5xl mb-2 text-blue-600 mt-auto">JassTracker</h1>
       <p class="font-medium">Coiffeur Jass auf das nächste Level anheben</p>
       <slot />
     </div>

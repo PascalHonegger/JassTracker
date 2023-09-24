@@ -1,5 +1,5 @@
 import { api } from "@/services/requests";
-import {
+import type {
   WebGameStatistics,
   WebPlayerStatistics,
   WebTableStatistics,
