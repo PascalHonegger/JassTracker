@@ -14,7 +14,7 @@ class JwtTokenServiceTest {
         issuer = "Test Issuer",
         audience = "Test Audience",
         realm = "JwtTokenServiceTest",
-        expiryTime = 2.hours,
+        expiryTime = 4.hours,
     )
     private val registeredPlayer = RegisteredPlayer(
         id = UUID.randomUUID(),
