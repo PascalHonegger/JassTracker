@@ -10,13 +10,17 @@ import dev.honegger.jasstracker.data.database.enums.ContractType;
 import dev.honegger.jasstracker.data.database.tables.records.ContractRecord;
 
 import java.util.UUID;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function4;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row4;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -120,6 +124,11 @@ public class Contract extends TableImpl<ContractRecord> {
         return new Contract(alias, this);
     }
 
+    @Override
+    public Contract as(Table<?> alias) {
+        return new Contract(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -136,6 +145,14 @@ public class Contract extends TableImpl<ContractRecord> {
         return new Contract(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public Contract rename(Table<?> name) {
+        return new Contract(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
@@ -143,5 +160,20 @@ public class Contract extends TableImpl<ContractRecord> {
     @Override
     public Row4<UUID, String, Integer, ContractType> fieldsRow() {
         return (Row4) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function4<? super UUID, ? super String, ? super Integer, ? super ContractType, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super UUID, ? super String, ? super Integer, ? super ContractType, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

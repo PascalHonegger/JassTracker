@@ -17,27 +17,17 @@ export const usePlayerStore = defineStore("player", {
       const authStore = useAuthStore();
       try {
         assertNonNullish(authStore.playerId, "PlayerId not defined");
-        const { token } = await updatePlayerDisplayName(
-          authStore.playerId,
-          displayName
-        );
+        const { token } = await updatePlayerDisplayName(authStore.playerId, displayName);
         authStore.setToken(token);
       } catch (e) {
         toast.error("Es gab ein Problem mit der Aktualisierung des Spielers");
       }
     },
-    async updatePassword(
-      oldPassword: string,
-      newPassword: string
-    ): Promise<boolean> {
+    async updatePassword(oldPassword: string, newPassword: string): Promise<boolean> {
       const authStore = useAuthStore();
       try {
         assertNonNullish(authStore.playerId, "PlayerId not defined");
-        const { token } = await updatePlayerPassword(
-          authStore.playerId,
-          oldPassword,
-          newPassword
-        );
+        const { token } = await updatePlayerPassword(authStore.playerId, oldPassword, newPassword);
         authStore.setToken(token);
         return true;
       } catch (e) {

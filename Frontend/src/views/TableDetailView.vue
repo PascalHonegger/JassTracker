@@ -4,16 +4,14 @@ import { useRoute, useRouter } from "vue-router";
 import { useTableStore } from "@/store/table-store";
 import { useGameStore } from "@/store/game-store";
 import { storeToRefs } from "pinia";
-import CreateGame, { CreateNewGameForm } from "@/components/CreateGame.vue";
+import CreateGame from "@/components/CreateGame.vue";
+import type { CreateNewGameForm } from "@/components/CreateGame.vue";
 import ModalDialog from "@/components/ModalDialog.vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
-import {
-  WebCreateGame,
-  WebCreateGameParticipation,
-  WebGameParticipation,
-} from "@/services/web-model";
+import type { WebCreateGame, WebCreateGameParticipation } from "@/services/web-model";
 import GameItem from "@/components/GameItem.vue";
-import GameList, { NamedGame } from "@/components/GameList.vue";
+import GameList from "@/components/GameList.vue";
+import type { NamedGame } from "@/components/GameList.vue";
 import { dateCompare } from "@/util/dates";
 import { useMetaStore } from "@/store/meta-store";
 import { useToast } from "vue-toastification";
@@ -66,19 +64,17 @@ const namedGames = computed<NamedGame[]>(() => {
     .reverse();
 });
 
-const openGames = computed(() =>
-  namedGames.value.filter(({ game }) => game.endTime === undefined)
-);
+const openGames = computed(() => namedGames.value.filter(({ game }) => game.endTime === undefined));
 
 const completedGames = computed(() =>
-  namedGames.value.filter(({ game }) => game.endTime !== undefined)
+  namedGames.value.filter(({ game }) => game.endTime !== undefined),
 );
 
 watch(
   () => route.params.tableId,
   async (newId) => {
     await setCurrentTableId(newId);
-  }
+  },
 );
 
 onMounted(async () => {
@@ -124,7 +120,7 @@ async function createNewGame() {
 
 function updatePlayer(
   player: keyof CreateNewGameForm,
-  participation: WebGameParticipation | null
+  participation: WebCreateGameParticipation | null,
 ) {
   newGame[player] = participation ?? newPlayer;
 }
@@ -146,9 +142,7 @@ function backToOverview() {
   <div class="container mx-auto p-4" v-if="currentTable">
     <div class="flex flex-row items-stretch mt-2">
       <button @click="backToOverview" class="btn btn-blue">Zurück</button>
-      <button @click="openCreateGameDialog" class="btn btn-blue ml-2">
-        Neues Spiel erstellen
-      </button>
+      <button @click="openCreateGameDialog" class="btn btn-blue ml-2">Neues Spiel erstellen</button>
       <RouterLink
         v-if="currentGame"
         class="btn btn-blue ml-2"
@@ -182,10 +176,7 @@ function backToOverview() {
       <p class="font-bold">Neues Spiel erstellen</p>
     </template>
     <template v-slot:body>
-      <form
-        @submit.prevent="createNewGame"
-        class="flex flex-row justify-around gap-2"
-      >
+      <form @submit.prevent="createNewGame" class="flex flex-row justify-around gap-2">
         <CreateGame
           :disabled="creatingGame"
           :existing-players="currentGamePlayers"
@@ -195,12 +186,7 @@ function backToOverview() {
       </form>
     </template>
     <template v-slot:footer>
-      <button
-        type="button"
-        class="btn btn-blue"
-        :disabled="creatingGame"
-        @click="createNewGame"
-      >
+      <button type="button" class="btn btn-blue" :disabled="creatingGame" @click="createNewGame">
         Neues Spiel starten
 
         <WaitSpinner v-if="creatingGame" size="medium" />

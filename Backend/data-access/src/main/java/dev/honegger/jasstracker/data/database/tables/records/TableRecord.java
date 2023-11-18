@@ -179,5 +179,6 @@ public class TableRecord extends UpdatableRecordImpl<TableRecord> implements Rec
         setId(id);
         setName(name);
         setOwnerId(ownerId);
+        resetChangedOnNotNull();
     }
 }

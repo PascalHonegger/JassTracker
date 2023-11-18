@@ -45,25 +45,19 @@ export type BaseRound = {
 };
 
 export type PlayedRound = BaseRound & {
-  type: RoundType.Played;
+  type: "played";
   score: number;
 };
 
 export type LockedRound = BaseRound & {
-  type: RoundType.Locked;
+  type: "locked";
   score: number;
 };
 
 export type OpenRound = BaseRound & {
-  type: RoundType.Open;
+  type: "open";
   score: null;
 };
-
-export enum RoundType {
-  Played = "played",
-  Open = "open",
-  Locked = "locked",
-}
 
 export type ContractType =
   | "Acorns"

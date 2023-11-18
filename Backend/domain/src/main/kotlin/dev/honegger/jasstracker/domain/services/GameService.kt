@@ -10,7 +10,7 @@ import dev.honegger.jasstracker.domain.util.validateExists
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import java.util.*
 
 interface GameService {

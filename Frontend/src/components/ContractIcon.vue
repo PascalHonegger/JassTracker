@@ -4,7 +4,7 @@ import type { Contract } from "@/types/types";
 defineProps<{ contract: Contract }>();
 </script>
 
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 .contract-icon {
   width: 40px;
   height: 40px;
@@ -12,9 +12,7 @@ defineProps<{ contract: Contract }>();
 </style>
 
 <template>
-  <div
-    class="contract-icon flex items-center justify-center pointer-events-none select-none"
-  >
+  <div class="contract-icon flex items-center justify-center pointer-events-none select-none">
     <span v-if="contract.type === 'Guschti'">5/4</span>
     <span class="text-xl" v-else-if="contract.type === 'Joker'">⭐</span>
     <img

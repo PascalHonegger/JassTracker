@@ -290,5 +290,6 @@ public class RoundRecord extends UpdatableRecordImpl<RoundRecord> implements Rec
         setGameId(gameId);
         setPlayerId(playerId);
         setContractId(contractId);
+        resetChangedOnNotNull();
     }
 }

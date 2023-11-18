@@ -1,8 +1,8 @@
-@Suppress("DSL_SCOPE_VIOLATION") // see https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
     application
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.shadow)
+    alias(libs.plugins.kover)
 }
 
 application {
@@ -10,6 +10,10 @@ application {
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+}
+
+kotlin {
+    jvmToolchain(20)
 }
 
 dependencies {
@@ -31,6 +35,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.logback)
     implementation(libs.kotlin.logging)
+    implementation(libs.slf4j)
     implementation(libs.java.jwt)
 }
 

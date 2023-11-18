@@ -1,4 +1,4 @@
-FROM eclipse-temurin:19-jre
+FROM eclipse-temurin:21-jre
 EXPOSE 8080:8080
 RUN mkdir /app
 COPY ./Backend/bootstrap/build/libs/*.jar /app/jasstracker.jar

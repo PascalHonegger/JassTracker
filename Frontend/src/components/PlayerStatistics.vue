@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { useStatisticsStore } from "@/store/statistics-store";
 import { computed, onMounted, ref } from "vue";
-import { WebPlayerStatistics } from "@/services/web-model";
+import type { WebPlayerStatistics } from "@/services/web-model";
 import { Bar, Area, Marker, Chart, Line, Grid, Tooltip } from "vue3-charts";
-import { ChartAxis } from "vue3-charts/dist/types";
 import StatisticsContainer from "@/components/StatisticsContainer.vue";
 import { useContractStore } from "@/store/contract-store";
 import { maxScore } from "@/util/constants";
 import { useAuthStore } from "@/store/auth-store";
 import { assertNonNullish } from "@/util/assert";
+import type { AxisConfig } from "vue3-charts/src/types";
 
 const statisticsStore = useStatisticsStore();
 const contractStore = useContractStore();
@@ -25,9 +25,7 @@ async function refresh() {
   isLoading.value = true;
   try {
     assertNonNullish(authStore.playerId, "PlayerId Should be defined");
-    playerStatistics.value = await statisticsStore.getPlayerStatistics(
-      authStore.playerId
-    );
+    playerStatistics.value = await statisticsStore.getPlayerStatistics(authStore.playerId);
   } finally {
     isLoading.value = false;
   }
@@ -62,6 +60,12 @@ const margin = ref({
   right: 20,
   bottom: 0,
 });
+
+// Not exported by vue3-charts so we have to copy it here
+interface ChartAxis {
+  primary: AxisConfig;
+  secondary: AxisConfig;
+}
 
 const scoreAxis = computed<ChartAxis>(() => ({
   primary: {
@@ -104,9 +108,7 @@ const averageAxis = computed<ChartAxis>(() => ({
     :is-loading="isLoading"
     @refresh="refresh"
   >
-    <h2 class="text-xl font-normal leading-normal">
-      Durchschnittliche Punktzahlen pro Trumpf
-    </h2>
+    <h2 class="text-xl font-normal leading-normal">Durchschnittliche Punktzahlen pro Trumpf</h2>
     <Chart
       :size="{ width, height: 300 }"
       :data="contractAverages"
@@ -140,9 +142,7 @@ const averageAxis = computed<ChartAxis>(() => ({
         />
       </template>
     </Chart>
-    <h2 class="text-xl font-normal leading-normal">
-      Häufigkeit von Punktzahlen
-    </h2>
+    <h2 class="text-xl font-normal leading-normal">Häufigkeit von Punktzahlen</h2>
     <Chart
       :size="{ width, height: 400 }"
       :data="scoreDistribution"
@@ -152,11 +152,7 @@ const averageAxis = computed<ChartAxis>(() => ({
     >
       <template #layers>
         <Grid :hide-y="true" />
-        <Area
-          :dataKeys="['score', 'height']"
-          type="monotone"
-          :areaStyle="{ fill: 'url(#grad)' }"
-        />
+        <Area :dataKeys="['score', 'height']" type="monotone" :areaStyle="{ fill: 'url(#grad)' }" />
         <Line
           :dataKeys="['score', 'height']"
           :lineStyle="{ stroke: '#0096c7' }"

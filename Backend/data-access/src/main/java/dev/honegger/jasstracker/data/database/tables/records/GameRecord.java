@@ -218,5 +218,6 @@ public class GameRecord extends UpdatableRecordImpl<GameRecord> implements Recor
         setStartTime(startTime);
         setEndTime(endTime);
         setTableId(tableId);
+        resetChangedOnNotNull();
     }
 }

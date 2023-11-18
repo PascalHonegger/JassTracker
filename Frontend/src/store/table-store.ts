@@ -1,14 +1,9 @@
 import { defineStore } from "pinia";
-import {
-  deleteTableById,
-  createTable,
-  getTable,
-  getTables,
-} from "@/services/table-service";
+import { deleteTableById, createTable, getTable, getTables } from "@/services/table-service";
 
-import { Table } from "@/types/types";
+import type { Table } from "@/types/types";
 import { useGameStore } from "@/store/game-store";
-import { WebTable } from "@/services/web-model";
+import type { WebTable } from "@/services/web-model";
 
 export const useTableStore = defineStore("table", {
   state: () => ({
@@ -65,8 +60,7 @@ export const useTableStore = defineStore("table", {
         gameIds: table.gameIds,
         loadedGames: {},
         latestGameId: table.latestGame?.id ?? "",
-        currentGameId:
-          table.latestGame?.endTime == null ? table.latestGame?.id ?? "" : "",
+        currentGameId: table.latestGame?.endTime == null ? table.latestGame?.id ?? "" : "",
       };
       if (table.latestGame != null) {
         const gameStore = useGameStore();

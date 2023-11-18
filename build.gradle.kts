@@ -4,7 +4,6 @@ buildscript {
     }
 }
 
-@Suppress("DSL_SCOPE_VIOLATION") // see https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
@@ -16,50 +15,32 @@ allprojects {
     group = "dev.honegger"
     version = "0.0.1"
 
-    apply(plugin = "kover")
-
     repositories {
         mavenCentral()
     }
-
-    tasks.withType<JavaCompile>().configureEach {
-        val service = project.extensions.getByType<JavaToolchainService>()
-        val customProvider = service.compilerFor {
-            languageVersion.set(JavaLanguageVersion.of("19"))
-        }
-        javaCompiler.set(customProvider)
-    }
-
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain>().configureEach {
-        val service = project.extensions.getByType<JavaToolchainService>()
-        val customLauncher = service.launcherFor {
-            languageVersion.set(JavaLanguageVersion.of("19"))
-        }
-        kotlinJavaToolchain.toolchain.use(customLauncher)
-    }
 }
 
-koverMerged {
-    enable()
-    htmlReport {
+dependencies {
+    kover(project(":Backend:bootstrap"))
+    kover(project(":Backend:data-access"))
+    kover(project(":Backend:domain"))
+    kover(project(":Backend:web-api"))
+    kover(project(":Backend:security"))
+}
 
-    }
-    xmlReport {
-
-    }
-    verify {
-        rule {
-            name = "Minimal line coverage rate in percent"
-            bound {
-                minValue = 90
-            }
+koverReport {
+    filters {
+        excludes {
+            packages("dev.honegger.jasstracker.data.database", "dev.honegger.jasstracker.bootstrap.*")
         }
     }
-
-    filters {
-        classes {
-            excludes.add("dev.honegger.jasstracker.data.database.*")
-            excludes.add("dev.honegger.jasstracker.bootstrap.*")
+    defaults {
+        verify {
+            rule {
+                bound {
+                    minValue = 90
+                }
+            }
         }
     }
 }

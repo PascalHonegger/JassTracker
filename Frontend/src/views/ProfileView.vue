@@ -12,14 +12,14 @@ const authStore = useAuthStore();
 const playerStore = usePlayerStore();
 const toast = useToast();
 
-const loadingDisplayName = ref<boolean>(false);
-const loadingNewPassword = ref<boolean>(false);
+const loadingDisplayName = ref(false);
+const loadingNewPassword = ref(false);
 const newDisplayName = ref(authStore.displayName ?? "");
 const oldPassword = ref("");
 const newPassword = ref("");
 const passwordConfirm = ref("");
-const confirmConfirmationFailed = ref<boolean>(false);
-const confirmOldPasswordFailed = ref<boolean>(false);
+const confirmConfirmationFailed = ref(false);
+const confirmOldPasswordFailed = ref(false);
 
 async function updateDisplayName() {
   loadingDisplayName.value = true;
@@ -33,7 +33,7 @@ async function updatePassword() {
   loadingNewPassword.value = true;
   const updatePasswordSuccessful = await playerStore.updatePassword(
     oldPassword.value,
-    newPassword.value
+    newPassword.value,
   );
   loadingNewPassword.value = false;
   if (!updatePasswordSuccessful) {
@@ -55,7 +55,7 @@ async function deleteAccount() {
 }
 </script>
 
-<style lang="scss">
+<style lang="postcss" scoped>
 label {
   @apply block mb-2 text-sm font-medium text-gray-900;
 }
@@ -141,14 +141,9 @@ label {
           />
         </div>
         <div v-if="confirmConfirmationFailed" class="text-red-600 mt-4">
-          Die Bestätigung vom Passwort stimmt nicht mit dem neuen Passwort
-          überein!
+          Die Bestätigung vom Passwort stimmt nicht mit dem neuen Passwort überein!
         </div>
-        <button
-          type="submit"
-          :disabled="loadingNewPassword"
-          class="btn btn-blue self-center"
-        >
+        <button type="submit" :disabled="loadingNewPassword" class="btn btn-blue self-center">
           Passwort Ändern
           <WaitSpinner v-if="loadingNewPassword" size="small"></WaitSpinner>
         </button>

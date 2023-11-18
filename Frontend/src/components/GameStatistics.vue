@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { Game } from "@/types/types";
+import type { Game } from "@/types/types";
 import { useStatisticsStore } from "@/store/statistics-store";
 import { computed, onMounted, ref, watch } from "vue";
-import { WebGameStatistics } from "@/services/web-model";
+import type { WebGameStatistics } from "@/services/web-model";
 import { Bar, Chart, Grid, Line, Marker, Tooltip } from "vue3-charts";
-import { ChartAxis } from "vue3-charts/dist/types";
 import StatisticsContainer from "@/components/StatisticsContainer.vue";
 import { maxScore } from "@/util/constants";
+import type { AxisConfig, Data } from "vue3-charts/src/types";
 
 const statisticsStore = useStatisticsStore();
 
@@ -22,9 +22,7 @@ watch(props.game, async () => await refresh());
 async function refresh() {
   isLoading.value = true;
   try {
-    gameStatistics.value = await statisticsStore.getGameStatistics(
-      props.game.id
-    );
+    gameStatistics.value = await statisticsStore.getGameStatistics(props.game.id);
   } finally {
     isLoading.value = false;
   }
@@ -40,7 +38,7 @@ const scoreOverRound = computed(
         scores.team1Score != null && scores.team2Score != null
           ? scores.team1Score - scores.team2Score
           : undefined,
-    })) ?? []
+    })) ?? [],
 );
 
 const averages = computed(() => {
@@ -91,6 +89,12 @@ const margin = ref({
   right: 20,
   bottom: 0,
 });
+
+// Not exported by vue3-charts so we have to copy it here
+interface ChartAxis {
+  primary: AxisConfig;
+  secondary: AxisConfig;
+}
 const scoreAxis = computed<ChartAxis>(() => ({
   primary: {
     domain: ["dataMin", "dataMax"],
@@ -121,14 +125,12 @@ const averageAxis = computed<ChartAxis>(() => ({
     @refresh="refresh"
   >
     <h2 class="text-xl font-normal leading-normal">
-      Hochgerechnete Punktzahlen pro Runde (<span style="color: orange"
-        >Team 1</span
-      >
-      vs <span style="color: blue">Team 2</span>)
+      Hochgerechnete Punktzahlen pro Runde (<span style="color: orange">Team 1</span> vs
+      <span style="color: blue">Team 2</span>)
     </h2>
     <Chart
       :size="{ width, height: 400 }"
-      :data="scoreOverRound"
+      :data="scoreOverRound as Data[]"
       :margin="margin"
       :direction="'horizontal'"
       :axis="scoreAxis"
@@ -167,7 +169,7 @@ const averageAxis = computed<ChartAxis>(() => ({
     </h2>
     <Chart
       :size="{ width, height: 300 }"
-      :data="scoreOverRound"
+      :data="scoreOverRound as Data[]"
       :margin="margin"
       :direction="'horizontal'"
     >
@@ -195,9 +197,7 @@ const averageAxis = computed<ChartAxis>(() => ({
       </template>
     </Chart>
 
-    <h2 class="text-xl font-normal leading-normal">
-      Durchschnittliche Punktzahlen
-    </h2>
+    <h2 class="text-xl font-normal leading-normal">Durchschnittliche Punktzahlen</h2>
     <Chart
       :size="{ width, height: 300 }"
       :data="averages"
@@ -208,10 +208,7 @@ const averageAxis = computed<ChartAxis>(() => ({
       <template #layers>
         <Grid />
         <Bar :dataKeys="['label', 'average']" :barStyle="{ fill: '#0096c7' }" />
-        <Bar
-          :dataKeys="['label', 'weightedAverage']"
-          :barStyle="{ fill: '#48cae4' }"
-        />
+        <Bar :dataKeys="['label', 'weightedAverage']" :barStyle="{ fill: '#48cae4' }" />
       </template>
 
       <template #widgets>

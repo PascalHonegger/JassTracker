@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import HelpTabs from "@/components/HelpTabs.vue";
 </script>
-<style lang="scss">
+<style lang="postcss" scoped>
 h3 {
   @apply text-lg font-normal leading-normal mt-4;
 }
@@ -30,56 +30,47 @@ h3 {
           alt="Spielablauf"
         />
         <p>
-          Der Coiffeur ist ein Partnerjass, bei dem jeweils die beiden
-          gegenüberliegenden Spieler ein Team bilden.
+          Der Coiffeur ist ein Partnerjass, bei dem jeweils die beiden gegenüberliegenden Spieler
+          ein Team bilden.
           <br />
-          Es geht darum, sämtliche Trumpfarten einmal zu spielen und dabei
-          möglichst viele Punkte zu erzielen. Es werden jeweils nur die Punkte
-          des ansagenden Teams geschrieben.
+          Es geht darum, sämtliche Trumpfarten einmal zu spielen und dabei möglichst viele Punkte zu
+          erzielen. Es werden jeweils nur die Punkte des ansagenden Teams geschrieben.
           <br />
-          Jedem Trumpf ist ein Multiplikator zugeteilt, mit welchem am Ende der
-          Runde die erzielten Punkte multipliziert werden. Dieser Umstand
-          erfordert eine vorausschauende Planung bei der Trumpfwahl.
+          Jedem Trumpf ist ein Multiplikator zugeteilt, mit welchem am Ende der Runde die erzielten
+          Punkte multipliziert werden. Dieser Umstand erfordert eine vorausschauende Planung bei der
+          Trumpfwahl.
           <br />
-          Beim Coiffeur auf 8 Runden müssen von jedem Team jede Trumpffarbe,
-          Obenabe, Undenufe, und zwei Joker (freie Wahl der Trumpfart) je einmal
-          gespielt werden. Beim Coiffeur auf 10 Runden müssen zusätzlich einmal
-          Slalom und einmal Guschti 5/4 gespielt werden.
+          Beim Coiffeur auf 8 Runden müssen von jedem Team jede Trumpffarbe, Obenabe, Undenufe, und
+          zwei Joker (freie Wahl der Trumpfart) je einmal gespielt werden. Beim Coiffeur auf 10
+          Runden müssen zusätzlich einmal Slalom und einmal Guschti 5/4 gespielt werden.
         </p>
         <h3>Slalom</h3>
         <p>
-          Beim Slalom wird abwechslungsweise ein Stich Obenabe und dann ein
-          Stich Undenufe gespielt.
+          Beim Slalom wird abwechslungsweise ein Stich Obenabe und dann ein Stich Undenufe gespielt.
           <br />
-          Beim Slalom-Obenabe wird der erste Stich Obenabe gespielt. Beim
-          Slalom-Undenufe wird hingegen mit Undenufe begonnen.
+          Beim Slalom-Obenabe wird der erste Stich Obenabe gespielt. Beim Slalom-Undenufe wird
+          hingegen mit Undenufe begonnen.
           <br />
         </p>
         <h3>Guschti</h3>
         <p>
-          Beim Guschti-Obenabe werden zuerst fünf Stiche Obenabe und dann vier
-          Stiche Undenufe.
+          Beim Guschti-Obenabe werden zuerst fünf Stiche Obenabe und dann vier Stiche Undenufe.
           <br />
-          Beim Guschti-Undenufe zuerst fünf Stiche Undenufe und dann vier Stiche
-          Obenabe gejasst.
+          Beim Guschti-Undenufe zuerst fünf Stiche Undenufe und dann vier Stiche Obenabe gejasst.
           <br />
         </p>
         <h3>Schieben</h3>
         <p>
-          Das Schieben erfolgt nicht wie beim Schieber zum Partner, sondern im
-          Gegenuhrzeigersinn zum nächsten Mitspieler.
+          Das Schieben erfolgt nicht wie beim Schieber zum Partner, sondern im Gegenuhrzeigersinn
+          zum nächsten Mitspieler.
           <br />
-          Schieben alle Spieler weiter, kommt die Aufforderung zum Trumpfen
-          wieder zum ersten Spieler zurück. Dieser kann nicht mehr
-          weiterschieben und muss einen Trumpf wählen. Derjenige Spieler,
-          welcher die Trumpfart bestimmt hat, startet mit dem Ablegen der ersten
+          Schieben alle Spieler weiter, kommt die Aufforderung zum Trumpfen wieder zum ersten
+          Spieler zurück. Dieser kann nicht mehr weiterschieben und muss einen Trumpf wählen.
+          Derjenige Spieler, welcher die Trumpfart bestimmt hat, startet mit dem Ablegen der ersten
           Karte. Der Coiffeur wird ohne Weisen gespielt.
         </p>
         <h3>Wer Gewinnt?</h3>
-        <p>
-          Das Team, welches nach Beendigung aller Runden am meisten Punkte
-          aufweist, gewinnt.
-        </p>
+        <p>Das Team, welches nach Beendigung aller Runden am meisten Punkte aufweist, gewinnt.</p>
       </div>
     </div>
 
@@ -92,31 +83,25 @@ h3 {
           alt="Regeln"
         />
         <p class="text-left">
-          Beim Coiffeur gibt es klare Regeln, wann welche Farben gespielt werden
-          dürfen.
+          Beim Coiffeur gibt es klare Regeln, wann welche Farben gespielt werden dürfen.
         </p>
         <h3>Regel 1</h3>
         <p>
-          Wer eine Karte der ausgespielten Farbe besitzt, muss diese Farbe
-          spielen. Die Ausnahme ist der Trumpf-Bauer/Trumpf-Under.
+          Wer eine Karte der ausgespielten Farbe besitzt, muss diese Farbe spielen. Die Ausnahme ist
+          der Trumpf-Bauer/Trumpf-Under.
         </p>
         <h3>Regel 2</h3>
         <p>
-          Wer keine Karte der ausgespielten Farbe hat, darf irgendeine Karte
-          spielen (Untertrumpfen ist nur erlaubt, wenn man nur noch Trumpfkarten
-          besitzt).
+          Wer keine Karte der ausgespielten Farbe hat, darf irgendeine Karte spielen (Untertrumpfen
+          ist nur erlaubt, wenn man nur noch Trumpfkarten besitzt).
         </p>
         <h3>Regel 3</h3>
-        <p>
-          Es darf jederzeit ein Trumpf gespielt werden, anstatt Farbe zu
-          bekennen.
-        </p>
+        <p>Es darf jederzeit ein Trumpf gespielt werden, anstatt Farbe zu bekennen.</p>
         <h3>Regel 4</h3>
         <p>
-          Wurde die Trumpffarbe ausgespielt, dann muss ebenfalls eine
-          Trumpfkarte gespielt werden. Wer neben dem Trumpf-Bauer/Trumpf-Under
-          keine andere Trumpfkarte mehr besitzt, darf statt des
-          Trumpf-Bauers/Trumpf-Unders auch jede andere Karte spielen.
+          Wurde die Trumpffarbe ausgespielt, dann muss ebenfalls eine Trumpfkarte gespielt werden.
+          Wer neben dem Trumpf-Bauer/Trumpf-Under keine andere Trumpfkarte mehr besitzt, darf statt
+          des Trumpf-Bauers/Trumpf-Unders auch jede andere Karte spielen.
         </p>
       </div>
     </div>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const jassTrackerHelpIsActive = ref<boolean>(true);
-const jassRulesIsActive = ref<boolean>(false);
+const jassTrackerHelpIsActive = ref(true);
+const jassRulesIsActive = ref(false);
 function switchTab() {
   if (jassTrackerHelpIsActive.value) {
     jassTrackerHelpIsActive.value = !jassTrackerHelpIsActive.value;

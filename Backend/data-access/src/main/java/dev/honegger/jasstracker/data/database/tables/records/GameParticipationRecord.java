@@ -216,5 +216,6 @@ public class GameParticipationRecord extends UpdatableRecordImpl<GameParticipati
         setPlayerId(playerId);
         setTablePosition(tablePosition);
         setPlayerName(playerName);
+        resetChangedOnNotNull();
     }
 }

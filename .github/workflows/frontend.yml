@@ -15,30 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          package_json_file: Frontend/package.json
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
-          cache: npm
-          cache-dependency-path: Frontend/package-lock.json
-      - run: npm ci
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: Frontend/pnpm-lock.yaml
+      - run: pnpm i
         working-directory: Frontend
-      - run: npm run lint
+      - run: pnpm lint
         working-directory: Frontend
-
-  qodana-js:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: npm
-          cache-dependency-path: Frontend/package-lock.json
-      - run: npm ci
-        working-directory: Frontend
-      - name: 'Qodana JS Scan'
-        uses: JetBrains/qodana-action@v2022.3.4
-        with:
-          args: '-i,Frontend,--linter,jetbrains/qodana-js'
-          artifact-name: 'qodana-js-report'
-          cache-dir: ${{ runner.temp }}/qodana-js/caches

@@ -1,18 +1,15 @@
 <script setup lang="ts">
-import TableItem from "../components/TableItem.vue";
-import ModalDialog from "../components/ModalDialog.vue";
+import TableItem from "@/components/TableItem.vue";
+import ModalDialog from "@/components/ModalDialog.vue";
 import WaitSpinner from "@/components/WaitSpinner.vue";
 import { computed, onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useTableStore } from "@/store/table-store";
 import { storeToRefs } from "pinia";
 import { useGameStore } from "@/store/game-store";
-import {
-  WebCreateGame,
-  WebCreateGameParticipation,
-  WebGameParticipation,
-} from "@/services/web-model";
-import CreateGame, { CreateNewGameForm } from "@/components/CreateGame.vue";
+import type { WebCreateGame, WebCreateGameParticipation } from "@/services/web-model";
+import CreateGame from "@/components/CreateGame.vue";
+import type { CreateNewGameForm } from "@/components/CreateGame.vue";
 import { useAuthStore } from "@/store/auth-store";
 import { useMetaStore } from "@/store/meta-store";
 import { useToast } from "vue-toastification";
@@ -67,7 +64,7 @@ async function createNewTable() {
     newTableName.value.length > maxTableNameLength
   ) {
     toast.error(
-      `Tischname muss zwischen ${minTableNameLength} und ${maxTableNameLength} Zeichen sein`
+      `Tischname muss zwischen ${minTableNameLength} und ${maxTableNameLength} Zeichen sein`,
     );
     creatingTable.value = false;
     return;
@@ -75,7 +72,7 @@ async function createNewTable() {
   const validateTeamPlayersSuccess = await validatePlayers(newGame);
   if (!validateTeamPlayersSuccess) {
     toast.error(
-      `Spieler Alias muss zwischen ${minDisplayNameLength} und ${maxDisplayNameLength} Zeichen sein`
+      `Spieler Alias muss zwischen ${minDisplayNameLength} und ${maxDisplayNameLength} Zeichen sein`,
     );
     creatingTable.value = false;
     return;
@@ -109,7 +106,7 @@ async function validatePlayers(game: CreateNewGameForm): Promise<boolean> {
 
 function updatePlayer(
   player: keyof CreateNewGameForm,
-  participation: WebGameParticipation | null
+  participation: WebCreateGameParticipation | null,
 ) {
   newGame[player] = participation ?? newPlayer;
 }
@@ -126,11 +123,7 @@ function updatePlayer(
       </button>
     </div>
 
-    <ModalDialog
-      v-if="isModalVisible"
-      @close="isModalVisible = false"
-      class="overflow-auto"
-    >
+    <ModalDialog v-if="isModalVisible" @close="isModalVisible = false" class="overflow-auto">
       <template v-slot:header>
         <p class="font-bold">Tisch erstellen</p>
       </template>
@@ -139,9 +132,7 @@ function updatePlayer(
           <div
             class="flex flex-row gap-2 table-name mb-4 pb-4 justify-center border-b-2 border-black border-dashed"
           >
-            <label for="tableName" class="text-center block self-center"
-              >Tisch Name:</label
-            >
+            <label for="tableName" class="text-center block self-center">Tisch Name:</label>
             <input
               id="tableName"
               class="box-input self-center w-60"

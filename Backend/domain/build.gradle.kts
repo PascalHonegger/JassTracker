@@ -1,10 +1,15 @@
-@Suppress("DSL_SCOPE_VIOLATION") // see https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kover)
+}
+
+kotlin {
+    jvmToolchain(20)
 }
 
 dependencies {
     implementation(libs.kotlin.logging)
+    implementation(libs.slf4j)
     implementation(libs.kotlinx.datetime)
     testImplementation(testLibs.kotlin.test)
     testImplementation(testLibs.mockk)

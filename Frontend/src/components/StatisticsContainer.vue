@@ -13,11 +13,7 @@ defineProps<{ title: string; isLoading: boolean }>();
   <div v-if="!isLoading">
     <h1 class="text-5xl font-normal leading-normal">
       {{ title }}
-      <IconSelector
-        class="w-10 cursor-pointer inline"
-        @click="emits('refresh')"
-        icon="refresh"
-      />
+      <IconSelector class="w-10 cursor-pointer inline" @click="emits('refresh')" icon="refresh" />
     </h1>
     <Responsive class="w-full">
       <template #main="{ width }">

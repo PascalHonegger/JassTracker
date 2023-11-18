@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import {
-  WebCreateGame,
-  WebCreateGameParticipation,
-} from "@/services/web-model";
+import type { WebCreateGame, WebCreateGameParticipation } from "@/services/web-model";
 import { VueDraggableNext as Draggable } from "vue-draggable-next";
 import { computed } from "vue";
 import CreateGamePlayer from "@/components/CreateGamePlayer.vue";
@@ -19,7 +16,7 @@ const emit = defineEmits<{
   (
     event: "updatePlayer",
     player: keyof CreateNewGameForm,
-    participation: WebCreateGameParticipation | null
+    participation: WebCreateGameParticipation | null,
   ): void;
 }>();
 
@@ -32,6 +29,12 @@ const playerNameLookup = computed(() => {
   }
   return lookup;
 });
+
+function foo(player: WebCreateGameParticipation) {
+  return player.playerId != null && player.playerId in playerNameLookup.value
+    ? playerNameLookup.value[player.playerId]
+    : null;
+}
 
 type PlayerRef = WebCreateGameParticipation & { name: string | null };
 
@@ -144,17 +147,12 @@ const team2Player2DisplayName = computed({
   },
 });
 </script>
-<style lang="scss" scoped>
-@mixin player-dimensions {
-  @apply w-36 h-full md:w-full;
-}
+<style lang="postcss" scoped>
 .player-slot {
-  @include player-dimensions;
-  @apply bg-gray-100 overflow-hidden h-36 md:h-24;
+  @apply w-36 h-36 md:w-full bg-gray-100 overflow-hidden md:h-24;
 }
 .player {
-  @include player-dimensions;
-  @apply p-3 rounded-md text-center cursor-grab;
+  @apply w-36 h-full md:w-full p-3 rounded-md text-center cursor-grab;
 }
 .no-team > .player {
   @apply bg-gray-300 h-16;
@@ -180,11 +178,7 @@ const team2Player2DisplayName = computed({
           :group="{ name: 'players', pull: 'clone', put: false }"
           :sort="false"
         >
-          <div
-            class="player"
-            v-for="element in availablePlayers"
-            :key="element.playerId"
-          >
+          <div class="player" v-for="element in availablePlayers" :key="element.playerId!">
             <span v-if="element.name != null">
               {{ element.name }}
             </span>
@@ -192,9 +186,7 @@ const team2Player2DisplayName = computed({
           </div>
         </Draggable>
       </div>
-      <div
-        class="flex justify-items-center justify-center grid grid-cols-2 sm:grid-cols-3 gap-4"
-      >
+      <div class="flex justify-items-center justify-center grid grid-cols-2 sm:grid-cols-3 gap-4">
         <img
           loading="lazy"
           class="hidden sm:block w-32 md:w-48 h-32 md:h-48 col-start-2 row-start-2 justify-self-center m-4 pointer-events-none select-none"
@@ -210,9 +202,7 @@ const team2Player2DisplayName = computed({
         >
           <CreateGamePlayer
             class="player"
-            :username="
-              playerNameLookup[newGameForm.team1Player1.playerId] ?? null
-            "
+            :username="foo(newGameForm.team1Player1)"
             v-model:display-name="team1Player1DisplayName"
           />
         </Draggable>
@@ -224,9 +214,7 @@ const team2Player2DisplayName = computed({
         >
           <CreateGamePlayer
             class="player"
-            :username="
-              playerNameLookup[newGameForm.team1Player2.playerId] ?? null
-            "
+            :username="foo(newGameForm.team1Player2)"
             v-model:display-name="team1Player2DisplayName"
           />
         </Draggable>
@@ -240,9 +228,7 @@ const team2Player2DisplayName = computed({
         >
           <CreateGamePlayer
             class="player"
-            :username="
-              playerNameLookup[newGameForm.team2Player1.playerId] ?? null
-            "
+            :username="foo(newGameForm.team2Player1)"
             v-model:display-name="team2Player1DisplayName"
           />
         </Draggable>
@@ -254,9 +240,7 @@ const team2Player2DisplayName = computed({
         >
           <CreateGamePlayer
             class="player"
-            :username="
-              playerNameLookup[newGameForm.team2Player2.playerId] ?? null
-            "
+            :username="foo(newGameForm.team2Player2)"
             v-model:display-name="team2Player2DisplayName"
           />
         </Draggable>

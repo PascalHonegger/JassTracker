@@ -10,12 +10,10 @@ const authStore = useAuthStore();
 const router = useRouter();
 const toast = useToast();
 
-const registerLoading = ref<boolean>(false);
-const registerFailed = ref<boolean>(false);
-const loginAsGuestLoading = ref<boolean>(false);
-const loading = computed(
-  () => registerLoading.value || loginAsGuestLoading.value
-);
+const registerLoading = ref(false);
+const registerFailed = ref(false);
+const loginAsGuestLoading = ref(false);
+const loading = computed(() => registerLoading.value || loginAsGuestLoading.value);
 const username = ref("");
 const displayName = ref("");
 const password = ref("");
@@ -32,7 +30,7 @@ async function register() {
   const registerSuccessful = await authStore.registerPlayer(
     username.value,
     displayName.value,
-    password.value
+    password.value,
   );
   if (registerSuccessful) {
     toast.success("Spieler wurde erfolgreich registriert");
@@ -49,9 +47,7 @@ async function register() {
     <div class="flex flex-col my-8 self-center w-48">
       <form @submit.prevent="register" autocomplete="on">
         <div class="mb-6">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900"
-            for="username"
+          <label class="block mb-2 text-sm font-medium text-gray-900" for="username"
             >Benutzername</label
           >
           <input
@@ -65,9 +61,7 @@ async function register() {
           />
         </div>
         <div class="mb-6">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900"
-            for="nickname"
+          <label class="block mb-2 text-sm font-medium text-gray-900" for="nickname"
             >Anzeigename</label
           >
           <input
@@ -81,9 +75,7 @@ async function register() {
           />
         </div>
         <div class="mb-6">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900"
-            for="password"
+          <label class="block mb-2 text-sm font-medium text-gray-900" for="password"
             >Passwort</label
           >
           <input
@@ -96,26 +88,18 @@ async function register() {
             v-model="password"
           />
         </div>
-        <button
-          type="submit"
-          :disabled="loading"
-          class="btn btn-blue self-center"
-        >
+        <button type="submit" :disabled="loading" class="btn btn-blue self-center">
           Registrieren
 
           <WaitSpinner v-if="registerLoading" size="small"></WaitSpinner>
         </button>
-        <div v-if="registerFailed" class="text-red-600 mt-4">
-          Registrierung fehlgeschlagen
-        </div>
+        <div v-if="registerFailed" class="text-red-600 mt-4">Registrierung fehlgeschlagen</div>
       </form>
     </div>
     <div class="mb-auto mx-1">
       <p>
         Bereits registriert?
-        <RouterLink to="/login" class="underline"
-          >Melde dich stattdessen an!</RouterLink
-        >
+        <RouterLink to="/login" class="underline">Melde dich stattdessen an!</RouterLink>
       </p>
     </div>
   </LoginRegisterLayout>

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from "vue";
 
-const props = defineProps<{ max: number; modelValue?: number }>();
+const props = defineProps<{ max: number; modelValue: number | null }>();
 const emit = defineEmits<{
   (event: "update:modelValue", value?: number): void;
 }>();
@@ -9,7 +9,7 @@ const emit = defineEmits<{
 const input = ref<HTMLInputElement>();
 const enteredScore = ref(props.modelValue?.toString() ?? "");
 const score = computed(() =>
-  enteredScore.value === "" ? undefined : parseInt(enteredScore.value, 10)
+  enteredScore.value === "" ? undefined : parseInt(enteredScore.value, 10),
 );
 const inRange = computed(() => Math.abs(score.value ?? 0) <= props.max);
 

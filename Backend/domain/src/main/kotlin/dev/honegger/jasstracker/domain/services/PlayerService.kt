@@ -7,7 +7,7 @@ import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
 import dev.honegger.jasstracker.domain.util.validateCurrentPlayer
 import dev.honegger.jasstracker.domain.util.validateExists
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import java.util.*
 
 interface PlayerService {

@@ -1,7 +1,11 @@
-@Suppress("DSL_SCOPE_VIOLATION") // see https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kover)
+}
+
+kotlin {
+    jvmToolchain(20)
 }
 
 dependencies {

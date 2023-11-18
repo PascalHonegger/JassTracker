@@ -253,5 +253,6 @@ public class PlayerRecord extends UpdatableRecordImpl<PlayerRecord> implements R
         setDisplayName(displayName);
         setPassword(password);
         setIsGuest(isGuest);
+        resetChangedOnNotNull();
     }
 }

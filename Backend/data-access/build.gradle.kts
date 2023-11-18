@@ -1,10 +1,14 @@
 import org.jooq.meta.jaxb.ForcedType
 
-@Suppress("DSL_SCOPE_VIOLATION") // see https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
     java
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.jooq)
+    alias(libs.plugins.kover)
+}
+
+kotlin {
+    jvmToolchain(20)
 }
 
 dependencies {

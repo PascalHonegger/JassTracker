@@ -5,10 +5,10 @@
 [![JassTracker Operations](https://github.com/PascalHonegger/JassTracker/actions/workflows/operations.yml/badge.svg)](https://github.com/PascalHonegger/JassTracker/actions/workflows/operations.yml)
 
 ## Screenshots
-![Jasstisch erstellen](Documentation/src/resources/screenshots/table-creation.png)
-![Jasstisch erstellen](Documentation/src/resources/screenshots/tables.png)
-![Jasstisch erstellen](Documentation/src/resources/screenshots/scoreboard.png)
-![Jasstisch erstellen](Documentation/src/resources/screenshots/statistics.png)
+![Jasstisch creation](Documentation/src/resources/screenshots/table-creation.png)
+![Jasstisch table](Documentation/src/resources/screenshots/tables.png)
+![Jasstisch scoreboard](Documentation/src/resources/screenshots/scoreboard.png)
+![Jasstisch statistics](Documentation/src/resources/screenshots/statistics.png)
 
 ## Development
 
@@ -19,14 +19,15 @@ You can also manually start all components:
 ### Frontend
 ```shell
 cd Frontend
+# Make sure you've set up PNPM (https://pnpm.io/installation#using-corepack)
 # Install NPM dependencies
-npm ci
+pnpm i
 # Start dev server
-npm run serve
+pnpm serve
 # Build for prod
-npm run build
+pnpm build
 # Run linter
-npm run lint
+pnpm lint
 ```
 
 ### Backend
