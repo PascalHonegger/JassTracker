@@ -6,28 +6,28 @@ include(":Backend:web-api")
 include(":Backend:security")
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
 dependencyResolutionManagement {
     versionCatalogs {
-        val kotlin = "1.9.10"
-        val mockk = "1.13.7"
-        val ktor = "2.3.4"
-        val logback = "1.4.11"
+        val kotlin = "2.0.0"
+        val mockk = "1.13.11"
+        val ktor = "2.3.11"
+        val logback = "1.5.6"
         val shadow = "8.1.1"
-        val kotlinxDatetime = "0.4.1"
-        val kotlinLogging = "5.1.0"
-        val flyway = "9.22.1"
-        val postgresql = "42.6.0"
-        val jooq = "3.18.4"
+        val kotlinxDatetime = "0.6.0"
+        val kotlinLogging = "6.0.9"
+        val flyway = "10.13.0"
+        val postgresql = "42.7.3"
+        val jooq = "3.19.8"
         val jooqPlugin = "8.2.1"
-        val kover = "0.7.3"
-        val testcontainers = "1.19.0"
+        val kover = "0.8.0"
+        val testcontainers = "1.19.8"
         val javaJwt = "4.4.0" // Equal to java-jwt-version from https://github.com/ktorio/ktor/blob/main/gradle/libs.versions.toml
-        val slf4j = "2.0.9"
+        val slf4j = "2.0.13"
         val argon2 = "2.11"
-        val versions = "0.48.0"
+        val versions = "0.51.0"
 
         create("libs") {
             library("ktor-server-core", "io.ktor", "ktor-server-core-jvm").version(ktor)
@@ -46,7 +46,8 @@ dependencyResolutionManagement {
             library("logback", "ch.qos.logback", "logback-classic").version(logback)
             library("slf4j", "org.slf4j", "slf4j-simple").version(slf4j)
             library("kotlin-logging", "io.github.oshai", "kotlin-logging-jvm").version(kotlinLogging)
-            library("flyway", "org.flywaydb", "flyway-core").version(flyway)
+            library("flyway-core", "org.flywaydb", "flyway-core").version(flyway)
+            library("flyway-postgresql", "org.flywaydb", "flyway-database-postgresql").version(flyway)
             library("postgresql", "org.postgresql", "postgresql").version(postgresql)
             library("jooq", "org.jooq", "jooq").version(jooq)
             library("java-jwt", "com.auth0", "java-jwt").version(javaJwt)

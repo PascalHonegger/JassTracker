@@ -8,13 +8,14 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(20)
+    jvmToolchain(21)
 }
 
 dependencies {
     implementation(project(":Backend:domain"))
     implementation(libs.logback)
-    implementation(libs.flyway)
+    implementation(libs.flyway.core)
+    implementation(libs.flyway.postgresql)
     implementation(libs.jooq)
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlin.reflect)
