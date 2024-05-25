@@ -16,12 +16,12 @@ jobs:
     container:
       image: texlive/texlive:latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Make LaTeX
         working-directory: ./Documentation
         run: make doc
       - name: Archive built LaTeX documentation
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: documentation
           path: Documentation/out/*.pdf

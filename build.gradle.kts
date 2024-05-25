@@ -28,13 +28,13 @@ dependencies {
     kover(project(":Backend:security"))
 }
 
-koverReport {
-    filters {
-        excludes {
-            packages("dev.honegger.jasstracker.data.database", "dev.honegger.jasstracker.bootstrap.*")
+kover {
+    reports {
+        filters {
+            excludes {
+                packages("dev.honegger.jasstracker.data.database", "dev.honegger.jasstracker.bootstrap.*")
+            }
         }
-    }
-    defaults {
         verify {
             rule {
                 bound {
