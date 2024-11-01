@@ -147,6 +147,90 @@ const team2Player2DisplayName = computed({
   },
 });
 </script>
+<template>
+  <div class="flex flex-col gap-4">
+    <h2 class="text-center text-xl">
+      <span class="bg-orange-200">Team 1</span> gegen
+      <span class="bg-blue-200">Team 2</span>
+    </h2>
+    <div class="flex flex-col md:flex-row gap-4">
+      <div class="flex justify-center">
+        <Draggable
+          class="no-team w-full flex flex-row flex-wrap justify-around md:flex-nowrap md:flex-col md:justify-center gap-2"
+          :list="availablePlayers"
+          :group="{ name: 'players', pull: 'clone', put: false }"
+          :sort="false"
+        >
+          <div v-for="element in availablePlayers" :key="element.playerId!" class="player">
+            <span v-if="element.name != null">
+              {{ element.name }}
+            </span>
+            <span v-else class="italic">Neuer Spieler</span>
+          </div>
+        </Draggable>
+      </div>
+      <div class="flex justify-items-center justify-center grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <img
+          loading="lazy"
+          class="hidden sm:block w-32 md:w-48 h-32 md:h-48 col-start-2 row-start-2 justify-self-center m-4 pointer-events-none select-none"
+          src="../assets/table.webp"
+          alt="Jasstisch"
+        />
+        <!-- Team 1 (Top & Bottom) -->
+        <Draggable
+          v-model="team1Player1"
+          class="player-slot team1 sm:col-start-2 sm:row-start-1 sm:self-end sm:justify-self-center"
+          group="players"
+          :sort="false"
+        >
+          <CreateGamePlayer
+            v-model:display-name="team1Player1DisplayName"
+            class="player"
+            :username="foo(newGameForm.team1Player1)"
+          />
+        </Draggable>
+        <Draggable
+          v-model="team1Player2"
+          class="player-slot team1 sm:col-start-2 sm:row-start-3 sm:self-start sm:justify-self-center"
+          group="players"
+          :sort="false"
+        >
+          <CreateGamePlayer
+            v-model:display-name="team1Player2DisplayName"
+            class="player"
+            :username="foo(newGameForm.team1Player2)"
+          />
+        </Draggable>
+
+        <!-- Team 2 (Left & Right) -->
+        <Draggable
+          v-model="team2Player1"
+          class="player-slot team2 sm:col-start-1 sm:row-start-2 sm:self-center sm:justify-self-end"
+          group="players"
+          :sort="false"
+        >
+          <CreateGamePlayer
+            v-model:display-name="team2Player1DisplayName"
+            class="player"
+            :username="foo(newGameForm.team2Player1)"
+          />
+        </Draggable>
+        <Draggable
+          v-model="team2Player2"
+          class="player-slot team2 sm:col-start-3 sm:row-start-2 sm:self-center sm:justify-self-start"
+          group="players"
+          :sort="false"
+        >
+          <CreateGamePlayer
+            v-model:display-name="team2Player2DisplayName"
+            class="player"
+            :username="foo(newGameForm.team2Player2)"
+          />
+        </Draggable>
+      </div>
+    </div>
+  </div>
+</template>
 <style lang="postcss" scoped>
 .player-slot {
   @apply w-36 h-36 md:w-full bg-gray-100 overflow-hidden md:h-24;
@@ -164,87 +248,3 @@ const team2Player2DisplayName = computed({
   @apply bg-blue-200;
 }
 </style>
-<template>
-  <div class="flex flex-col gap-4">
-    <h2 class="text-center text-xl">
-      <span class="bg-orange-200">Team 1</span> gegen
-      <span class="bg-blue-200">Team 2</span>
-    </h2>
-    <div class="flex flex-col md:flex-row gap-4">
-      <div class="flex justify-center">
-        <Draggable
-          class="no-team w-full flex flex-row flex-wrap justify-around md:flex-nowrap md:flex-col md:justify-center gap-2"
-          :list="availablePlayers"
-          :group="{ name: 'players', pull: 'clone', put: false }"
-          :sort="false"
-        >
-          <div class="player" v-for="element in availablePlayers" :key="element.playerId!">
-            <span v-if="element.name != null">
-              {{ element.name }}
-            </span>
-            <span v-else class="italic">Neuer Spieler</span>
-          </div>
-        </Draggable>
-      </div>
-      <div class="flex justify-items-center justify-center grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <img
-          loading="lazy"
-          class="hidden sm:block w-32 md:w-48 h-32 md:h-48 col-start-2 row-start-2 justify-self-center m-4 pointer-events-none select-none"
-          src="../assets/table.webp"
-          alt="Jasstisch"
-        />
-        <!-- Team 1 (Top & Bottom) -->
-        <Draggable
-          class="player-slot team1 sm:col-start-2 sm:row-start-1 sm:self-end sm:justify-self-center"
-          v-model="team1Player1"
-          group="players"
-          :sort="false"
-        >
-          <CreateGamePlayer
-            class="player"
-            :username="foo(newGameForm.team1Player1)"
-            v-model:display-name="team1Player1DisplayName"
-          />
-        </Draggable>
-        <Draggable
-          class="player-slot team1 sm:col-start-2 sm:row-start-3 sm:self-start sm:justify-self-center"
-          v-model="team1Player2"
-          group="players"
-          :sort="false"
-        >
-          <CreateGamePlayer
-            class="player"
-            :username="foo(newGameForm.team1Player2)"
-            v-model:display-name="team1Player2DisplayName"
-          />
-        </Draggable>
-
-        <!-- Team 2 (Left & Right) -->
-        <Draggable
-          class="player-slot team2 sm:col-start-1 sm:row-start-2 sm:self-center sm:justify-self-end"
-          v-model="team2Player1"
-          group="players"
-          :sort="false"
-        >
-          <CreateGamePlayer
-            class="player"
-            :username="foo(newGameForm.team2Player1)"
-            v-model:display-name="team2Player1DisplayName"
-          />
-        </Draggable>
-        <Draggable
-          class="player-slot team2 sm:col-start-3 sm:row-start-2 sm:self-center sm:justify-self-start"
-          v-model="team2Player2"
-          group="players"
-          :sort="false"
-        >
-          <CreateGamePlayer
-            class="player"
-            :username="foo(newGameForm.team2Player2)"
-            v-model:display-name="team2Player2DisplayName"
-          />
-        </Draggable>
-      </div>
-    </div>
-  </div>
-</template>

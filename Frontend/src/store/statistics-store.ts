@@ -13,21 +13,21 @@ export const useStatisticsStore = defineStore("statistics", {
     async getGameStatistics(gameId: string) {
       try {
         return await getGameStatistics(gameId);
-      } catch (e) {
+      } catch {
         toast.error("Es gab ein Problem beim Laden der Spielstatistiken");
       }
     },
     async getPlayerStatistics(playerId: string) {
       try {
         return await getPlayerStatistics(playerId);
-      } catch (e) {
+      } catch {
         toast.error("Es gab ein Problem beim Laden der Spielerstatistiken");
       }
     },
     async getTableStatistics(tableId: string) {
       try {
         return await getTableStatistics(tableId);
-      } catch (e) {
+      } catch {
         toast.error("Es gab ein Problem beim Laden der Tischstatistiken");
       }
     },

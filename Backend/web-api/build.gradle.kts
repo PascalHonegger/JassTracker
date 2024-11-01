@@ -5,7 +5,7 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(23)
 }
 
 dependencies {
@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.java.jwt)
     implementation(libs.kotlinx.datetime)
     testImplementation(libs.ktor.client.content.negotiation)
+    testImplementation(libs.ktor.server.content.negotiation)
     testImplementation(testLibs.ktor.server.tests)
     testImplementation(testLibs.kotlin.test)
     testImplementation(testLibs.mockk)

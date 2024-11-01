@@ -1,13 +1,6 @@
 <script setup lang="ts">
 defineProps<{ size: "small" | "medium" | "large" }>();
 </script>
-<style lang="postcss" scoped>
-.spinner-border {
-  border: 0.25em solid;
-  border-right-color: transparent;
-  vertical-align: middle;
-}
-</style>
 <template>
   <div
     class="spinner-border animate-spin inline-block border-2 rounded-full"
@@ -24,3 +17,10 @@ defineProps<{ size: "small" | "medium" | "large" }>();
     <span class="sr-only">Wird geladen...</span>
   </div>
 </template>
+<style lang="postcss" scoped>
+.spinner-border {
+  border: 0.25em solid;
+  border-right-color: transparent;
+  vertical-align: middle;
+}
+</style>

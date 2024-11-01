@@ -5,7 +5,7 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.autohead.*
-import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.statuspages.*
@@ -13,8 +13,8 @@ import io.ktor.server.request.*
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 fun Application.configureHTTP() {
-    val log = KotlinLogging.logger {  }
-    if (environment.developmentMode) {
+    val log = KotlinLogging.logger { }
+    if (developmentMode) {
         install(CORS) {
             allowHeader(HttpHeaders.ContentType)
             allowHeader(HttpHeaders.Authorization)

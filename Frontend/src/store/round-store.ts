@@ -15,7 +15,7 @@ export const useRoundStore = defineStore("round", {
       try {
         const newRound = await createRound(round);
         await this.handleRoundCreateOrUpdate(newRound);
-      } catch (e) {
+      } catch {
         toast.error("Es gab ein Problem mit der Erstellung der Runde");
       }
     },
@@ -26,7 +26,7 @@ export const useRoundStore = defineStore("round", {
         await updateRound(round.id, round);
         this.removeRoundFromCurrentGame(round.id, round.playerId, round.contractId);
         await this.handleRoundCreateOrUpdate(round);
-      } catch (e) {
+      } catch {
         toast.error("Es gab ein Problem mit der Aktualisierung der Runde");
       }
     },
@@ -112,7 +112,7 @@ export const useRoundStore = defineStore("round", {
         gameStore.currentGame.currentPlayer = await getCurrentPlayerOfGame(
           gameStore.currentGame.id,
         );
-      } catch (e) {
+      } catch {
         toast.error("Es gab ein Problem bei der Löschung der Runde");
         return false;
       }

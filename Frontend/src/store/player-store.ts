@@ -19,7 +19,7 @@ export const usePlayerStore = defineStore("player", {
         assertNonNullish(authStore.playerId, "PlayerId not defined");
         const { token } = await updatePlayerDisplayName(authStore.playerId, displayName);
         authStore.setToken(token);
-      } catch (e) {
+      } catch {
         toast.error("Es gab ein Problem mit der Aktualisierung des Spielers");
       }
     },
@@ -30,7 +30,7 @@ export const usePlayerStore = defineStore("player", {
         const { token } = await updatePlayerPassword(authStore.playerId, oldPassword, newPassword);
         authStore.setToken(token);
         return true;
-      } catch (e) {
+      } catch {
         return false;
       }
     },
@@ -40,7 +40,7 @@ export const usePlayerStore = defineStore("player", {
         assertNonNullish(authStore.playerId, "PlayerId not defined");
         await deleteRegisteredPlayer(authStore.playerId);
         await authStore.logout();
-      } catch (e) {
+      } catch {
         toast.error("Es gab ein Problem mit der Löschung des Spielers");
       }
     },

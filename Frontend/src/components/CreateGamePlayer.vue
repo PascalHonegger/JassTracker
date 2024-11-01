@@ -12,7 +12,7 @@ const emit = defineEmits<{
     <div v-if="username != null">
       {{ username }}
     </div>
-    <div class="italic" v-else>Neuer Spieler</div>
+    <div v-else class="italic">Neuer Spieler</div>
     <div class="flex flex-col md:flex-row items-center gap-4">
       <label>Alias: </label>
       <input

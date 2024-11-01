@@ -39,7 +39,7 @@ function parseJwt(token: string): JwtToken | null {
     );
 
     return JSON.parse(jsonPayload);
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -73,7 +73,7 @@ export const useAuthStore = defineStore("auth", {
         await this.loadContracts();
 
         return true;
-      } catch (e) {
+      } catch {
         this.setToken("");
         return false;
       }
@@ -88,7 +88,7 @@ export const useAuthStore = defineStore("auth", {
         this.setToken(token);
         await this.loadContracts();
         return true;
-      } catch (e) {
+      } catch {
         this.setToken("");
         return false;
       }

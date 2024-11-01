@@ -119,22 +119,22 @@ const averageAxis = computed<ChartAxis>(() => ({
       <template #layers>
         <Grid />
         <Bar
-          :dataKeys="['contract', 'average']"
-          :barStyle="{ fill: '#0096c7', fillOpacity: 0.4 }"
+          :data-keys="['contract', 'average']"
+          :bar-style="{ fill: '#0096c7', fillOpacity: 0.4 }"
         />
         <Marker
           v-if="playerStatistics"
           :value="playerStatistics.average"
           label="Mittelwert"
           color="black"
-          :strokeWidth="2"
-          strokeDasharray="6 6"
+          :stroke-width="2"
+          stroke-dasharray="6 6"
         />
       </template>
 
       <template #widgets>
         <Tooltip
-          borderColor="#48CAE4"
+          border-color="#48CAE4"
           :config="{
             contract: { label: 'Trumpf' },
             average: { color: '#0096c7', label: 'Mittelwert', format: ',.1f' },
@@ -152,10 +152,10 @@ const averageAxis = computed<ChartAxis>(() => ({
     >
       <template #layers>
         <Grid :hide-y="true" />
-        <Area :dataKeys="['score', 'height']" type="monotone" :areaStyle="{ fill: 'url(#grad)' }" />
+        <Area :data-keys="['score', 'height']" type="monotone" :area-style="{ fill: 'url(#grad)' }" />
         <Line
-          :dataKeys="['score', 'height']"
-          :lineStyle="{ stroke: '#0096c7' }"
+          :data-keys="['score', 'height']"
+          :line-style="{ stroke: '#0096c7' }"
           :type="'monotone'"
           :hide-dot="true"
         />
@@ -170,7 +170,7 @@ const averageAxis = computed<ChartAxis>(() => ({
 
       <template #widgets>
         <Tooltip
-          borderColor="#48CAE4"
+          border-color="#48CAE4"
           :config="{
             score: { color: 'black', label: 'Punkte' },
             occurrences: { color: 'blue', label: 'Häufigkeit' },

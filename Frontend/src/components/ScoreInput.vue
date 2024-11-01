@@ -38,12 +38,12 @@ function handleChange() {
 <template>
   <input
     ref="input"
+    v-model="enteredScore"
     inputmode="numeric"
     :class="{ '!bg-red-100': !inRange }"
-    @change="handleChange"
-    @keypress="handleKeypress"
     :min="-max"
     :max="max"
-    v-model="enteredScore"
+    @change="handleChange"
+    @keypress="handleKeypress"
   />
 </template>
