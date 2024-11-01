@@ -9,7 +9,7 @@ fun Application.initializeDatabase() {
             url = property("jasstracker.db.url").getString(),
             user = property("jasstracker.db.user").getString(),
             password = propertyOrNull("jasstracker.db.password")?.getString(),
-            runTestMigrations = environment.developmentMode
+            runTestMigrations = developmentMode
         )
     }
 }

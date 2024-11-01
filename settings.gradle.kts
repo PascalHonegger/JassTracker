@@ -11,19 +11,19 @@ plugins {
 
 dependencyResolutionManagement {
     versionCatalogs {
-        val kotlin = "2.0.0"
-        val mockk = "1.13.11"
-        val ktor = "2.3.11"
-        val logback = "1.5.6"
+        val kotlin = "2.0.21"
+        val mockk = "1.13.13"
+        val ktor = "3.0.1"
+        val logback = "1.5.12"
         val shadow = "8.1.1"
-        val kotlinxDatetime = "0.6.0"
+        val kotlinxDatetime = "0.6.1"
         val kotlinLogging = "6.0.9"
-        val flyway = "10.13.0"
-        val postgresql = "42.7.3"
+        val flyway = "10.20.1"
+        val postgresql = "42.7.4"
         val jooq = "3.19.8"
         val jooqPlugin = "8.2.1"
-        val kover = "0.8.0"
-        val testcontainers = "1.19.8"
+        val kover = "0.8.3"
+        val testcontainers = "1.20.3"
         val javaJwt = "4.4.0" // Equal to java-jwt-version from https://github.com/ktorio/ktor/blob/main/gradle/libs.versions.toml
         val slf4j = "2.0.13"
         val argon2 = "2.11"
@@ -65,7 +65,7 @@ dependencyResolutionManagement {
         }
         create("testLibs") {
             library("kotlin-test", "org.jetbrains.kotlin", "kotlin-test-junit5").version(kotlin)
-            library("ktor-server-tests", "io.ktor", "ktor-server-tests-jvm").version(ktor)
+            library("ktor-server-tests", "io.ktor", "ktor-server-test-host").version(ktor)
             library("mockk", "io.mockk", "mockk").version(mockk)
             library("testcontainers", "org.testcontainers", "testcontainers").version(testcontainers)
             library("testcontainers-junit", "org.testcontainers", "junit-jupiter").version(testcontainers)

@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.java.jwt)
     implementation(libs.kotlinx.datetime)
     testImplementation(libs.ktor.client.content.negotiation)
+    testImplementation(libs.ktor.server.content.negotiation)
     testImplementation(testLibs.ktor.server.tests)
     testImplementation(testLibs.kotlin.test)
     testImplementation(testLibs.mockk)
