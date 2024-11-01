@@ -11,7 +11,7 @@ plugins {
 
 dependencyResolutionManagement {
     versionCatalogs {
-        val kotlin = "2.0.21"
+        val kotlin = "2.1.0-Beta2"
         val mockk = "1.13.13"
         val ktor = "3.0.1"
         val logback = "1.5.12"
