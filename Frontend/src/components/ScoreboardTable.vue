@@ -34,11 +34,6 @@ function getTeamTotal(team: Team): number {
 
 const teams = computed(() => [props.game.team1, props.game.team2]);
 </script>
-<style lang="postcss" scoped>
-.active {
-  @apply bg-green-300;
-}
-</style>
 <template>
   <div
     class="max-w-3xl my-4 w-full text-center border rounded border-black border-solid overflow-auto flex"
@@ -80,10 +75,10 @@ const teams = computed(() => [props.game.team1, props.game.team2]);
       </thead>
       <tbody>
         <RoundRow
-          class="odd:bg-white even:bg-slate-100 h-10"
           v-for="r in game.rows"
-          :row="r"
           :key="r.contract.id"
+          class="odd:bg-white even:bg-slate-100 h-10"
+          :row="r"
           :readonly="game.endTime !== undefined"
         />
       </tbody>
@@ -96,10 +91,10 @@ const teams = computed(() => [props.game.team1, props.game.team2]);
         </tr>
         <tr class="border-t-2 border-slate-300">
           <td
-            class="h-10 text-xl font-bold"
-            colspan="2"
             v-for="(team, index) in teams"
             :key="index"
+            class="h-10 text-xl font-bold"
+            colspan="2"
           >
             {{ getTeamTotal(team) }}
           </td>
@@ -108,3 +103,8 @@ const teams = computed(() => [props.game.team1, props.game.team2]);
     </table>
   </div>
 </template>
+<style lang="postcss" scoped>
+.active {
+  @apply bg-green-300;
+}
+</style>

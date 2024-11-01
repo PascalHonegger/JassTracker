@@ -42,19 +42,19 @@ function closeModal() {
   >
     <p class="font-bold">Dein Jasstisch</p>
     <p class="font-bold">{{ table.name }}</p>
-    <icon @click="showModal" icon="trash" class="absolute top-2 right-2 z-10"></icon>
+    <icon icon="trash" class="absolute top-2 right-2 z-10" @click="showModal"></icon>
     <GamePreview v-if="latestGame !== undefined" :game="latestGame"></GamePreview>
   </RouterLink>
 
-  <Modal class="delete-table-modal" v-show="isModalVisible" @close="closeModal">
-    <template v-slot:header>
+  <Modal v-show="isModalVisible" class="delete-table-modal" @close="closeModal">
+    <template #header>
       <p class="font-bold">Tisch löschen</p>
     </template>
-    <template v-slot:body>
+    <template #body>
       Sind Sie sicher, dass Sie den Tisch: {{ table.name }} und alle enthaltenen Spiele Löschen
       möchten?
     </template>
-    <template v-slot:footer>
+    <template #footer>
       <button type="button" class="btn btn-blue" @click="deleteTable">Löschen</button>
     </template>
   </Modal>

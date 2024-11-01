@@ -138,14 +138,14 @@ const averageAxis = computed<ChartAxis>(() => ({
       <template #layers>
         <Grid :hide-y="true" />
         <Line
-          :dataKeys="['round', 'team1']"
-          :lineStyle="{ stroke: 'orange' }"
+          :data-keys="['round', 'team1']"
+          :line-style="{ stroke: 'orange' }"
           :type="'monotone'"
           :hide-dot="true"
         />
         <Line
-          :dataKeys="['round', 'team2']"
-          :lineStyle="{ stroke: 'blue' }"
+          :data-keys="['round', 'team2']"
+          :line-style="{ stroke: 'blue' }"
           :type="'monotone'"
           :hide-dot="true"
         />
@@ -153,7 +153,7 @@ const averageAxis = computed<ChartAxis>(() => ({
 
       <template #widgets>
         <Tooltip
-          borderColor="#48CAE4"
+          border-color="#48CAE4"
           :config="{
             team1: { color: 'orange', label: 'Team 1' },
             team2: { color: 'blue', label: 'Team 2' },
@@ -177,8 +177,8 @@ const averageAxis = computed<ChartAxis>(() => ({
         <Grid :hide-y="true" />
         <Marker :value="0" :color="'gray'" :label="'Ausgeglichen'" />
         <Line
-          :dataKeys="['round', 'diff']"
-          :lineStyle="{ stroke: 'red' }"
+          :data-keys="['round', 'diff']"
+          :line-style="{ stroke: 'red' }"
           :type="'monotone'"
           :hide-dot="true"
         />
@@ -186,7 +186,7 @@ const averageAxis = computed<ChartAxis>(() => ({
 
       <template #widgets>
         <Tooltip
-          borderColor="#48CAE4"
+          border-color="#48CAE4"
           :config="{
             team1: { color: 'orange', label: 'Team 1' },
             team2: { color: 'blue', label: 'Team 2' },
@@ -207,13 +207,13 @@ const averageAxis = computed<ChartAxis>(() => ({
     >
       <template #layers>
         <Grid />
-        <Bar :dataKeys="['label', 'average']" :barStyle="{ fill: '#0096c7' }" />
-        <Bar :dataKeys="['label', 'weightedAverage']" :barStyle="{ fill: '#48cae4' }" />
+        <Bar :data-keys="['label', 'average']" :bar-style="{ fill: '#0096c7' }" />
+        <Bar :data-keys="['label', 'weightedAverage']" :bar-style="{ fill: '#48cae4' }" />
       </template>
 
       <template #widgets>
         <Tooltip
-          borderColor="#48CAE4"
+          border-color="#48CAE4"
           :config="{
             label: { hide: true },
             average: { color: '#0096c7', label: 'Mittelwert', format: ',.1f' },

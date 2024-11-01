@@ -123,7 +123,7 @@ export const useGameStore = defineStore("game", {
       }
       try {
         await deleteGameById(gameId);
-      } catch (e) {
+      } catch {
         return false;
       }
       return true;

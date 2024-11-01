@@ -52,17 +52,6 @@ function getClass(round: Round): string {
 }
 </script>
 
-<style lang="postcss" scoped>
-.played,
-.locked {
-  background-color: lightgray;
-}
-
-.open {
-  background-color: lightblue;
-}
-</style>
-
 <template>
   <tr>
     <th scope="row" class="border-r-2 border-slate-300 h-full">
@@ -78,11 +67,11 @@ function getClass(round: Round): string {
       <td>
         <div class="relative w-fit mx-auto">
           <ScoreInput
+            v-model="r.score"
             class="w-24 px-1"
             :class="getClass(r)"
             :disabled="r.type === 'locked' || readonly"
             :max="maxScore"
-            v-model="r.score"
             @update:model-value="(score) => handleInput(score, r)"
           />
           <span
@@ -95,3 +84,14 @@ function getClass(round: Round): string {
     </template>
   </tr>
 </template>
+
+<style lang="postcss" scoped>
+.played,
+.locked {
+  background-color: lightgray;
+}
+
+.open {
+  background-color: lightblue;
+}
+</style>

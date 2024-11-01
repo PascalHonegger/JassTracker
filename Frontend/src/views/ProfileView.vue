@@ -55,44 +55,38 @@ async function deleteAccount() {
 }
 </script>
 
-<style lang="postcss" scoped>
-label {
-  @apply block mb-2 text-sm font-medium text-gray-900;
-}
-</style>
-
 <template>
   <div class="container mx-auto text-center flex flex-col gap-4 py-8">
     <div class="container flex flex-col md:flex-row md:justify-around gap-4">
-      <form @submit.prevent="updateDisplayName" autocomplete="on">
+      <form autocomplete="on" @submit.prevent="updateDisplayName">
         <div class="mb-6 flex flex-col">
           <label for="username">Benutzername</label>
           <input
+            id="username"
+            v-model="authStore.username"
             autocomplete="username"
             class="box-input"
-            id="username"
             name="username"
             type="text"
             disabled
-            v-model="authStore.username"
           />
         </div>
         <div class="mb-6 flex flex-col">
           <label for="displayname">Anzeigename</label>
           <input
+            id="displayname"
+            v-model="newDisplayName"
             autocomplete="nickname"
             class="box-input"
-            id="displayname"
             name="displayname"
             type="text"
             :disabled="loadingDisplayName || isGuest"
-            v-model="newDisplayName"
           />
         </div>
         <button
+          v-if="!isGuest"
           type="submit"
           :disabled="loadingDisplayName"
-          v-if="!isGuest"
           class="btn btn-blue self-center"
         >
           Anzeigename Aktualisieren
@@ -100,17 +94,17 @@ label {
           <WaitSpinner v-if="loadingDisplayName" size="small"></WaitSpinner>
         </button>
       </form>
-      <form @submit.prevent="updatePassword" v-if="!isGuest" autocomplete="on">
+      <form v-if="!isGuest" autocomplete="on" @submit.prevent="updatePassword">
         <div class="mb-6 flex flex-col">
           <label for="old-password">Altes Passwort</label>
           <input
+            id="old-password"
+            v-model="oldPassword"
             autocomplete="old-password"
             class="box-input"
-            id="old-password"
             name="old-password"
             type="password"
             :disabled="loadingNewPassword"
-            v-model="oldPassword"
           />
         </div>
         <div v-if="confirmOldPasswordFailed" class="text-red-600 mt-4">
@@ -119,25 +113,25 @@ label {
         <div class="mb-6 flex flex-col">
           <label for="new-password">Neues Passwort</label>
           <input
+            id="new-password"
+            v-model="newPassword"
             autocomplete="new-password"
             class="box-input"
-            id="new-password"
             name="new-password"
             type="password"
             :disabled="loadingNewPassword"
-            v-model="newPassword"
           />
         </div>
         <div class="mb-6 flex flex-col">
           <label for="password-confirm">Neues Passwort Bestätigen</label>
           <input
+            id="password-confirm"
+            v-model="passwordConfirm"
             autocomplete="new-password"
             class="box-input"
-            id="password-confirm"
             name="password-confirm"
             type="password"
             :disabled="loadingNewPassword"
-            v-model="passwordConfirm"
           />
         </div>
         <div v-if="confirmConfirmationFailed" class="text-red-600 mt-4">
@@ -150,8 +144,14 @@ label {
       </form>
     </div>
     <div v-if="!isGuest">
-      <button @click="deleteAccount" class="btn btn-red">Konto löschen</button>
+      <button class="btn btn-red" @click="deleteAccount">Konto löschen</button>
     </div>
     <PlayerStatistics />
   </div>
 </template>
+
+<style lang="postcss" scoped>
+label {
+  @apply block mb-2 text-sm font-medium text-gray-900;
+}
+</style>

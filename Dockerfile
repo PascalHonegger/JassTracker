@@ -1,4 +1,4 @@
-FROM node:20-alpine AS buildFrontend
+FROM node:22-alpine AS buildFrontend
 RUN corepack enable
 COPY ./Frontend /home/node/src
 WORKDIR /home/node/src

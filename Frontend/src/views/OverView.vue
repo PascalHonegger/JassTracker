@@ -116,18 +116,18 @@ function updatePlayer(
     <div class="flex flex-col items-stretch md:flex-wrap md:flex-row gap-4 p-4">
       <TableItem v-for="t in tablesAsArray" :key="t.id" :table="t"></TableItem>
       <button
-        @click="isModalVisible = true"
         class="jass-table cursor-pointer max-w-sm w-full lg:max-w-full lg:flex"
+        @click="isModalVisible = true"
       >
         <span class="self-center text-6xl">+</span>
       </button>
     </div>
 
-    <ModalDialog v-if="isModalVisible" @close="isModalVisible = false" class="overflow-auto">
-      <template v-slot:header>
+    <ModalDialog v-if="isModalVisible" class="overflow-auto" @close="isModalVisible = false">
+      <template #header>
         <p class="font-bold">Tisch erstellen</p>
       </template>
-      <template v-slot:body>
+      <template #body>
         <div class="flex flex-col">
           <div
             class="flex flex-row gap-2 table-name mb-4 pb-4 justify-center border-b-2 border-black border-dashed"
@@ -135,20 +135,20 @@ function updatePlayer(
             <label for="tableName" class="text-center block self-center">Tisch Name:</label>
             <input
               id="tableName"
+              v-model="newTableName"
               class="box-input self-center w-60"
               placeholder="Beispiel: Samschtig-Jass Familie"
-              v-model="newTableName"
             />
           </div>
           <CreateGame
             :disabled="creatingTable"
             :existing-players="availablePlayers"
             :new-game-form="newGame"
-            @updatePlayer="updatePlayer"
+            @update-player="updatePlayer"
           ></CreateGame>
         </div>
       </template>
-      <template v-slot:footer>
+      <template #footer>
         <button
           type="button"
           class="btn btn-blue"

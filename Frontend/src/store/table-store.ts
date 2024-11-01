@@ -72,7 +72,7 @@ export const useTableStore = defineStore("table", {
       delete this.tables[tableId];
       try {
         await deleteTableById(tableId);
-      } catch (e) {
+      } catch {
         return false;
       }
       return true;

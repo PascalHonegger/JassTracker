@@ -139,10 +139,10 @@ function backToOverview() {
 }
 </script>
 <template>
-  <div class="container mx-auto p-4" v-if="currentTable">
+  <div v-if="currentTable" class="container mx-auto p-4">
     <div class="flex flex-row items-stretch mt-2">
-      <button @click="backToOverview" class="btn btn-blue">Zurück</button>
-      <button @click="openCreateGameDialog" class="btn btn-blue ml-2">Neues Spiel erstellen</button>
+      <button class="btn btn-blue" @click="backToOverview">Zurück</button>
+      <button class="btn btn-blue ml-2" @click="openCreateGameDialog">Neues Spiel erstellen</button>
       <RouterLink
         v-if="currentGame"
         class="btn btn-blue ml-2"
@@ -172,20 +172,20 @@ function backToOverview() {
   </div>
 
   <ModalDialog v-if="isModalVisible" @close="isModalVisible = false">
-    <template v-slot:header>
+    <template #header>
       <p class="font-bold">Neues Spiel erstellen</p>
     </template>
-    <template v-slot:body>
-      <form @submit.prevent="createNewGame" class="flex flex-row justify-around gap-2">
+    <template #body>
+      <form class="flex flex-row justify-around gap-2" @submit.prevent="createNewGame">
         <CreateGame
           :disabled="creatingGame"
           :existing-players="currentGamePlayers"
           :new-game-form="newGame"
-          @updatePlayer="updatePlayer"
+          @update-player="updatePlayer"
         ></CreateGame>
       </form>
     </template>
-    <template v-slot:footer>
+    <template #footer>
       <button type="button" class="btn btn-blue" :disabled="creatingGame" @click="createNewGame">
         Neues Spiel starten
 

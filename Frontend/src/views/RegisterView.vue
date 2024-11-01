@@ -45,19 +45,19 @@ async function register() {
 <template>
   <LoginRegisterLayout>
     <div class="flex flex-col my-8 self-center w-48">
-      <form @submit.prevent="register" autocomplete="on">
+      <form autocomplete="on" @submit.prevent="register">
         <div class="mb-6">
           <label class="block mb-2 text-sm font-medium text-gray-900" for="username"
             >Benutzername</label
           >
           <input
+            id="username"
+            v-model="username"
             autocomplete="username"
             class="box-input w-full"
-            id="username"
             name="username"
             type="text"
             :disabled="loading"
-            v-model="username"
           />
         </div>
         <div class="mb-6">
@@ -65,13 +65,13 @@ async function register() {
             >Anzeigename</label
           >
           <input
+            id="nickname"
+            v-model="displayName"
             autocomplete="nickname"
             class="box-input w-full"
-            id="nickname"
             name="nickname"
             type="text"
             :disabled="loading"
-            v-model="displayName"
           />
         </div>
         <div class="mb-6">
@@ -79,13 +79,13 @@ async function register() {
             >Passwort</label
           >
           <input
+            id="password"
+            v-model="password"
             autocomplete="new-password"
             class="box-input w-full"
-            id="password"
             name="password"
             type="password"
             :disabled="loading"
-            v-model="password"
           />
         </div>
         <button type="submit" :disabled="loading" class="btn btn-blue self-center">

@@ -15,8 +15,8 @@ function switchTab() {
 
 <template>
   <div>
-    <div @click="switchTab" v-show="jassTrackerHelpIsActive" />
-    <div @click="switchTab" v-show="jassRulesIsActive" />
+    <div v-show="jassTrackerHelpIsActive" @click="switchTab" />
+    <div v-show="jassRulesIsActive" @click="switchTab" />
     <slot></slot>
   </div>
 </template>

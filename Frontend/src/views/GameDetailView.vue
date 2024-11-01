@@ -96,12 +96,12 @@ function backToTable() {
       <GameItem :game="currentGame" />
       <GameStatistics :game="currentGame" />
     </template>
-    <ModalDialog class="delete-game-modal" v-if="isModalVisible" @close="closeModal">
-      <template v-slot:header>
+    <ModalDialog v-if="isModalVisible" class="delete-game-modal" @close="closeModal">
+      <template #header>
         <p class="font-bold">Spiel löschen</p>
       </template>
-      <template v-slot:body> Sind Sie sicher, dass Sie dieses Spiel löschen möchten? </template>
-      <template v-slot:footer>
+      <template #body> Sind Sie sicher, dass Sie dieses Spiel löschen möchten? </template>
+      <template #footer>
         <button type="button" class="btn btn-blue" @click="deleteGame">Löschen</button>
       </template>
     </ModalDialog>

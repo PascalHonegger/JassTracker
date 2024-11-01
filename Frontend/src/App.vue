@@ -25,12 +25,6 @@ function logout() {
   router.push("/login");
 }
 </script>
-<style lang="postcss" scoped>
-/*noinspection CssUnusedSymbol*/
-.router-link-exact-active {
-  @apply text-emerald-400;
-}
-</style>
 <template>
   <div class="flex flex-col h-screen overflow-hidden">
     <nav class="border-gray-200 px-2 sm:px-4 py-2.5 bg-gray-800 grow-0">
@@ -45,15 +39,15 @@ function logout() {
           </button>
           <RouterLink class="flex items-center text-white" :to="logoLink">JassTracker</RouterLink>
         </div>
-        <div :class="{ hidden: hideMobileMenu }" class="w-full md:block md:w-auto" id="mobile-menu">
+        <div id="mobile-menu" :class="{ hidden: hideMobileMenu }" class="w-full md:block md:w-auto">
           <ul
             class="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium text-white"
           >
             <li>
               <RouterLink
+                v-if="store.loggedIn"
                 class="block py-2 pr-4 pl-3 text-white"
                 to="/Profile"
-                v-if="store.loggedIn"
                 >Profil</RouterLink
               >
             </li>
@@ -63,7 +57,7 @@ function logout() {
               >
             </li>
             <li>
-              <button @click="logout" class="block py-2 pr-4 pl-3 text-white" v-if="store.loggedIn">
+              <button v-if="store.loggedIn" class="block py-2 pr-4 pl-3 text-white" @click="logout">
                 Ausloggen
               </button>
             </li>
@@ -79,3 +73,9 @@ function logout() {
     </div>
   </div>
 </template>
+<style lang="postcss" scoped>
+/*noinspection CssUnusedSymbol*/
+.router-link-exact-active {
+  @apply text-emerald-400;
+}
+</style>

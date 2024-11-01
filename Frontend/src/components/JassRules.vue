@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import HelpTabs from "@/components/HelpTabs.vue";
 </script>
-<style lang="postcss" scoped>
-h3 {
-  @apply text-lg font-normal leading-normal mt-4;
-}
-</style>
 <template>
   <div class="container mx-auto text-center">
     <HelpTabs class="flex border-b border-black mt-4">
@@ -107,3 +102,8 @@ h3 {
     </div>
   </div>
 </template>
+<style lang="postcss" scoped>
+h3 {
+  @apply text-lg font-normal leading-normal mt-4;
+}
+</style>
