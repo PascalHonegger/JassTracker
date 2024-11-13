@@ -1,4 +1,5 @@
 FROM eclipse-temurin:23-jre-alpine
+RUN apk add --no-cache argon2-libs
 EXPOSE 8080:8080
 RUN mkdir /app
 COPY ./Backend/bootstrap/build/libs/*.jar /app/jasstracker.jar
