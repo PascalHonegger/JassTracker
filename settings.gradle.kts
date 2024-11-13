@@ -11,7 +11,7 @@ plugins {
 
 dependencyResolutionManagement {
     versionCatalogs {
-        val kotlin = "2.1.0-Beta2"
+        val kotlin = "2.1.0-RC"
         val mockk = "1.13.13"
         val ktor = "3.0.1"
         val logback = "1.5.12"
@@ -51,6 +51,7 @@ dependencyResolutionManagement {
             library("postgresql", "org.postgresql", "postgresql").version(postgresql)
             library("jooq", "org.jooq", "jooq").version(jooq)
             library("java-jwt", "com.auth0", "java-jwt").version(javaJwt)
+            library("argon2-jvm-nolibs", "de.mkammerer", "argon2-jvm-nolibs").version(argon2)
             library("argon2-jvm", "de.mkammerer", "argon2-jvm").version(argon2)
             library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").version(kotlin)
 
