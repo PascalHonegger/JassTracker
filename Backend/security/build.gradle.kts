@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kover)
+    alias(testLibs.plugins.kover)
 }
 
 kotlin {

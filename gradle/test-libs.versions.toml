@@ -1,0 +1,19 @@
+[versions]
+kotlin = "2.1.20"
+ktor = "3.1.1"
+mockk = "1.13.17"
+testcontainers = "1.20.6"
+kover = "0.9.1"
+versions = "0.52.0"
+
+[libraries]
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlin" }
+ktor-server-tests = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
+testcontainers-junit = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+
+[plugins]
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
