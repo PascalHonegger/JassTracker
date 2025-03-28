@@ -23,7 +23,7 @@ cd Frontend
 # Install NPM dependencies
 pnpm i
 # Start dev server
-pnpm serve
+pnpm dev
 # Build for prod
 pnpm build
 # Run linter
