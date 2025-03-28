@@ -11,7 +11,7 @@ open class RepositoryTest {
     companion object {
         @Container
         @JvmStatic
-        val postgresql = PostgreSQLContainer("postgres:14-alpine")
+        val postgresql = PostgreSQLContainer("postgres:17-alpine")
 
         @BeforeAll
         @JvmStatic
