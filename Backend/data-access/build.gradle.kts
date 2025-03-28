@@ -8,7 +8,10 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(23)
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(23))
+        vendor.set(JvmVendorSpec.GRAAL_VM)
+    }
 }
 
 dependencies {
@@ -74,8 +77,6 @@ jooq {
                     generate.apply {
                         isDeprecated = false
                         isRecords = true
-                        isPojos = false
-                        isFluentSetters = false
                     }
                     target.apply {
                         packageName = "dev.honegger.jasstracker.data.database"
