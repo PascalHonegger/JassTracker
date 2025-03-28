@@ -32,7 +32,7 @@ kover {
     reports {
         filters {
             excludes {
-                packages("dev.honegger.jasstracker.data.database", "dev.honegger.jasstracker.bootstrap.*")
+                packages("dev.honegger.jasstracker.data.database", "dev.honegger.jasstracker.bootstrap", "dev.honegger.jasstracker.bootstrap.plugins")
             }
         }
         verify {

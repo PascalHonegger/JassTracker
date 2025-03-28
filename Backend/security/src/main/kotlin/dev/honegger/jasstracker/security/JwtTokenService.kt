@@ -15,8 +15,8 @@ import kotlinx.datetime.toJavaInstant
 import java.util.*
 import kotlin.time.Duration
 
-data class JwtConfig(
-    val secret: String,
+class JwtConfig(
+    val secret: ByteArray,
     val issuer: String,
     val audience: String,
     val realm: String,
