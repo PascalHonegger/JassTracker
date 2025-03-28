@@ -4,13 +4,16 @@ import dev.honegger.jasstracker.domain.GuestPlayer
 import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.RegisteredPlayer
 import java.util.*
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.hours
 
+@OptIn(ExperimentalEncodingApi::class)
 class JwtTokenServiceTest {
     private val config = JwtConfig(
-        secret = "z8TxaimeeD3R9EFBCBTLNi6LNlDOOiRuKjb5TYcUEcNNjYDzhbS5StLIB1wqvDPhNoXY66FUvIsQrOykDUbUQg==",
+        secret = Base64.decode("z8TxaimeeD3R9EFBCBTLNi6LNlDOOiRuKjb5TYcUEcNNjYDzhbS5StLIB1wqvDPhNoXY66FUvIsQrOykDUbUQg=="),
         issuer = "Test Issuer",
         audience = "Test Audience",
         realm = "JwtTokenServiceTest",
