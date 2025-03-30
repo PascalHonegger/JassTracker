@@ -1,10 +1,13 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kover)
+    alias(testLibs.plugins.kover)
 }
 
 kotlin {
-    jvmToolchain(23)
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(23))
+        vendor.set(JvmVendorSpec.GRAAL_VM)
+    }
 }
 
 dependencies {

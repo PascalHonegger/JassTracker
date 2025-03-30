@@ -2,18 +2,21 @@ plugins {
     application
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.shadow)
-    alias(libs.plugins.kover)
+    alias(testLibs.plugins.kover)
 }
 
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
+    mainClass.set("dev.honegger.jasstracker.bootstrap.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
 kotlin {
-    jvmToolchain(23)
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(23))
+        vendor.set(JvmVendorSpec.GRAAL_VM)
+    }
 }
 
 dependencies {
@@ -27,7 +30,7 @@ dependencies {
     implementation(libs.ktor.server.call.logging)
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.ktor.server.cors)
-    implementation(libs.ktor.server.netty)
+    implementation(libs.ktor.server.cio)
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.server.auth.jwt)
     implementation(libs.ktor.server.status.pages)
@@ -37,12 +40,18 @@ dependencies {
     implementation(libs.kotlin.logging)
     implementation(libs.slf4j)
     implementation(libs.java.jwt)
+    testImplementation(testLibs.kotlin.test)
+    testImplementation(testLibs.mockk)
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 tasks {
     shadowJar {
         manifest {
-            attributes(Pair("Main-Class", "io.ktor.server.netty.EngineMain"))
+            attributes("Main-Class" to "dev.honegger.jasstracker.bootstrap.ApplicationKt")
         }
     }
 }
