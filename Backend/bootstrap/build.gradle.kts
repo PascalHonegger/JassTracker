@@ -51,7 +51,7 @@ tasks.withType<Test> {
 tasks {
     shadowJar {
         manifest {
-            attributes(Pair("Main-Class", "dev.honegger.jasstracker.bootstrap.ApplicationKt"))
+            attributes("Main-Class" to "dev.honegger.jasstracker.bootstrap.ApplicationKt")
         }
     }
 }
