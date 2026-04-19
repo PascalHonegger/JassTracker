@@ -23,7 +23,7 @@ cd Frontend
 # Install NPM dependencies
 pnpm i
 # Start dev server
-pnpm serve
+pnpm dev
 # Build for prod
 pnpm build
 # Run linter
@@ -34,8 +34,19 @@ pnpm lint
 ```shell
 # Start dev server
 ./gradlew run
+
 # Run tests
 ./gradlew check
+
+# Generate jOOQ Code
+docker run -d \
+  --name postgres \
+  -e POSTGRES_USER=jasstracker \
+  -e POSTGRES_PASSWORD=password \
+  -p 5432:5432 \
+  -v jasstracker_pg_dev:/var/lib/postgresql/data \
+  postgres:18-alpine
+./gradlew generateJasstrackerJooq
 ```
 
 ## Deployment / Production

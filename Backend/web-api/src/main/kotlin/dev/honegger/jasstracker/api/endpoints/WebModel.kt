@@ -3,7 +3,7 @@ package dev.honegger.jasstracker.api.endpoints
 import dev.honegger.jasstracker.api.serializer.UUIDSerializer
 import dev.honegger.jasstracker.domain.*
 import dev.honegger.jasstracker.domain.services.AuthToken
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime

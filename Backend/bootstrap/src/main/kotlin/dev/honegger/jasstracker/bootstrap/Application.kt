@@ -1,10 +1,10 @@
+@file:OptIn(ExperimentalEncodingApi::class)
+
 package dev.honegger.jasstracker.bootstrap
 
 import dev.honegger.jasstracker.api.endpoints.*
-import dev.honegger.jasstracker.bootstrap.plugins.configureAuthentication
-import dev.honegger.jasstracker.bootstrap.plugins.configureHTTP
-import dev.honegger.jasstracker.bootstrap.plugins.configureStaticRouting
-import dev.honegger.jasstracker.bootstrap.plugins.initializeDatabase
+import dev.honegger.jasstracker.bootstrap.plugins.*
+import dev.honegger.jasstracker.bootstrap.utils.readConfiguration
 import dev.honegger.jasstracker.data.repositories.*
 import dev.honegger.jasstracker.domain.services.*
 import dev.honegger.jasstracker.security.Argon2HashConfig
@@ -14,15 +14,32 @@ import dev.honegger.jasstracker.security.JwtTokenService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.cio.*
+import io.ktor.server.config.*
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.time.Duration
 
-fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+fun main() {
+    embeddedServer(
+        factory = CIO,
+        configure = {
+            connectors += EngineConnectorBuilder().apply {
+                port = System.getenv("PORT")?.toInt() ?: 8080
+            }
+        },
+        environment = applicationEnvironment {
+            config = MapApplicationConfig(readConfiguration(System::getenv))
+        },
+        module = Application::module,
+    ).start(true)
+}
 
-@Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
     environment.config.apply {
         val jwtConfig = JwtConfig(
-            secret = property("jwt.secret").getString(),
+            secret = Base64.decode(property("jwt.secret").getString()),
             issuer = property("jwt.issuer").getString(),
             audience = property("jwt.audience").getString(),
             realm = property("jwt.realm").getString(),
@@ -55,7 +72,6 @@ fun Application.module() {
         initializeDatabase()
         configureHTTP()
         configureStaticRouting()
-
 
         routing {
             route("/api") {

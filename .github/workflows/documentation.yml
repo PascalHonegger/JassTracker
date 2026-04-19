@@ -16,7 +16,7 @@ jobs:
     container:
       image: texlive/texlive:latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Make LaTeX
         working-directory: ./Documentation
         run: make doc
