@@ -27,13 +27,14 @@ import org.jooq.QueryPart;
 import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -238,7 +239,7 @@ public class Player extends TableImpl<PlayerRecord> {
      */
     @Override
     public Player where(Condition condition) {
-        return new Player(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new Player(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -305,7 +306,7 @@ public class Player extends TableImpl<PlayerRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public Player whereExists(Select<?> select) {
+    public Player whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -313,7 +314,7 @@ public class Player extends TableImpl<PlayerRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public Player whereNotExists(Select<?> select) {
+    public Player whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

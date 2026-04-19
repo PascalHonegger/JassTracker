@@ -2,7 +2,7 @@ package dev.honegger.jasstracker.data.repositories
 
 import dev.honegger.jasstracker.data.bootstrap
 import org.junit.jupiter.api.BeforeAll
-import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.postgresql.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 
@@ -11,7 +11,7 @@ open class RepositoryTest {
     companion object {
         @Container
         @JvmStatic
-        val postgresql = PostgreSQLContainer("postgres:17-alpine")
+        val postgresql = PostgreSQLContainer("postgres:18-alpine")
 
         @BeforeAll
         @JvmStatic

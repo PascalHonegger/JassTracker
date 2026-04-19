@@ -19,7 +19,7 @@ services:
       DB_PASSWORD: password
 
   database:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     restart: on-failure
     environment:
       POSTGRES_USER: jasstracker

@@ -1,16 +1,16 @@
 [versions]
-kotlin = "2.1.20"
-ktor = "3.1.1"
-logback = "1.5.18"
-shadow = "8.1.1"
-kotlinxDatetime = "0.6.2"
-kotlinLogging = "7.0.5"
-flyway = "11.5.0"
-postgresql = "42.7.5"
-jooq = "3.20.2"
-jooqPlugin = "10.0"
+kotlin = "2.3.20"
+ktor = "3.4.2"
+logback = "1.5.24"
+shadow = "9.4.1"
+kotlinxDatetime = "0.7.1"
+kotlinLogging = "8.0.01"
+flyway = "12.4.0"
+postgresql = "42.7.10"
+jooq = "3.21.2"
+jooqPlugin = "10.2.1"
 javaJwt = "4.5.0" # Equal to java-jwt-version from https://github.com/ktorio/ktor/blob/main/gradle/libs.versions.toml
-slf4j = "2.0.13"
+slf4j = "2.0.17"
 argon2 = "2.12"
 
 [libraries]
@@ -41,5 +41,5 @@ kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref =
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 jooq = { id = "nu.studer.jooq", version.ref = "jooqPlugin" }

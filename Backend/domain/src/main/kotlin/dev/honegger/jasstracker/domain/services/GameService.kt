@@ -7,7 +7,7 @@ import dev.honegger.jasstracker.domain.repositories.TableRepository
 import dev.honegger.jasstracker.domain.util.displayNameLengthRange
 import dev.honegger.jasstracker.domain.util.validateCurrentPlayer
 import dev.honegger.jasstracker.domain.util.validateExists
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import io.github.oshai.kotlinlogging.KotlinLogging

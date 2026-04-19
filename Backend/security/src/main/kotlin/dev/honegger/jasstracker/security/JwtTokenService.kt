@@ -10,8 +10,8 @@ import dev.honegger.jasstracker.domain.PlayerSession
 import dev.honegger.jasstracker.domain.RegisteredPlayer
 import dev.honegger.jasstracker.domain.services.AuthToken
 import dev.honegger.jasstracker.domain.services.AuthTokenService
-import kotlinx.datetime.Clock
-import kotlinx.datetime.toJavaInstant
+import kotlin.time.Clock
+import kotlin.time.toJavaInstant
 import java.util.*
 import kotlin.time.Duration
 

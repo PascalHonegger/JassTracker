@@ -7,7 +7,7 @@ import dev.honegger.jasstracker.domain.repositories.ContractRepository
 import dev.honegger.jasstracker.domain.repositories.RoundRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
 import io.mockk.*
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.junit.jupiter.api.assertThrows

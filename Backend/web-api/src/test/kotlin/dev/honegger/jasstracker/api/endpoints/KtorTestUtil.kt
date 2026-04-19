@@ -18,8 +18,8 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.datetime.Clock
-import kotlinx.datetime.toJavaInstant
+import kotlin.time.Clock
+import kotlin.time.toJavaInstant
 import java.util.*
 import kotlin.time.Duration.Companion.days
 
