@@ -60,7 +60,7 @@ export const useTableStore = defineStore("table", {
         gameIds: table.gameIds,
         loadedGames: {},
         latestGameId: table.latestGame?.id ?? "",
-        currentGameId: table.latestGame?.endTime == null ? table.latestGame?.id ?? "" : "",
+        currentGameId: table.latestGame?.endTime == null ? (table.latestGame?.id ?? "") : "",
       };
       if (table.latestGame != null) {
         const gameStore = useGameStore();

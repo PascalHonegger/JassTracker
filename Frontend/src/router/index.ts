@@ -87,14 +87,12 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!useAuthStore().loggedIn) {
-      next({ name: "login" });
-      return;
+      return { name: "login" };
     }
   }
-  next();
 });
 
 export default router;

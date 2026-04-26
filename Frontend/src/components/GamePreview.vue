@@ -19,21 +19,23 @@ function getTeamScore(team: Team): number {
 </script>
 <template>
   <table>
-    <tr>
-      <th v-for="(team, index) in teams" :key="index" class="px-2">
-        <div>Team {{ index + 1 }}</div>
-        <div>{{ getTeamScore(team) }} Punkte</div>
-      </th>
-    </tr>
-    <tr>
-      <td v-for="(team, index) in teams" :key="index" class="border-t-2 border-slate-300">
-        {{ team.player1.displayName }}
-      </td>
-    </tr>
-    <tr>
-      <td v-for="(team, index) in teams" :key="index" class="border-t-2 border-slate-300">
-        {{ team.player2.displayName }}
-      </td>
-    </tr>
+    <tbody>
+      <tr>
+        <th v-for="(team, index) in teams" :key="index" class="px-2">
+          <div>Team {{ index + 1 }}</div>
+          <div>{{ getTeamScore(team) }} Punkte</div>
+        </th>
+      </tr>
+      <tr>
+        <td v-for="(team, index) in teams" :key="index" class="border-t-2 border-slate-300">
+          {{ team.player1.displayName }}
+        </td>
+      </tr>
+      <tr>
+        <td v-for="(team, index) in teams" :key="index" class="border-t-2 border-slate-300">
+          {{ team.player2.displayName }}
+        </td>
+      </tr>
+    </tbody>
   </table>
 </template>
