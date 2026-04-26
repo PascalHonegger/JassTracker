@@ -53,5 +53,11 @@ tasks {
         manifest {
             attributes("Main-Class" to "dev.honegger.jasstracker.bootstrap.ApplicationKt")
         }
+
+        // Workaround for https://github.com/flyway/flyway/issues/4157
+        // See also https://github.com/flyway/flyway/issues/4112#issuecomment-3338186484
+        isZip64 = true
+        mergeServiceFiles()
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 }

@@ -13,5 +13,5 @@ RUN ./gradlew shadowJar --no-daemon
 
 FROM ghcr.io/graalvm/jdk-community:25
 EXPOSE 8080:8080
-COPY --from=build_backend /home/gradle/src/Backend/bootstrap/build/libs/*.jar /app/jasstracker.jar
+COPY --from=build_backend /home/gradle/src/Backend/bootstrap/build/libs/*-all.jar /app/jasstracker.jar
 ENTRYPOINT ["java","-jar","/app/jasstracker.jar"]
