@@ -40,6 +40,7 @@ pnpm lint
 
 # Generate jOOQ Code
 docker run -d \
+  --rm
   --name postgres \
   -e POSTGRES_USER=jasstracker \
   -e POSTGRES_PASSWORD=password \

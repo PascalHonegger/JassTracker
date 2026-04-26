@@ -63,7 +63,8 @@ function getClass(round: Round): string {
         <div class="ml-auto">×{{ row.contract.multiplier }}</div>
       </div>
     </th>
-    <template v-for="r in row.rounds" :key="r">
+    <template v-for="r in row.rounds">
+      <!-- eslint-disable-next-line vue/require-v-for-key -->
       <td>
         <div class="relative w-fit mx-auto">
           <ScoreInput

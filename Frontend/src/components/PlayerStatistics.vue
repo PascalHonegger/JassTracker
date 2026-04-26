@@ -152,7 +152,11 @@ const averageAxis = computed<ChartAxis>(() => ({
     >
       <template #layers>
         <Grid :hide-y="true" />
-        <Area :data-keys="['score', 'height']" type="monotone" :area-style="{ fill: 'url(#grad)' }" />
+        <Area
+          :data-keys="['score', 'height']"
+          type="monotone"
+          :area-style="{ fill: 'url(#grad)' }"
+        />
         <Line
           :data-keys="['score', 'height']"
           :line-style="{ stroke: '#0096c7' }"
