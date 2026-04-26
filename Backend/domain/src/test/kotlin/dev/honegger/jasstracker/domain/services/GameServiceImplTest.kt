@@ -7,8 +7,8 @@ import dev.honegger.jasstracker.domain.repositories.GameRepository
 import dev.honegger.jasstracker.domain.repositories.PlayerRepository
 import dev.honegger.jasstracker.domain.repositories.TableRepository
 import io.mockk.*
+import kotlin.time.Clock
 import kotlinx.datetime.*
-import kotlinx.datetime.TimeZone
 import org.junit.jupiter.api.assertThrows
 import java.util.*
 import kotlin.test.*
