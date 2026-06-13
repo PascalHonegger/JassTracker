@@ -15,8 +15,9 @@ export const useRoundStore = defineStore("round", {
       try {
         const newRound = await createRound(round);
         await this.handleRoundCreateOrUpdate(newRound);
-      } catch {
+      } catch (error) {
         toast.error("Es gab ein Problem mit der Erstellung der Runde");
+        console.error("Error creating round:", error);
       }
     },
     async updateRound(round: WebRound) {
@@ -26,15 +27,26 @@ export const useRoundStore = defineStore("round", {
         await updateRound(round.id, round);
         this.removeRoundFromCurrentGame(round.id, round.playerId, round.contractId);
         await this.handleRoundCreateOrUpdate(round);
-      } catch {
+      } catch (error) {
         toast.error("Es gab ein Problem mit der Aktualisierung der Runde");
+        console.error("Error updating round:", error);
       }
     },
     async handleRoundCreateOrUpdate(round: WebRound) {
       const gameStore = useGameStore();
       assertNonNullish(gameStore.currentGame, "currentGame should not be undefined");
       this.addRoundToCurrentGame(round);
-      gameStore.currentGame.currentPlayer = await getCurrentPlayerOfGame(gameStore.currentGame.id);
+      
+      try {
+        const nextPlayer = await getCurrentPlayerOfGame(gameStore.currentGame.id);
+        // Force reactivity by reassigning the entire object
+        if (gameStore.currentGame && nextPlayer) {
+          gameStore.currentGame.currentPlayer = { ...nextPlayer };
+        }
+      } catch (error) {
+        console.error("Error fetching current player:", error);
+        toast.error("Es gab ein Problem bei der Aktualisierung des aktuellen Spielers");
+      }
     },
     addRoundToCurrentGame(round: WebRound) {
       const gameStore = useGameStore();
@@ -109,11 +121,15 @@ export const useRoundStore = defineStore("round", {
       try {
         await deleteRoundById(roundId);
         this.updateRoundNumbers(roundNumber);
-        gameStore.currentGame.currentPlayer = await getCurrentPlayerOfGame(
-          gameStore.currentGame.id,
-        );
-      } catch {
+        
+        const nextPlayer = await getCurrentPlayerOfGame(gameStore.currentGame.id);
+        // Force reactivity by reassigning the entire object
+        if (gameStore.currentGame && nextPlayer) {
+          gameStore.currentGame.currentPlayer = { ...nextPlayer };
+        }
+      } catch (error) {
         toast.error("Es gab ein Problem bei der Löschung der Runde");
+        console.error("Error removing round:", error);
         return false;
       }
       return true;
