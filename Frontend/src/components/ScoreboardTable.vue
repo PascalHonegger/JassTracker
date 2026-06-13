@@ -10,7 +10,8 @@ const props = defineProps<{ game: Game }>();
 
 function isActive(participation: GameParticipation): boolean {
   return (
-    props.game.endTime === undefined && props.game.currentPlayer.playerId === participation.playerId
+    props.game.endTime === undefined && 
+    props.game.currentPlayer?.playerId === participation.playerId
   );
 }
 
@@ -33,6 +34,8 @@ function getTeamTotal(team: Team): number {
 }
 
 const teams = computed(() => [props.game.team1, props.game.team2]);
+
+const currentPlayerId = computed(() => props.game.currentPlayer?.playerId);
 </script>
 <template>
   <div
@@ -105,6 +108,6 @@ const teams = computed(() => [props.game.team1, props.game.team2]);
 </template>
 <style lang="postcss" scoped>
 .active {
-  @apply bg-green-300;
+  @apply bg-green-300 !important;
 }
 </style>
