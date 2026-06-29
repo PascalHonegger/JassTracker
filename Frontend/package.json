@@ -2,7 +2,7 @@
   "name": "jasstracker",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@10.33.2+sha512.a90faf6feeab71ad6c6e57f94e0fe1a12f5dcc22cd754db40ae9593eb6a3e0b6b12e3540218bb37ae083404b1f2ce6db2a4121e979829b4aff94b99f49da1cf8",
+  "packageManager": "pnpm@11.9.0+sha512.bd682d5d03fe525ef7c9fd6780c6884d1e756ac4c9c9fe00c538782824310dcf90e3ddc4f53835f06dfaebd5085e41855e0bcbb3b60de2ac5bbab89e5036f03b",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -17,36 +17,31 @@
   "dependencies": {
     "mande": "^2.0.9",
     "pinia": "^3.0.4",
-    "vue": "^3.5.33",
+    "vue": "^3.5.39",
     "vue-draggable-next": "^2.3.0",
-    "vue-router": "^5.0.6",
+    "vue-router": "^5.1.0",
     "vue-toastification": "2.0.0-rc.5",
     "vue3-charts": "^1.1.33"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
-    "@tailwindcss/vite": "^4.2.4",
+    "@eslint/js": "^10.0.1",
+    "@tailwindcss/vite": "^4.3.1",
     "@tsconfig/node22": "^22.0.5",
     "@types/d3-axis": "^3.0.6",
     "@types/d3-shape": "^3.1.8",
-    "@types/node": "^24.12.2",
-    "@vitejs/plugin-vue": "^6.0.6",
+    "@types/node": "^26.0.1",
+    "@vitejs/plugin-vue": "^6.0.7",
     "@vue/eslint-config-prettier": "^10.2.0",
-    "@vue/eslint-config-typescript": "^14.7.0",
+    "@vue/eslint-config-typescript": "^14.9.0",
     "@vue/tsconfig": "^0.9.1",
-    "eslint": "^9.39.4",
-    "eslint-plugin-vue": "^10.9.0",
+    "eslint": "^10.6.0",
+    "eslint-plugin-vue": "^10.9.2",
     "npm-run-all": "^4.1.5",
-    "prettier": "^3.8.3",
-    "tailwindcss": "^4.2.4",
+    "prettier": "^3.9.1",
+    "tailwindcss": "^4.3.1",
     "typescript": "^6.0.3",
-    "vite": "^8.0.16",
-    "vue-tsc": "^3.2.7"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "vue-demi"
-    ]
+    "typescript-eslint": "^8.62.0",
+    "vite": "^8.1.0",
+    "vue-tsc": "^3.3.5"
   }
 }

@@ -58,14 +58,14 @@ const teams = computed(() => [props.game.team1, props.game.team2]);
           <template v-for="(team, index) in teams" :key="index">
             <th
               scope="col"
-              :class="{ active: isActive(team.player1) }"
+              :class="{ 'bg-green-300': isActive(team.player1) }"
               class="border-l-2 border-slate-300"
             >
               {{ team.player1.displayName }}
             </th>
             <th
               scope="col"
-              :class="{ active: isActive(team.player2) }"
+              :class="{ 'bg-green-300': isActive(team.player2) }"
               class="border-l-2 border-slate-300"
             >
               {{ team.player2.displayName }}
@@ -103,8 +103,3 @@ const teams = computed(() => [props.game.team1, props.game.team2]);
     </table>
   </div>
 </template>
-<style lang="postcss" scoped>
-.active {
-  @apply bg-green-300;
-}
-</style>
