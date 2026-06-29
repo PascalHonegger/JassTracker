@@ -1,7 +1,7 @@
 [versions]
-kotlin = "2.3.20"
-ktor = "3.4.3"
-mockk = "1.14.9"
+kotlin = "2.4.0"
+ktor = "3.5.1"
+mockk = "1.14.11"
 testcontainers = "2.0.5"
 kover = "0.9.8"
 versions = "0.54.0"
