@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
   gradle-action-detection:
@@ -11,18 +12,12 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-java@v5
         with:
           distribution: graalvm
           java-version: 25
           cache: gradle
 
-      - name: Run snapshot action
-        uses: mikepenz/gradle-dependency-submission@main
-        with:
-          gradle-build-module: |-
-            :Backend:bootstrap
-          gradle-build-configuration: |-
-            compileClasspath
-          sub-module-mode: 'INDIVIDUAL_DEEP'
+      - name: Generate and submit dependency graph
+        uses: gradle/actions/dependency-submission@v6
